@@ -1,0 +1,13 @@
+#DESCRIPCION DE PROYECTO
+spring:
+  application:
+    name: Api rest de clinica con My Batis
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: Clinica
+    password: holaCOMO
+
+#PUERTO DE SERVIDOR
+server:
+  port: 8081
+ 
