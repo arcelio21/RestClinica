@@ -4,7 +4,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-public class Tmodules {
+public class Tmodule {
 	
 	@Positive
 	private Integer id;
@@ -14,18 +14,18 @@ public class Tmodules {
 	private String nameModule;
 
 	
-	public Tmodules() {
+	public Tmodule() {
 		super();
 	}
 
 
-	public Tmodules(@Positive Integer id) {
+	public Tmodule(@Positive Integer id) {
 		super();
 		this.id = id;
 	}
 
 
-	public Tmodules(@Positive Integer id, @NotBlank @Max(30) String nameModule) {
+	public Tmodule(@Positive Integer id, @NotBlank @Max(30) String nameModule) {
 		super();
 		this.id = id;
 		this.nameModule = nameModule;

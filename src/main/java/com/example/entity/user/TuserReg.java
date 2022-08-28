@@ -2,6 +2,7 @@ package com.example.entity.user;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.FutureOrPresent;
@@ -14,7 +15,7 @@ import javax.validation.constraints.Size;
 
 import com.example.entity.address.Taddress;
 
-public class TusersRegs {
+public class TuserReg {
 
 
 	@Positive
@@ -52,26 +53,29 @@ public class TusersRegs {
 	
 	@NotNull
 	private Taddress addressId;
+	
+	
+	private List<@NotNull TuserTypeReg> usersTypesRegs;
 
 	
-	public TusersRegs() {
+	public TuserReg() {
 		super();
 	}
 
 
-	public TusersRegs(@Positive Integer id) {
+	public TuserReg(@Positive Integer id) {
 		super();
 		this.id = id;
 	}
 
 
-	public TusersRegs(@NotNull @Size(min = 13, max = 18) @Positive Long idenCard) {
+	public TuserReg(@NotNull @Size(min = 13, max = 18) @Positive Long idenCard) {
 		super();
 		this.idenCard = idenCard;
 	}
 
 
-	public TusersRegs(@Positive Integer id, @NotNull @Size(min = 13, max = 18) @Positive Long idenCard,
+	public TuserReg(@Positive Integer id, @NotNull @Size(min = 13, max = 18) @Positive Long idenCard,
 			@NotEmpty(message = "EL VALOR DE NOMBRE NO PUEDE SER NULO VACIO") @Size(min = 1, max = 30) String name,
 			@NotEmpty(message = "EL VALOR DE APELLIDO NO PUEDE SER NULO VACIO") @Size(min = 1, max = 30) String lastName,
 			@NotEmpty(message = "EL VALOR DE APELLIDO NO PUEDE SER NULO VACIO") @Size(min = 7, max = 8) String contact,
@@ -191,6 +195,17 @@ public class TusersRegs {
 
 	public void setAddressId(Taddress addressId) {
 		this.addressId = addressId;
+	}
+
+
+	
+	public List<TuserTypeReg> getUsersTypesRegs() {
+		return usersTypesRegs;
+	}
+
+
+	public void setUsersTypesRegs(List<TuserTypeReg> usersTypesRegs) {
+		this.usersTypesRegs = usersTypesRegs;
 	}
 
 

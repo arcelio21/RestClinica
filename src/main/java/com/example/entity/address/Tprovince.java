@@ -6,7 +6,7 @@ public class Tprovince {
 	
 	private Integer id;
 	private String name;
-	private List<Tdistricts> districts;
+	private List<Tdistrict> districts;
 	
 	public Tprovince() {
 		super();
@@ -37,11 +37,11 @@ public class Tprovince {
 
 	
 
-	public List<Tdistricts> getDistricts() {
+	public List<Tdistrict> getDistricts() {
 		return districts;
 	}
 
-	public void setDistricts(List<Tdistricts> districts) {
+	public void setDistricts(List<Tdistrict> districts) {
 		this.districts = districts;
 	}
 

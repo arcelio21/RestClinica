@@ -4,7 +4,7 @@ public class Tvillage {
 
 	private Integer id;
 	private String name;
-	private Tdistricts district;
+	private Tdistrict district;
 	
 	
 	
@@ -15,7 +15,7 @@ public class Tvillage {
 		super();
 		this.id = id;
 	}
-	public Tvillage(Integer id, String name, Tdistricts district) {
+	public Tvillage(Integer id, String name, Tdistrict district) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -33,10 +33,10 @@ public class Tvillage {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Tdistricts getDistrict() {
+	public Tdistrict getDistrict() {
 		return district;
 	}
-	public void setDistrict(Tdistricts district) {
+	public void setDistrict(Tdistrict district) {
 		this.district = district;
 	}
 	@Override

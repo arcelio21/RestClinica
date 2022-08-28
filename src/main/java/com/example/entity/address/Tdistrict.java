@@ -2,7 +2,7 @@ package com.example.entity.address;
 
 import java.util.List;
 
-public class Tdistricts {
+public class Tdistrict {
 
 	private Integer id;
 	private String name;
@@ -10,20 +10,20 @@ public class Tdistricts {
 	private List<Tvillage> villages;
 	
 	
-	public Tdistricts() {
+	public Tdistrict() {
 		super();
 	}
 
 
 
-	public Tdistricts(Integer id) {
+	public Tdistrict(Integer id) {
 		super();
 		this.id = id;
 	}
 
 
 
-	public Tdistricts(Integer id, String name, Tprovince province) {
+	public Tdistrict(Integer id, String name, Tprovince province) {
 		super();
 		this.id = id;
 		this.name = name;
