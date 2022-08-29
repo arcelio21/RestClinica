@@ -2,10 +2,17 @@ package com.example.entity.address;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
+
 public class Tprovince {
 	
+	@Positive
 	private Integer id;
+	
+	@NotEmpty
 	private String name;
+	
 	private List<Tdistrict> districts;
 	
 	public Tprovince() {
@@ -41,9 +48,6 @@ public class Tprovince {
 		return districts;
 	}
 
-	public void setDistricts(List<Tdistrict> districts) {
-		this.districts = districts;
-	}
 
 	@Override
 	public String toString() {

@@ -3,8 +3,8 @@ spring:
   application:
     name: Api rest de clinica con My Batis
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: Clinica
+    url: jdbc:mysql://localhost:3306/clinica_ws
+    username: root
     password: holaCOMO
 
 #PUERTO DE SERVIDOR
