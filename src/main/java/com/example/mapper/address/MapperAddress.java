@@ -30,12 +30,10 @@ public interface MapperAddress {
 	
 	@Select("SELECT a.id as id,a.specific_address as 'specific',v.id as villId,v.name as villName FROM Taddress a "
 			+ "INNER JOIN Tvillages v  ON a.village_id=v.id WHERE a.id=#{id}")
-	@Results(
-			{@Result(column = "id",property = "id"),
-			@Result(column = "specific",property = "specificAddress"),
-			@Result(column = "villId",property = "villageId.id"),
-			@Result(column = "villName",property = "villageId.name")}
-	)
+	@Result(column = "id",property = "id")
+	@Result(column = "specific",property = "specificAddress")
+	@Result(column = "villId",property = "villageId.id")
+	@Result(column = "villName",property = "villageId.name")
 	public Taddress getVillageAllById(@Param("id") Integer id);
 	
 	

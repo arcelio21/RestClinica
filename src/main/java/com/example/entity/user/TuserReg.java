@@ -43,7 +43,7 @@ public class TuserReg {
 	private String email;
 	
 	@PastOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO")
-	private LocalDate fehcaNacimiento;
+	private LocalDate fechaNacimiento;
 	
 	@Max(value = 150)
 	private String password;
@@ -80,7 +80,7 @@ public class TuserReg {
 			@NotEmpty(message = "EL VALOR DE APELLIDO NO PUEDE SER NULO VACIO") @Size(min = 1, max = 30) String lastName,
 			@NotEmpty(message = "EL VALOR DE APELLIDO NO PUEDE SER NULO VACIO") @Size(min = 7, max = 8) String contact,
 			@Email(message = "E-MAIL NO VALIDO") @Max(50) String email,
-			@PastOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO") LocalDate fehcaNacimiento,
+			@PastOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO") LocalDate fechaNacimiento,
 			@Max(150) String password,
 			@FutureOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO") LocalDateTime fechaCreacion,
 			@NotNull Taddress addressId) {
@@ -91,7 +91,7 @@ public class TuserReg {
 		this.lastName = lastName;
 		this.contact = contact;
 		this.email = email;
-		this.fehcaNacimiento = fehcaNacimiento;
+		this.fechaNacimiento = fechaNacimiento;
 		this.password = password;
 		this.fechaCreacion = fechaCreacion;
 		this.addressId = addressId;
@@ -158,13 +158,13 @@ public class TuserReg {
 	}
 
 
-	public LocalDate getFehcaNacimiento() {
-		return fehcaNacimiento;
+	public LocalDate getFechaNacimiento() {
+		return fechaNacimiento;
 	}
 
 
-	public void setFehcaNacimiento(LocalDate fehcaNacimiento) {
-		this.fehcaNacimiento = fehcaNacimiento;
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 
@@ -212,7 +212,7 @@ public class TuserReg {
 	@Override
 	public String toString() {
 		return "TusersRegs [id=" + id + ", idenCard=" + idenCard + ", name=" + name + ", lastName=" + lastName
-				+ ", contact=" + contact + ", email=" + email + ", fehcaNacimiento=" + fehcaNacimiento + ", password="
+				+ ", contact=" + contact + ", email=" + email + ", fechaNacimiento=" + fechaNacimiento + ", password="
 				+ password + ", fechaCreacion=" + fechaCreacion + ", addressId=" + addressId.getId() + "]";
 	}
 	
