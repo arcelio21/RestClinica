@@ -24,5 +24,33 @@ public class TtypeUserModule {
 		this.typeUser = typeUser;
 	}
 
+
+	public TmodulePrivilege getModulePrivilegeId() {
+		return modulePrivilegeId;
+	}
+
+
+	public void setModulePrivilegeId(TmodulePrivilege modulePrivilegeId) {
+		this.modulePrivilegeId = modulePrivilegeId;
+	}
+
+
+	public TtypeUser getTypeUser() {
+		return typeUser;
+	}
+
+
+	public void setTypeUser(TtypeUser typeUser) {
+		this.typeUser = typeUser;
+	}
+
+
+	@Override
+	public String toString() {
+		return "TtypeUserModule [modulePrivilegeId=" + modulePrivilegeId + ", typeUser=" + typeUser + "]";
+	}
+	
+	
+
 	
 }

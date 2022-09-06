@@ -7,15 +7,14 @@ import javax.validation.constraints.Positive;
 public class Tspeciality {
 
 	@Positive
-	private Integer id;
+	private  Integer id;
 	
 	@NotEmpty
 	@Max(30)
-	private String name;
+	private  String name;
 
-	
+
 	public Tspeciality() {
-		super();
 	}
 
 
@@ -40,7 +39,6 @@ public class Tspeciality {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;

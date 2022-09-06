@@ -83,8 +83,8 @@ public class TuserTypeReg {
 
 	@Override
 	public String toString() {
-		return "TuserTypeReg [id=" + id + ", userRegId=" + userRegId + ", typeUser=" + typeUser + ", statusId="
-				+ statusId + "]";
+		return "TuserTypeReg [id=" + id + ", userRegId=" + userRegId.getId() + ", typeUser=" + typeUser.getId() + ", statusId="
+				+ statusId.getId() + "]";
 	}
 	
 	
