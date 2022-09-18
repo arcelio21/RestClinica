@@ -16,7 +16,7 @@ import com.example.entity.visit.TdiagnoseVisit;
 import com.example.entity.visit.Tvisit;
 
 @Mapper
-public interface MapperDiagnosesVisit {
+public interface MapperDiagnosesVisit{
 
 	@Select("SELECT * FROM Tdiagnoses_visits")
 	@Results(
@@ -42,7 +42,7 @@ public interface MapperDiagnosesVisit {
 	@Select("SELECT * FROM Tdiagnoses_visits WHERE diagnosis_id=#{diag.id}")
 	List<TdiagnoseVisit> getByDiagnosesId(@Param("diag") Tdiagnose tdiagnose);
 	
-	@ResultMap("diagVisit")
+	
 	@Update("UPDATE Tdiagnoses_visits "
 			+ "SET visit_id=#{diagVis.visitId.id}, diagnosis_id=#{diagVis.diagnoseId.id}, observation=#{diagVis.observation} "
 			+ "WHERE id=#{diagVis.id}")
