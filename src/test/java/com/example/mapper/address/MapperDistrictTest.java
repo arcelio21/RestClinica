@@ -46,7 +46,7 @@ class MapperDistrictTest {
 	
 	@Test
 	void getDistrictAllById() {
-		Tdistrict distrito=this.mapperDistrict.getDistrictAllById(4);
+		Tdistrict distrito=this.mapperDistrict.getDistrictAllSimpleById(4);
 		System.out.println(distrito.getName()+"provincia: "+distrito.getProvince().getName());
 		assertNotNull(distrito);
 	}

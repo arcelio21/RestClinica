@@ -5,14 +5,20 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonInclude(value = Include.NON_NULL)
 public class Tprovince {
 	
 	@Positive
 	private Integer id;
 	
 	@NotEmpty
+	@JsonInclude(value = Include.NON_NULL)
 	private String name;
 	
+	@JsonInclude(value = Include.NON_NULL)
 	private List<Tdistrict> districts;
 	
 	public Tprovince() {

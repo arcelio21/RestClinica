@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.FetchType;
+import org.apache.ibatis.annotations.One;
 
 import com.example.entity.address.Taddress;
 
@@ -19,7 +21,8 @@ public interface MapperAddress {
 	@Select("SELECT * FROM Taddress")
 	@Results(id = "address",value={@Result(column = "id",property = "id"),
 			@Result(column = "specific_address",property = "specificAddress"),
-			@Result(column="village_id",property = "villageId.id")}
+			@Result(column="village_id",property = "villageId",one = @One(select = "com.example.mapper.address.MapperVillage.getById",
+					fetchType = FetchType.LAZY))}
 	)
 	public List<Taddress> getAll();
 	

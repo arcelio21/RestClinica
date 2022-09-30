@@ -1,9 +1,25 @@
 package com.example.entity.address;
 
-public class Tvillage {
+import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonIgnoreProperties({"handler"})
+@JsonInclude(content = Include.NON_NULL)
+public class Tvillage implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	private Integer id;
 	private String name;
+
+	@JsonInclude(content = Include.NON_NULL)
 	private Tdistrict district;
 	
 	

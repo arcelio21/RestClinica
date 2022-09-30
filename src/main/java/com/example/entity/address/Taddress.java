@@ -1,8 +1,24 @@
 package com.example.entity.address;
 
-public class Taddress {
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+
+@JsonIgnoreProperties({"handler"})
+@JsonInclude(content = Include.NON_NULL)
+public class Taddress implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer id;
+
+	@JsonInclude(content = Include.NON_NULL)
 	private Tvillage villageId;
 	private String specificAddress;
 	
@@ -42,6 +58,7 @@ public class Taddress {
 
 
 
+	@JsonGetter
 	public Tvillage getVillageId() {
 		return villageId;
 	}

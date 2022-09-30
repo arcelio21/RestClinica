@@ -6,8 +6,11 @@ spring:
     url: jdbc:mysql://localhost:3306/clinica_ws
     username: root
     password: holaCOMO
+  jackson:
+    serialization:
+      fail-on-empty-beans: true
 
 #PUERTO DE SERVIDOR
 server:
   port: 8081
- 
+

@@ -2,11 +2,23 @@ package com.example.entity.address;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+@JsonIgnoreProperties({"handler"})
+@JsonInclude(value = Include.NON_NULL)
 public class Tdistrict {
 
 	private Integer id;
+	
+	@JsonInclude( value = Include.NON_NULL)
 	private String name;
+
+	@JsonInclude( value = Include.NON_NULL)
 	private Tprovince province;
+
+	@JsonInclude(value = Include.NON_NULL)
 	private List<Tvillage> villages;
 	
 	
