@@ -85,5 +85,16 @@ class MapperUserRegTest {
 		assertEquals(validate.getIdenCard(), userValidate.getIdenCard());
 		System.out.println("ENVIADO: "+userValidate.getIdenCard()+"| RETORNADO: "+validate.getIdenCard());
 	}
+	
+	@Test
+	void getByNmae() {
+		List<TuserReg> users=this.mapperUserReg.getByName("arce");
+		assertNotNull(users);
+		assertTrue(users.size()>0);
+		
+		for(TuserReg user:users) {
+			System.out.println(user);
+		}
+	}
 
 }

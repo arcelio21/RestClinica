@@ -43,6 +43,14 @@ class MapperStatusTest {
 	}
 	
 	@Test
+	void getByName() {
+		List<Tstatus> status=this.status.getByName("a");
+		assertNotNull(status);
+		assertTrue(status.size()>0);
+		status.forEach(System.out::println);
+	}
+	
+	@Test
 	void update() {
 		Integer id=1;
 		Tstatus status=new Tstatus();

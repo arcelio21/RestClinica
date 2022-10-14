@@ -34,7 +34,7 @@ class MapperTypeUserTest {
 	
 	@Test
 	void getById() {
-		TtypeUser typeUser=this.typeUser.getById(1);
+		TtypeUser typeUser=this.typeUser.getById(11);
 		assertNotNull(typeUser);
 		assertNotNull(typeUser.getId());
 		assertNotNull(typeUser.getNameTypeUser());
