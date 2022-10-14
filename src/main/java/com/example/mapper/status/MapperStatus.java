@@ -22,6 +22,10 @@ public interface MapperStatus {
 	@Result(column = "name_status",property = "name")
 	public Tstatus getById(@Param("id") Integer id);
 	
+	@Select("SELECT * FROM Tstatus WHERE name_status LIKE '${name}%'")
+	@Result(column = "name_status",property = "name")
+	List<Tstatus> getByName(@Param("name") String name);
+	
 	@Update("UPDATE Tstatus SET name_status=#{status.name} WHERE id=#{status.id}")
 	public Integer update(@Param("status") Tstatus status);
 	

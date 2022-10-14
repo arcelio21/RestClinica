@@ -37,20 +37,24 @@ public interface MapperUserReg {
 	@ResultMap(value = "userRegSimple")
 	public TuserReg getById(@Param("id") Integer id);
 	
+	@Select("SELECT * FROM TusersRegs WHERE name LIKE '${name}%' ")
+	@ResultMap(value = "userRegSimple")
+	public List<TuserReg> getByName(@Param("name") String name);
+	
 	
 	@Insert("INSERT INTO TusersRegs(iden_card,name,last_name,contact,email,fecha_nacimiento,password,address_id)"
 			+ " VALUES(#{user.idenCard},#{user.name},#{user.lastName},#{user.contact},#{user.email},#{user.fechaNacimiento},"
 			+ "#{user.password},#{user.addressId.id}) ")
-	public int save(@Param("user") TuserReg user);
+	public Integer save(@Param("user") TuserReg user);
 	
 	
 	@Update("UPDATE TusersRegs SET iden_card=#{user.idenCard},name=#{user.name},last_name=#{user.lastName},contact=#{user.contact},"
 			+ "email=#{user.email},fecha_nacimiento=#{user.fechaNacimiento},address_id=#{user.addressId.id} WHERE id=#{user.id}")
-	public int update(@Param("user") TuserReg user);
+	public Integer update(@Param("user") TuserReg user);
 	
 	
-	@Update("UPDATE TusersRegs SET password=SHA1('${user.password}') WHERE id=${user.id}")
-	public int updatePassword(@Param("user") TuserReg user);
+	@Update("UPDATE TusersRegs SET password=SHA1('${user.password}') WHERE id=${user.id} OR iden_card=${user.idenCard}")
+	public Integer updatePassword(@Param("user") TuserReg user);
 	
 	
 	@Select("SELECT * FROM TusersRegs WHERE iden_card=${user.idenCard} AND password=sha1('${user.password}') ")
