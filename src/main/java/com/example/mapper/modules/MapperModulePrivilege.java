@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.FetchType;
+import org.apache.ibatis.annotations.One;
 
 import com.example.entity.modules.TmodulePrivilege;
 
@@ -21,9 +23,9 @@ public interface MapperModulePrivilege {
 			id = "modulPrivMap",
 			value = {
 				@Result(column = "id",property = "id"),
-				@Result(column = "privilege_id", property = "privilege.id"),
-				@Result(column = "module_id",property = "module.id"),
-				@Result(column = "status_id",property = "status.id")
+				@Result(column = "privilege_id", property = "privilege", one = @One(select="com.example.mapper.modules.MapperPrivilege.getByid",fetchType = FetchType.LAZY)),
+				@Result(column = "module_id",property = "module", one = @One(select="com.example.mapper.modules.MapperModules.getById",fetchType = FetchType.LAZY)),
+				@Result(column = "status_id",property = "status", one = @One(select="com.example.mapper.status.MapperStatus.getById",fetchType = FetchType.LAZY))
 			}
 	)
 	List<TmodulePrivilege> getAll();

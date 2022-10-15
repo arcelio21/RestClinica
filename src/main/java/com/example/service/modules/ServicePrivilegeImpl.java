@@ -2,7 +2,6 @@ package com.example.service.modules;
 
 import java.util.Collections;
 import java.util.List;
-
 import com.example.entity.modules.Tprivilege;
 import com.example.mapper.modules.MapperPrivilege;
 
@@ -39,18 +38,22 @@ public class ServicePrivilegeImpl implements IServicePrivilege{
 	public Integer update(Tprivilege tprivilege) {
 
 		if(tprivilege==null || tprivilege.getId()==null || tprivilege.getId()<=0) {
-			return null; 
+			return 0; 
 		}
-		return this.MapperPrivilege.update(tprivilege);
+		
+		return this.mapperPrivilege.update(tprivilege);
 	}
 
 	@Override
-	public Integer save(Tprivilege tprivileg) {
-	    // TODO Auto-generated method stub
-	    if(tprivileg==null){
-             return null;
+	public Integer save(Tprivilege tprivilege){
+	    if(tprivilege==null){
+	    	return 0;
 	    }
-	    return this.MapperPrivilege.service(tprivileg);
-	}
+	    
+	    if(tprivilege.getId()!=null || tprivilege.getId()>=0) {
+	    	return 0;
+	    }
 
+	    return this.mapperPrivilege.save(tprivilege);
+	}
 }
