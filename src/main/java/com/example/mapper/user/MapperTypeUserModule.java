@@ -46,7 +46,12 @@ public interface MapperTypeUserModule {
 	List<TtypeUserModule> getModulePriv(@Param("id") Integer modulePrivilegeId);
 	
 	
-	
+	/**
+	* Metodo que  actualizara por medio de id de tipo de usuario e id del modulo de referencia
+	* @param ttypeUserModule Contentra el id de tipo de usuario
+	* @param modulPrivBef Contendra id del modulo de privilegio
+	* @return
+	*/	
 	@Update("UPDATE Ttypeusers_modules "
 			+ "SET modls_privgs_id=#{typeUserModule.modulePrivilegeId.id} "
 			+ "WHERE type_user_id=#{typeUserModule.typeUser.id} AND modls_privgs_id=#{modulPrivBef}")

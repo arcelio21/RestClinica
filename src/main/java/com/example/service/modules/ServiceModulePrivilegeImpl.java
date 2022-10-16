@@ -11,7 +11,6 @@ public class ServiceModulePrivilegeImpl implements IServiceModulePrivilege{
 	private MapperModulePrivilege mapperModulePrivilege;
 	
 	
-
 	public ServiceModulePrivilegeImpl(MapperModulePrivilege mapperModulePrivilege) {
 		this.mapperModulePrivilege = mapperModulePrivilege;
 	}

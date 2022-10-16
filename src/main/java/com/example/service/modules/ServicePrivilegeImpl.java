@@ -7,8 +7,7 @@ import com.example.mapper.modules.MapperPrivilege;
 
 public class ServicePrivilegeImpl implements IServicePrivilege{
 
-	private MapperPrivilege mapperPrivilege;
-	
+	private MapperPrivilege mapperPrivilege;	
 	
 	public ServicePrivilegeImpl(MapperPrivilege mapperPrivilege) {
 		this.mapperPrivilege = mapperPrivilege;
