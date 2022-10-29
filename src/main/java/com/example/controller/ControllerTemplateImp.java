@@ -39,21 +39,18 @@ public abstract class ControllerTemplateImp<T,S extends ServiceTemplateCrud<T, I
 	@RequestMapping("/{id}")
 	@Override
 	public ResponseEntity<T> getById(@PathVariable("id") Integer id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@PostMapping 
 	@Override
 	public ResponseEntity<Integer> save(@RequestBody T t) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@PutMapping
 	@Override
 	public ResponseEntity<Integer> update(@RequestBody T t) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
