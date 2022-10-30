@@ -1,5 +1,6 @@
 package com.example.service.appointment;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.example.entity.appointment.Tappointment;
@@ -15,22 +16,40 @@ public class ServiceAppointmentImpl implements IServiceAppointment<Tappointment,
 
 	@Override
 	public List<Tappointment> getAll() {
-		return null;
+	
+		List<Tappointment> aTappointments = this.mapperAppointment.getAll();
+
+		if(aTappointments==null || aTappointments.size()<=0){
+			return Collections.emptyList();
+		}
+		return aTappointments;
 	}
 
 	@Override
 	public Tappointment getById(Integer id) {
-		return null;
+
+		if(id==null || id<=0){
+			return null;
+		}
+		return this.mapperAppointment.getById(id);
 	}
 
 	@Override
-	public Integer update(Tappointment t) {
-		return null;
+	public Integer update(Tappointment tappointment) {
+
+		if(tappointment==null || tappointment.getId()==null || tappointment.getId()<=0){
+			return 0;
+		}
+		return this.mapperAppointment.update(tappointment);
 	}
 
 	@Override
-	public Integer save(Tappointment t) {
-		return null;
+	public Integer save(Tappointment tappointment) {
+
+		if(tappointment==null || tappointment.getId()!=null){
+			return 0;
+		}
+		return this.mapperAppointment.save(tappointment);
 	}
 
 }
