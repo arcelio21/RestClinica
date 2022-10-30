@@ -50,4 +50,31 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<TuserTypeReg,
 		return this.mapperUserTypeReg.save(tuserTypeReg);
 	}
 
+	@Override
+	public List<TuserTypeReg> getByIdUserReg(Integer id) {
+
+		if(id==null || id<=0){
+			return Collections.emptyList();
+		}
+		return this.mapperUserTypeReg.getByIdUserReg(id);
+	}
+
+	@Override
+	public List<TuserTypeReg> getByIdTypeUser(Integer id) {
+		
+		if(id==null || id<=0){
+			return Collections.emptyList();
+		}
+		return this.mapperUserTypeReg.getByIdTypeUser(id);
+	}
+
+	@Override
+	public List<TuserTypeReg> getByIdStatus(Integer id) {
+
+		if(id==null || id<=0){
+			return Collections.emptyList();
+		}
+		return this.mapperUserTypeReg.getByIdStatus(id);
+	}
+
 }
