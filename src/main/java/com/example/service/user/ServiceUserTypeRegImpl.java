@@ -16,7 +16,6 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<TuserTypeReg,
 
 	@Override
 	public List<TuserTypeReg> getAll() {
-		// TODO Auto-generated method stub
 		List<TuserTypeReg> tuserTypeRegs= this.mapperUserTypeReg.getAll();
 		if(tuserTypeRegs.size()<=0){
 		  return Collections.emptyList();
@@ -34,15 +33,21 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<TuserTypeReg,
 	}
 
 	@Override
-	public Integer update(TuserTypeReg t) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer update(TuserTypeReg tuserTypeReg) {
+
+		if(tuserTypeReg==null || tuserTypeReg.getId()==null || tuserTypeReg.getId()<=0){
+			return 0;
+		}
+		return this.mapperUserTypeReg.update(tuserTypeReg);     
 	}
 
 	@Override
-	public Integer save(TuserTypeReg t) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer save(TuserTypeReg tuserTypeReg) {
+
+		if(tuserTypeReg==null){
+			return 0;
+		}
+		return this.mapperUserTypeReg.save(tuserTypeReg);
 	}
 
 }
