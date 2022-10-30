@@ -26,8 +26,11 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<TuserTypeReg,
 
 	@Override
 	public TuserTypeReg getById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(id==null || id<=0){
+			return null;
+		}
+		return this.mapperUserTypeReg.getById(id);
 	}
 
 	@Override
