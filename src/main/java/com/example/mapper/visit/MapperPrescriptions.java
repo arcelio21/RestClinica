@@ -19,7 +19,7 @@ public interface MapperPrescriptions {
 	List<Tprescription> getAll();
 	
 	@Select("SELECT * FROM Tprescriptions WHERE id=#{id}")
-	TvitalSign getById(@Param("id") Integer od);
+	Tprescription getById(@Param("id") Integer id);
 	
 	@Update("UPDATE Tprescriptions "
 			+ "SET name=#{pre.name}"

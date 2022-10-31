@@ -6,6 +6,9 @@ import java.util.List;
 import com.example.entity.visit.Tdiagnose;
 import com.example.mapper.visit.MapperDiagnoses;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ServiceDiagnosesImpl implements IServiceDiagnoses<Tdiagnose,Integer>{
 
 	private MapperDiagnoses mapperDiagnoses;
