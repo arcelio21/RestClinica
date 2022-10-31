@@ -1,5 +1,6 @@
 package com.example.service.speciality;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.example.entity.speciality.TuserSpeciality;
@@ -20,50 +21,86 @@ public class ServiceUserSpiciality implements IServiceUserSpeciality<TuserSpecia
 	@Transactional(readOnly = true)
 	@Override
 	public List<TuserSpeciality> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<TuserSpeciality> userSpecialities = this.mapperUserSpeciality.getAll();
+		if(userSpecialities==null || userSpecialities.size()<=0){
+			return Collections.emptyList();
+		}
+		return userSpecialities;
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public TuserSpeciality getById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(id==null || id<=0){
+			return null;
+		}
+		return this.mapperUserSpeciality.getById(id);
 	}
 
-	@Override
+	@OveuserSpecialitiese
 	@Transactional
-	public Integer update(TuserSpeciality t) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer update(TuserSpeciality tuserSpeciality) {
+
+		if(tuserSpeciality==null || tuserSpeciality.getId()==null || tuserSpeciality.getId()<=0){
+			return 0;
+		}
+		return this.mapperUserSpeciality.update(tuserSpeciality);
 	}
 
 	@Transactional
 	@Override
-	public Integer save(TuserSpeciality t) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer save(TuserSpeciality tuserSpeciality) {
+
+		if(tuserSpeciality==null || tuserSpeciality.getId()!=null){
+			return 0;
+		}
+		return this.mapperUserSpeciality.save(tuserSpeciality);
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public List<TuserSpeciality> getByIdSpeciality(Integer idSpeciality) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(idSpeciality==null || idSpeciality<=0){
+			return Collections.emptyList();
+		}
+
+		List<TuserSpeciality> userSpecialities = this.mapperUserSpeciality.getByIdSpeciality(idSpeciality);
+
+		if(userSpecialities==null || userSpecialities.size()<=0){
+			return Collections.emptyList();
+		}
+		return userSpecialities;
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public TuserSpeciality getByIdUserTypeReg(Integer idUserTypeReg) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(idUserTypeReg==null || idUserTypeReg<=0){
+			return null;
+		}
+	
+		TuserSpeciality userSpecialities= this.mapperUserSpeciality.getByIdUserTypeReg(idUserTypeReg);
+		
+		return userSpecialities;
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public List<TuserSpeciality> getByIdStatus(Integer idStatus) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(idStatus==null || idStatus<=0){
+			return Collections.emptyList();
+		}
+		
+		List<TuserSpeciality> userSpecialities = this.mapperUserSpeciality.getByIdStatus(idStatus);
+		if(userSpecialities==null || userSpecialities.size()<=0){
+			return Collections.emptyList();
+		}
+		return userSpecialities;
 	}
 
 	
