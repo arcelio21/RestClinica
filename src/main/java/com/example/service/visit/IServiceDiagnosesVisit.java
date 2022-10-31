@@ -9,8 +9,8 @@ import com.example.service.ServiceTemplateCrud;
 
 public interface IServiceDiagnosesVisit<T, I> extends ServiceTemplateCrud<T, I> {
 
-	List<TdiagnoseVisit> getByVisitId(Tvisit tvisit);
+	List<T> getByVisitId(Tvisit tvisit);
 
-	List<TdiagnoseVisit> getByDiagnosesId( Tdiagnose tdiagnose);
+	List<T> getByDiagnosesId( Tdiagnose tdiagnose);
 
 }
