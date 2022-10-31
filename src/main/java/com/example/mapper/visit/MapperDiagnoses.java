@@ -15,18 +15,18 @@ import com.example.entity.visit.TvitalSign;
 public interface MapperDiagnoses {
 
 	@Select("SELECT * FROM Tdiagnoses")
-	List<TvitalSign> getAll();
+	List<Tdiagnose> getAll();
 	
 	@Select("SELECT * FROM Tdiagnoses WHERE id=#{id}")
-	TvitalSign getById(@Param("id") Integer od);
+	Tdiagnose getById(@Param("id") Integer id);
 	
 	@Update("UPDATE Tdiagnoses "
 			+ "SET name=#{diag.name}"
 			+ " WHERE id=#{diag.id}")
-	Integer update(@Param("diag") Tdiagnose ttest);
+	Integer update(@Param("diag") Tdiagnose tdiagnose);
 	
 	@Insert("INSERT INTO Tdiagnoses "
 			+ "(name) "
 			+ "VALUES (#{diag.name})")
-	Integer save(@Param("diag") Tdiagnose ttest);
+	Integer save(@Param("diag") Tdiagnose tdiagnose);
 }
