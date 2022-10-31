@@ -5,6 +5,9 @@ import java.util.List;
 import com.example.entity.modules.Tprivilege;
 import com.example.mapper.modules.MapperPrivilege;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ServicePrivilegeImpl implements IServicePrivilege{
 
 	private MapperPrivilege mapperPrivilege;	

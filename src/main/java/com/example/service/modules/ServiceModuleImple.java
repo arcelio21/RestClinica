@@ -6,6 +6,9 @@ import java.util.List;
 import com.example.entity.modules.Tmodule;
 import com.example.mapper.modules.MapperModules;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ServiceModuleImple implements IServiceModule{
 
 	private MapperModules mapperModules;

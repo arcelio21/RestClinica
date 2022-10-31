@@ -6,6 +6,9 @@ import java.util.List;
 import com.example.entity.user.TuserTypeReg;
 import com.example.mapper.user.MapperUserTypeReg;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<TuserTypeReg, Integer> {
 
 	private MapperUserTypeReg mapperUserTypeReg;

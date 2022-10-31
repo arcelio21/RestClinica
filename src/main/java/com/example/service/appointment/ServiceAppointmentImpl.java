@@ -11,6 +11,9 @@ import com.example.entity.status.Tstatus;
 import com.example.entity.user.TuserTypeReg;
 import com.example.mapper.appointment.MapperAppointment;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ServiceAppointmentImpl implements IServiceAppointment<Tappointment, Integer> {
 
 	private MapperAppointment mapperAppointment;

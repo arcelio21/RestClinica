@@ -7,6 +7,9 @@ import java.util.Map;
 import com.example.entity.user.TtypeUser;
 import com.example.mapper.user.MapperTypeUser;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ServiceTypeUserImpl implements IServiceTypeUser{
 
 	

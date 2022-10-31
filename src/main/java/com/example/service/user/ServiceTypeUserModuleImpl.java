@@ -6,6 +6,9 @@ import java.util.List;
 import com.example.entity.user.TtypeUserModule;
 import com.example.mapper.user.MapperTypeUserModule;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule {
 
 	private MapperTypeUserModule mapperTypeUserModule;
