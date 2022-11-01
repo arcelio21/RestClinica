@@ -50,5 +50,5 @@ public interface MapperSymptomVisit {
 	@Insert("INSERT INTO Tsymptoms_visits "
 			+ "(visit_id,symptoms_id,obervation) "
 			+ "VALUES (#{symVis.visitId.id},#{symVis.symptomId.id},#{symVis.observation})")
-	Integer save();
+	Integer save(@Param("symVis") TsymptomVisit tsymptomVisit);
 }
