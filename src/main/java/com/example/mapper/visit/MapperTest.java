@@ -9,16 +9,15 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.example.entity.visit.Ttest;
-import com.example.entity.visit.TvitalSign;
 
 @Mapper
 public interface MapperTest {
 	
 	@Select("SELECT * FROM Ttests")
-	List<TvitalSign> getAll();
+	List<Ttest> getAll();
 	
 	@Select("SELECT * FROM Ttests WHERE id=#{id}")
-	TvitalSign getById(@Param("id") Integer od);
+	Ttest getById(@Param("id") Integer od);
 	
 	@Update("UPDATE Ttests "
 			+ "SET name=#{test.name}"
