@@ -14,7 +14,6 @@ import org.apache.ibatis.annotations.Update;
 import com.example.entity.visit.Ttest;
 import com.example.entity.visit.TtestVisit;
 import com.example.entity.visit.Tvisit;
-import com.example.entity.visit.TvitalSignVisit;
 
 @Mapper
 public interface MapperTestVisit {
@@ -33,7 +32,7 @@ public interface MapperTestVisit {
 	
 	@ResultMap("testVisId")
 	@Select("SELECT * FROM Ttests_visits WHERE id=#{id}")
-	TvitalSignVisit getById(@Param("id") Integer id);
+	TtestVisit getById(@Param("id") Integer id);
 	
 	@ResultMap("testVisId")
 	@Select("SELECT * FROM Ttests_visits WHERE visit_id=#{vis.id}")
