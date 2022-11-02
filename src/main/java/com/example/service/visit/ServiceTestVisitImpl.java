@@ -8,8 +8,10 @@ import com.example.entity.visit.TtestVisit;
 import com.example.entity.visit.Tvisit;
 import com.example.mapper.visit.MapperTestVisit;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class ServiceTestVisitImpl implements IServiceTestVisit<TtestVisit,Integer> {
 
 	private MapperTestVisit mapperTestVisit;

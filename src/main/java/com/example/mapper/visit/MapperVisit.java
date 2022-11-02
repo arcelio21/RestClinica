@@ -86,7 +86,4 @@ public interface MapperVisit {
 			+ "WHERE id=#{vis.id}")
 	Integer changeStatus(@Param("vis") Tvisit tvisit);
 	
-	
-	
-	
 }

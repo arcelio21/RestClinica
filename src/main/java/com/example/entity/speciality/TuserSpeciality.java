@@ -6,6 +6,9 @@ import javax.validation.constraints.Positive;
 import com.example.entity.status.Tstatus;
 import com.example.entity.user.TuserTypeReg;
 
+/**
+ *@apiNote Esta clase se encargar de guardar toda la informacion de los registros de la tabla {TuserSpeciality}
+ * */
 public class TuserSpeciality {
 
 	@Positive
@@ -42,6 +45,9 @@ public class TuserSpeciality {
 	}
 
 
+	/**
+	 * @apiNote Devolvera el ID de la especialidad de usuario
+	 */
 	public Integer getId() {
 		return id;
 	}
