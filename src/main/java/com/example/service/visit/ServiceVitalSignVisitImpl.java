@@ -62,12 +62,25 @@ public class ServiceVitalSignVisitImpl implements IServiceVitalSignVisit<TvitalS
 		return this.mapperVitalSignVisit.save(tvitalSignVisit);
 	}
 
-	
+	/**
+	*@apiNote Metodo que se encargar de realizar busqueda filtrado por el ID de la Visit
+	*@param tvisit :Contendra el ID del visit por el cual se desea filtrar la busqueda
+	* @return tvitalSignVisits : VitalSignVisit encontrados
+	* */	
 	@Override
 	@Transactional
 	public List<TvitalSignVisit> getByVisitId(Tvisit tvisit) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(tvisit==null || tvisit.getId()==null || tvisit.getId()<=0){
+			return Collections.emptyList();
+		}
+
+		List<TvitalSignVisit> tvitalSignVisits = this.mapperVitalSignVisit.getByVisitId(tvisit);
+
+		if(tvitalSignVisits==null || tvitalSignVisits.size()<=0){
+			return Collections.emptyList();
+		}
+		return tvitalSignVisits;
 	}
 
 	@Override
