@@ -173,13 +173,33 @@ public class ServiceVisitImpl implements IServiceVisit<Tvisit, Integer> {
 		return tvisits;
 	}
 
+	/**
+	 *@apiNote Metodo que se encargara de hacer busqueda de Visit por su fecha de creacion de acuerdo al tipo de estados de las consultas que busca
+	 *@param tstatus Estado de las visit que esta buscando
+	 *@param date Fecha de creacion de las Visit que esta buscando
+	 *@return tvisits Resultado de las busqueda realizada
+	 * */
 	@Override
 	@Transactional(readOnly = true)
 	public List<Tvisit> getByCreationDate(Tstatus tstatus, LocalDateTime date) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(tstatus== null || tstatus.getId()==null || date==null){
+			Collections.emptyList();
+		}
+
+		List<Tvisit> tvisits = this.mapperVisit.getByCreationDate(tstatus, date);
+
+		if(tvisits==null || tvisits.size()<=0){
+			return Collections.emptyList();
+		}
+		return tvisits;
 	}
 
+	/**
+	 *@apiNote Metodo que buscara las Visit de acuerdo a su estado
+	 *@param tstatus Valor del tipo de estado que se usara para filtrar
+	 *@return tvisit Resultado de las busqueda realizada
+	 * */
 	@Override
 	@Transactional(readOnly = true)
 	public List<Tvisit> getByStatusId(Tstatus tstatus) {
