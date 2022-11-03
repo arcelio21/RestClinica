@@ -68,7 +68,7 @@ public class ServiceVitalSignVisitImpl implements IServiceVitalSignVisit<TvitalS
 	* @return tvitalSignVisits : VitalSignVisit encontrados
 	* */	
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<TvitalSignVisit> getByVisitId(Tvisit tvisit) {
 
 		if(tvisit==null || tvisit.getId()==null || tvisit.getId()<=0){
@@ -83,10 +83,25 @@ public class ServiceVitalSignVisitImpl implements IServiceVitalSignVisit<TvitalS
 		return tvitalSignVisits;
 	}
 
+	/**
+	 *@apiNote Metodo que hara busqueda de VitalSignVisit filtrado por el ID de VitalSign
+	 *@param sign : Contendra el ID del SignVital
+	 *@return tvitalSignVisits : resutado de las busqueda
+	 * */
 	@Override
+	@Transactional(readOnly = true)
 	public List<TvitalSignVisit> getByVitalSignId(TvitalSign sign) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(sign==null || sign.getId()==null || sign.getId()<=0){
+			return Collections.emptyList();
+		}
+
+		List<TvitalSignVisit> tvitalSignVisits = this.mapperVitalSignVisit.getByVitalSignId(sign);
+
+		if(tvitalSignVisits==null || tvitalSignVisits.size()<=0){
+			return Collections.emptyList();
+		}
+		return tvitalSignVisits;
 	}
 
 
