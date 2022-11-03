@@ -203,8 +203,17 @@ public class ServiceVisitImpl implements IServiceVisit<Tvisit, Integer> {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Tvisit> getByStatusId(Tstatus tstatus) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(tstatus==null || tstatus.getId()==null){
+			return Collections.emptyList();
+		}
+
+		List<Tvisit> tvisits = this.mapperVisit.getByStatusId(tstatus);
+
+		if(tvisits==null || tvisits.size()<=0){
+			return Collections.emptyList();
+		}
+		return tvisits;
 	}
 
 }
