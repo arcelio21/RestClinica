@@ -47,7 +47,7 @@ public class ServiceAddressImpl implements IServiceAddress<Taddress, Integer> {
 	public Integer save(Taddress taddress) {
 		
 		if(taddress!=null){
-			this.mapper.save(taddress);
+			return this.mapper.save(taddress);
 		}
 		return 0;
 	}
