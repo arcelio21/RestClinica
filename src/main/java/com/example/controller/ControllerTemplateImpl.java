@@ -11,21 +11,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.example.service.ServiceTemplateCrud;
+import com.mysql.cj.log.Log;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public abstract class ControllerTemplateImpl<T, S extends ServiceTemplateCrud<T, Integer>>
 		implements IControllerTemplate<T> {
 
 	protected S service;
 
 	protected ControllerTemplateImpl(S service) {
-
 		this.service = service;
 	}
 
 	@GetMapping
 	@Override
 	public ResponseEntity<List<T>> getAll() {
-
+		
 		List<T> data = null;
 		try {
 			data = this.service.getAll();
@@ -56,8 +59,9 @@ public abstract class ControllerTemplateImpl<T, S extends ServiceTemplateCrud<T,
 	@PostMapping
 	@Override
 	public ResponseEntity<Integer> save(@RequestBody T t) {
-
+		System.out.println("Inicio de guardado");
 		if(t==null){
+			System.out.println("RETORNAR POR VALOR NULO");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 		}
 
@@ -65,11 +69,14 @@ public abstract class ControllerTemplateImpl<T, S extends ServiceTemplateCrud<T,
 			Integer rowAffected = this.service.save(t);
 
 			if(rowAffected==1){
+				System.out.println("RETORNAR POR VALOR ACEPTADO");
 				return ResponseEntity.status(HttpStatus.CREATED).body(rowAffected);
 			}else{
+				System.out.println("RETORNAR POR VALOR FALLADO");
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(rowAffected);
 			}
 	}catch(Exception e){
+		System.out.println("RETORNAR POR VALOR EXCEPTION");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
 		}
 	}
