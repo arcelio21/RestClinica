@@ -39,7 +39,7 @@ public class ServiceUserSpiciality implements IServiceUserSpeciality<TuserSpecia
 		return this.mapperUserSpeciality.getById(id);
 	}
 
-	@OveuserSpecialitiese
+	@Override
 	@Transactional
 	public Integer update(TuserSpeciality tuserSpeciality) {
 
