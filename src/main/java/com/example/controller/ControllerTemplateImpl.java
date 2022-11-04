@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.example.service.ServiceTemplateCrud;
-import com.mysql.cj.log.Log;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +27,7 @@ public abstract class ControllerTemplateImpl<T, S extends ServiceTemplateCrud<T,
 	@GetMapping
 	@Override
 	public ResponseEntity<List<T>> getAll() {
-		
+		log.info("REALIZANDO BUSQUEDA");
 		List<T> data = null;
 		try {
 			data = this.service.getAll();
