@@ -19,3 +19,18 @@ server:
 springdoc:
   packagesToScan: com.example.controller 
   
+# CONFIGURACION JWT
+# ISSUER: QUIEN GENERA EL TOKEN
+jwt:
+  security:
+    enabled: true # PARA HABILITAR O NO LA SEGURIDAD
+  timezone: "America/Panama"
+  issuer: "www.utp.com"
+  token:
+    auth:
+      path: ""
+    secret: "bnVsaWtlbg==" #FIRMA SECRETA DEL TOKEN
+    expiresIn: 3600 #TIEMPO QUE DURA EL TOKEN
+  excluded: #RUTAS QUE SERAN EXCLUIDAS
+  path: ""
+
