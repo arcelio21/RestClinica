@@ -3,7 +3,7 @@ spring:
   application:
     name: Api rest de clinica con My Batis
   datasource:
-    url: jdbc:mysql://localhost:3306/clinica_ws
+    url: jdbc:mysql://localhost:3306/clinica
     username: root
     password: holaCOMO
   jackson:
@@ -12,7 +12,7 @@ spring:
 
 #PUERTO DE SERVIDOR
 server:
-  port: 8081
+  port: 8082
 
 
 #SPRING DOC
@@ -32,5 +32,5 @@ jwt:
     secret: "bnVsaWtlbg==" #FIRMA SECRETA DEL TOKEN
     expiresIn: 3600 #TIEMPO QUE DURA EL TOKEN
   excluded: #RUTAS QUE SERAN EXCLUIDAS
-  path: ""
+    path: ""
 

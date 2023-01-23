@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.example.entity.visit.Tdiagnose;
-import com.example.entity.visit.TvitalSign;
 
 @Mapper
 public interface MapperDiagnoses {

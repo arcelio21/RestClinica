@@ -3,7 +3,6 @@ package com.example.service.visit;
 import java.util.List;
 
 import com.example.entity.visit.Tdiagnose;
-import com.example.entity.visit.TdiagnoseVisit;
 import com.example.entity.visit.Tvisit;
 import com.example.service.ServiceTemplateCrud;
 

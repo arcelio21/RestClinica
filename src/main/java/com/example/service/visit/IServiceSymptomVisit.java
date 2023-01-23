@@ -2,7 +2,6 @@ package com.example.service.visit;
 
 import java.util.List;
 
-import com.example.entity.visit.Tprescription;
 import com.example.entity.visit.Tsymptom;
 import com.example.entity.visit.Tvisit;
 import com.example.service.ServiceTemplateCrud;
