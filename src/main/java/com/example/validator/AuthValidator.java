@@ -23,7 +23,7 @@ public class AuthValidator {
      */
     public void validate(MultiValueMap<String,String> paramMap,String grantType) throws ApiUnauthorized {
 
-        if(grantType.isEmpty() || !grantType.equals(AuthValidator.CLIENT_CREDENTIALS)){
+        if(!grantType.equals(AuthValidator.CLIENT_CREDENTIALS)){
             this.message("El campo granType es invalido");
         }
 
