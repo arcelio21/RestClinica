@@ -16,7 +16,7 @@ public class InterceptorJwtIo implements HandlerInterceptor {
 
     @Value("#{'${jwt.excluded.path}'.split(',')}")
     private List<String> excluded;
-    private JwtIo jwtIo;
+    private final JwtIo jwtIo;
 
     public InterceptorJwtIo(JwtIo jwtIo) {
         this.jwtIo = jwtIo;
@@ -32,7 +32,7 @@ public class InterceptorJwtIo implements HandlerInterceptor {
         }
 
         if(!validate && request.getHeader("Authorization")!=null && !request.getHeader("Authorization").isEmpty()){
-            String token = request.getHeader("Authorization").replaceAll("Bearer","");
+            String token = request.getHeader("Authorization").replaceAll("Bearer ","");
             validate = !jwtIo.validateToken(token);
         }
 
