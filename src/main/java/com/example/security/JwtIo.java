@@ -24,7 +24,7 @@ public class JwtIo {
     @Value("${jwt.token.expiresIn:3600}")
     private int EXPIRES_IN;
 
-    @Value("$[jwt.issuer:none}")
+    @Value("${jwt.issuer:none}")
     private String ISSUER;
 
     public String generateToken(Object src){
@@ -55,6 +55,7 @@ public class JwtIo {
             JWT jwt = this.jwt(encodedJWT);
             validate= jwt.isExpired();
         }catch (Exception e){
+            e.printStackTrace(System.out);
             validate = true;
         }
 
