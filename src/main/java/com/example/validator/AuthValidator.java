@@ -21,14 +21,14 @@ public class AuthValidator {
      * @param grantType
      * @throws ApiUnauthorized
      */
-    public void validate(MultiValueMap<String,String> paramMap,String grantType) throws ApiUnauthorized {
+    public void validate(MultiValueMap<String,String> paramMap,String grantType) throws ApiUnauthorized{
 
         if(!grantType.equals(AuthValidator.CLIENT_CREDENTIALS)){
             this.message("El campo granType es invalido");
         }
 
-        if(Objects.isNull(paramMap) || Objects.isNull(paramMap.getFirst("client_id")) || paramMap.getFirst("cliente_id").isEmpty()
-                || Objects.isNull(paramMap.getFirst("client_secret")) || paramMap.getFirst("cliente_secret").isEmpty()){
+        if(Objects.isNull(paramMap) || Objects.isNull(paramMap.getFirst("client_id")) || paramMap.getFirst("client_id").isEmpty()
+                || Objects.isNull(paramMap.getFirst("client_secret")) || paramMap.getFirst("client_secret").isEmpty()){
             this.message("client_id y/o client secrete es invalido");
         }
     }
