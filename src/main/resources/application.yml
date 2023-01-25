@@ -28,7 +28,7 @@ jwt:
   issuer: "www.utp.com"
   token:
     auth:
-      path: ""
+      path: "/api/v1/jwt/auth/cliente_credential/AccessToken" #URL  que gestionara la autorizacion
     secret: "bnVsaWtlbg==" #FIRMA SECRETA DEL TOKEN
     expiresIn: 3600 #TIEMPO QUE DURA EL TOKEN
   excluded: #RUTAS QUE SERAN EXCLUIDAS
