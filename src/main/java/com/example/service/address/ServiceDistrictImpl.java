@@ -23,7 +23,7 @@ public class ServiceDistrictImpl implements IServiceDistrict<Tdistrict, Integer>
 	@Override
 	public List<Tdistrict> getAll() {
 		
-		List<Tdistrict> districts=this.mapperDistrict.getAll();
+		List<Tdistrict> districts=this.mapperDistrict.getALl();
 		if(districts.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -74,8 +74,8 @@ public class ServiceDistrictImpl implements IServiceDistrict<Tdistrict, Integer>
 
 
 	@Override
-	public Tdistrict getByIdSimple(Integer id) {
-		return Optional.ofNullable(id).map(this.mapperDistrict::getByIdSimple).orElse(null);
+	public Tdistrict getByIdAll(Integer id) {
+		return Optional.ofNullable(id).map(this.mapperDistrict::getByIdAll).orElse(null);
 	}
 
 }

@@ -10,5 +10,5 @@ public interface IServiceDistrict<T, I> extends ServiceTemplateCrud<T, I>{
 	
 	T getDistrictAllSimpleById(I id);
 	List<T> getByProvinceId(Tprovince tprovince);
-	Tdistrict getByIdSimple(I id);
+	Tdistrict getByIdAll(I id);
 }

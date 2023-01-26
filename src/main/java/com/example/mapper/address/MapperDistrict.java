@@ -20,6 +20,15 @@ import com.example.entity.address.Tprovince;
 @Mapper
 public interface MapperDistrict {
 
+	@Select("SELECT id,name FROM Tdistricts")
+	@Result(column = "id", property = "id")
+	@Result(column = "name", property = "name")
+	public List<Tdistrict> getALl();
+
+	@Select("SELECT id,name FROM Tdistricts WHERE id=#{id}")
+	@Result(column = "id", property = "id")
+	@Result(column = "name", property = "name")
+	public Tdistrict getById(@Param("id") Integer id);
 	@Select("SELECT * FROM Tdistricts")
 	@Results(id = "districtAll",
 			value={@Result(column = "id",property = "id"),
@@ -28,20 +37,20 @@ public interface MapperDistrict {
 					fetchType = FetchType.LAZY)),
 			@Result(column = "id", property = "villages", many = @Many(select = "com.example.mapper.address.MapperVillage.getByDistrictId",fetchType = FetchType.LAZY ))}
 	)
-	public List<Tdistrict> getAll();
+	public List<Tdistrict> getAllExtra();
 	
 	/**
 	 * METODO QUE RETURNA DISTRITOS POR ID, JUNTO A SU PROVINCIA Y CORREGIMIENTOS ASOCIADOS
-	 * @param ID (Integer) DEL DISTRITO A BUSCAR
+	 * @param id (Integer) DEL DISTRITO A BUSCAR
 	 * @return UN OBJETO 'Tdistrict'
 	 */
 	@Select("SELECT * FROM Tdistricts WHERE id=#{id}")
 	@ResultMap(value = "districtAll")
-	public Tdistrict getById(@Param("id") Integer id);
+	public Tdistrict getByIdAll(@Param("id") Integer id);
 	
 	/**
 	 * METODO QUE RETORNA LA INFORMACION DE  DISTRITOS POR ID Y SU PROVINCIA ASOCIADA
-	 * @param ID (Integer) DEL DISTRITO A BUSCAR
+	 * @param id (Integer) DEL DISTRITO A BUSCAR
 	 * @return UN OBJETO 'Tdistrict'
 	 */
 	@Select("SELECT * FROM Tdistricts WHERE id=#{id}")
@@ -53,7 +62,7 @@ public interface MapperDistrict {
 			fetchType = FetchType.LAZY))
 		}
 	)
-	public Tdistrict getByIdSimple(@Param("id") Integer id);
+	public Tdistrict getProvinceByIdDistrict(@Param("id") Integer id);
 	
 	@Select("SELECT * FROM Tdistricts WHERE province_Id=#{prov.id}")
 	@Result(column = "id", property = "id")
