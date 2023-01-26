@@ -19,6 +19,16 @@ import com.example.entity.address.Tvillage;
 @Mapper
 public interface MapperVillage {
 
+	@Select("SELECT id,name FROM Tvillages")
+	@Results(
+			id = "villageSimple1",
+			value = {
+					@Result(column = "id", property = "id"),
+					@Result(column = "name", property = "name")
+			}
+	)
+	public List<Tvillage> getAll();
+
 	@Select("SELECT * FROM Tvillages")
 	@Results(id = "villageSimple",
 			value={@Result(column = "id",property = "id"),
@@ -26,11 +36,15 @@ public interface MapperVillage {
 			@Result(column="district_id",property = "district",one = @One(select = "com.example.mapper.address.MapperDistrict.getByIdSimple",
 					fetchType = FetchType.LAZY))}
 	)
-	public List<Tvillage> getAll();
+	public List<Tvillage> getAllExtra();
+
+	@Select("SELECT id,name FROM Tvillages WHERE id=#{id}")
+	@ResultMap(value = "villageSimple1")
+	public Tvillage getById(@Param("id") Integer id);
 	
 	@Select("SELECT * FROM Tvillages WHERE id=#{id}")
 	@ResultMap(value = "villageSimple")
-	public Tvillage getById(@Param("id") Integer id);
+	public Tvillage getByIdExtra(@Param("id") Integer id);
 	
 	@Select("SELECT id as id,name as name FROM Tvillages WHERE district_id=#{dist.id}")
 	@Result(column = "id",property = "id")

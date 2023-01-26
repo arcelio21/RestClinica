@@ -19,7 +19,7 @@ public class Tvillage implements Serializable{
 	private Integer id;
 	private String name;
 
-	@JsonInclude(content = Include.NON_NULL)
+	@JsonInclude(value =Include.NON_NULL)
 	private Tdistrict district;
 	
 	
