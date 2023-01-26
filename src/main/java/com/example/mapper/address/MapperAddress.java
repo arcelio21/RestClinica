@@ -18,16 +18,23 @@ import com.example.entity.address.Taddress;
 @Mapper
 public interface MapperAddress {
 	
-	@Select("SELECT * FROM Taddress")
+	@Select("SELECT a.id as id,v.name as vname, d.name as dname, p.name as pname, specific_address " +
+			"FROM Taddress a INNER JOIN Tvillages v ON a.village_id=v.id " +
+			"INNER JOIN Tdistricts d ON v.district_id=d.id " +
+			"INNER JOIN Tprovinces p ON d.province_id=p.id")
+	@Result(column = "id",property = "id")
+	@Result(column = "vname",property = "villageId.name")
+	@Result(column = "dname", property = "villageId.district.name")
+	@Result(column = "pname",property = "villageId.district.province.name")
+	@Result(column = "specific_address", property = "specificAddress")
+	public List<Taddress> getAll();
+	
+	@Select("SELECT * FROM Taddress WHERE id=#{id}")
 	@Results(id = "address",value={@Result(column = "id",property = "id"),
 			@Result(column = "specific_address",property = "specificAddress"),
 			@Result(column="village_id",property = "villageId",one = @One(select = "com.example.mapper.address.MapperVillage.getById",
 					fetchType = FetchType.LAZY))}
 	)
-	public List<Taddress> getAll();
-	
-	@Select("SELECT * FROM Taddress WHERE id=#{id}")
-	@ResultMap(value = "address")
 	public Taddress getById(@Param("id") Integer id);
 	
 	
