@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @SpringBootApplication
 @CrossOrigin("*")
-@EnableAutoConfiguration
 @EnableConfigurationProperties
 @MapperScan("com.example.mapper.*")
 @Tag(name = "Clinica", description = "Manejara consultas y citas de una clinica")
