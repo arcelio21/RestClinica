@@ -21,7 +21,7 @@ import com.example.entity.address.Tprovince;
 public interface MapperProvince {
 
 	@Select(value = "SELECT * FROM Tprovinces")
-	public List<Tprovince> getAllSimple();
+	public List<Tprovince> getAll();
 	
 	@Select(value = "SELECT * FROM Tprovinces")
 	@Results(
@@ -33,11 +33,14 @@ public interface MapperProvince {
 			,fetchType = FetchType.LAZY))
 		}
 	)
-	List<Tprovince> getAll();
-	
-	@ResultMap("provRe")
+	List<Tprovince> getAllExtra();
+
 	@Select("SELECT * FROM Tprovinces WHERE id=#{id}")
 	public Tprovince getById(@Param("id") Integer id);
+
+	@ResultMap("provRe")
+	@Select("SELECT * FROM Tprovinces WHERE id=#{id}")
+	public Tprovince getByIdAll(@Param("id") Integer id);
 	
 	@Select("SELECT id,name FROM Tprovinces WHERE id=#{id}")
 	@Results(

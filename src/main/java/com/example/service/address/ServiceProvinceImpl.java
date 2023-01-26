@@ -58,7 +58,7 @@ public class ServiceProvinceImpl implements IServiceProvince<Tprovince, Integer>
 	 */
 	@Override
 	public List<Tprovince> getAllSimple() {
-		return this.mapperProvince.getAllSimple();
+		return this.mapperProvince.getAll();
 	}
 
 	@Override
