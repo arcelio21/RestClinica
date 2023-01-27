@@ -3,6 +3,7 @@ package com.example.controller;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.dto.RequestResponseDTO;
 import com.example.service.ServiceTemplateCrud;
 
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class ControllerTemplateImpl<T, S extends ServiceTemplateCrud<T, Integer>>
-		implements IControllerTemplate<T> {
+		implements IControllerTemplate<T>{
 
 	protected S service;
 
@@ -39,43 +40,67 @@ public abstract class ControllerTemplateImpl<T, S extends ServiceTemplateCrud<T,
 	})
 	@GetMapping
 	@Override
-	public ResponseEntity<List<T>> getAll() {
+	public ResponseEntity<RequestResponseDTO> getAll() {
 		log.info("REALIZANDO BUSQUEDA");
-		List<T> data = null;
+		RequestResponseDTO responseDTO = null;
+		Object data=null;
 		try {
-			data = this.service.getAll();
-			return ResponseEntity.status(HttpStatus.OK).body(data);
+			data = (Object) this.service.getAll();
+			responseDTO= RequestResponseDTO.builder()
+					.status("Success")
+					.description("Datos encontrados")
+					.data(data)
+					.build();
+
+			return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
 		} catch (Exception e) {
 			data = Collections.emptyList();
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(data);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
 		}
 	}
 
 	@GetMapping("/{id}")
 	@Override
-	public ResponseEntity<T> getById(
+	public ResponseEntity<RequestResponseDTO> getById(
 			@Parameter(name = "Id register", description = "1") @PathVariable("id") Integer id) {
 
+		RequestResponseDTO responseDTO=null;
 		try {
-			T data = this.service.getById(id);
+			Object data = (Object) this.service.getById(id);
+
 			if (data == null) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(data);
+				responseDTO=RequestResponseDTO.builder()
+						.status("Error")
+						.description("Dato no encontrado")
+						.data(Collections.emptyList())
+						.build();
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
 			} else {
-				return ResponseEntity.ok(data);
+				responseDTO=RequestResponseDTO.builder()
+						.status("Success")
+						.description("Dato encontrado")
+						.data(data)
+						.build();
+				return ResponseEntity.ok(responseDTO);
 			}
 
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			responseDTO=RequestResponseDTO.builder()
+					.status("Error")
+					.description("Dato no encontrado")
+					.data(Collections.emptyList())
+					.build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
 		}
 	}
 
 	@PostMapping
 	@Override
-	public ResponseEntity<Integer> save(@RequestBody T t) {
+	public ResponseEntity<RequestResponseDTO> save(@RequestBody T t) {
 		System.out.println("Inicio de guardado");
 		if (t == null) {
 			System.out.println("RETORNAR POR VALOR NULO");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 
 		try {
@@ -83,20 +108,20 @@ public abstract class ControllerTemplateImpl<T, S extends ServiceTemplateCrud<T,
 
 			if (rowAffected == 1) {
 				System.out.println("RETORNAR POR VALOR ACEPTADO");
-				return ResponseEntity.status(HttpStatus.CREATED).body(rowAffected);
+				return ResponseEntity.status(HttpStatus.CREATED).body(null);
 			} else {
 				System.out.println("RETORNAR POR VALOR FALLADO");
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(rowAffected);
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			}
 		} catch (Exception e) {
 			System.out.println("RETORNAR POR VALOR EXCEPTION");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(0);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 	}
 
 	@PutMapping
 	@Override
-	public ResponseEntity<Integer> update(@RequestBody T t) {
+	public ResponseEntity<RequestResponseDTO> update(@RequestBody T t) {
 		return null;
 	}
 
