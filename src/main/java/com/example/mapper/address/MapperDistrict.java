@@ -63,12 +63,17 @@ public interface MapperDistrict {
 		}
 	)
 	public Tdistrict getProvinceByIdDistrict(@Param("id") Integer id);
+
+	@Select("SELECT id,name FROM Tdistricts WHERE province_Id=#{prov.id}")
+	@Result(column = "id", property = "id")
+	@Result(column = "name", property = "name")
+	List<Tdistrict> getByProvinceId(@Param("prov") Tprovince tprovince);
 	
 	@Select("SELECT * FROM Tdistricts WHERE province_Id=#{prov.id}")
 	@Result(column = "id", property = "id")
 	@Result(column = "name", property = "name")
 	@Result(column = "id", property = "villages", many = @Many(select = "com.example.mapper.address.MapperVillage.getByDistrictId",fetchType = FetchType.LAZY ))
-	List<Tdistrict> getByProvinceId(@Param("prov") Tprovince tprovince);
+	List<Tdistrict> getByProvinceIdAll(@Param("prov") Tprovince tprovince);
 	
 	
 	@Select("SELECT Tdistricts.id,Tdistricts.name,Tprovinces.id as provId,Tprovinces.name as provName FROM Tdistricts  "
