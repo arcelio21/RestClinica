@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonIgnoreProperties({"handler"})
-@JsonInclude(content = Include.NON_NULL)
+@JsonInclude(value = Include.NON_NULL)
 public class Tvillage implements Serializable{
 
 	/**
