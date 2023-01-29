@@ -23,7 +23,7 @@ springdoc:
 # ISSUER: QUIEN GENERA EL TOKEN
 jwt:
   security:
-    enabled: true # PARA HABILITAR O NO LA SEGURIDAD
+    enabled: false # PARA HABILITAR O NO LA SEGURIDAD
   timezone: "America/Panama"
   issuer: "www.utp.com"
   token:
