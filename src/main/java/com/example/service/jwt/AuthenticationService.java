@@ -1,6 +1,6 @@
 package com.example.service.jwt;
 
-import com.example.config.JwtUtils;
+import com.example.security.JwtUtils;
 import com.example.dto.AuthenticationRequest;
 import com.example.dto.AuthenticationResponse;
 import com.example.dto.RegisterRequest;
@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.jsonwebtoken.io.Decoders;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {

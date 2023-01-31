@@ -1,4 +1,4 @@
-package com.example.config;
+package com.example.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -68,9 +68,6 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(keyByte);
     }
 
-    private Key getSignInKey1() {
-        return Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    }
     /**
      * Valida si el token esta expirado
      * @param token
