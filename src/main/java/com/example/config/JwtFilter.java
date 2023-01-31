@@ -19,11 +19,12 @@ import java.io.IOException;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor //LOS CAMPOS OBLIGATORIOS(Final) LO AGREGA A UN CONSTRUCTOR
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+    private final JwtUtils jwtUtils;
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -40,13 +41,12 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         jwtToken = authHeader.substring(7);
-        cedula =""; //TODO falta implementar
+        cedula =this.jwtUtils.extractUsername(jwtToken);
 
         if(cedula!=null && SecurityContextHolder.getContext().getAuthentication()==null){ //Valida que la cedula no sea nula y que no haya una autentifacion definida
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(cedula);
-            final  boolean validateToken = false; //TODO implementar validacion de token
-            if (!validateToken){
+            if (this.jwtUtils.isTokenValid(jwtToken,userDetails)){
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null,userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -54,5 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
         }
+
+        filterChain.doFilter(request,response);
     }
 }
