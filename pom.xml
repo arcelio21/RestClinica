@@ -82,32 +82,8 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--CONFIGURACION DE PROPERTIES JWT-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
 
-        <!--LIBRERIA PARA MANEJAR Serializacion-->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <type>jar</type>
-        </dependency>
         <!--LIBRERIA PARA JWT-->
-        <dependency>
-            <groupId>io.fusionauth</groupId>
-            <artifactId>fusionauth-jwt</artifactId>
-            <version>5.2.0</version>
-        </dependency>
-
-       <!-- <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
-        </dependency> -->
-
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
