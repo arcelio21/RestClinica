@@ -1,6 +1,7 @@
 package com.example.mapper.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -36,6 +37,10 @@ public interface MapperUserReg {
 	@Select("SELECT * FROM TusersRegs WHERE id=#{id}")
 	@ResultMap(value = "userRegSimple")
 	public TuserReg getById(@Param("id") Integer id);
+
+	@Select("SELECT * FROM TusersRegs WHERE iden_card=#{idencard}")
+	@ResultMap(value = "userRegSimple")
+	public Optional<TuserReg> getByIdenCard(@Param("idencard") Long idenCard);
 	
 	@Select("SELECT * FROM TusersRegs WHERE name LIKE '${name}%' ")
 	@ResultMap(value = "userRegSimple")
