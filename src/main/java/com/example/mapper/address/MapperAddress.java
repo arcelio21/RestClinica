@@ -2,16 +2,8 @@ package com.example.mapper.address;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
-import org.apache.ibatis.annotations.One;
 
 import com.example.entity.address.Taddress;
 
@@ -59,8 +51,9 @@ public interface MapperAddress {
 	@Result(column = "villName",property = "villageId.name")
 	public Taddress getVillageAllById(@Param("id") Integer id);
 	
-	
+
 	@Insert("INSERT INTO Taddress (specific_address,village_id) VALUES(#{addr.specificAddress},#{addr.villageId.id})")
+	@Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
 	public int save(@Param("addr")Taddress address);
 	
 	
