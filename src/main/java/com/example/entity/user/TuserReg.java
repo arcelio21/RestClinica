@@ -2,6 +2,7 @@ package com.example.entity.user;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 import javax.validation.constraints.Email;
@@ -14,8 +15,11 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import com.example.entity.address.Taddress;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class TuserReg {
+
+public class TuserReg implements UserDetails {
 
 
 	@Positive
@@ -168,8 +172,38 @@ public class TuserReg {
 	}
 
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
 	public String getPassword() {
 		return password;
+	}
+
+	@Override
+	public String getUsername() {
+		return String.valueOf(this.idenCard);
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 
 
