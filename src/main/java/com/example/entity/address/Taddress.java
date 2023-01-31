@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import lombok.Builder;
 
 
 @JsonIgnoreProperties({"handler"})
 @JsonInclude(content = Include.NON_NULL)
+@Builder
 public class Taddress implements Serializable {
 	
 	/**
