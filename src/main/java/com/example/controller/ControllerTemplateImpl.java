@@ -1,11 +1,12 @@
 package com.example.controller;
 
 import java.util.Collections;
-import java.util.List;
 
 import com.example.dto.RequestResponseDTO;
 import com.example.service.ServiceTemplateCrud;
 
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +63,7 @@ public abstract class ControllerTemplateImpl<T, S extends ServiceTemplateCrud<T,
 	@GetMapping("/{id}")
 	@Override
 	public ResponseEntity<RequestResponseDTO> getById(
-			@Parameter(name = "Id register", description = "1") @PathVariable("id") Integer id) {
+			@Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso", required = true, schema = @Schema(type = "integer", format = "int32")) @PathVariable("id") Integer id) {
 
 		RequestResponseDTO responseDTO=null;
 		try {
