@@ -17,7 +17,7 @@ public class DistrictAllDto {
     @Schema(name = "name", description = "Nombre del distrito", example = "Boquete")
     private String name;
 
-    @Schema(name = "province", description = "Datos de la provincia asociada al distrito", ref = "#/components/schemas/ProvinceDto")
+    @Schema(name = "province", description = "Datos de la provincia asociada al distrito", implementation = ProvinceDto.class)
     private ProvinceDto tprovince;
 
 }
