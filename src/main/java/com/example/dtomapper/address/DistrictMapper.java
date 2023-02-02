@@ -16,7 +16,7 @@ public interface DistrictMapper {
     @Mappings({
             @Mapping(source = "tdistrict.id", target = "id"),
             @Mapping(source = "tdistrict.name", target = "name"),
-            @Mapping(source = "province.id", target = "provinceId", defaultValue = "0")
+            @Mapping(source = "province.id", target = "provinceId")
     })
     DistrictDto tdistrictToDistrictDto(Tdistrict tdistrict);
 
