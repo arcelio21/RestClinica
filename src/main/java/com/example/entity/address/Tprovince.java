@@ -27,6 +27,10 @@ public class Tprovince {
 		super();
 	}
 
+	public Tprovince(Integer id){
+		super();
+		this.id = id;
+	}
 	public Tprovince(Integer id, String name) {
 		super();
 		this.id = id;
