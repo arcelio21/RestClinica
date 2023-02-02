@@ -127,4 +127,25 @@ public class ControllerDistrict {
         );
     }
 
+    @Operation(summary = "Obtener todas los distritos", description = "Se utiliza para obtener todas los distritos registrados con datos basicos de nombre y ID",
+            method = "Get",responses = {
+            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
+                    content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                    @Content(schema = @Schema)
+            })
+    }
+    )
+    @GetMapping("/allIdName")
+    public ResponseEntity<ResponseDTO> getAllIdName(){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Distritos disponibles con estrucutura simple")
+                        .data(this.serviceDistrict.getAllIdName())
+                        .build()
+        );
+    }
+
 }
