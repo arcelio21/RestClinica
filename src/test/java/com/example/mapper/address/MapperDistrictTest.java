@@ -25,7 +25,7 @@ class MapperDistrictTest {
 	@Test
 	void getAll() {
 		//fail("Not yet implemented");
-		List<Tdistrict> districts=this.mapperDistrict.getAll();
+		List<Tdistrict> districts=this.mapperDistrict.getALl();
 		districts.forEach(x->System.out.println(x));
 		assertTrue(districts.size()>0);
 	}
