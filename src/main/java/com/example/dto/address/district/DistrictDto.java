@@ -16,7 +16,7 @@ public class DistrictDto {
     @Schema(name = "name", description = "Nombre del distrito", example = "Boquete")
     private String name;
 
-    @JsonInclude(content = JsonInclude.Include.NON_EMPTY)
+    @JsonInclude(value = JsonInclude.Include.NON_NULL)
     @Schema(name = "provinceId", description = "Identificacion de la provincia a la que pertenece el distrito", example = "1", format = "int32", minimum = "1")
     private Integer provinceId;
 }
