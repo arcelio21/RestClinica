@@ -148,4 +148,25 @@ public class ControllerDistrict {
         );
     }
 
+    @Operation(summary = "Obtener distrito relacionado con una provincia",description = "Se podra obtener el distrito relacionada con la provincia que se busca",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Distrito encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseDTO.class,description = "Datos de Distrito"))),
+            @ApiResponse(responseCode = "404",description = "Distrito no encontrado, Id no valido",content = @Content(schema = @Schema))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
+    }
+    )
+    @GetMapping("/byprovince/{id}")
+    public ResponseEntity<ResponseDTO> getByProvince(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Distritos relacionados con la provincia")
+                        .data(this.serviceDistrict.getByProvinceId(id))
+                        .build()
+        );
+    }
+
+
+
 }
