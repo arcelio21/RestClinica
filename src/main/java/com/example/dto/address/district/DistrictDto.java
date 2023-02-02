@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-@Schema(name = "DistrictDTO", description = "Estructura simple de datos de distritos")
+@Schema(name = "District", description = "Estructura simple de datos de distritos")
 public class DistrictDto {
 
     @Schema(name = "id", description = "Identificacion unica de Distrito", example = "1", format = "int32", minimum = "1")
