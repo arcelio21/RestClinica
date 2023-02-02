@@ -16,7 +16,7 @@ public interface ProvinceMapper {
 
     @Mappings(value = {
             //@Mapping(ignore = true, source = "districts"),
-            @Mapping(target = "ID",source = "tprovince.id",defaultValue = "0"),
+            @Mapping(target = "id",source = "tprovince.id",defaultValue = "0"),
             @Mapping(target ="nombre",source ="tprovince.name", defaultValue = ""),
 
     })
@@ -24,7 +24,7 @@ public interface ProvinceMapper {
 
     @Mappings(value = {
             //@Mapping(ignore = true, source = "districts"),
-            @Mapping(target = "id",source = "provinceDto.ID", resultType = Integer.class),
+            @Mapping(target = "id",source = "provinceDto.id", resultType = Integer.class),
             @Mapping(target ="name",source = "provinceDto.nombre")
     })
     Tprovince provinceDtoToTprovince(ProvinceDto provinceDto);
