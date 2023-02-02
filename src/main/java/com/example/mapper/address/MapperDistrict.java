@@ -29,8 +29,8 @@ public interface MapperDistrict {
 	public List<Tdistrict> getAll();
 
 	@Select("SELECT id,name, province_id FROM Tdistricts WHERE id=#{id}")
-	@ResultMap(value = "allIdName")
-	public  Tdistrict getByIdAll(@Param("id") Integer id);
+	@ResultMap(value = "all")
+	public  Tdistrict getById(@Param("id") Integer id);
 
 	@Select("SELECT id,name FROM Tdistricts")
 	@Results(id = "allIdName", value = {
