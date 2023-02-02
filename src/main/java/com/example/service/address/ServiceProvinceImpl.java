@@ -20,7 +20,6 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 
 
 	private final MapperProvince mapperProvince;
-	@Autowired
 	private final ProvinceMapper provinceMapper;
 	
 
@@ -74,20 +73,6 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 
 		Tprovince tprovince =this.provinceMapper.provinceDtoToTprovince(provinceDto);
 		return this.mapperProvince.save(tprovince);
-	}
-
-	/**
-	 * TRAERA LA INFORMACION MAS SIMPLE DE UNA PROVINCIA, SU NOMBRE E ID
-	 */
-	@Override
-	public List<ProvinceDto> getAllSimple() {
-		return null;
-	}
-
-	@Override
-	public Tprovince getByIdSimple(Integer id) {
-		
-		return Optional.ofNullable(id).map(this.mapperProvince::getByIdSimple).orElse(null);
 	}
 
 }
