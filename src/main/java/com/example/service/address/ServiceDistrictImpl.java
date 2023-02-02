@@ -1,8 +1,14 @@
 package com.example.service.address;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.dto.address.district.DistrictAllDto;
+import com.example.dto.address.district.DistrictDto;
+import com.example.dto.address.province.ProvinceDto;
+import com.example.dtomapper.address.DistrictMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.address.Tdistrict;
@@ -10,72 +16,113 @@ import com.example.entity.address.Tprovince;
 import com.example.mapper.address.MapperDistrict;
 import java.util.Collections;
 
+@RequiredArgsConstructor
 @Service
-public class ServiceDistrictImpl implements IServiceDistrict<Tdistrict, Integer>{
+public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Integer>{
 	
-	private MapperDistrict mapperDistrict;
-	
-	public ServiceDistrictImpl(MapperDistrict mapperDistrict) {
-		
-		this.mapperDistrict=mapperDistrict;
-	}
+	private final MapperDistrict mapperDistrict;
+	private  final DistrictMapper districtMapper;
+
 	
 	@Override
-	public List<Tdistrict> getAll() {
+	public List<DistrictDto> getAll() {
 		
-		List<Tdistrict> districts=this.mapperDistrict.getALl();
+		List<Tdistrict> districts=this.mapperDistrict.getAll();
 		if(districts.isEmpty()) {
 			return Collections.emptyList();
 		}
-		
-		return districts;
-	}
 
-	@Override
-	public Tdistrict getById(Integer id) {
-		return Optional.ofNullable(id).map(mapperDistrict::getById).orElse(null);
-	}
+		List<DistrictDto> districtDtos = new ArrayList<>();
 
-	@Override
-	public Integer update(Tdistrict tdistrict) {
-		if(tdistrict==null || tdistrict.getId()==null) {
-			return null;
+		for (Tdistrict tdistrict:
+			 districts) {
+			districtDtos.add(this.districtMapper.tdistrictToDistrictDto(tdistrict));
 		}
-		
-		return this.update(tdistrict);
+
+		return districtDtos;
 	}
 
 	@Override
-	public Integer save(Tdistrict tdistrict) {
-		
-		if(tdistrict==null) {
-			return null;
+	public DistrictDto getById(Integer id) {
+		return Optional.ofNullable(id).map(mapperDistrict::getById).map(districtMapper::tdistrictToDistrictDto).orElse(null);
+	}
+
+	@Override
+	public Integer update(DistrictDto districtDto) {
+
+		if (districtDto == null || districtDto.getId()==null || districtDto.getName() == null
+				|| districtDto.getId()<=0 || districtDto.getName().isEmpty()) {
+			return 0;
 		}
-		return this.save(tdistrict);
+
+		Tdistrict tdistrict= this.districtMapper.districtDtoToTdistrict(districtDto);
+
+
+		return this.mapperDistrict.update(tdistrict);
 	}
 
 	@Override
-	public Tdistrict getDistrictAllSimpleById(Integer id) {
-
-		if(id==null) {
-			return null;
+	public Integer save(DistrictDto districtDto) {
+		if (districtDto == null || districtDto.getName() == null || districtDto.getName().isEmpty()) {
+			return 0;
 		}
-		return this.mapperDistrict.getDistrictAllSimpleById(id);
+
+		Tdistrict tdistrict = this.districtMapper.districtDtoToTdistrict(districtDto);
+		return this.mapperDistrict.save(tdistrict);
+	}
+
+
+	@Override
+	public DistrictDto getByIdName(Integer id) {
+		return Optional.ofNullable(id)
+				.map(mapperDistrict::getByIdName)
+				.map(districtMapper::tdistrictToDistrictDto)
+				.orElse(null);
 	}
 
 	@Override
-	public List<Tdistrict> getByProvinceId(Tprovince tprovince) {
-		
-		if(tprovince==null || tprovince.getId()==null) {
+	public List<DistrictDto> getAllIdName() {
+		List<Tdistrict> districts=this.mapperDistrict.getAllIdName();
+		if(districts.isEmpty()) {
 			return Collections.emptyList();
 		}
-		return this.mapperDistrict.getByProvinceId(tprovince);
+
+		List<DistrictDto> districtAllDtos= new ArrayList<>();
+
+		for (Tdistrict tdistrict:
+				districts) {
+			districtAllDtos.add(this.districtMapper.tdistrictToDistrictDto(tdistrict));
+		}
+
+		return districtAllDtos;
 	}
 
 
 	@Override
-	public Tdistrict getByIdAll(Integer id) {
-		return Optional.ofNullable(id).map(this.mapperDistrict::getByIdAll).orElse(null);
+	public List<DistrictDto> getByProvinceId(ProvinceDto provinceDto) {
+		if(provinceDto==null || provinceDto.getId()==null || provinceDto.getId()<=0){
+			return  Collections.emptyList();
+		}
+
+		List<Tdistrict> tdistricts = this.mapperDistrict.getByProvinceId(new Tprovince(provinceDto.getId()));
+
+		if(tdistricts.isEmpty()){
+			return  Collections.emptyList();
+		}
+		List<DistrictDto> districtDtos = new ArrayList<>();
+		for(Tdistrict tdistrict:tdistricts ){
+			districtDtos.add(this.districtMapper.tdistrictToDistrictDto(tdistrict));
+		}
+		return districtDtos;
+	}
+
+	@Override
+	public DistrictAllDto getDistrictAndProvinceById(Integer id) {
+
+		return Optional.ofNullable(id)
+				.map(mapperDistrict::getDistrictAndProvinceById)
+				.map(districtMapper::tdistrictToDistrictAll)
+				.orElse(null);
 	}
 
 }
