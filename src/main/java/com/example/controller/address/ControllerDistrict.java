@@ -1,6 +1,7 @@
 package com.example.controller.address;
 
 import com.example.dto.ResponseDTO;
+import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.province.ProvinceDto;
 import com.example.service.address.ServiceDistrictImpl;
@@ -9,10 +10,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/api/v1/district")
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Controller District", description = "Se podra realizar todas las operaciones disponibles para district")
 public class ControllerDistrict {
 
@@ -101,7 +103,8 @@ public class ControllerDistrict {
             }
     )
     @PutMapping
-    public ResponseEntity<ResponseDTO> update(@RequestBody DistrictDto districtDto){
+    public ResponseEntity<ResponseDTO> update(@org.springframework.web.bind.annotation.RequestBody DistrictDto districtDto){
+        log.info(districtDto.getName()+" "+districtDto.getId());
         Integer row = this.serviceDistrict.update(districtDto);
         return ResponseEntity.ok(
                 ResponseDTO.builder()
@@ -168,5 +171,20 @@ public class ControllerDistrict {
     }
 
 
+    @Operation(summary = "Obtener distrito por id con datos de provincia",description = "Se podra obtener el distrito que ademas de los datos principales tendra los datos de la provincia a la que esta relacionado",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Distrito encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DistrictAllDto.class,description = "Datos de Distrito"))),
+            @ApiResponse(responseCode = "404",description = "Distrito no encontrado, Id no valido",content = @Content(schema = @Schema))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
+    }
+    )
+    @GetMapping("/districtAndProvince/{id}")
+    public ResponseEntity<DistrictAllDto> getDistrictAndProvinceById(@PathVariable("id")  Integer id) {
+        return ResponseEntity.ok(
+                this.serviceDistrict.getDistrictAndProvinceById(id)
+        );
+    }
 
 }
