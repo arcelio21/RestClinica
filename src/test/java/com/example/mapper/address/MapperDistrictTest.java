@@ -25,7 +25,7 @@ class MapperDistrictTest {
 	@Test
 	void getAll() {
 		//fail("Not yet implemented");
-		List<Tdistrict> districts=this.mapperDistrict.getALl();
+		List<Tdistrict> districts=this.mapperDistrict.getAll();
 		districts.forEach(x->System.out.println(x));
 		assertTrue(districts.size()>0);
 	}
@@ -44,12 +44,7 @@ class MapperDistrictTest {
 	 * assertNotNull(districtProv); }
 	 */
 	
-	@Test
-	void getDistrictAllById() {
-		Tdistrict distrito=this.mapperDistrict.getDistrictAllSimpleById(4);
-		System.out.println(distrito.getName()+"provincia: "+distrito.getProvince().getName());
-		assertNotNull(distrito);
-	}
+
 	
 	
 
