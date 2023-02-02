@@ -56,7 +56,7 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 	@Override
 	public Integer update(ProvinceDto provinceDto) {
 		
-		if(provinceDto==null || provinceDto.getID()==null || provinceDto.getID()==0) {
+		if(provinceDto==null || provinceDto.getId()==null || provinceDto.getId()==0) {
 			return 0;
 		}
 
