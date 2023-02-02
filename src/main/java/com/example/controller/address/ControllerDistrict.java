@@ -48,9 +48,9 @@ public class ControllerDistrict {
 
     @Operation(summary = "Obtener distrito por ID",description = "Se podra obtener el distrito que se desee filtrandolo por su ID",
             method = "GET", responses = {
-            @ApiResponse(responseCode = "200",description = "Provincia encontrada",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProvinceDto.class,description = "Datos de provincia"))),
-            @ApiResponse(responseCode = "404",description = "Provincia no encontrada, Id no valido",content = @Content(schema = @Schema))
+            @ApiResponse(responseCode = "200",description = "Distrito encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DistrictDto.class,description = "Datos de Distrito"))),
+            @ApiResponse(responseCode = "404",description = "Distrito no encontrado, Id no valido",content = @Content(schema = @Schema))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
     }
@@ -108,6 +108,22 @@ public class ControllerDistrict {
                         .info("Cantidad de registros actualizados")
                         .data(row)
                         .build()
+        );
+    }
+
+    @Operation(summary = "Obtener distrito basico por ID",description = "Se podra obtener el distrito con su nombre y ID, filtrandolo por su ID",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Distrito encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DistrictDto.class,description = "Datos de Distrito"))),
+            @ApiResponse(responseCode = "404",description = "Distrito no encontrado, Id no valido",content = @Content(schema = @Schema))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
+    }
+    )
+    @GetMapping("/getIdName/{id}")
+    public ResponseEntity<DistrictDto> getByIdName(@PathVariable(value = "id") Integer id){
+        return ResponseEntity.ok(
+                this.serviceDistrict.getByIdName(id)
         );
     }
 
