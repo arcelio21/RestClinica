@@ -35,22 +35,12 @@ public interface MapperProvince {
 	)
 	List<Tprovince> getAllExtra();
 
-	@Select("SELECT * FROM Tprovinces WHERE id=#{id}")
+	@Select("SELECT id,name FROM Tprovinces WHERE id=#{id}")
 	public Tprovince getById(@Param("id") Integer id);
 
 	@ResultMap("provRe")
 	@Select("SELECT * FROM Tprovinces WHERE id=#{id}")
 	public Tprovince getByIdAll(@Param("id") Integer id);
-	
-	@Select("SELECT id,name FROM Tprovinces WHERE id=#{id}")
-	@Results(
-		id = "provinceSimple",
-		value = {
-			@Result(column = "id",property = "id"),
-			@Result(column = "name", property = "name")
-		}
-	)
-	public Tprovince getByIdSimple(@Param("id") Integer id);
 	
 	@Insert("INSERT INTO Tprovinces (name)values(#{prov.name})")
 	public int save(@Param("prov")Tprovince province);
