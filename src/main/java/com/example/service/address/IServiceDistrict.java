@@ -13,6 +13,6 @@ public interface IServiceDistrict<T, I> extends ServiceTemplateCrud<T, I>{
 
 	T getByIdName(I id);
 	List<T> getAllIdName();
-	List<T> getByProvinceId(ProvinceDto provinceDto);
+	List<T> getByProvinceId(I id);
 	DistrictAllDto getDistrictAndProvinceById(I id);
 }

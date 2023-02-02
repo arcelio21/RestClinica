@@ -99,12 +99,12 @@ public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Intege
 
 
 	@Override
-	public List<DistrictDto> getByProvinceId(ProvinceDto provinceDto) {
-		if(provinceDto==null || provinceDto.getId()==null || provinceDto.getId()<=0){
+	public List<DistrictDto> getByProvinceId(Integer id) {
+		if(id==null || id<=0){
 			return  Collections.emptyList();
 		}
 
-		List<Tdistrict> tdistricts = this.mapperDistrict.getByProvinceId(new Tprovince(provinceDto.getId()));
+		List<Tdistrict> tdistricts = this.mapperDistrict.getByProvinceId(new Tprovince(id));
 
 		if(tdistricts.isEmpty()){
 			return  Collections.emptyList();
