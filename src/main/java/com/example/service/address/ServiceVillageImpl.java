@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.dto.address.village.VillageDistrictDto;
 import com.example.dto.address.village.VillageDto;
 import com.example.dtomapper.address.VillageMapper;
 import lombok.RequiredArgsConstructor;
@@ -63,14 +64,53 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 	}
 
 	@Override
-	public List<Tvillage> getByDistrictId(Tdistrict tdistrict) {
-		
-		return Optional.ofNullable(tdistrict).map(this.mapperVillage::getByDistrictId).orElse(Collections.emptyList());
+	public List<VillageDto> getByDistrictId(Integer id) {
+
+		if(id==null || id<=0){
+			return Collections.emptyList();
+		}
+
+		List<Tvillage> tvillages = this.mapperVillage.getByDistrictId(new Tdistrict(id));
+
+		if( tvillages==null ||tvillages.isEmpty()){
+			return Collections.emptyList();
+		}
+
+		List<VillageDto> villageDistrictDtos = new ArrayList<>();
+
+		for(Tvillage tvillage: tvillages){
+			villageDistrictDtos.add(this.villageMapper.tvillageToVillageDto(tvillage));
+		}
+		return villageDistrictDtos;
 	}
 
 	@Override
-	public Tvillage getDistrictAllById(Integer id) {
-		return Optional.ofNullable(id).map(this.mapperVillage::getDistrictAllById).orElse(null);
+	public VillageDistrictDto getDistrictAllById(Integer id) {
+		return Optional.ofNullable(id).map(this.mapperVillage::getDistrictAllById)
+				.map(this.villageMapper::tvillageToVillageDistritcDto)
+				.orElse(null);
+	}
+
+	@Override
+	public List<VillageDto> getAllIdName() {
+		List<Tvillage> tvillages = this.mapperVillage.getAllIdName();
+
+		if(tvillages.isEmpty()){
+			return  Collections.emptyList();
+		}
+
+		List<VillageDto> villageDtos = new ArrayList<>();
+		for(Tvillage tvillage:tvillages){
+			villageDtos.add(this.villageMapper.tvillageToVillageDto(tvillage));
+		}
+		return villageDtos;
+	}
+
+	@Override
+	public VillageDto getByIdName(Integer id) {
+		return Optional.ofNullable(id).map(this.mapperVillage::getByIdName)
+				.map(this.villageMapper::tvillageToVillageDto)
+				.orElse(null);
 	}
 
 }
