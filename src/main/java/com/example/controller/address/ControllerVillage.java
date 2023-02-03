@@ -1,8 +1,6 @@
 package com.example.controller.address;
 
 import com.example.dto.ResponseDTO;
-import com.example.dto.address.district.DistrictAllDto;
-import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.village.VillageDistrictDto;
 import com.example.dto.address.village.VillageDto;
 import com.example.service.address.ServiceVillageImpl;
@@ -21,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/village")
 @RequiredArgsConstructor
-@Tag(name = "Controller Village", description = "Realizar operaciones diponbles")
+@Tag(name = "Controller Village", description = "Realizar operaciones diponibles sobre Villages")
 public class ControllerVillage {
 
     private final ServiceVillageImpl serviceVillage;

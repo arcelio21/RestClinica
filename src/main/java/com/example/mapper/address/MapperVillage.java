@@ -20,7 +20,7 @@ public interface MapperVillage {
 	)
 	List<Tvillage> getAll();
 
-	@Select("SELECT id,name FROM Tvillages WHERE id=#{id}")
+	@Select("SELECT id, name, district_id FROM Tvillages WHERE id=#{id}")
 	@ResultMap(value = "villageSimple")
 	Tvillage getById(@Param("id") Integer id);
 
