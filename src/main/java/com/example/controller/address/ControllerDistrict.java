@@ -3,7 +3,6 @@ package com.example.controller.address;
 import com.example.dto.ResponseDTO;
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
-import com.example.dto.address.province.ProvinceDto;
 import com.example.service.address.ServiceDistrictImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -104,7 +103,6 @@ public class ControllerDistrict {
     )
     @PutMapping
     public ResponseEntity<ResponseDTO> update(@org.springframework.web.bind.annotation.RequestBody DistrictDto districtDto){
-        log.info(districtDto.getName()+" "+districtDto.getId());
         Integer row = this.serviceDistrict.update(districtDto);
         return ResponseEntity.ok(
                 ResponseDTO.builder()
