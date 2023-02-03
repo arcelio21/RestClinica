@@ -1,7 +1,9 @@
 package com.example.controller.address;
 
 import com.example.dto.ResponseDTO;
+import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
+import com.example.dto.address.village.VillageDistrictDto;
 import com.example.dto.address.village.VillageDto;
 import com.example.service.address.ServiceVillageImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -104,5 +106,47 @@ public class ControllerVillage {
                         .data(this.serviceVillage.update(villageDto))
                         .build()
         );
+
     }
+
+    @Operation(summary = "Obtener village relacionado con un distrito",description = "Se podra obtener el village relacionada con el distrito que se busca",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Village encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseDTO.class,description = "Datos de Village"))),
+            @ApiResponse(responseCode = "404",description = "Village no encontrado, Id no valido",content = @Content(schema = @Schema))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
+    }
+    )
+    @GetMapping("/bydistrict/{id}")
+    public ResponseEntity<ResponseDTO> getByDistrictId(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Villages relacionados al distritos buscado")
+                        .data(this.serviceVillage.getByDistrictId(id))
+                        .build()
+        );
+    }
+
+
+    @Operation(summary = "Obtener village por id con datos de distrito",description = "Se podra obtener el village que ademas de los datos principales tendra los datos del distrito a la que esta relacionado",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Village encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = VillageDistrictDto.class,description = "Datos de Village"))),
+            @ApiResponse(responseCode = "404",description = "Village no encontrado, Id no valido",content = @Content(schema = @Schema))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
+    }
+    )
+    @GetMapping("/villageanddistrict/{id}")
+    public ResponseEntity<VillageDistrictDto> getDistrictAllById(@PathVariable("id") Integer id){
+
+        return ResponseEntity.ok(
+                this.serviceVillage.getDistrictAllById(id)
+        );
+    }
+
+
+
+
 }
