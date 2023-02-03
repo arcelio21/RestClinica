@@ -1,48 +1,65 @@
 package com.example.service.address;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.dto.address.village.VillageDto;
+import com.example.dtomapper.address.VillageMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tvillage;
 import com.example.mapper.address.MapperVillage;
 
+@RequiredArgsConstructor
 @Service
-public class ServiceVillageImpl implements IServiceVillage<Tvillage, Integer>{
+public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 
 	
-	private MapperVillage mapperVillage;
-	
-	public ServiceVillageImpl(MapperVillage mapperVillage) {
-		this.mapperVillage=mapperVillage;
-	}
+	private final MapperVillage mapperVillage;
+	private final VillageMapper villageMapper;
+
 	
 	@Override
-	public List<Tvillage> getAll() {
+	public List<VillageDto> getAll() {
 		
 		List<Tvillage> villages=this.mapperVillage.getAll();
 		if(villages==null || villages.isEmpty()) {
 			return Collections.emptyList();
 		}
-		return villages;
+
+		List<VillageDto> villageDtos = new ArrayList<>();
+		for (Tvillage village :
+			 villages) {
+			villageDtos.add(this.villageMapper.tvillageToVillageDto(village));
+		}
+		return villageDtos;
 	}
 
 	@Override
-	public Tvillage getById(Integer id) {
-		return Optional.ofNullable(id).map(this.mapperVillage::getById).orElse(null);
+	public VillageDto getById(Integer id) {
+		return Optional
+				.ofNullable(id)
+				.map(this.mapperVillage::getById)
+				.map(this.villageMapper::tvillageToVillageDto)
+				.orElse(null);
 	}
 
 	@Override
-	public Integer update(Tvillage t) {
-		return Optional.ofNullable(t).map(this.mapperVillage::update).orElse(0);
+	public Integer update(VillageDto t) {
+		return Optional.ofNullable(t)
+				.map(this.villageMapper::villageDtoToTvillage)
+				.map(this.mapperVillage::update).orElse(0);
 	}
 
 	@Override
-	public Integer save(Tvillage t) {
-		return Optional.ofNullable(t).map(this.mapperVillage::save).orElse(0);
+	public Integer save(VillageDto t) {
+		return Optional.ofNullable(t)
+				.map(this.villageMapper::villageDtoToTvillage)
+				.map(this.mapperVillage::save).orElse(0);
 	}
 
 	@Override
