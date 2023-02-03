@@ -1,54 +1,45 @@
 package com.example.mapper.address;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.One;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.mapping.FetchType;
-
 import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tvillage;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface MapperVillage {
 
+	@Select("SELECT id,name, district_id FROM Tvillages")
+	@Results(
+			id = "villageSimple",
+			value = {
+					@Result(column = "id", property = "id"),
+					@Result(column = "name", property = "name"),
+					@Result(column = "district_id", property = "district.id")
+			}
+	)
+	public List<Tvillage> getAll();
+
+	@Select("SELECT id,name FROM Tvillages WHERE id=#{id}")
+	@ResultMap(value = "villageSimple")
+	public Tvillage getById(@Param("id") Integer id);
+
 	@Select("SELECT id,name FROM Tvillages")
 	@Results(
-			id = "villageSimple1",
+			id = "village",
 			value = {
 					@Result(column = "id", property = "id"),
 					@Result(column = "name", property = "name")
 			}
 	)
-	public List<Tvillage> getAll();
+	public List<Tvillage> getAllIdName();
 
-	@Select("SELECT * FROM Tvillages")
-	@Results(id = "villageSimple",
-			value={@Result(column = "id",property = "id"),
-			@Result(column = "name",property = "name"),
-			@Result(column="district_id",property = "district",one = @One(select = "com.example.mapper.address.MapperDistrict.getByIdSimple",
-					fetchType = FetchType.LAZY))}
-	)
-	public List<Tvillage> getAllExtra();
-
-	@Select("SELECT id,name FROM Tvillages WHERE id=#{id}")
-	@ResultMap(value = "villageSimple1")
-	public Tvillage getById(@Param("id") Integer id);
-	
 	@Select("SELECT * FROM Tvillages WHERE id=#{id}")
-	@ResultMap(value = "villageSimple")
-	public Tvillage getByIdExtra(@Param("id") Integer id);
+	@ResultMap(value = "village")
+	public Tvillage getByIdName(@Param("id") Integer id);
 	
 	@Select("SELECT id as id,name as name FROM Tvillages WHERE district_id=#{dist.id}")
-	@Result(column = "id",property = "id")
-	@Result(column = "name",property = "name")
+	@ResultMap(value = "village")
 	List<Tvillage> getByDistrictId(@Param("dist") Tdistrict tdistrict);
 	
 	
