@@ -26,7 +26,7 @@ public class ControllerVillage {
 
     private final ServiceVillageImpl serviceVillage;
 
-    @Operation(summary = "Obtener todas los villages", description = "Se utiliza para obtener todas los viallages registrados",
+    @Operation(summary = "Obtener todas los villages", description = "Se utiliza para obtener todos los villages registrados",
             method = "Get",responses = {
             @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
                     content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
@@ -146,7 +146,42 @@ public class ControllerVillage {
         );
     }
 
+    @Operation(summary = "Obtener todas los villages con datos basico", description = "Se utiliza para obtener todas los villages registrados con solo ID, NAME",
+            method = "Get",responses = {
+            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
+                    content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                    @Content(schema = @Schema)
+            })
+    }
+    )
+    @GetMapping("/allIdName")
+    public ResponseEntity<ResponseDTO> getAllIdName(){
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Informacion basica de village")
+                        .data(this.serviceVillage.getAllIdName())
+                        .build()
+        );
+    }
 
+    @Operation(summary = "Obtener village basico por ID",description = "Se podra obtener el village con su nombre y ID, filtrandolo por su ID",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Village encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = VillageDto.class,description = "Datos de Distrito"))),
+            @ApiResponse(responseCode = "404",description = "Village no encontrado, Id no valido",content = @Content(schema = @Schema))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
+    }
+    )
+    @GetMapping("/getIdName/{id}")
+    public  ResponseEntity<VillageDto> getByIdName(@PathVariable("id") Integer id){
+
+        return ResponseEntity.ok(
+                this.serviceVillage.getByIdName(id)
+        );
+    }
 
 
 }
