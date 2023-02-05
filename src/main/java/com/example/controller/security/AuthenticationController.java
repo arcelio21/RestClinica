@@ -1,5 +1,6 @@
 package com.example.controller.security;
 
+import com.example.controller.ControllerTemplate;
 import com.example.dto.AuthenticationRequest;
 import com.example.dto.AuthenticationResponse;
 import com.example.dto.RegisterRequest;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthenticationController {
+public class AuthenticationController extends ControllerTemplate {
 
     private final AuthenticationService authenticationService;
     @PostMapping("/register")
