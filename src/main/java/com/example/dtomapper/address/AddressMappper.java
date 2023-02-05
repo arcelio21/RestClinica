@@ -15,7 +15,8 @@ public interface AddressMappper {
             @Mapping(source = "taddress.villageId.id", target = "villageId", defaultValue = "0"),
             @Mapping(source = "taddress.villageId.name", target = "villageName", defaultValue = ""),
             @Mapping(source = "taddress.villageId.district.name", target = "districtName", defaultValue = ""),
-            @Mapping(source = "taddress.villageId.district.province.name", target = "provinceName", defaultValue = "")
+            @Mapping(source = "taddress.villageId.district.province.name", target = "provinceName", defaultValue = ""),
+            @Mapping(source = "taddress.specificAddress", target = "specificAddress", defaultValue = "")
     })
     AddressGetDto taddressToAddressGetDto(Taddress taddress);
 

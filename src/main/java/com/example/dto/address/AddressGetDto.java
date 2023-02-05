@@ -15,4 +15,6 @@ public record AddressGetDto(
         @Schema(name = "districtName", description = "Nombre de distrito asociado", example = "David")
         String districtName,
         @Schema(name = "provinceName", description = "Nombre de provincia asociada", example = "Chiriquí")
-        String provinceName) {}
+        String provinceName,
+        @Schema(name = "specificAddress", description = "Direcion especifica", example = "Al frente de la iglesia")
+        String specificAddress) {}
