@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.village.VillageDistrictDto;
 import com.example.dto.address.village.VillageDto;
 import com.example.dtomapper.address.VillageMapper;
@@ -25,7 +26,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 
 	
 	@Override
-	public List<VillageDto> getAll() {
+	public List<AddressGetDto> getAll() {
 		
 		List<Tvillage> villages=this.mapperVillage.getAll();
 		if(villages==null || villages.isEmpty()) {

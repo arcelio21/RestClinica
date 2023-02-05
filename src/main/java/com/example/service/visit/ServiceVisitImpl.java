@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.entity.speciality.Tspeciality;
 import com.example.entity.speciality.TuserSpeciality;
 import com.example.entity.status.Tstatus;
@@ -25,7 +26,7 @@ public class ServiceVisitImpl implements IServiceVisit<Tvisit, Integer> {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Tvisit> getAll() {
+	public List<AddressGetDto> getAll() {
 
 		List<Tvisit> tvisits = this.mapperVisit.getAll();
 

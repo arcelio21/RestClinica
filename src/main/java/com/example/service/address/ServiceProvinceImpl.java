@@ -3,12 +3,11 @@ package com.example.service.address;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.province.ProvinceDto;
 import com.example.dtomapper.address.ProvinceMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.address.Tprovince;
@@ -24,11 +23,11 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 	
 
 	/**
-	 * SE EJECUTARA UN QUERY QUE TRAERA LAS PROVINCIAS, CON
-	 * LOS DISTRITOS ASOCIADO A CADA PROVINCIA Y LOS CORREGIMIENTOS ASOCIADO A CADA DISTRITOS
-	 */
+     * SE EJECUTARA UN QUERY QUE TRAERA LAS PROVINCIAS, CON
+     * LOS DISTRITOS ASOCIADO A CADA PROVINCIA Y LOS CORREGIMIENTOS ASOCIADO A CADA DISTRITOS
+     */
 	@Override
-	public List<ProvinceDto> getAll() {
+	public List<AddressGetDto> getAll() {
 		List<Tprovince> tprovinces = this.mapperProvince.getAll();
 		if(tprovinces==null || tprovinces.isEmpty()){
 			return Collections.emptyList();

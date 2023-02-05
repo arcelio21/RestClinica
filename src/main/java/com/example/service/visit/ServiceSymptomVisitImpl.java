@@ -3,6 +3,7 @@ package com.example.service.visit;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.entity.visit.Tsymptom;
 import com.example.entity.visit.TsymptomVisit;
 import com.example.entity.visit.Tvisit;
@@ -24,7 +25,7 @@ public class ServiceSymptomVisitImpl implements IServiceSymptomVisit<TsymptomVis
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<TsymptomVisit> getAll() {
+	public List<AddressGetDto> getAll() {
 
 		List<TsymptomVisit> tsymptomVisits = this.mapperSymptomVisit.getAll();
 

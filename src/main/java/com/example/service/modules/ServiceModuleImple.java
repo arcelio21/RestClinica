@@ -3,6 +3,7 @@ package com.example.service.modules;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.entity.modules.Tmodule;
 import com.example.mapper.modules.MapperModules;
 
@@ -19,7 +20,7 @@ public class ServiceModuleImple implements IServiceModule{
 	}
 
 	@Override
-	public List<Tmodule> getAll() {
+	public List<AddressGetDto> getAll() {
 
 		List<Tmodule> modules=this.mapperModules.getAll();
 		

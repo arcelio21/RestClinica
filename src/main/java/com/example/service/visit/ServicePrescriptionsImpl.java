@@ -3,6 +3,7 @@ package com.example.service.visit;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.entity.visit.Tprescription;
 import com.example.mapper.visit.MapperPrescriptions;
 
@@ -20,7 +21,7 @@ public class ServicePrescriptionsImpl implements IServicePrescriptions<Tprescrip
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<Tprescription> getAll() {
+	public List<AddressGetDto> getAll() {
 	
 		List<Tprescription> tprescriptions = this.mapperPrescriptions.getAll();
 

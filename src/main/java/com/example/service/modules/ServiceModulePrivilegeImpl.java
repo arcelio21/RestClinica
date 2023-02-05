@@ -3,6 +3,7 @@ package com.example.service.modules;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.entity.modules.TmodulePrivilege;
 import com.example.mapper.modules.MapperModulePrivilege;
 
@@ -19,7 +20,7 @@ public class ServiceModulePrivilegeImpl implements IServiceModulePrivilege{
 	}
 
 	@Override
-	public List<TmodulePrivilege> getAll() {
+	public List<AddressGetDto> getAll() {
 
 		List<TmodulePrivilege> modulesPriv=this.mapperModulePrivilege.getAll();
 		if(modulesPriv==null || modulesPriv.isEmpty()) {

@@ -3,6 +3,7 @@ package com.example.service.user;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.entity.user.TtypeUserModule;
 import com.example.mapper.user.MapperTypeUserModule;
 
@@ -18,7 +19,7 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule {
 	}
 
 	@Override
-	public List<TtypeUserModule> getAll() {
+	public List<AddressGetDto> getAll() {
 		List<TtypeUserModule> ttypeUserModules = this.mapperTypeUserModule.getAll();
 		if (ttypeUserModules == null || ttypeUserModules.isEmpty()) {
 			return Collections.emptyList();

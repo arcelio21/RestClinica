@@ -1,7 +1,15 @@
 package com.example.service.address;
 
-import com.example.service.ServiceTemplateCrud;
+import com.example.dto.address.AddressGetDto;
+import com.example.dto.address.AddressRequestDto;
 
-public interface IServiceAddress<T,I> extends ServiceTemplateCrud<T, I> {
+import java.util.List;
 
+public interface IServiceAddress{
+
+
+    List<AddressGetDto> getAll();
+    AddressGetDto getById(Integer id);
+    Integer update(AddressRequestDto requestDto);
+    Integer save(AddressRequestDto requestDto);
 }

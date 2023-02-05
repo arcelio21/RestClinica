@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.entity.appointment.Tappointment;
 import com.example.entity.speciality.Tspeciality;
 import com.example.entity.speciality.TuserSpeciality;
@@ -23,7 +24,7 @@ public class ServiceAppointmentImpl implements IServiceAppointment<Tappointment,
 	}
 
 	@Override
-	public List<Tappointment> getAll() {
+	public List<AddressGetDto> getAll() {
 
 		List<Tappointment> aTappointments = this.mapperAppointment.getAll();
 

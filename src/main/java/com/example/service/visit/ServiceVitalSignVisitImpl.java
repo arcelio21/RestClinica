@@ -3,6 +3,7 @@ package com.example.service.visit;
 import java.util.Collections;
 import java.util.List;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.entity.visit.Tvisit;
 import com.example.entity.visit.TvitalSign;
 import com.example.entity.visit.TvitalSignVisit;
@@ -22,7 +23,7 @@ public class ServiceVitalSignVisitImpl implements IServiceVitalSignVisit<TvitalS
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<TvitalSignVisit> getAll() {
+	public List<AddressGetDto> getAll() {
 
 		List<TvitalSignVisit> tvitalSignVisits = this.mapperVitalSignVisit.getAll();
 

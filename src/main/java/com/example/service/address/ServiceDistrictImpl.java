@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
-import com.example.dto.address.province.ProvinceDto;
 import com.example.dtomapper.address.DistrictMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Intege
 
 	
 	@Override
-	public List<DistrictDto> getAll() {
+	public List<AddressGetDto> getAll() {
 		
 		List<Tdistrict> districts=this.mapperDistrict.getAll();
 		if(districts.isEmpty()) {

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.example.dto.address.AddressGetDto;
 import com.example.entity.user.TtypeUser;
 import com.example.mapper.user.MapperTypeUser;
 
@@ -70,7 +71,7 @@ public class ServiceTypeUserImpl implements IServiceTypeUser{
 
 
 	@Override
-	public List<TtypeUser> getAll() {
+	public List<AddressGetDto> getAll() {
 		return Collections.emptyList();
 	}
 
