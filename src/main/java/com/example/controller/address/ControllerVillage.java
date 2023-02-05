@@ -1,5 +1,6 @@
 package com.example.controller.address;
 
+import com.example.controller.ControllerTemplate;
 import com.example.dto.ResponseDTO;
 import com.example.dto.address.village.VillageDistrictDto;
 import com.example.dto.address.village.VillageDto;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/village")
 @RequiredArgsConstructor
 @Tag(name = "Controller Village", description = "Realizar operaciones diponibles sobre Villages")
-public class ControllerVillage {
+public class ControllerVillage extends ControllerTemplate {
 
     private final ServiceVillageImpl serviceVillage;
 

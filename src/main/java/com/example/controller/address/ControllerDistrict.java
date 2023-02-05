@@ -1,5 +1,6 @@
 package com.example.controller.address;
 
+import com.example.controller.ControllerTemplate;
 import com.example.dto.ResponseDTO;
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Controller District", description = "Se podra realizar todas las operaciones disponibles para district")
-public class ControllerDistrict {
+public class ControllerDistrict extends ControllerTemplate {
 
     private final ServiceDistrictImpl serviceDistrict;
 
