@@ -4,7 +4,6 @@ import com.example.controller.ControllerTemplate;
 import com.example.dto.ResponseDTO;
 import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.AddressRequestDto;
-import com.example.dto.address.province.ProvinceDto;
 import com.example.service.address.IServiceAddress;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Addresses Controller", description = "Realiza operaciones sobre los registros disponibles de Address")
+@Tag(name = "Controller Adress", description = "Realiza operaciones sobre los registros disponibles de Address")
 @RequestMapping("api/v1/address")
 public class ControllerAddress extends ControllerTemplate {
 

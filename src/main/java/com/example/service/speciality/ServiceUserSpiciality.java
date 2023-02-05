@@ -3,7 +3,6 @@ package com.example.service.speciality;
 import java.util.Collections;
 import java.util.List;
 
-import com.example.dto.address.AddressGetDto;
 import com.example.entity.speciality.TuserSpeciality;
 import com.example.mapper.speciality.MapperUserSpeciality;
 
@@ -21,7 +20,7 @@ public class ServiceUserSpiciality implements IServiceUserSpeciality<TuserSpecia
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<AddressGetDto> getAll() {
+	public List<TuserSpeciality> getAll() {
 		
 		List<TuserSpeciality> userSpecialities = this.mapperUserSpeciality.getAll();
 		if(userSpecialities==null || userSpecialities.size()<=0){

@@ -3,7 +3,6 @@ package com.example.service.visit;
 import java.util.Collections;
 import java.util.List;
 
-import com.example.dto.address.AddressGetDto;
 import com.example.entity.visit.Ttest;
 import com.example.mapper.visit.MapperTest;
 
@@ -21,7 +20,7 @@ public class ServiceTestImpl implements IServiceTest<Ttest,Integer>{
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<AddressGetDto> getAll() {
+	public List<Ttest> getAll() {
 
 		List<Ttest> ttests = this.mapperTest.getAll();
 

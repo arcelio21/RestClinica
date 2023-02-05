@@ -3,7 +3,6 @@ package com.example.service.user;
 import java.util.Collections;
 import java.util.List;
 
-import com.example.dto.address.AddressGetDto;
 import com.example.entity.user.TuserTypeReg;
 import com.example.mapper.user.MapperUserTypeReg;
 
@@ -19,7 +18,7 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<TuserTypeReg,
 	}
 
 	@Override
-	public List<AddressGetDto> getAll() {
+	public List<TuserTypeReg> getAll() {
 		List<TuserTypeReg> tuserTypeRegs= this.mapperUserTypeReg.getAll();
 		if(tuserTypeRegs.size()<=0){
 		  return Collections.emptyList();

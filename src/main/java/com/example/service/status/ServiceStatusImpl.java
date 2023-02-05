@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.example.dto.address.AddressGetDto;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.status.Tstatus;
@@ -23,7 +22,7 @@ public class ServiceStatusImpl implements IServiceStatus{
 	}
 
 	@Override
-	public List<AddressGetDto> getAll() {
+	public List<Tstatus> getAll() {
 		
 		List<Tstatus> status=this.mapperStatus.getAll();
 		if(status==null || status.isEmpty()){

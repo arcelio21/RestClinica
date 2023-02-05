@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
 import com.example.dtomapper.address.DistrictMapper;
@@ -25,7 +24,7 @@ public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Intege
 
 	
 	@Override
-	public List<AddressGetDto> getAll() {
+	public List<DistrictDto> getAll() {
 		
 		List<Tdistrict> districts=this.mapperDistrict.getAll();
 		if(districts.isEmpty()) {

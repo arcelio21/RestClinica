@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.province.ProvinceDto;
 import com.example.dtomapper.address.ProvinceMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,7 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
      * LOS DISTRITOS ASOCIADO A CADA PROVINCIA Y LOS CORREGIMIENTOS ASOCIADO A CADA DISTRITOS
      */
 	@Override
-	public List<AddressGetDto> getAll() {
+	public List<ProvinceDto> getAll() {
 		List<Tprovince> tprovinces = this.mapperProvince.getAll();
 		if(tprovinces==null || tprovinces.isEmpty()){
 			return Collections.emptyList();

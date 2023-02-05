@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.dto.address.AddressGetDto;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.user.TuserReg;
@@ -20,7 +19,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 	}
 	
 	@Override
-	public List<AddressGetDto> getAll() {
+	public List<TuserReg> getAll() {
 		List<TuserReg> users=this.mapperUserReg.getAll();
 		
 		if(users==null || users.isEmpty()) {

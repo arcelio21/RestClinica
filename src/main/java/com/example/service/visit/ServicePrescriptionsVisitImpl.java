@@ -2,7 +2,6 @@ package com.example.service.visit;
 
 import java.util.List;
 
-import com.example.dto.address.AddressGetDto;
 import com.example.entity.visit.Tprescription;
 import com.example.entity.visit.TprescriptionVisit;
 import com.example.entity.visit.Tvisit;
@@ -17,7 +16,7 @@ public class ServicePrescriptionsVisitImpl implements IServicePrescriptionsVisit
 	}
 
 	@Override
-	public List<AddressGetDto> getAll() {
+	public List<TprescriptionVisit> getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}

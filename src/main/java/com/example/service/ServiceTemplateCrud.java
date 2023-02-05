@@ -1,7 +1,5 @@
 package com.example.service;
 
-import com.example.dto.address.AddressGetDto;
-
 import java.util.List;
 
 public interface ServiceTemplateCrud<T,I> {
