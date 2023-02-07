@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
 import com.example.dtomapper.address.DistrictMapper;
+import com.example.exception.NoDataFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,8 @@ public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Intege
 
 	@Override
 	public DistrictDto getById(Integer id) {
-		return Optional.ofNullable(id).map(mapperDistrict::getById).map(districtMapper::tdistrictToDistrictDto).orElse(null);
+		return Optional.ofNullable(id).map(mapperDistrict::getById).map(districtMapper::tdistrictToDistrictDto)
+				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
 	@Override
