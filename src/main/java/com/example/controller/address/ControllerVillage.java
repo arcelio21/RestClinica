@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -76,12 +77,10 @@ public class ControllerVillage extends ControllerTemplate {
     )
     @PostMapping
     public ResponseEntity<ResponseDTO> save(@RequestBody VillageDto villageDto){
-        return ResponseEntity.ok(
-                ResponseDTO.builder()
-                        .info("Cantidad de registro creados")
-                        .data(this.serviceVillage.save(villageDto))
-                        .build()
-        );
+        return  new ResponseEntity<>(ResponseDTO.builder()
+                .info("Cantidad de registros creados")
+                .data(this.serviceVillage.save(villageDto))
+                .build(), HttpStatus.CREATED);
     }
 
     @Operation(
