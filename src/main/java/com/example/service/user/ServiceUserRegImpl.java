@@ -7,7 +7,12 @@ import com.example.dtomapper.user.UserRegMapper;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.user.UsernameInvalid;
 import com.example.mapper.user.MapperUserReg;
+import com.example.service.jwt.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -16,12 +21,15 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ServiceUserRegImpl implements IServiceUserReg{
 
 	private final MapperUserReg mapperUserReg;
 	private final UserRegMapper userRegMapper;
+	private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
 
-	
+
 	@Override
 	public List<UserRegDto> getAll() {
 
@@ -89,10 +97,18 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 			user.setPassword("PASS VACIO");
 			return null;
 		}
+
+
+
+		this.authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(
+						user.getIdenCard(),
+						user.getPassword()
+				)
+		);
+
 		
-		return Optional.of(user)
-				.map(this.userRegMapper::authenticationRequestToTuserReg)
-				.map(this.mapperUserReg::validateAccount)
+		return this.mapperUserReg.getByIdenCard(user.getIdenCard())
 				.map(this.userRegMapper::TuserRegToUserRegDto)
 				.orElseThrow(() -> new UsernameInvalid("Datos no valido"));
 	}
