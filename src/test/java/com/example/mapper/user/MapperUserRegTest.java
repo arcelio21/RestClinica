@@ -72,7 +72,7 @@ class MapperUserRegTest {
 		TuserReg user=this.mapperUserReg.getById(1);
 		user.setPassword("hola");
 		System.out.println(user);
-		Integer rowAffected=this.mapperUserReg.updatePassword(user);
+		Integer rowAffected=this.mapperUserReg.updatePassword(user, "");
 		assertEquals(1, rowAffected);
 	}
 	
