@@ -1,6 +1,7 @@
 package com.example.controller.address;
 
 import com.example.controller.ControllerTemplate;
+import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.AddressRequestDto;
@@ -52,7 +53,7 @@ public class ControllerAddress extends ControllerTemplate {
             method = "GET", responses = {
             @ApiResponse(responseCode = "200",description = "Address encontrada",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AddressGetDto.class,description = "Datos de Address"))),
-            @ApiResponse(responseCode = "404",description = "Address no encontrada, Id no valido",content = @Content(schema = @Schema))
+            @ApiResponse(responseCode = "404",description = "Address no encontrada, Id no valido",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
     }
