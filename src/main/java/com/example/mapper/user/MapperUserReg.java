@@ -59,17 +59,5 @@ public interface MapperUserReg {
 	
 	@Update("UPDATE TusersRegs SET password=${newPass} WHERE iden_card=${user.idenCard} AND password=${user.password}")
 	Integer updatePassword(@Param("user") TuserReg user, @Param("newPass") String newPass);
-	
-	
-	@Select("SELECT * FROM TusersRegs WHERE iden_card=${user.idenCard} AND password=sha1('${user.password}') ")
-	@Result(column = "id",property = "id")
-	@Result(column = "iden_card",property = "idenCard")
-	@Result(column = "name",property = "name")
-	@Result(column = "last_name",property = "lastName")
-	@Result(column = "contact",property = "contact")
-	@Result(column = "email",property = "email")
-	@Result(column = "fecha_nacimiento",property = "fechaNacimiento")
-	@Result(column = "fecha_creacion",property = "fechaCreacion")
-	@Result(column = "address_id",property = "addressId.id")
-	TuserReg validateAccount(@Param("user") TuserReg user);
+
 }
