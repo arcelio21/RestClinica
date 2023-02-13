@@ -4,29 +4,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.exception.NoDataFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.user.TuserReg;
 import com.example.mapper.user.MapperUserReg;
 
 @Service
+@RequiredArgsConstructor
 public class ServiceUserRegImpl implements IServiceUserReg{
 
-	private MapperUserReg mapperUserReg;
-	
-	public ServiceUserRegImpl(MapperUserReg mapperUserReg) {
-		this.mapperUserReg=mapperUserReg;
-	}
+	private final MapperUserReg mapperUserReg;
+
 	
 	@Override
 	public List<TuserReg> getAll() {
-		List<TuserReg> users=this.mapperUserReg.getAll();
-		
-		if(users==null || users.isEmpty()) {
-			return Collections.emptyList();
-		}
-		
-		return users;
+
+		//TODO Hacer DTO para mapear estos datos
+		return Optional.ofNullable(this.mapperUserReg.getAll()).
+				orElseThrow(NoDataFoundException::new);
 	}
 
 	@Override
