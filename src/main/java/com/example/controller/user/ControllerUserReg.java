@@ -1,10 +1,14 @@
 package com.example.controller.user;
 
 import com.example.dto.AuthenticationRequest;
+import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
+import com.example.dto.address.AddressGetDto;
 import com.example.dto.user.UserRegDto;
 import com.example.service.user.ServiceUserRegImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,6 +46,12 @@ public class ControllerUserReg {
         );
     }
 
+    @Operation(summary = "Validar usuario",description = "Se valida el usuario para saber su existencia con contraseña y cedula, principalmente para obtener informacion",
+                method = "POST", responses = {
+                @ApiResponse(responseCode = "200",description = "Usuario validado",
+                        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de usuarios"))),
+                @ApiResponse(responseCode = "403",description = "Datos de usuario no valido",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+        })
     @PostMapping("/Validate")
     public ResponseEntity<UserRegDto> validateAcount(@RequestBody AuthenticationRequest auth){
 
