@@ -1,5 +1,6 @@
 package com.example.exception;
 
+import com.example.dto.ErrorResponseDto;
 import com.example.exception.user.UsernameInvalid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,18 +20,21 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NoDataFoundException.class)
     public ResponseEntity<Object> handleNoDatFoundException(NoDataFoundException ex){
 
-        Map<String,Object> error=new LinkedHashMap<>();
-        error.put("Fecha", LocalDate.now());
-        error.put("Message", ex.getMessage());
+        var error = ErrorResponseDto.builder()
+                .fecha(LocalDate.now())
+                .messageError(ex.getMessage())
+                .build();
 
         return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UsernameInvalid.class)
     public ResponseEntity<Object> handleUsernameInvalid(UsernameInvalid ex){
-        Map<String, Object> error = new HashMap<>();
-        error.put("Fecha", LocalDate.now());
-        error.put("Message", ex.getMessage());
+
+        var error = ErrorResponseDto.builder()
+                .fecha(LocalDate.now())
+                .messageError(ex.getMessage())
+                .build();
 
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
