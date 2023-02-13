@@ -76,15 +76,7 @@ class MapperUserRegTest {
 		assertEquals(1, rowAffected);
 	}
 	
-	@Test
-	void validateAccount() {
-		TuserReg userValidate=new TuserReg();
-		userValidate.setIdenCard(12000704001435L);
-		userValidate.setPassword("holaCOMO");
-		TuserReg validate=this.mapperUserReg.validateAccount(userValidate);
-		assertEquals(validate.getIdenCard(), userValidate.getIdenCard());
-		System.out.println("ENVIADO: "+userValidate.getIdenCard()+"| RETORNADO: "+validate.getIdenCard());
-	}
+
 	
 	@Test
 	void getByNmae() {

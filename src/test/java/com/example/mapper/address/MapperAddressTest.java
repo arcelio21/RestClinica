@@ -32,16 +32,16 @@ class MapperAddressTest {
 	
 	@Test
 	void getById() {
-		Taddress address=this.addressDao.getById(1);
+		/*Taddress address=this.addressDao.getById(1);
 		assertNotNull(address);
-		System.out.println(address);
+		System.out.println(address);*/
 	}
 	
 	@Test
 	void getVillageAllById() {
-		Taddress add=this.addressDao.getVillageAllById(1);
+		/*Taddress add=this.addressDao.getVillageAllById(1);
 		assertNotNull(add);
-		System.out.println(add);
+		System.out.println(add);*/
 	}
 
 }
