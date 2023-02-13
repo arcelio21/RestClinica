@@ -5,6 +5,7 @@ import com.example.dto.user.UserRegDto;
 import com.example.dto.user.UserUpdatePassDto;
 import com.example.dtomapper.user.UserRegMapper;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.UsernameInvalid;
 import com.example.mapper.user.MapperUserReg;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -93,7 +94,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 				.map(this.userRegMapper::authenticationRequestToTuserReg)
 				.map(this.mapperUserReg::validateAccount)
 				.map(this.userRegMapper::TuserRegToUserRegDto)
-				.orElseThrow();
+				.orElseThrow(() -> new UsernameInvalid("Datos no valido"));
 	}
 
 	@Override
