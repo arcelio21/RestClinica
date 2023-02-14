@@ -46,6 +46,23 @@ public class ControllerUserReg {
         );
     }
 
+    @Operation(summary = "Obtener usuario por ID",description = "Se podra obtener un usuario por su ID",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Usuario encontrada",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Address"))),
+            @ApiResponse(responseCode = "404",description = "Usuario no encontrada, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
+    }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<UserRegDto> getById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(
+                this.serviceUserReg.getById(id)
+        );
+    }
+
+
     @Operation(summary = "Validar usuario",description = "Se valida el usuario para saber su existencia con contraseña y cedula, principalmente para obtener informacion",
                 method = "POST", responses = {
                 @ApiResponse(responseCode = "200",description = "Usuario validado",
