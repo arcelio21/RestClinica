@@ -41,7 +41,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 	}
 
 	@Override
-	public UserRegDto getById(Integer id) {
+	public UserRegDto getById(Long id) {
 		return Optional.ofNullable(id)
 				.map(this.mapperUserReg::getById)
 				.map(this.userRegMapper::TuserRegToUserRegDto)

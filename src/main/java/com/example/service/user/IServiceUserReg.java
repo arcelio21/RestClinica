@@ -8,7 +8,7 @@ import com.example.dto.user.UserUpdatePassDto;
 import com.example.entity.user.TuserReg;
 import com.example.service.ServiceTemplateCrud;
 
-public interface IServiceUserReg extends ServiceTemplateCrud<UserRegDto, Integer>{
+public interface IServiceUserReg extends ServiceTemplateCrud<UserRegDto, Long>{
 
 	List<UserRegDto> getByName(String name);
 	UserRegDto validateAccount(AuthenticationRequest user);

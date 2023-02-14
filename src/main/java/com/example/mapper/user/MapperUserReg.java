@@ -35,7 +35,7 @@ public interface MapperUserReg {
 
 	@Select("SELECT * FROM TusersRegs WHERE id=#{id}")
 	@ResultMap(value = "userRegSimple")
-	TuserReg getById(@Param("id") Integer id);
+	TuserReg getById(@Param("id") Long id);
 
 	@Select("SELECT * FROM TusersRegs WHERE iden_card=#{idencard}")
 	@ResultMap(value = "userRegSimple")

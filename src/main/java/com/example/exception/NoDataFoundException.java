@@ -6,6 +6,11 @@ public class NoDataFoundException extends RuntimeException{
         super(String.format("Data con id %d no encontrado", id));
     }
 
+    public NoDataFoundException(Long id) {
+        super(String.format("Data con id %d no encontrado", id));
+    }
+
+
     public NoDataFoundException() {
         super("Data no encontrada");
     }

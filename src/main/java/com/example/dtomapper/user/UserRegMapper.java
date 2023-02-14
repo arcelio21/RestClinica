@@ -7,10 +7,12 @@ import com.example.entity.user.TuserReg;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface UserRegMapper {
 
+    UserRegMapper INSTANCE = Mappers.getMapper(UserRegMapper.class);
 
     @Mappings({
             @Mapping(source = "user.id", target = "id"),
@@ -39,7 +41,8 @@ public interface UserRegMapper {
             @Mapping(source = "user.addressId", target = "addressId.id"),
             @Mapping(target = "addressId", ignore = true),
             @Mapping(target = "usersTypesRegs", ignore = true),
-            @Mapping(target = "fechaCreacion", ignore = true)
+            @Mapping(target = "fechaCreacion", ignore = true),
+            @Mapping(target = "authorities", ignore = true)
     })
     TuserReg userRegDtoToTuserReg(UserRegDto user);
 
@@ -54,7 +57,8 @@ public interface UserRegMapper {
             @Mapping(target = "name", ignore = true),
             @Mapping(target = "contact", ignore = true),
             @Mapping(target = "email", ignore = true),
-            @Mapping(target = "lastName", ignore = true)
+            @Mapping(target = "lastName", ignore = true),
+            @Mapping(target = "authorities", ignore = true)
     })
     TuserReg authenticationRequestToTuserReg(AuthenticationRequest request);
 
@@ -70,6 +74,7 @@ public interface UserRegMapper {
             @Mapping(target = "contact", ignore = true),
             @Mapping(target = "email", ignore = true),
             @Mapping(target = "lastName", ignore = true),
+            @Mapping(target = "authorities", ignore = true)
     })
     TuserReg userUpdatePassToTuserReg(UserUpdatePassDto user);
 
