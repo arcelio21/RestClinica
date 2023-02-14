@@ -60,6 +60,30 @@ public class ControllerUserReg {
         );
     }
 
+    @Operation(
+            summary = "Actualizar Usuarios",
+            description = "Se actualizara usuario que se desee",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Usuario actualizada correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PostMapping
+    public ResponseEntity<ResponseDTO> update(@RequestBody UserRegDto userRegDto){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Cantidad de registros actualizados")
+                        .data(this.serviceUserReg.update(userRegDto))
+                        .build()
+        );
+    }
+
 
     @Operation(summary = "Validar usuario",description = "Se valida el usuario para saber su existencia con contraseña y cedula, principalmente para obtener informacion",
                 method = "POST", responses = {
