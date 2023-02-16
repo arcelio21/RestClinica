@@ -35,7 +35,7 @@ class MapperUserRegTest {
 	
 	@Test
 	void getById() {
-		TuserReg user=this.mapperUserReg.getById(1);
+		TuserReg user=this.mapperUserReg.getById(1L);
 		assertNotNull(user);
 		System.out.println(user); 
 		LocalDate fecha=LocalDate.of(2000, 9, 02);
@@ -61,7 +61,7 @@ class MapperUserRegTest {
 	
 	@Test
 	void update() {
-		TuserReg user=this.mapperUserReg.getById(1);
+		TuserReg user=this.mapperUserReg.getById(1L);
 		user.setContact("67289102");
 		Integer rowAffected=this.mapperUserReg.update(user);
 		assertEquals(1, rowAffected);
@@ -69,7 +69,7 @@ class MapperUserRegTest {
 	
 	@Test
 	void updatePassword() {
-		TuserReg user=this.mapperUserReg.getById(1);
+		TuserReg user=this.mapperUserReg.getById(1L);
 		user.setPassword("hola");
 		System.out.println(user);
 		Integer rowAffected=this.mapperUserReg.updatePassword(user, "");
