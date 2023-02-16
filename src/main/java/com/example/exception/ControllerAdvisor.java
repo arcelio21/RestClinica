@@ -1,6 +1,7 @@
 package com.example.exception;
 
 import com.example.dto.ErrorResponseDto;
+import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.user.UserNotSaveException;
 import com.example.exception.user.UsernameInvalid;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,20 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .messageError(ex.getMessage())
                 .fecha(LocalDate.now())
                 .data(ex.getData())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AddressNotSaveException.class)
+    public ResponseEntity<Object> handleUserNotSave(AddressNotSaveException ex){
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data(
+                        (ex.getData()==null)?"":ex.getData()
+                )
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
