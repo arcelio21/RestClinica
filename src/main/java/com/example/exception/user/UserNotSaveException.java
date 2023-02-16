@@ -1,6 +1,6 @@
 package com.example.exception.user;
 
-public class UserNotSaveException extends  Exception{
+public class UserNotSaveException extends  RuntimeException{
 
     private final Object data;
     public UserNotSaveException(String message, Object data) {
