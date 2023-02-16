@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
 @Schema(name = "UserReg", description = "Tendra toda la informacion disponible de los usuarios registrados")
 public class UserRegDto {
@@ -25,5 +25,11 @@ public class UserRegDto {
     private String email;
     private LocalDate fechaNacimiento;
     private LocalDateTime fechaCreacion;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Integer addressId;
+
+
+
+
 }
