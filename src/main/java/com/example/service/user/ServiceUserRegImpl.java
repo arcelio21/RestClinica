@@ -2,18 +2,25 @@ package com.example.service.user;
 
 import com.example.dto.AuthenticationRequest;
 import com.example.dto.user.UserRegDto;
+import com.example.dto.user.UserRegSaveDto;
 import com.example.dto.user.UserUpdatePassDto;
+import com.example.dtomapper.address.AddressMappper;
 import com.example.dtomapper.user.UserRegMapper;
+import com.example.entity.address.Taddress;
+import com.example.entity.user.TuserReg;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.address.AddressNotSaveException;
+import com.example.exception.user.UserNotSaveException;
 import com.example.exception.user.UsernameInvalid;
+import com.example.mapper.address.MapperAddress;
 import com.example.mapper.user.MapperUserReg;
-import com.example.service.jwt.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +35,8 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 	private final UserRegMapper userRegMapper;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
+	private final AddressMappper addressMappper;
+	private final MapperAddress mapperAddress;
 
 
 	@Override
@@ -61,14 +70,33 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 				.orElse(0);
 		
 	}
-	
+
+	@Transactional
 	@Override
-	public Integer save(UserRegDto t) {
+	public Integer save(UserRegDto user)  {
+
+		if( user != null && user.getClass().equals(UserRegSaveDto.class)){
+
+			Taddress taddress = this.addressMappper.userRegSaveDtoToTaddres((UserRegSaveDto) user);
+
+			Optional.ofNullable(taddress)
+					.map(this.mapperAddress::save)
+					.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos"));
+
+
+			return Optional.of(user)
+					.map(this.userRegMapper::userRegDtoToTuserReg)
+					.map((tuserReg -> {tuserReg.setAddressId(new Taddress(taddress.getId()));
+						return tuserReg;
+					}))
+					.map(this.mapperUserReg::save)
+					.orElseThrow(()-> new UserNotSaveException("Datos no son validos para ser guardados", user));
+
+		}else {
+			throw  new UserNotSaveException("Datos de usuario no guardado", user);
+		}
 		
-		return Optional.ofNullable(t)
-				.map(this.userRegMapper::userRegDtoToTuserReg)
-				.map(this.mapperUserReg::save)
-				.orElse(0);
+
 	}
 
 	@Override
