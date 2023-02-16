@@ -4,6 +4,8 @@ import com.example.dto.AuthenticationRequest;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.user.UserRegDto;
+import com.example.dto.user.UserRegSaveDto;
+import com.example.exception.user.UserNotSaveException;
 import com.example.service.user.ServiceUserRegImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +76,7 @@ public class ControllerUserReg {
                     })
             }
     )
-    @PostMapping
+    @PutMapping
     public ResponseEntity<ResponseDTO> update(@RequestBody UserRegDto userRegDto){
 
         return ResponseEntity.ok(
@@ -82,6 +85,35 @@ public class ControllerUserReg {
                         .data(this.serviceUserReg.update(userRegDto))
                         .build()
         );
+    }
+
+    @Operation(
+            summary = "Guardar nueva address",
+            description = "Se guardara una nueva address en caso de necesitarse",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Address creada correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PostMapping
+    public ResponseEntity<ResponseDTO> save (@RequestBody UserRegDto userRegDto) throws UserNotSaveException {
+
+        UserRegDto u = UserRegSaveDto.userSaveBUilder()
+                .direcSpecific("")
+                .build();
+
+
+        return new ResponseEntity<>(ResponseDTO.builder()
+                .info("Cantidad de registro guardados")
+                .data(this.serviceUserReg.save(userRegDto))
+                .build(),
+                HttpStatus.CREATED
+                );
     }
 
 
