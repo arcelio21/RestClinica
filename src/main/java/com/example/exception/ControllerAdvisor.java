@@ -1,6 +1,7 @@
 package com.example.exception;
 
 import com.example.dto.ErrorResponseDto;
+import com.example.exception.user.UserNotSaveException;
 import com.example.exception.user.UsernameInvalid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,17 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UserNotSaveException.class)
+    public ResponseEntity<Object> handleUserNotSave(UserNotSaveException ex){
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data(ex.getData())
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
