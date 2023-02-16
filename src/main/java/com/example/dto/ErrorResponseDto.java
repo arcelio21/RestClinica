@@ -15,4 +15,6 @@ public class ErrorResponseDto {
 
     private LocalDate fecha;
     private String messageError;
+
+    private Object data;
 }
