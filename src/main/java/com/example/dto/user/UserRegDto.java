@@ -19,11 +19,11 @@ public class UserRegDto {
     private String lastName;
 
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY) //Para que solo se muestra cuando se va obtener un datos y no ingresarlos
     private String password;
     private String contact;
     private String email;
     private LocalDate fechaNacimiento;
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDateTime fechaCreacion;
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
