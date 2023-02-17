@@ -7,10 +7,12 @@ import com.example.entity.address.Taddress;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface AddressMappper {
 
+    AddressMappper INSTANCE = Mappers.getMapper(AddressMappper.class);
     @Mappings({
             @Mapping(source = "taddress.id", target = "id", defaultValue = "0"),
             @Mapping(source = "taddress.villageId.id", target = "villageId", defaultValue = "0"),
