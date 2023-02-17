@@ -1,6 +1,7 @@
 package com.example.exception;
 
 import com.example.dto.ErrorResponseDto;
+import com.example.dto.user.UserRegSaveDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.user.UserNotSaveException;
 import com.example.exception.user.UsernameInvalid;
@@ -44,10 +45,26 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNotSaveException.class)
     public ResponseEntity<Object> handleUserNotSave(UserNotSaveException ex){
 
+        Map<String, Object> data=null;
+        if(ex.getData()!=null){
+            UserRegSaveDto user = (UserRegSaveDto) ex.getData();
+            data= new HashMap<>();
+            data.put("idenCard",user.getIdenCard());
+            data.put("name", user.getName());
+            data.put("lastName", user.getLastName());
+            data.put("email", user.getEmail());
+            data.put("contact", user.getContact());
+            data.put("fechaNacimiento", user.getFechaNacimiento());
+            data.put("villageId", user.getVillageId());
+            data.put("direcSpecific", user.getDirecSpecific());
+        }
+
         var error = ErrorResponseDto.builder()
                 .messageError(ex.getMessage())
                 .fecha(LocalDate.now())
-                .data(ex.getData())
+                .data(
+                        (data==null)?"":data
+                )
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -56,11 +73,19 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AddressNotSaveException.class)
     public ResponseEntity<Object> handleUserNotSave(AddressNotSaveException ex){
 
+        Map<String, Object> data=null;
+        if(ex.getData()!=null){
+            UserRegSaveDto user = (UserRegSaveDto) ex.getData();
+            data= new HashMap<>();
+            data.put("villageId", user.getVillageId());
+            data.put("direcSpecific", user.getDirecSpecific());
+        }
+
         var error = ErrorResponseDto.builder()
                 .messageError(ex.getMessage())
                 .fecha(LocalDate.now())
                 .data(
-                        (ex.getData()==null)?"":ex.getData()
+                        (data==null)?"":data
                 )
                 .build();
 
