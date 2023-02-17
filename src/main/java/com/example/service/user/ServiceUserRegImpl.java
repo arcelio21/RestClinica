@@ -16,15 +16,18 @@ import com.example.mapper.address.MapperAddress;
 import com.example.mapper.user.MapperUserReg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
@@ -75,15 +78,20 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 	@Override
 	public Integer save(UserRegDto user)  {
 
-		if( user != null && user.getClass().equals(UserRegSaveDto.class)){
+		if( user == null || !user.getClass().equals(UserRegSaveDto.class)) throw  new UserNotSaveException("Datos de usuario no guardado", user);
 
-			Taddress taddress = this.addressMappper.userRegSaveDtoToTaddres((UserRegSaveDto) user);
 
+		Taddress taddress = this.addressMappper.userRegSaveDtoToTaddres((UserRegSaveDto) user);
+
+		try {
 			Optional.ofNullable(taddress)
 					.map(this.mapperAddress::save)
-					.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos"));
+					.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos", user));
+		}catch (Exception e){
+			throw new AddressNotSaveException("Datos de direccion no validos", user);
+		}
 
-
+		try {
 			return Optional.of(user)
 					.map(this.userRegMapper::userRegDtoToTuserReg)
 					.map((tuserReg -> {tuserReg.setAddressId(new Taddress(taddress.getId()));
@@ -92,10 +100,11 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 					.map(this.mapperUserReg::save)
 					.orElseThrow(()-> new UserNotSaveException("Datos no son validos para ser guardados", user));
 
-		}else {
-			throw  new UserNotSaveException("Datos de usuario no guardado", user);
+		}catch ( Exception e){
+			// TODO: 02/16/23 Crear map para enviar argumentos y asi no se vea datos innecesarios 
+			throw new UserNotSaveException("Datos no son validos, verifiquelos", user);
 		}
-		
+
 
 	}
 
