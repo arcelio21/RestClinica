@@ -88,10 +88,10 @@ public class ControllerUserReg {
     }
 
     @Operation(
-            summary = "Guardar nueva address",
-            description = "Se guardara una nueva address en caso de necesitarse",
+            summary = "Guardar nueva usuario",
+            description = "Se guardara una nueva usuario en caso de necesitarse",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Address creada correctamente",content = {
+                    @ApiResponse(responseCode = "201", description = "User creada correctamente",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ResponseDTO.class))
                     }),
@@ -101,16 +101,12 @@ public class ControllerUserReg {
             }
     )
     @PostMapping
-    public ResponseEntity<ResponseDTO> save (@RequestBody UserRegDto userRegDto) throws UserNotSaveException {
-
-        UserRegDto u = UserRegSaveDto.userSaveBUilder()
-                .direcSpecific("")
-                .build();
+    public ResponseEntity<ResponseDTO> save (@RequestBody UserRegSaveDto user) throws UserNotSaveException {
 
 
         return new ResponseEntity<>(ResponseDTO.builder()
                 .info("Cantidad de registro guardados")
-                .data(this.serviceUserReg.save(userRegDto))
+                .data(this.serviceUserReg.save(user))
                 .build(),
                 HttpStatus.CREATED
                 );
