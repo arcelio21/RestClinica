@@ -2,19 +2,19 @@ package com.example.exception;
 
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.user.UserRegSaveDto;
+import com.example.dto.user.UserRegUpdateDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.user.UserNotSaveException;
+import com.example.exception.user.UserNotUpdateException;
 import com.example.exception.user.UsernameInvalid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @ControllerAdvice
@@ -48,15 +48,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         Map<String, Object> data=null;
         if(ex.getData()!=null){
             UserRegSaveDto user = (UserRegSaveDto) ex.getData();
-            data= new HashMap<>();
-            data.put("idenCard",user.getIdenCard());
-            data.put("name", user.getName());
-            data.put("lastName", user.getLastName());
-            data.put("email", user.getEmail());
-            data.put("contact", user.getContact());
-            data.put("fechaNacimiento", user.getFechaNacimiento());
-            data.put("villageId", user.getVillageId());
-            data.put("direcSpecific", user.getDirecSpecific());
+            data = datUserToDataError(user.getIdenCard(), user.getName(), user.getLastName(), user.getEmail(), user.getContact(), user.getFechaNacimiento(), user.getVillageId(), user.getDirecSpecific());
         }
 
         var error = ErrorResponseDto.builder()
@@ -68,6 +60,41 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotUpdateException.class)
+    public ResponseEntity<Object> handleUserNotUpdate(UserNotUpdateException ex){
+
+        Map<String, Object> data=null;
+        if(ex.getData()!=null){
+            UserRegUpdateDto user = (UserRegUpdateDto) ex.getData();
+            data = datUserToDataError(user.getIdenCard(), user.getName(), user.getLastName(), user.getEmail(), user.getContact(), user.getFechaNacimiento(), user.getVillageId(), user.getDirecSpecific());
+            data.put("addressId", user.getAddressId());
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data(
+                        (data==null)?"":data
+                )
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    private Map<String, Object> datUserToDataError(Long idenCard, String name, String lastName, String email, String contact, LocalDate fechaNacimiento, Long villageId, String direcSpecific) {
+        Map<String, Object> data;
+        data= new HashMap<>();
+        data.put("idenCard", idenCard);
+        data.put("name", name);
+        data.put("lastName", lastName);
+        data.put("email", email);
+        data.put("contact", contact);
+        data.put("fechaNacimiento", fechaNacimiento);
+        data.put("villageId", villageId);
+        data.put("direcSpecific", direcSpecific);
+        return data;
     }
 
     @ExceptionHandler(AddressNotSaveException.class)
