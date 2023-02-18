@@ -8,6 +8,11 @@ public class UserNotSaveException extends  RuntimeException{
         this.data=data;
     }
 
+    public UserNotSaveException(String message) {
+        super(message);
+        this.data=null;
+    }
+
     public final Object getData() {
         return data;
     }
