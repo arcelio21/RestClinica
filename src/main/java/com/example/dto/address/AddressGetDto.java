@@ -7,7 +7,7 @@ import lombok.Builder;
 @Schema(name = "AddressGet", description = "Contendra informacion de las direcciones registradas")
 public record AddressGetDto(
         @Schema(name = "id", description = "Identificacion unica de address", example = "1", format = "int32", minimum = "1")
-        Integer id,
+        Long id,
         @Schema(name = "villageId", description = "ID de village relacionado a address", example = "4", format = "int32", minimum = "1")
         Integer villageId,
         @Schema(name = "villageName", description = "Nombre de village asociado", example = "Las lomas")

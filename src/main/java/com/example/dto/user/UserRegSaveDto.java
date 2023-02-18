@@ -19,9 +19,9 @@ public class UserRegSaveDto extends UserRegDto{
 
 
     @Builder(builderMethodName = "userSaveBUilder")
-    public UserRegSaveDto(Integer id, Long idenCard, String name, String lastName, String password, String contact, String email,
-                          LocalDate fechaNacimiento, LocalDateTime fechaCreacion, Integer addressId,
-                            Long villageId, String direcSpecific
+    public UserRegSaveDto(Long id, Long idenCard, String name, String lastName, String password, String contact, String email,
+                          LocalDate fechaNacimiento, LocalDateTime fechaCreacion, Long addressId,
+                          Long villageId, String direcSpecific
     ) {
         super(id, idenCard, name, lastName, password, contact, email, fechaNacimiento, fechaCreacion, addressId);
         this.villageId= villageId;

@@ -18,7 +18,7 @@ public class Taddress implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Integer id;
+	private Long id;
 
 	@JsonInclude(content = Include.NON_NULL)
 	private Tvillage villageId;
@@ -32,14 +32,14 @@ public class Taddress implements Serializable {
 
 
 
-	public Taddress(Integer id) {
+	public Taddress(Long id) {
 		super();
 		this.id = id;
 	}
 
 
 
-	public Taddress(Integer id, Tvillage villageId, String specificAddress) {
+	public Taddress(Long id, Tvillage villageId, String specificAddress) {
 		super();
 		this.id = id;
 		this.villageId = villageId;
@@ -48,13 +48,13 @@ public class Taddress implements Serializable {
 
 
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
 
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

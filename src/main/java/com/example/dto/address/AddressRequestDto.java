@@ -10,7 +10,7 @@ import lombok.Getter;
 public class AddressRequestDto {
 
     @Schema(name = "id", description = "Identificacion unica de address", example = "1", format = "int32", minimum = "1")
-    private Integer id;
+    private Long id;
 
     @Schema(name = "villageId", description = "ID de village relacionado a address", example = "4", format = "int32", minimum = "1")
     private Integer villageId;
