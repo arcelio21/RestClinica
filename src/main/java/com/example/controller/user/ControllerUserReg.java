@@ -5,6 +5,7 @@ import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.user.UserRegDto;
 import com.example.dto.user.UserRegSaveDto;
+import com.example.dto.user.UserRegUpdateDto;
 import com.example.exception.user.UserNotSaveException;
 import com.example.service.user.ServiceUserRegImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,7 +78,7 @@ public class ControllerUserReg {
             }
     )
     @PutMapping
-    public ResponseEntity<ResponseDTO> update(@RequestBody UserRegDto userRegDto){
+    public ResponseEntity<ResponseDTO> update(@RequestBody UserRegUpdateDto userRegDto){
 
         return ResponseEntity.ok(
                 ResponseDTO.builder()
