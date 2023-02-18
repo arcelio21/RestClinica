@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Schema(name = "UserReg", description = "Tendra toda la informacion disponible de los usuarios registrados")
 public class UserRegDto {
 
-    private Integer id;
+    private Long id;
     private Long idenCard;
     private String name;
     private String lastName;
@@ -27,7 +27,7 @@ public class UserRegDto {
     private LocalDateTime fechaCreacion;
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private Integer addressId;
+    private Long addressId;
 
 
 
