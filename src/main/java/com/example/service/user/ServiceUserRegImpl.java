@@ -3,31 +3,29 @@ package com.example.service.user;
 import com.example.dto.AuthenticationRequest;
 import com.example.dto.user.UserRegDto;
 import com.example.dto.user.UserRegSaveDto;
+import com.example.dto.user.UserRegUpdateDto;
 import com.example.dto.user.UserUpdatePassDto;
 import com.example.dtomapper.address.AddressMappper;
 import com.example.dtomapper.user.UserRegMapper;
 import com.example.entity.address.Taddress;
-import com.example.entity.user.TuserReg;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.user.UserNotSaveException;
+import com.example.exception.user.UserNotUpdateException;
 import com.example.exception.user.UsernameInvalid;
 import com.example.mapper.address.MapperAddress;
 import com.example.mapper.user.MapperUserReg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
@@ -60,17 +58,41 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 				.orElseThrow(() -> new NoDataFoundException(id));
 	}
 
+	@Transactional
 	@Override
 	public Integer update(UserRegDto t) {
 
 		if(t==null || t.getId()==null) {
-			return 0;
+			throw  new UserNotUpdateException("Datos no validos ");
 		}
 
-		return Optional.of(t)
-				.map(this.userRegMapper::userRegDtoToTuserReg)
-				.map(this.mapperUserReg::update)
-				.orElse(0);
+
+		if(!t.getClass().equals(UserRegUpdateDto.class)) throw new UserNotUpdateException("Datos no validos");
+
+		Taddress address = this.addressMappper.userRegUpdateDtoToTaddres((UserRegUpdateDto) t);
+
+		try {
+			Optional.ofNullable(address)
+					.map(this.mapperAddress::update)
+					.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos"));
+		}catch (Exception e){
+			throw new AddressNotSaveException("Datos de direccion no validos", t);
+		}
+
+		try {
+
+			return Optional.of(t)
+					.map(this.userRegMapper::userRegDtoToTuserReg)
+					.map(tuserReg -> {
+						tuserReg.setAddressId(new Taddress(address.getId()));
+						return tuserReg;
+					})
+					.map(this.mapperUserReg::update)
+					.orElseThrow(()-> new UserNotUpdateException("Datos no validos de usuario"));
+
+		}catch (Exception e){
+			throw new UserNotUpdateException("Datos no validos de usuario",(UserRegUpdateDto) t);
+		}
 		
 	}
 
@@ -83,10 +105,13 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 
 		Taddress taddress = this.addressMappper.userRegSaveDtoToTaddres((UserRegSaveDto) user);
 
+
 		try {
 			Optional.ofNullable(taddress)
 					.map(this.mapperAddress::save)
-					.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos", user));
+					.orElseThrow(()-> {
+						throw  new AddressNotSaveException("Datos de direccion no son validos");
+					});
 		}catch (Exception e){
 			throw new AddressNotSaveException("Datos de direccion no validos", user);
 		}
@@ -98,10 +123,9 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 						return tuserReg;
 					}))
 					.map(this.mapperUserReg::save)
-					.orElseThrow(()-> new UserNotSaveException("Datos no son validos para ser guardados", user));
+					.orElseThrow(()-> new UserNotSaveException("Datos no son validos para ser guardados"));
 
 		}catch ( Exception e){
-			// TODO: 02/16/23 Crear map para enviar argumentos y asi no se vea datos innecesarios 
 			throw new UserNotSaveException("Datos no son validos, verifiquelos", user);
 		}
 
