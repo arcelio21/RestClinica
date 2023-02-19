@@ -4,6 +4,7 @@ import com.example.dto.ErrorResponseDto;
 import com.example.dto.user.UserRegSaveDto;
 import com.example.dto.user.UserRegUpdateDto;
 import com.example.exception.address.AddressNotSaveException;
+import com.example.exception.address.AddressNotUpdateException;
 import com.example.exception.user.UserNotSaveException;
 import com.example.exception.user.UserNotUpdateException;
 import com.example.exception.user.UsernameInvalid;
@@ -103,6 +104,29 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         Map<String, Object> data=null;
         if(ex.getData()!=null){
             UserRegSaveDto user = (UserRegSaveDto) ex.getData();
+            data= new HashMap<>();
+            data.put("villageId", user.getVillageId());
+            data.put("direcSpecific", user.getDirecSpecific());
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data(
+                        (data==null)?"":data
+                )
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AddressNotUpdateException.class)
+    public ResponseEntity<Object> handleUserNotSave(AddressNotUpdateException ex){
+
+        Map<String, Object> data=null;
+        if(ex.getData()!=null) {
+
+            UserRegUpdateDto user = (UserRegUpdateDto) ex.getData();
             data= new HashMap<>();
             data.put("villageId", user.getVillageId());
             data.put("direcSpecific", user.getDirecSpecific());
