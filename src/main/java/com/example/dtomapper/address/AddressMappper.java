@@ -15,7 +15,7 @@ public interface AddressMappper {
 
     AddressMappper INSTANCE = Mappers.getMapper(AddressMappper.class);
     @Mappings({
-            @Mapping(source = "taddress.id", target = "id", defaultValue = "0"),
+            @Mapping(source = "taddress.id", target = "id", defaultValue = "0L"),
             @Mapping(source = "taddress.villageId.id", target = "villageId", defaultValue = "0"),
             @Mapping(source = "taddress.villageId.name", target = "villageName", defaultValue = ""),
             @Mapping(source = "taddress.villageId.district.name", target = "districtName", defaultValue = ""),
@@ -44,8 +44,7 @@ public interface AddressMappper {
             @Mapping(source = "user.villageId", target = "villageId.id"),
             @Mapping(source = "user.direcSpecific", target = "specificAddress"),
             @Mapping(source = "user.addressId", target = "id"),
-            @Mapping(target = "villageId", ignore = true),
-            @Mapping(target = "id", ignore = true)
+            @Mapping(target = "villageId", ignore = true)
     })
     Taddress userRegUpdateDtoToTaddres(UserRegUpdateDto user);
 }
