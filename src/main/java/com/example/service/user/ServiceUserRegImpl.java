@@ -20,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +34,6 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 
 	private final MapperUserReg mapperUserReg;
 	private final UserRegMapper userRegMapper;
-	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	private final AddressMappper addressMappper;
 	private final MapperAddress mapperAddress;
@@ -162,7 +160,6 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 		}
 
 
-
 		this.authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
 						user.getIdenCard(),
@@ -186,7 +183,6 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 		long count = properties.stream()
 				.filter(p -> p != null && !p.trim().equals(""))
 				.count();
-
 
 
 		return (count== properties.size())?
