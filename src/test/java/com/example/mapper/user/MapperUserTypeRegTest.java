@@ -96,7 +96,7 @@ class MapperUserTypeRegTest {
 	void save() {
 		TuserTypeReg user=new TuserTypeReg();
 		user.setTypeUser(new TtypeUser(2));
-		user.setUserRegId(new TuserReg(1));
+		user.setUserRegId(new TuserReg(1L));
 		user.setStatusId(new Tstatus(1));
 		
 		Integer rowAffected=this.mapperUserTypeReg.save(user);
