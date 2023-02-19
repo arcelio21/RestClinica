@@ -38,7 +38,7 @@ public interface UserRegMapper {
             @Mapping(source = "user.contact", target = "contact"),
             @Mapping(source = "user.password", target = "password"),
             @Mapping(source = "user.fechaNacimiento", target = "fechaNacimiento"),
-            @Mapping(source = "user.addressId", target = "addressId.id"),
+            @Mapping(source = "user.addressId", target = "addressId.id", resultType = Long.class),
             @Mapping(target = "addressId", ignore = true),
             @Mapping(target = "usersTypesRegs", ignore = true),
             @Mapping(target = "fechaCreacion", ignore = true),
