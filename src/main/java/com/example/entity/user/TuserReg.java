@@ -23,7 +23,7 @@ public class TuserReg implements UserDetails {
 
 
 	@Positive
-	private Integer id;
+	private Long id;
 	
 	@NotNull
 	@Size(min = 13,max = 18)
@@ -67,19 +67,14 @@ public class TuserReg implements UserDetails {
 	}
 
 
-	public TuserReg(@Positive Integer id) {
+	public TuserReg(@Positive Long id) {
 		super();
 		this.id = id;
 	}
 
 
-	public TuserReg(@NotNull @Size(min = 13, max = 18) @Positive Long idenCard) {
-		super();
-		this.idenCard = idenCard;
-	}
 
-
-	public TuserReg(@Positive Integer id, @NotNull @Size(min = 13, max = 18) @Positive Long idenCard,
+	public TuserReg(@Positive Long id, @NotNull @Size(min = 13, max = 18) @Positive Long idenCard,
 			@NotEmpty(message = "EL VALOR DE NOMBRE NO PUEDE SER NULO VACIO") @Size(min = 1, max = 30) String name,
 			@NotEmpty(message = "EL VALOR DE APELLIDO NO PUEDE SER NULO VACIO") @Size(min = 1, max = 30) String lastName,
 			@NotEmpty(message = "EL VALOR DE APELLIDO NO PUEDE SER NULO VACIO") @Size(min = 7, max = 8) String contact,
@@ -102,12 +97,12 @@ public class TuserReg implements UserDetails {
 	}
 
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
