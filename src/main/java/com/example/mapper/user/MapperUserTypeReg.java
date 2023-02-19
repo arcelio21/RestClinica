@@ -16,7 +16,7 @@ import com.example.entity.user.TuserTypeReg;
 @Mapper
 public interface MapperUserTypeReg {
 
-	@Select("SELECT * FROM tusers_types_regs")
+	@Select("SELECT * FROM Tusers_types_regs")
 	@Results(id = "userTypeRegMap",
 		value = {
 				@Result(column = "id",property = "id"),
@@ -27,28 +27,28 @@ public interface MapperUserTypeReg {
 	)
 	List<TuserTypeReg> getAll();
 	
-	@Select("SELECT * FROM tusers_types_regs WHERE id=#{id}")
+	@Select("SELECT * FROM Tusers_types_regs WHERE id=#{id}")
 	@ResultMap("userTypeRegMap")
 	TuserTypeReg getById(@Param("id") Integer id);
-	
-	@Select("SELECT * FROM tusers_types_regs WHERE user_reg_id=#{id}")
+
+	@Select("SELECT * FROM Tusers_types_regs WHERE user_reg_id=#{id}")
 	@ResultMap("userTypeRegMap")
 	List<TuserTypeReg> getByIdUserReg(@Param("id") Integer id);
 	
-	@Select("SELECT * FROM tusers_types_regs WHERE type_user_id=#{id}")
+	@Select("SELECT * FROM Tusers_types_regs WHERE type_user_id=#{id}")
 	@ResultMap("userTypeRegMap")
 	List<TuserTypeReg> getByIdTypeUser(@Param("id") Integer id);
 	
-	@Select("SELECT * FROM tusers_types_regs WHERE status_id=#{id}")
+	@Select("SELECT * FROM 	Tusers_types_regs WHERE status_id=#{id}")
 	@ResultMap("userTypeRegMap")
 	List<TuserTypeReg> getByIdStatus(@Param("id") Integer id);
 	
-	@Update("UPDATE tusers_types_regs "
+	@Update("UPDATE Tusers_types_regs "
 			+ "SET user_reg_id=#{user.userRegId.id}, type_user_id=#{user.typeUser.id}, status_id=#{user.statusId.id} "
 			+ "WHERE id=#{user.id} ")
 	Integer update(@Param("user") TuserTypeReg tuserTypeReg);
 	
-	@Insert("INSERT INTO tusers_types_regs "
+	@Insert("INSERT INTO Tusers_types_regs "
 			+ "(user_reg_id,type_user_id,status_id) "
 			+ "VALUES (#{user.userRegId.id},#{user.typeUser.id},#{user.statusId.id})")
 	Integer save(@Param("user") TuserTypeReg tuserTypeReg);
