@@ -10,6 +10,7 @@ import com.example.dtomapper.user.UserRegMapper;
 import com.example.entity.address.Taddress;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.address.AddressNotSaveException;
+import com.example.exception.address.AddressNotUpdateException;
 import com.example.exception.user.UserNotSaveException;
 import com.example.exception.user.UserNotUpdateException;
 import com.example.exception.user.UsernameInvalid;
@@ -74,9 +75,10 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 		try {
 			Optional.ofNullable(address)
 					.map(this.mapperAddress::update)
-					.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos"));
+					.orElseThrow(()-> new AddressNotUpdateException("Datos de direccion no son validos"));
 		}catch (Exception e){
-			throw new AddressNotSaveException("Datos de direccion no validos", t);
+			log.info(e.getMessage());
+			throw new AddressNotUpdateException("Datos de direccion no validos", t);
 		}
 
 		try {
