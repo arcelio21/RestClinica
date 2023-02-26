@@ -50,9 +50,9 @@ public class ControllerUserReg {
 
     @Operation(summary = "Obtener usuario por ID",description = "Se podra obtener un usuario por su ID",
             method = "GET", responses = {
-            @ApiResponse(responseCode = "200",description = "Usuario encontrada",
+            @ApiResponse(responseCode = "200",description = "Usuario encontrado",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Address"))),
-            @ApiResponse(responseCode = "404",description = "Usuario no encontrada, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+            @ApiResponse(responseCode = "404",description = "Usuario no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
     }
@@ -61,6 +61,26 @@ public class ControllerUserReg {
     public ResponseEntity<UserRegDto> getById(@PathVariable("id") Long id){
         return ResponseEntity.ok(
                 this.serviceUserReg.getById(id)
+        );
+    }
+
+    @Operation(summary = "Obtener usuario por nombre",description = "Se podra obtener un usuario por su Nombre",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Usuarios encontrados",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Address"))),
+            @ApiResponse(responseCode = "404",description = "Usuario no encontrado, nombre no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "name", in = ParameterIn.PATH, description = "nombre de usuario",example = "arcelio",required = true, schema = @Schema(implementation = String.class))
+        }
+    )
+    @GetMapping("/byName/{name}")
+    public ResponseEntity<ResponseDTO> getByName(@PathVariable("name") String name){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Usuario filtrados por nombre")
+                        .data(this.serviceUserReg.getByName(name))
+                        .build()
         );
     }
 
