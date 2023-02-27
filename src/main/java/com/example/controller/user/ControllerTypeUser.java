@@ -68,5 +68,31 @@ public class ControllerTypeUser extends ControllerTemplate {
         );
     }
 
+    @Operation(
+            summary = "Guardar nueva tipo de usuario",
+            description = "Se guardara una nuevo tipo de usuario en caso de necesitarse, el ID no es necesario que se escriba ya que no se utilizara durante el guardado de la info",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Tipo de usuario creada correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PostMapping
+    public ResponseEntity<ResponseDTO> save(@Validated(value = {ValidateGroupA.class}) @NotNull @RequestBody TypeUserDto typeUserDto){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Cantidad de registros guardados")
+                        .data(this.serviceTypeUser.save(typeUserDto))
+                        .build()
+        );
+    }
+
+
+
 
 }
