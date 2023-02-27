@@ -11,6 +11,7 @@ import com.example.entity.address.Taddress;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
+import com.example.exception.user.PasswordNotUpdateException;
 import com.example.exception.user.UserNotSaveException;
 import com.example.exception.user.UserNotUpdateException;
 import com.example.exception.user.UsernameInvalid;
@@ -20,6 +21,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +41,10 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 	private final AuthenticationManager authenticationManager;
 	private final AddressMappper addressMappper;
 	private final MapperAddress mapperAddress;
+
+	private final UserDetailsService userDetailsService;
+
+	private final PasswordEncoder passwordEncoder;
 
 
 	@Override
@@ -174,23 +182,50 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 	}
 
 	@Override
-	public Integer updatePassword(UserUpdatePassDto user) {
+	public Integer updatePassword( UserUpdatePassDto user) {
 		
 		if(user==null ){
-			return 0;
+			throw new PasswordNotUpdateException("Datos no enviados");
 		}
-		List<String> properties = Arrays.asList(user.getOldPassword(), user.getIndeCard().toString(), user.getNewPassword());
+
+		List<String> properties = null;
+
+		try {
+			 properties = Arrays.asList(user.getOldPassword(), user.getIndeCard().toString(), user.getNewPassword());
+		}catch (RuntimeException e){
+			throw new PasswordNotUpdateException("Datos mo validos", user);
+		}
+
 		long count = properties.stream()
 				.filter(p -> p != null && !p.trim().equals(""))
 				.count();
 
 
-		return (count== properties.size())?
-					Optional.of(user)
+		if(count<properties.size()) throw new PasswordNotUpdateException(" Cantidad Datos no son validos", user);
+
+		UserDetails userDetails = userDetailsService.loadUserByUsername(user.getIndeCard().toString());
+
+		UserUpdatePassDto userValid;
+		if(passwordEncoder.matches(user.getOldPassword(), userDetails.getPassword())){
+
+			log.info("Funciona el emparejamiento de contraseña");
+			String newPassEncode = passwordEncoder.encode(user.getNewPassword());
+			String oldPassEncode = passwordEncoder.encode(user.getOldPassword());
+			userValid = UserUpdatePassDto.builder()
+					.indeCard(user.getIndeCard())
+					.oldPassword(oldPassEncode)
+					.newPassword(newPassEncode)
+					.build();
+			log.info("new"+userValid.getNewPassword()+"OLd: "+userValid.getOldPassword());
+			log.info("Old:"+ userValid.getOldPassword()+ " :Actual: "+userDetails.getPassword());
+		}else {
+			throw new UsernameInvalid("Contraseña de usuario no valida");
+		}
+
+		return Optional.of(user)
 					.map(this.userRegMapper::userUpdatePassToTuserReg)
-					.map(tuserReg -> this.mapperUserReg.updatePassword(tuserReg, user.getNewPassword()))
-					.orElseThrow()
-					: 0;
+					.map(tuserReg -> this.mapperUserReg.updatePassword(tuserReg,userValid.getNewPassword()))
+					.orElseThrow(()-> new PasswordNotUpdateException("Error al actualizar usuario, datos de usuario no validos", user));
 
 	}
 
