@@ -3,9 +3,8 @@ package com.example.service.user;
 import java.util.List;
 
 import com.example.dto.AuthenticationRequest;
-import com.example.dto.user.UserRegDto;
-import com.example.dto.user.UserUpdatePassDto;
-import com.example.entity.user.TuserReg;
+import com.example.dto.user.user_reg.UserRegDto;
+import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.service.ServiceTemplateCrud;
 
 public interface IServiceUserReg extends ServiceTemplateCrud<UserRegDto, Long>{

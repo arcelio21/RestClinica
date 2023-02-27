@@ -1,9 +1,9 @@
 package com.example.exception;
 
 import com.example.dto.ErrorResponseDto;
-import com.example.dto.user.UserRegSaveDto;
-import com.example.dto.user.UserRegUpdateDto;
-import com.example.dto.user.UserUpdatePassDto;
+import com.example.dto.user.user_reg.UserRegSaveDto;
+import com.example.dto.user.user_reg.UserRegUpdateDto;
+import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
 import com.example.exception.user.PasswordNotUpdateException;

@@ -1,4 +1,4 @@
-package com.example.dto.user;
+package com.example.dto.user.user_reg;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

@@ -2,8 +2,8 @@ package com.example.dtomapper.address;
 
 import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.AddressRequestDto;
-import com.example.dto.user.UserRegSaveDto;
-import com.example.dto.user.UserRegUpdateDto;
+import com.example.dto.user.user_reg.UserRegSaveDto;
+import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.entity.address.Taddress;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -7,21 +7,22 @@ import java.util.Map;
 import com.example.entity.user.TtypeUser;
 import com.example.mapper.user.MapperTypeUser;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class ServiceTypeUserImpl implements IServiceTypeUser{
 
 	
-	private MapperTypeUser mapperTypeUser;
-	
-	
-	
-	public ServiceTypeUserImpl(MapperTypeUser mapperTypeUser) {
-		this.mapperTypeUser = mapperTypeUser;
-	}
+	private final MapperTypeUser mapperTypeUser;
 
-	
+	@Override
+	public List<TtypeUser> getAll() {
+		return Collections.emptyList();
+	}
 
 	@Override
 	public TtypeUser getById(Integer id) {
@@ -56,22 +57,8 @@ public class ServiceTypeUserImpl implements IServiceTypeUser{
 		return this.mapperTypeUser.save(t);
 	}
 
-	@Override
-	public Map<Integer, TtypeUser> getAllMap() {
-
-		Map<Integer,TtypeUser> typeUsers=this.mapperTypeUser.getAll();
-		if(typeUsers==null || typeUsers.isEmpty()) {
-			return Collections.emptyMap();
-		}
-		
-		return typeUsers;
-	}
 
 
 
-	@Override
-	public List<TtypeUser> getAll() {
-		return Collections.emptyList();
-	}
 
 }

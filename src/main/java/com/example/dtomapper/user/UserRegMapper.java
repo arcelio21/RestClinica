@@ -1,8 +1,8 @@
 package com.example.dtomapper.user;
 
 import com.example.dto.AuthenticationRequest;
-import com.example.dto.user.UserRegDto;
-import com.example.dto.user.UserUpdatePassDto;
+import com.example.dto.user.user_reg.UserRegDto;
+import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.entity.user.TuserReg;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,6 +1,6 @@
 package com.example.exception.user;
 
-import com.example.dto.user.UserRegUpdateDto;
+import com.example.dto.user.user_reg.UserRegUpdateDto;
 
 public class UserNotUpdateException extends RuntimeException{
 

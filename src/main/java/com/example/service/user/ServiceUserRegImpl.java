@@ -1,10 +1,10 @@
 package com.example.service.user;
 
 import com.example.dto.AuthenticationRequest;
-import com.example.dto.user.UserRegDto;
-import com.example.dto.user.UserRegSaveDto;
-import com.example.dto.user.UserRegUpdateDto;
-import com.example.dto.user.UserUpdatePassDto;
+import com.example.dto.user.user_reg.UserRegDto;
+import com.example.dto.user.user_reg.UserRegSaveDto;
+import com.example.dto.user.user_reg.UserRegUpdateDto;
+import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.dtomapper.address.AddressMappper;
 import com.example.dtomapper.user.UserRegMapper;
 import com.example.entity.address.Taddress;
