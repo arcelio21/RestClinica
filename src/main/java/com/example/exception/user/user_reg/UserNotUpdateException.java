@@ -1,4 +1,4 @@
-package com.example.exception.user;
+package com.example.exception.user.user_reg;
 
 import com.example.dto.user.user_reg.UserRegUpdateDto;
 

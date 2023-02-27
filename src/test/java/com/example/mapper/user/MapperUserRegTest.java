@@ -30,7 +30,7 @@ class MapperUserRegTest {
 		List<TuserReg> users=this.mapperUserReg.getAll();
 		assertNotNull(users);
 		assertTrue(users.size()>0);
-		users.forEach(x->System.out.println(x));
+		users.forEach(System.out::println);
 	}
 	
 	@Test
@@ -38,7 +38,7 @@ class MapperUserRegTest {
 		TuserReg user=this.mapperUserReg.getById(1L);
 		assertNotNull(user);
 		System.out.println(user); 
-		LocalDate fecha=LocalDate.of(2000, 9, 02);
+		LocalDate fecha=LocalDate.of(2000, 9, 2);
 		assertEquals(fecha, user.getFechaNacimiento());
 		System.out.println(fecha+" "+user.getFechaNacimiento());
 	}
@@ -53,7 +53,7 @@ class MapperUserRegTest {
 		user.setEmail("carloMon12@gmail.com");
 		user.setPassword("hola");
 		user.setFechaNacimiento(LocalDate.of(2000, 12, 12));
-		Taddress address=new Taddress(1);
+		Taddress address=new Taddress(1L);
 		user.setAddressId(address);
 		Integer rowAffected=this.mapperUserReg.save(user);
 		assertEquals(1,rowAffected);

@@ -7,7 +7,7 @@ import com.example.dto.user.user_reg.UserRegDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
 import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.dto.user.user_reg.UserUpdatePassDto;
-import com.example.exception.user.UserNotSaveException;
+import com.example.exception.user.user_reg.UserNotSaveException;
 import com.example.service.user.ServiceUserRegImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

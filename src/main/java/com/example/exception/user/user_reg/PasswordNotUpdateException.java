@@ -1,4 +1,4 @@
-package com.example.exception.user;
+package com.example.exception.user.user_reg;
 
 public class PasswordNotUpdateException extends RuntimeException{
 
