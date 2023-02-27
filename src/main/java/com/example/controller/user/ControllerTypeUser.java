@@ -92,7 +92,29 @@ public class ControllerTypeUser extends ControllerTemplate {
         );
     }
 
+    @Operation(
+            summary = "Actualizar Tipos de Usuarios",
+            description = "Se actualizara tipo de usuario que se desee",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Tipo Usuario actualizada correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PutMapping
+    public ResponseEntity<ResponseDTO> update(@Validated @NotNull @RequestBody TypeUserDto typeUserDto){
 
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Cantidad de registros actualizados")
+                        .data(this.serviceTypeUser.update(typeUserDto))
+                        .build()
+        );
+    }
 
 
 }
