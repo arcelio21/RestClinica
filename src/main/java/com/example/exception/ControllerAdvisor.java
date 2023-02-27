@@ -1,15 +1,18 @@
 package com.example.exception;
 
 import com.example.dto.ErrorResponseDto;
+import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
 import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
-import com.example.exception.user.PasswordNotUpdateException;
-import com.example.exception.user.UserNotSaveException;
-import com.example.exception.user.UserNotUpdateException;
-import com.example.exception.user.UsernameInvalid;
+import com.example.exception.user.type_user.TypeUserNotSaveException;
+import com.example.exception.user.type_user.TypeUserNotUpdateException;
+import com.example.exception.user.user_reg.PasswordNotUpdateException;
+import com.example.exception.user.user_reg.UserNotSaveException;
+import com.example.exception.user.user_reg.UserNotUpdateException;
+import com.example.exception.user.user_reg.UsernameInvalid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -207,4 +210,49 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         }
 
     }
+
+    @ExceptionHandler({TypeUserNotUpdateException.class})
+    public ResponseEntity<ErrorResponseDto> handleTypeUserNotUpdate(TypeUserNotUpdateException ex){
+
+        Map<String, Object> data = null;
+
+        if(ex.getData()!=null){
+            TypeUserDto typeUserDto = (TypeUserDto) ex.getData();
+            data = this.typeUserDtoToMap(typeUserDto);
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError("Datos enviados por cliente no validos")
+                .data((ex.getData()==null)?"":data)
+                .fecha(LocalDate.now())
+                .build();
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler({TypeUserNotSaveException.class})
+    public ResponseEntity<ErrorResponseDto> handleTypeUserNotUpdate(TypeUserNotSaveException ex){
+
+        Map<String, Object> data = null;
+
+        if(ex.getData()!=null){
+            TypeUserDto typeUserDto = (TypeUserDto) ex.getData();
+            data = this.typeUserDtoToMap(typeUserDto);
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError("Datos enviados por cliente no validos")
+                .data((ex.getData()==null)?"":data)
+                .fecha(LocalDate.now())
+                .build();
+        return ResponseEntity.badRequest().body(error);
+    }
+    
+    private Map<String,Object> typeUserDtoToMap(TypeUserDto typeUserDto){
+        Map<String,Object> data = new HashMap<>();
+        data.put("id", typeUserDto.getId());
+        data.put("name", typeUserDto.getName());
+        return data;
+    }
+
+
 }
