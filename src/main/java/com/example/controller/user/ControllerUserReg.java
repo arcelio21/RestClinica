@@ -1,5 +1,6 @@
 package com.example.controller.user;
 
+import com.example.controller.ControllerTemplate;
 import com.example.dto.AuthenticationRequest;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Tag(name = "Controller User", description = "Realiza operaciones sobre los registros disponibles de Usuarios")
 @RequestMapping("api/v1/user")
-public class ControllerUserReg {
+public class ControllerUserReg extends ControllerTemplate {
 
     private final ServiceUserRegImpl serviceUserReg;
 
@@ -52,7 +53,7 @@ public class ControllerUserReg {
     @Operation(summary = "Obtener usuario por ID",description = "Se podra obtener un usuario por su ID",
             method = "GET", responses = {
             @ApiResponse(responseCode = "200",description = "Usuario encontrado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Address"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de usuarios"))),
             @ApiResponse(responseCode = "404",description = "Usuario no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
