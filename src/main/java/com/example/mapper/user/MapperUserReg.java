@@ -57,7 +57,7 @@ public interface MapperUserReg {
 	Integer update(@Param("user") TuserReg user);
 	
 	
-	@Update("UPDATE TusersRegs SET password=${newPass} WHERE iden_card=${user.idenCard} AND password=${user.password}")
+	@Update("UPDATE TusersRegs SET password='${newPass}' WHERE iden_card=${user.idenCard} ")
 	Integer updatePassword(@Param("user") TuserReg user, @Param("newPass") String newPass);
 
 }
