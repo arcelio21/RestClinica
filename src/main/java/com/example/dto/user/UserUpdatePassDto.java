@@ -9,12 +9,12 @@ import lombok.Getter;
 @Schema(name = "User Update Password", description = "Se utilza cuando se quiere actualizar contraseña de usuario")
 public class UserUpdatePassDto {
 
-    @Schema(name = "IdentificationCard", description = "El valor de la cedula")
+    @Schema(name = "indeCard", description = "El valor de la cedula")
     private Long indeCard;
 
-    @Schema(name = "Old Paswword", description = "La ultima cotraseña del usuario")
+    @Schema(name = "oldPassword", description = "La ultima cotraseña del usuario")
     private String oldPassword;
 
-    @Schema(name = "New Password", description = "La nueva contraseña del usuario")
+    @Schema(name = "newPassword", description = "La nueva contraseña del usuario")
     private String newPassword;
 }
