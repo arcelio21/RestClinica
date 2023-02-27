@@ -3,8 +3,10 @@ package com.example.exception;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.user.UserRegSaveDto;
 import com.example.dto.user.UserRegUpdateDto;
+import com.example.dto.user.UserUpdatePassDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
+import com.example.exception.user.PasswordNotUpdateException;
 import com.example.exception.user.UserNotSaveException;
 import com.example.exception.user.UserNotUpdateException;
 import com.example.exception.user.UsernameInvalid;
@@ -141,5 +143,28 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PasswordNotUpdateException.class)
+    public ResponseEntity<Object> handlePaawordNotUpdate(PasswordNotUpdateException ex){
+
+        Map<String, Object> info = null;
+
+        if (ex.getData()!=null){
+            UserUpdatePassDto data = (UserUpdatePassDto) ex.getData();
+            info= new HashMap<>();
+
+            info.put("IndenCard", data.getIndeCard());
+            info.put("oldPass", data.getOldPassword());
+            info.put("newPass", data.getNewPassword());
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data((info==null)?"No data":info)
+                .build();
+
+        return ResponseEntity.badRequest().body(error);
     }
 }
