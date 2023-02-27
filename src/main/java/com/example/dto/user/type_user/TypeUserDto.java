@@ -1,5 +1,6 @@
 package com.example.dto.user.type_user;
 
+import com.example.dto.ValidateGroupA;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,6 @@ public class TypeUserDto {
     private Integer id;
 
     @Schema(name = "name", description = "Nombre del tipo de usuario", defaultValue = "Administrador")
-    @NotBlank(message = "Atributo no debe contener cadena vacia")
+    @NotBlank(message = "Atributo no debe contener cadena vacia", groups = {ValidateGroupA.class})
     private String name;
 }
