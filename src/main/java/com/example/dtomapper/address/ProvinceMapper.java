@@ -2,7 +2,6 @@ package com.example.dtomapper.address;
 
 import com.example.dto.address.province.ProvinceDto;
 import com.example.entity.address.Tprovince;
-import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -22,9 +21,9 @@ public interface ProvinceMapper {
     ProvinceDto tprovinceToProvinceDto(Tprovince tprovince);
 
     @Mappings(value = {
-            //@Mapping(ignore = true, source = "districts"),
             @Mapping(target = "id",source = "provinceDto.id", resultType = Integer.class),
-            @Mapping(target ="name",source = "provinceDto.nombre")
+            @Mapping(target ="name",source = "provinceDto.nombre"),
+            @Mapping(target = "districts", ignore = true)
     })
     Tprovince provinceDtoToTprovince(ProvinceDto provinceDto);
 

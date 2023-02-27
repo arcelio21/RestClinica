@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface VillageMapper {
 
-    VillageMapper INSTACE = Mappers.getMapper(VillageMapper.class);
+    VillageMapper INSTANCE = Mappers.getMapper(VillageMapper.class);
 
     @Mappings({
             @Mapping(target = "id",source = "tvillage.id", defaultValue = "0"),
@@ -33,7 +33,8 @@ public interface VillageMapper {
             @Mapping(target = "name",source = "tvillage.name"),
             @Mapping(target = "district", ignore = true),
             @Mapping(target = "district.id", source = "tvillage.district.id"),
-            @Mapping(target = "district.name", source = "tvillage.district.name")
+            @Mapping(target = "district.name", source = "tvillage.district.name"),
+            @Mapping(target = "district.provinceId", ignore = true)
     })
     VillageDistrictDto tvillageToVillageDistritcDto(Tvillage tvillage);
 
@@ -42,7 +43,9 @@ public interface VillageMapper {
             @Mapping(target = "name", source = "villageDistrictDto.name"),
             @Mapping(target = "district", ignore = true),
             @Mapping(target = "district.id", source = "villageDistrictDto.district.id"),
-            @Mapping(target = "district.name", source = "villageDistrictDto.district.name")
+            @Mapping(target = "district.name", source = "villageDistrictDto.district.name"),
+            @Mapping(target = "district.villages", ignore = true),
+            @Mapping(target = "district.province", ignore = true)
     })
     Tvillage villageDistrictDtoToTvillage(VillageDistrictDto villageDistrictDto);
 }
