@@ -2,13 +2,7 @@ package com.example.mapper.user;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.MapKey;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import com.example.entity.user.TtypeUser;
 
@@ -16,12 +10,14 @@ import com.example.entity.user.TtypeUser;
 public interface MapperTypeUser {
 
 	@Select("SELECT * FROM Ttypes_users")
-	@Result(column = "name_type_user",property = "nameTypeUser")
-	@MapKey(value = "id")
+	@Results(id = "resulTypeUser", value = {
+			@Result(column = "id", property = "id"),
+			@Result(column = "name_type_user",property = "nameTypeUser")
+	})
 	List<TtypeUser> getAll();
 	
 	@Select("SELECT * FROM Ttypes_users WHERE id=#{id}")
-	@Result(column = "name_type_user",property = "nameTypeUser")
+	@ResultMap(value = "resulTypeUser")
 	TtypeUser getById(@Param("id") Integer id);
 	
 	@Update("UPDATE Ttypes_users SET name_type_user=#{typeUser.nameTypeUser} WHERE id=#{typeUser.id}")
