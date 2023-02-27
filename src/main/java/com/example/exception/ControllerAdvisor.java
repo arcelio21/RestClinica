@@ -10,10 +10,15 @@ import com.example.exception.user.PasswordNotUpdateException;
 import com.example.exception.user.UserNotSaveException;
 import com.example.exception.user.UserNotUpdateException;
 import com.example.exception.user.UsernameInvalid;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDate;
@@ -166,5 +171,40 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .build();
 
         return ResponseEntity.badRequest().body(error);
+    }
+
+
+    public ResponseEntity<Object> handleArgumentNotValid(MethodArgumentNotValidException ex){
+
+        Map<String, Object> data = new HashMap<>();
+
+
+        data.put("Datos enviados", ex.getBindingResult().getTarget());
+        Map<String, Object>  errorDeCampo = new HashMap<>(); ;
+        for (FieldError fieldError: ex.getBindingResult().getFieldErrors()){
+            errorDeCampo.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+
+        data.put("Errores", errorDeCampo);
+
+        var error = ErrorResponseDto.builder()
+                .messageError("Error en validacion de valor de atributos")
+                .data(data)
+                .fecha(LocalDate.now())
+                .build();
+
+        return ResponseEntity.unprocessableEntity().body(error);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+
+        if(ex.getClass().equals(MethodArgumentNotValidException.class)) {
+            return this.handleArgumentNotValid((MethodArgumentNotValidException) ex);
+        }else {
+            return super.handleExceptionInternal(ex, body, headers, status, request);
+        }
+
     }
 }
