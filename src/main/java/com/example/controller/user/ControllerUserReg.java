@@ -6,6 +6,7 @@ import com.example.dto.ResponseDTO;
 import com.example.dto.user.UserRegDto;
 import com.example.dto.user.UserRegSaveDto;
 import com.example.dto.user.UserRegUpdateDto;
+import com.example.dto.user.UserUpdatePassDto;
 import com.example.exception.user.UserNotSaveException;
 import com.example.service.user.ServiceUserRegImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -146,6 +147,23 @@ public class ControllerUserReg {
 
         return ResponseEntity.ok(
                 this.serviceUserReg.validateAccount(auth)
+        );
+    }
+
+    @Operation(summary = "Actualizar contraseña de usuario",description = "Se encargara de actualizar contraseña de usuario cuando se desee",
+            method = "POST", responses = {
+            @ApiResponse(responseCode = "200",description = "Usuario Actualizado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseDTO.class,description = "Datos de actualizacion"))),
+            @ApiResponse(responseCode = "403",description = "Datos de usuario no valido",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    })
+    @PutMapping("/update/password")
+    public ResponseEntity<ResponseDTO> updatePassword( @RequestBody UserUpdatePassDto user){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Cantidad de registros actualizados")
+                        .data(this.serviceUserReg.updatePassword(user))
+                        .build()
         );
     }
 }
