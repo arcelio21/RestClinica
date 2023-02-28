@@ -216,8 +216,6 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 					.oldPassword(oldPassEncode)
 					.newPassword(newPassEncode)
 					.build();
-			log.info("new"+userValid.getNewPassword()+"OLd: "+userValid.getOldPassword());
-			log.info("Old:"+ userValid.getOldPassword()+ " :Actual: "+userDetails.getPassword());
 		}else {
 			throw new UsernameInvalid("Contraseña de usuario no valida");
 		}
