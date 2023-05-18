@@ -1,7 +1,6 @@
 package com.example.dto.address.district;
 
 import com.example.dto.address.province.ProvinceDto;
-import com.example.entity.address.Tprovince;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;

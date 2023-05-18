@@ -17,8 +17,7 @@ public class ServicePrescriptionsVisitImpl implements IServicePrescriptionsVisit
 
 	@Override
 	public List<TprescriptionVisit> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.mapperPrescriptionVisit.getAll();
 	}
 
 	@Override
