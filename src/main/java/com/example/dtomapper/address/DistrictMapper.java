@@ -44,7 +44,8 @@ public interface DistrictMapper {
             @Mapping(target = "villages", ignore = true),
             @Mapping(target = "province.id", source = "districtAllDto.tprovince.id"),
             @Mapping(target = "province.name", source = "districtAllDto.tprovince.nombre"),
-            @Mapping(target = "province", ignore = true)
+            @Mapping(target = "province", ignore = true),
+            @Mapping(target = "province.districts", ignore = true)
     })
     Tdistrict districtALlToTdistrict(DistrictAllDto districtAllDto);
 }
