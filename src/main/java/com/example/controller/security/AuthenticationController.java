@@ -24,7 +24,7 @@ public class AuthenticationController extends ControllerTemplate {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody AuthenticationRequest request){
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
 
         return  ResponseEntity.ok(this.authenticationService.authenticate(request));
     }

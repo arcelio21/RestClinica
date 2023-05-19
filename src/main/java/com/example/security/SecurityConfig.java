@@ -20,11 +20,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+        
         httpSecurity
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
+                        new AntPathRequestMatcher("/api/v1/province/**"),
+                        new AntPathRequestMatcher("/api/v1/village/**"),
+                        new AntPathRequestMatcher("/api/v1/district/**"),
+                        new AntPathRequestMatcher("/api/v1/address/**"),
                         new AntPathRequestMatcher("/swagger-ui.html"),
                         new AntPathRequestMatcher("/api/v1/auth/**"),
                         new AntPathRequestMatcher("/swagger-ui/index.html"),

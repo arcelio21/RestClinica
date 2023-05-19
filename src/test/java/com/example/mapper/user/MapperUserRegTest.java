@@ -39,8 +39,8 @@ class MapperUserRegTest {
 		assertNotNull(user);
 		System.out.println(user); 
 		LocalDate fecha=LocalDate.of(2000, 9, 2);
-		assertEquals(fecha, user.getFechaNacimiento());
-		System.out.println(fecha+" "+user.getFechaNacimiento());
+		assertEquals(fecha, user.getBirthday());
+		System.out.println(fecha+" "+user.getBirthday());
 	}
 	
 	@Test
@@ -52,7 +52,7 @@ class MapperUserRegTest {
 		user.setContact("67238192");
 		user.setEmail("carloMon12@gmail.com");
 		user.setPassword("hola");
-		user.setFechaNacimiento(LocalDate.of(2000, 12, 12));
+		user.setBirthday(LocalDate.of(2000, 12, 12));
 		Taddress address=new Taddress(1L);
 		user.setAddressId(address);
 		Integer rowAffected=this.mapperUserReg.save(user);

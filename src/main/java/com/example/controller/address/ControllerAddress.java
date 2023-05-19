@@ -48,7 +48,6 @@ public class ControllerAddress extends ControllerTemplate {
         return ResponseEntity.ok(responseDTO);
     }
 
-    // TODO probar el usereturntypeshcema en false haber si usa la configuracion que le pongo
     @Operation(summary = "Obtener address por ID",description = "Se podra obtener la address que se desee filtrandolo por su ID",
             method = "GET", responses = {
             @ApiResponse(responseCode = "200",description = "Address encontrada",
