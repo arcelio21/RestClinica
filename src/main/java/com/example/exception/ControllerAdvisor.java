@@ -7,6 +7,7 @@ import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
+import com.example.exception.modules.modules.ModulesNoFoundException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
 import com.example.exception.user.user_reg.PasswordNotUpdateException;
@@ -177,6 +178,11 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
 
+    /**
+     * PARA CAPTURAR ERRORES DE VALIDACION DE DATOS EN ENTIDADES
+     * @param ex
+     * @return
+     */
     public ResponseEntity<Object> handleArgumentNotValid(MethodArgumentNotValidException ex){
 
         Map<String, Object> data = new HashMap<>();
@@ -199,6 +205,10 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return ResponseEntity.unprocessableEntity().body(error);
     }
 
+    /**
+     * LO SOBRESCRIBI PARA QUE EN CASO DE QUE EL ERROR FUERA POR CAMPO CON DATOS NO VALIDO
+     * EJECUTAR EL METODO PERSONALIZADO QUE CREE
+     */
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
@@ -255,4 +265,17 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
 
+    //EXCEPTION MODULES
+    @ExceptionHandler(ModulesNoFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handlerModulesNotSave(ModulesNoFoundException ex){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+            ErrorResponseDto.builder()
+            .fecha(LocalDate.now())
+            .messageError(ex.getMessage())
+            .data((ex.getData()==null)?"":"ID: "+ex.getData())
+            .build()
+        );
+
+    }
 }
