@@ -9,6 +9,7 @@ import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
 import com.example.exception.modules.modules.ModulesNoFoundException;
+import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
@@ -300,6 +301,30 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .fecha(LocalDate.now())
                 .messageError(ex.getMessage())
                 .data((data!=null)?data:"")
+                .build()
+        );
+    }
+
+
+    @ExceptionHandler(ModulesNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto> handlerModulesNotSave(ModulesNotSaveException ex){
+
+        Map<String,Object> data = null;
+
+        if(ex.getData()!=null){
+
+            data = new HashMap<>();
+
+            ModulesDto modulesDto = (ModulesDto)ex.getData();
+
+            data.put("name_module", modulesDto.getName());
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            ErrorResponseDto.builder()
+                .fecha(LocalDate.now())
+                .data((data!=null)?data:"")
+                .messageError(ex.getMessage())
                 .build()
         );
     }
