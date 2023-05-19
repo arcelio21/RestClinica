@@ -1,5 +1,9 @@
 package com.example.exception.modules.modules;
 
+/**
+ * CLASE QUE MANEJARA EXCEPCIONES CUANDO NO SE
+ * ENCUENTRA DATOS DE 'MODULES'
+ */
 public class ModulesNoFoundException extends RuntimeException{
 
 

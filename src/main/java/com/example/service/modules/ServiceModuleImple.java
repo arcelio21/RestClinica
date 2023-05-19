@@ -1,64 +1,58 @@
 package com.example.service.modules;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import com.example.dto.modules.ModulesDto;
+import com.example.dtomapper.modules.ModulesMapper;
 import com.example.entity.modules.Tmodule;
+import com.example.exception.modules.modules.ModulesNoFoundException;
 import com.example.mapper.modules.MapperModules;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class ServiceModuleImple implements IServiceModule{
 
 	private MapperModules mapperModules;
+	private ModulesMapper modulesMapper;
 	
 	
-	public ServiceModuleImple(MapperModules mapperModules) {
-		this.mapperModules = mapperModules;
+	
+
+	@Override
+	public List<ModulesDto> getAll() {
+
+		return Optional.of(this.mapperModules.getAll())
+				.orElseThrow( ()-> new ModulesNoFoundException("Data Not Found"))
+				.stream()
+				.map(this.modulesMapper::TmoduleToModulesDto)
+				.toList();
 	}
 
 	@Override
-	public List<Tmodule> getAll() {
-
-		List<Tmodule> modules=this.mapperModules.getAll();
+	public ModulesDto getById(Long id) {
 		
-		if(modules==null || modules.isEmpty()) {
-			return Collections.emptyList();
-		}
-		return modules;
+		return Optional.of(id)
+				.map(this.mapperModules::getById)
+				.map(this.modulesMapper::TmoduleToModulesDto)
+				.orElseThrow(()-> new ModulesNoFoundException("Id no encontrado",id));
 	}
 
 	@Override
-	public Tmodule getById(Integer id) {
+	public Integer update(ModulesDto modulesDto) {
 
-		if(id==null || id<=0) {
-			return null;
-		}
 		
-		return this.mapperModules.getById(id);
+		//TODO RECORDA IMPLEMENTAR VALIDACION POR GRUPOS EN EL CONTROLLER
+		return null;
 	}
 
 	@Override
-	public Integer update(Tmodule tmodule) {
+	public Integer save(ModulesDto modulesDto) {
 
-		if(tmodule==null || tmodule.getId()==null || tmodule.getId()<=0) {
-			return 0;
-		}
-		return this.mapperModules.update(tmodule);
-	}
-
-	@Override
-	public Integer save(Tmodule tmodule) {
-
-		if(tmodule==null) {
-			return 0;
-		}
-		
-		if(tmodule.getId()!=null && tmodule.getId()<=0) {
-			return 0;
-		}
-		return this.mapperModules.insert(tmodule);
+		return null;
 	}
 
 }
