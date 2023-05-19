@@ -1,6 +1,7 @@
 package com.example.exception;
 
 import com.example.dto.ErrorResponseDto;
+import com.example.dto.modules.ModulesDto;
 import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
 import com.example.dto.user.user_reg.UserRegUpdateDto;
@@ -8,6 +9,7 @@ import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
 import com.example.exception.modules.modules.ModulesNoFoundException;
+import com.example.exception.modules.modules.ModulesNotUpdateException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
 import com.example.exception.user.user_reg.PasswordNotUpdateException;
@@ -267,7 +269,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     //EXCEPTION MODULES
     @ExceptionHandler(ModulesNoFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handlerModulesNotSave(ModulesNoFoundException ex){
+    public ResponseEntity<ErrorResponseDto> handlerModulesNotFound(ModulesNoFoundException ex){
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
             ErrorResponseDto.builder()
@@ -277,5 +279,28 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
             .build()
         );
 
+    }
+
+    @ExceptionHandler(ModulesNotUpdateException.class)
+    public ResponseEntity<ErrorResponseDto> handlerModulesNotUpdate(ModulesNotUpdateException ex){
+
+        Map<String,Object> data = null;
+
+        if(ex.getData()!=null){
+
+            data = new HashMap<>();
+            ModulesDto modulesDto = (ModulesDto)ex.getData();
+
+            data.put("id", modulesDto.getId());
+            data.put("name_module", modulesDto.getName());
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            ErrorResponseDto.builder()
+                .fecha(LocalDate.now())
+                .messageError(ex.getMessage())
+                .data((data!=null)?data:"")
+                .build()
+        );
     }
 }
