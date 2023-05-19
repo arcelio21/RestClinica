@@ -5,8 +5,8 @@ import java.util.Optional;
 
 import com.example.dto.modules.ModulesDto;
 import com.example.dtomapper.modules.ModulesMapper;
-import com.example.entity.modules.Tmodule;
 import com.example.exception.modules.modules.ModulesNoFoundException;
+import com.example.exception.modules.modules.ModulesNotUpdateException;
 import com.example.mapper.modules.MapperModules;
 
 import lombok.AllArgsConstructor;
@@ -38,7 +38,7 @@ public class ServiceModuleImple implements IServiceModule{
 		return Optional.of(id)
 				.map(this.mapperModules::getById)
 				.map(this.modulesMapper::TmoduleToModulesDto)
-				.orElseThrow(()-> new ModulesNoFoundException("Id no encontrado",id));
+				.orElseThrow(()-> new ModulesNoFoundException("Id Not Valid",id));
 	}
 
 	@Override
@@ -46,7 +46,10 @@ public class ServiceModuleImple implements IServiceModule{
 
 		
 		//TODO RECORDA IMPLEMENTAR VALIDACION POR GRUPOS EN EL CONTROLLER
-		return null;
+		return Optional.of(modulesDto)
+				.map(this.modulesMapper::modulesDtoToTmodule)
+				.map(this.mapperModules::update)
+				.orElseThrow(()-> new ModulesNotUpdateException("Data Modules Not Valid", modulesDto));
 	}
 
 	@Override
