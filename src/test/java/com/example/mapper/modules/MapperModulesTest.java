@@ -38,7 +38,7 @@ class MapperModulesTest {
 	@Test
 	void getById(){
 		//AL MOMENTO DE HACER EL TEST, LA TABLA NO TENIA REGISTRO
-		Tmodule module=this.mapperModules.getById(1);
+		Tmodule module=this.mapperModules.getById(1L);
 		assertNotNull(module);
 		assertNotNull(module.getNameModule());
 		System.out.println(module);
@@ -46,7 +46,7 @@ class MapperModulesTest {
 	
 	@Test
 	void update() {
-		Tmodule module=this.mapperModules.getById(1);
+		Tmodule module=this.mapperModules.getById(1L);
 		assertNotNull(module);
 		module.setNameModule("Login");
 		Integer rowAffected=this.mapperModules.update(module);
