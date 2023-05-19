@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.example.dto.modules.ModulesDto;
 import com.example.dtomapper.modules.ModulesMapper;
 import com.example.exception.modules.modules.ModulesNoFoundException;
+import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
 import com.example.mapper.modules.MapperModules;
 
@@ -55,7 +56,11 @@ public class ServiceModuleImple implements IServiceModule{
 	@Override
 	public Integer save(ModulesDto modulesDto) {
 
-		return null;
+		return Optional.of(modulesDto)
+			.map(this.modulesMapper::modulesDtoToTmodule)
+			.map(this.mapperModules::insert)
+			.orElseThrow(()-> new ModulesNotSaveException("Error, Modules Not Saved", modulesDto))
+		;
 	}
 
 }
