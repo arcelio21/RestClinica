@@ -20,7 +20,7 @@ public interface MapperModules {
 	
 	@Select("SELECT * FROM Tmodules WHERE id=#{id}")
 	@Result(column = "name_modules",property = "nameModule")
-	public Tmodule getById(@Param("id") Integer id);
+	public Tmodule getById(@Param("id") Long id);
 	
 	@Update("UPDATE Tmdoules SET name_modules=#{modul.nameModule} WHERE id=#{modul.id}")
 	public Integer update(@Param("modul") Tmodule module);
