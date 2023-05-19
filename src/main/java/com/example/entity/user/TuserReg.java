@@ -47,13 +47,13 @@ public class TuserReg implements UserDetails {
 	private String email;
 	
 	@PastOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO")
-	private LocalDate fechaNacimiento;
+	private LocalDate birthday;
 	
 	@Max(value = 150)
 	private String password;
 	
 	@FutureOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO")
-	private LocalDateTime fechaCreacion;
+	private LocalDateTime creationDate;
 	
 	@NotNull
 	private Taddress addressId;
@@ -79,9 +79,9 @@ public class TuserReg implements UserDetails {
 			@NotEmpty(message = "EL VALOR DE APELLIDO NO PUEDE SER NULO VACIO") @Size(min = 1, max = 30) String lastName,
 			@NotEmpty(message = "EL VALOR DE APELLIDO NO PUEDE SER NULO VACIO") @Size(min = 7, max = 8) String contact,
 			@Email(message = "E-MAIL NO VALIDO") @Max(50) String email,
-			@PastOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO") LocalDate fechaNacimiento,
+			@PastOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO") LocalDate birthday,
 			@Max(150) String password,
-			@FutureOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO") LocalDateTime fechaCreacion,
+			@FutureOrPresent(message = "EL RANGO DE FECHA NO ES CORRECTO") LocalDateTime creationDate,
 			@NotNull Taddress addressId) {
 		super();
 		this.id = id;
@@ -90,9 +90,9 @@ public class TuserReg implements UserDetails {
 		this.lastName = lastName;
 		this.contact = contact;
 		this.email = email;
-		this.fechaNacimiento = fechaNacimiento;
+		this.birthday = birthday;
 		this.password = password;
-		this.fechaCreacion = fechaCreacion;
+		this.creationDate = creationDate;
 		this.addressId = addressId;
 	}
 
@@ -155,15 +155,24 @@ public class TuserReg implements UserDetails {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-
-	public LocalDate getFechaNacimiento() {
-		return fechaNacimiento;
+	
+	public LocalDate getBirthday() {
+		return birthday;
 	}
 
 
-	public void setFechaNacimiento(LocalDate fechaNacimiento) {
-		this.fechaNacimiento = fechaNacimiento;
+	public void setBirthday(LocalDate birthday) {
+		this.birthday = birthday;
+	}
+
+
+	public LocalDateTime getCreationDate() {
+		return creationDate;
+	}
+
+
+	public void setCreationDate(LocalDateTime creationDate) {
+		this.creationDate = creationDate;
 	}
 
 
@@ -207,16 +216,6 @@ public class TuserReg implements UserDetails {
 	}
 
 
-	public LocalDateTime getFechaCreacion() {
-		return fechaCreacion;
-	}
-
-
-	public void setFechaCreacion(LocalDateTime fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-
-
 	public Taddress getAddressId() {
 		return addressId;
 	}
@@ -241,8 +240,8 @@ public class TuserReg implements UserDetails {
 	@Override
 	public String toString() {
 		return "TusersRegs [id=" + id + ", idenCard=" + idenCard + ", name=" + name + ", lastName=" + lastName
-				+ ", contact=" + contact + ", email=" + email + ", fechaNacimiento=" + fechaNacimiento + ", password="
-				+ password + ", fechaCreacion=" + fechaCreacion + ", addressId=" + addressId.getId() + "]";
+				+ ", contact=" + contact + ", email=" + email + ", fechaNacimiento=" + birthday + ", password="
+				+ password + ", fechaCreacion=" + creationDate + ", addressId=" + addressId.getId() + "]";
 	}
 	
 	

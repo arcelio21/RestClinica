@@ -22,9 +22,9 @@ public class UserRegDto {
     private String password;
     private String contact;
     private String email;
-    private LocalDate fechaNacimiento;
+    private LocalDate birthday;
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private LocalDateTime fechaCreacion;
+    private LocalDateTime creationDate;
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long addressId;

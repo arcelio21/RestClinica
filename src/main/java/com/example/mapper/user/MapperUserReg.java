@@ -26,8 +26,8 @@ public interface MapperUserReg {
 			@Result(column = "last_name", property = "lastName"),
 			@Result(column = "contact", property = "contact"),
 			@Result(column = "email", property = "email"),
-			@Result(column = "fecha_nacimiento", property = "fechaNacimiento"),
-			@Result(column = "fecha_creacion", property = "fechaCreacion"),
+			@Result(column = "birthday", property = "birthday"),
+			@Result(column = "creation_date", property = "creationDate"),
 			@Result(column = "address_id", property = "addressId.id")
 	})
 	List<TuserReg> getAll();
@@ -46,14 +46,14 @@ public interface MapperUserReg {
 	List<TuserReg> getByName(@Param("name") String name);
 	
 	
-	@Insert("INSERT INTO TusersRegs(iden_card,name,last_name,contact,email,fecha_nacimiento,password,address_id)"
-			+ " VALUES(#{user.idenCard},#{user.name},#{user.lastName},#{user.contact},#{user.email},#{user.fechaNacimiento},"
+	@Insert("INSERT INTO TusersRegs(iden_card,name,last_name,contact,email,birthday,password,address_id)"
+			+ " VALUES(#{user.idenCard},#{user.name},#{user.lastName},#{user.contact},#{user.email},#{user.birthday},"
 			+ "#{user.password},#{user.addressId.id}) ")
 	Integer save(@Param("user") TuserReg user);
 	
 	
 	@Update("UPDATE TusersRegs SET iden_card=#{user.idenCard},name=#{user.name},last_name=#{user.lastName},contact=#{user.contact},"
-			+ "email=#{user.email},fecha_nacimiento=#{user.fechaNacimiento},address_id=#{user.addressId.id} WHERE id=#{user.id}")
+			+ "email=#{user.email},birthday=#{user.birthday},address_id=#{user.addressId.id} WHERE id=#{user.id}")
 	Integer update(@Param("user") TuserReg user);
 	
 	

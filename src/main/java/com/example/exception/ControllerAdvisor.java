@@ -59,7 +59,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         Map<String, Object> data=null;
         if(ex.getData()!=null){
             UserRegSaveDto user = (UserRegSaveDto) ex.getData();
-            data = datUserToDataError(user.getIdenCard(), user.getName(), user.getLastName(), user.getEmail(), user.getContact(), user.getFechaNacimiento(), user.getVillageId(), user.getDirecSpecific());
+            data = datUserToDataError(user.getIdenCard(), user.getName(), user.getLastName(), user.getEmail(), user.getContact(), user.getBirthday(), user.getVillageId(), user.getDirecSpecific());
         }
 
         var error = ErrorResponseDto.builder()
@@ -79,7 +79,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         Map<String, Object> data=null;
         if(ex.getData()!=null){
             UserRegUpdateDto user = (UserRegUpdateDto) ex.getData();
-            data = datUserToDataError(user.getIdenCard(), user.getName(), user.getLastName(), user.getEmail(), user.getContact(), user.getFechaNacimiento(), user.getVillageId(), user.getDirecSpecific());
+            data = datUserToDataError(user.getIdenCard(), user.getName(), user.getLastName(), user.getEmail(), user.getContact(), user.getBirthday(), user.getVillageId(), user.getDirecSpecific());
             data.put("addressId", user.getAddressId());
         }
 
@@ -94,7 +94,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    private Map<String, Object> datUserToDataError(Long idenCard, String name, String lastName, String email, String contact, LocalDate fechaNacimiento, Long villageId, String direcSpecific) {
+    private Map<String, Object> datUserToDataError(Long idenCard, String name, String lastName, String email, String contact, LocalDate birthday, Long villageId, String direcSpecific) {
         Map<String, Object> data;
         data= new HashMap<>();
         data.put("idenCard", idenCard);
@@ -102,7 +102,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         data.put("lastName", lastName);
         data.put("email", email);
         data.put("contact", contact);
-        data.put("fechaNacimiento", fechaNacimiento);
+        data.put("birthday", birthday);
         data.put("villageId", villageId);
         data.put("direcSpecific", direcSpecific);
         return data;

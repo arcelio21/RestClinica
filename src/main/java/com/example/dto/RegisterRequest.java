@@ -19,7 +19,7 @@ public class RegisterRequest {
     private String lastName;
     private String contact;
     private String email;
-    private LocalDate fechaNacimiento;
+    private LocalDate birthday;
     private String direcSpecific;
     private Integer idVillage;
 }

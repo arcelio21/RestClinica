@@ -42,7 +42,7 @@ public class AuthenticationService {
             userAuth.setName(request.getName());
             userAuth.setLastName(request.getLastName());
             userAuth.setContact(request.getContact());
-            userAuth.setFechaNacimiento(request.getFechaNacimiento());
+            userAuth.setBirthday(request.getBirthday());
             userAuth.setPassword(passwordEncoder.encode(request.getPassword()));
             userAuth.setAddressId(addressAuth);
 

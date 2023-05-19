@@ -22,8 +22,8 @@ public interface UserRegMapper {
             @Mapping(source = "user.contact", target = "contact"),
             @Mapping(source = "user.email", target = "email"),
             @Mapping(source = "user.idenCard",target = "idenCard"),
-            @Mapping(source = "user.fechaNacimiento", target = "fechaNacimiento"),
-            @Mapping(source = "user.fechaCreacion", target = "fechaCreacion"),
+            @Mapping(source = "user.birthday", target = "birthday"),
+            @Mapping(source = "user.creationDate", target = "creationDate"),
             @Mapping(target = "password", ignore = true)
     })
     UserRegDto TuserRegToUserRegDto(TuserReg user);
@@ -37,11 +37,11 @@ public interface UserRegMapper {
             @Mapping(source = "user.email", target = "email"),
             @Mapping(source = "user.contact", target = "contact"),
             @Mapping(source = "user.password", target = "password"),
-            @Mapping(source = "user.fechaNacimiento", target = "fechaNacimiento"),
+            @Mapping(source = "user.birthday", target = "birthday"),
             @Mapping(source = "user.addressId", target = "addressId.id", resultType = Long.class),
             @Mapping(target = "addressId", ignore = true),
             @Mapping(target = "usersTypesRegs", ignore = true),
-            @Mapping(target = "fechaCreacion", ignore = true),
+            @Mapping(target = "creationDate", ignore = true),
             @Mapping(target = "authorities", ignore = true)
     })
     TuserReg userRegDtoToTuserReg(UserRegDto user);
@@ -52,8 +52,8 @@ public interface UserRegMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "addressId", ignore = true),
             @Mapping(target = "usersTypesRegs", ignore = true),
-            @Mapping(target = "fechaCreacion", ignore = true),
-            @Mapping(target = "fechaNacimiento", ignore = true),
+            @Mapping(target = "creationDate", ignore = true),
+            @Mapping(target = "birthday", ignore = true),
             @Mapping(target = "name", ignore = true),
             @Mapping(target = "contact", ignore = true),
             @Mapping(target = "email", ignore = true),
@@ -68,8 +68,8 @@ public interface UserRegMapper {
             @Mapping(target = "id", ignore = true),
             @Mapping(target = "addressId", ignore = true),
             @Mapping(target = "usersTypesRegs", ignore = true),
-            @Mapping(target = "fechaCreacion", ignore = true),
-            @Mapping(target = "fechaNacimiento", ignore = true),
+            @Mapping(target = "creationDate", ignore = true),
+            @Mapping(target = "birthday", ignore = true),
             @Mapping(target = "name", ignore = true),
             @Mapping(target = "contact", ignore = true),
             @Mapping(target = "email", ignore = true),

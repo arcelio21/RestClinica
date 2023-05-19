@@ -26,10 +26,10 @@ public class UserRegUpdateDto extends UserRegDto{
 
     @Builder(builderMethodName = "userUpdateBuilder")
     public UserRegUpdateDto(Long id, Long idenCard, String name, String lastName, String password, String contact, String email,
-                          LocalDate fechaNacimiento, LocalDateTime fechaCreacion, Long addressId,
+                          LocalDate birthday, LocalDateTime creationDate, Long addressId,
                           Long villageId, String direcSpecific
     ) {
-        super(id, idenCard, name, lastName, password, contact, email, fechaNacimiento, fechaCreacion, addressId);
+        super(id, idenCard, name, lastName, password, contact, email, birthday, creationDate, addressId);
         this.addressId= addressId;
         this.direcSpecific=direcSpecific;
         this.villageId=villageId;
