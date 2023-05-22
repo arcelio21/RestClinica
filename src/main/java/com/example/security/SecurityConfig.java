@@ -18,6 +18,7 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
 
+    //TODO VALIDAR EL TIPO DE PETICION DE RUTAS Y ASI FILTRA CUAL SE PUEDE ACCEDER Y CUAL NO
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         
