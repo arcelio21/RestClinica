@@ -1,0 +1,19 @@
+#DESCRIPCION DE PROYECTO
+spring:
+    datasource:
+        url: ${MYSQL_URL}
+ #testdb: nombre del contenedor y porque esta conectado a la misma red
+        username: ${MYSQL_USER}
+        password: ${MYSQL_PASS}
+    jackson:
+        serialization:
+            fail-on-empty-beans: true
+
+#PUERTO DE SERVIDOR
+server:
+    port: 8082
+
+
+#SPRING DOC
+springdoc:
+    packagesToScan: com.example.controller 
