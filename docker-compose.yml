@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  mysqlBd:
+    image: mysql:8.0.33
+    container_name: clinicadb
+    #command: bash -c "ls -la /var/lib/mysql"
+    ports:
+      - 33023:3306 #PUERTO EN MI PC Y DENRTO DEL CONTENEDOR
+      #0.0.0.0:33023
+    environment:
+       MYSQL_ROOT_PASSWORD: "admin"
+       MYSQL_DATABASE: "clinica"
+
+    volumes:
+      - "/home/arceliomontezuma/Documents/Proyectos_Java/BdClinica/clinicaBd.sql /docker-entrypoint-initdb.d/"
+      - "/home/arceliomontezuma/Documents/Proyectos_Java/BdClinica/files:/var/lib/mysql:rw" #ESTO DEFINE DONDE SE GUARDARA LA INFO DE LA DB EN MI PC Y CONTENEDOR, ASI NO SE PIERDE LA INFORMACION AL DETENER EL CONTENERDOR
+      #rw-> SIGNFICA QUE LA I¿UBICARION SERA DE ESCRITURA Y LECTURA
+    networks:
+      - clinicaNet
+  
+  rest_clinica:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rest_clinica
+    ports:
+      - 33923:8082
+    environment:
+       - MYSQL_URL=jdbc:mysql://mysqlBd:3306/clinica
+       - MYSQL_USER=root
+       - MYSQL_PASS=admin
+       - spring.profiles.active=docker
+    depends_on:
+       - mysqlBd
+    networks:
+      - clinicaNet
+
+networks:
+  clinicaNet:
+    name: clinicaNet
+    driver: bridge
