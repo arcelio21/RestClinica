@@ -2,6 +2,7 @@ package com.example.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,7 +19,10 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
 
-    //TODO VALIDAR EL TIPO DE PETICION DE RUTAS Y ASI FILTRA CUAL SE PUEDE ACCEDER Y CUAL NO
+    /**
+     *  TODO VER COMO SE PUEDE MODIFICAR LAS RUTAS A LAS QUE PUEDE ACCEDER DINAMICAMENTE
+     *  DESDE BASE DE DATOS
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         
@@ -27,10 +31,10 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers(
-                        new AntPathRequestMatcher("/api/v1/province/**"),
-                        new AntPathRequestMatcher("/api/v1/village/**"),
-                        new AntPathRequestMatcher("/api/v1/district/**"),
-                        new AntPathRequestMatcher("/api/v1/address/**"),
+                        new AntPathRequestMatcher("/api/v1/province/**",HttpMethod.GET.name()),
+                        new AntPathRequestMatcher("/api/v1/village/**",HttpMethod.GET.name()),
+                        new AntPathRequestMatcher("/api/v1/district/**",HttpMethod.GET.name()),
+                        new AntPathRequestMatcher("/api/v1/address/**",HttpMethod.GET.name()),
                         new AntPathRequestMatcher("/swagger-ui.html"),
                         new AntPathRequestMatcher("/api/v1/auth/**"),
                         new AntPathRequestMatcher("/swagger-ui/index.html"),
