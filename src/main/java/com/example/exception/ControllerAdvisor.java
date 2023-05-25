@@ -36,7 +36,7 @@ import java.util.Map;
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoDataFoundException.class)
-    public ResponseEntity<Object> handleNoDatFoundException(NoDataFoundException ex){
+    public ResponseEntity<ErrorResponseDto> handleNoDatFoundException(NoDataFoundException ex){
 
         var error = ErrorResponseDto.builder()
                 .fecha(LocalDate.now())
@@ -47,7 +47,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UsernameInvalid.class)
-    public ResponseEntity<Object> handleUsernameInvalid(UsernameInvalid ex){
+    public ResponseEntity<ErrorResponseDto> handleUsernameInvalid(UsernameInvalid ex){
 
         var error = ErrorResponseDto.builder()
                 .fecha(LocalDate.now())
@@ -58,7 +58,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UserNotSaveException.class)
-    public ResponseEntity<Object> handleUserNotSave(UserNotSaveException ex){
+    public ResponseEntity<ErrorResponseDto> handleUserNotSave(UserNotSaveException ex){
 
         Map<String, Object> data=null;
         if(ex.getData()!=null){
@@ -78,7 +78,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UserNotUpdateException.class)
-    public ResponseEntity<Object> handleUserNotUpdate(UserNotUpdateException ex){
+    public ResponseEntity<ErrorResponseDto> handleUserNotUpdate(UserNotUpdateException ex){
 
         Map<String, Object> data=null;
         if(ex.getData()!=null){
@@ -113,7 +113,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AddressNotSaveException.class)
-    public ResponseEntity<Object> handleUserNotSave(AddressNotSaveException ex){
+    public ResponseEntity<ErrorResponseDto> handleUserNotSave(AddressNotSaveException ex){
 
         Map<String, Object> data=null;
         if(ex.getData()!=null){
@@ -135,7 +135,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AddressNotUpdateException.class)
-    public ResponseEntity<Object> handleUserNotSave(AddressNotUpdateException ex){
+    public ResponseEntity<ErrorResponseDto> handleUserNotSave(AddressNotUpdateException ex){
 
         Map<String, Object> data=null;
         if(ex.getData()!=null) {
@@ -158,7 +158,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(PasswordNotUpdateException.class)
-    public ResponseEntity<Object> handlePaawordNotUpdate(PasswordNotUpdateException ex){
+    public ResponseEntity<ErrorResponseDto> handlePaawordNotUpdate(PasswordNotUpdateException ex){
 
         Map<String, Object> info = null;
 
