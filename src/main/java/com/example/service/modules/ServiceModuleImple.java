@@ -2,6 +2,7 @@ package com.example.service.modules;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.example.dto.modules.ModulesDto;
 import com.example.dtomapper.modules.ModulesMapper;
@@ -30,7 +31,7 @@ public class ServiceModuleImple implements IServiceModule{
 				.orElseThrow( ()-> new ModulesNoFoundException("Data Not Found"))
 				.stream()
 				.map(this.modulesMapper::TmoduleToModulesDto)
-				.toList();
+				.collect(Collectors.toList());
 	}
 
 	@Override
