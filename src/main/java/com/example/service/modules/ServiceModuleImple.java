@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.example.dto.modules.ModulesDto;
 import com.example.dtomapper.modules.ModulesMapper;
+import com.example.entity.modules.Tmodule;
 import com.example.exception.modules.modules.ModulesNoFoundException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
@@ -26,12 +27,17 @@ public class ServiceModuleImple implements IServiceModule{
 
 	@Override
 	public List<ModulesDto> getAll() {
-
-		return Optional.of(this.mapperModules.getAll())
-				.orElseThrow( ()-> new ModulesNoFoundException("Data Not Found"))
-				.stream()
-				.map(this.modulesMapper::TmoduleToModulesDto)
-				.collect(Collectors.toList());
+		
+		Optional<List<Tmodule>> tmodules = Optional.ofNullable(this.mapperModules.getAll());
+		
+		if(tmodules.isPresent() && !tmodules.get().isEmpty()){
+			
+			return tmodules.get().stream()
+					.map(this.modulesMapper::TmoduleToModulesDto)
+					.collect(Collectors.toList());
+		}
+		
+		throw new ModulesNoFoundException("Data Not Found");
 	}
 
 	@Override
