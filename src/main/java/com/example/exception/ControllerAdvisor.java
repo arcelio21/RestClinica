@@ -1,6 +1,8 @@
 package com.example.exception;
 
 import com.example.dto.ErrorResponseDto;
+import com.example.dto.address.AddressRequestDto;
+import com.example.dto.address.district.DistrictDto;
 import com.example.dto.modules.ModulesDto;
 import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
@@ -8,6 +10,7 @@ import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
+import com.example.exception.address.district.DistrictNotUpdateException;
 import com.example.exception.modules.modules.ModulesNoFoundException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
@@ -112,15 +115,19 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return data;
     }
 
+    /**
+     * EXCEPCIONES DE ADDRESS
+     */
+
     @ExceptionHandler(AddressNotSaveException.class)
-    public ResponseEntity<ErrorResponseDto> handleUserNotSave(AddressNotSaveException ex){
+    public ResponseEntity<ErrorResponseDto> handleAddressNotSave(AddressNotSaveException ex){
 
         Map<String, Object> data=null;
         if(ex.getData()!=null){
-            UserRegSaveDto user = (UserRegSaveDto) ex.getData();
+            AddressRequestDto user = (AddressRequestDto) ex.getData();
             data= new HashMap<>();
             data.put("villageId", user.getVillageId());
-            data.put("direcSpecific", user.getDirecSpecific());
+            data.put("direcSpecific", user.getSpecificAddress());
         }
 
         var error = ErrorResponseDto.builder()
@@ -135,15 +142,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AddressNotUpdateException.class)
-    public ResponseEntity<ErrorResponseDto> handleUserNotSave(AddressNotUpdateException ex){
+    public ResponseEntity<ErrorResponseDto> handleAddressNotUpdate(AddressNotUpdateException ex){
 
         Map<String, Object> data=null;
         if(ex.getData()!=null) {
 
-            UserRegUpdateDto user = (UserRegUpdateDto) ex.getData();
+            AddressRequestDto address = (AddressRequestDto) ex.getData();
             data= new HashMap<>();
-            data.put("villageId", user.getVillageId());
-            data.put("direcSpecific", user.getDirecSpecific());
+            data.put("idAddress", address.getId())
+            data.put("villageId", address.getVillageId());
+            data.put("direcSpecific", address.getSpecificAddress());
         }
 
         var error = ErrorResponseDto.builder()
@@ -156,6 +164,34 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * EXCEPCIONES DE DISTRITOS
+     */
+    @ExceptionHandler(DistrictNotUpdateException.class)
+    public ResponseEntity<ErrorResponseDto> handleDistrictNotUpdate(DistrictNotUpdateException ex){
+
+        Map<String, Object> data=null;
+        if(ex.getData()!=null) {
+
+            DistrictDto district = (DistrictDto) ex.getData();
+            data= new HashMap<>();
+            data.put("idDistrict", district.getId());
+            data.put("name", district.getName());
+            data.put("provinceId", district.getProvinceId());
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data(
+                        (data==null)?"":data
+                )
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(PasswordNotUpdateException.class)
     public ResponseEntity<ErrorResponseDto> handlePaawordNotUpdate(PasswordNotUpdateException ex){
