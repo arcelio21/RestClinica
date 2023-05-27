@@ -3,6 +3,7 @@ package com.example.exception;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.address.AddressRequestDto;
 import com.example.dto.address.district.DistrictDto;
+import com.example.dto.address.province.ProvinceDto;
 import com.example.dto.address.village.VillageDto;
 import com.example.dto.modules.ModulesDto;
 import com.example.dto.user.type_user.TypeUserDto;
@@ -13,6 +14,7 @@ import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
 import com.example.exception.address.district.DistrictNotSaveException;
 import com.example.exception.address.district.DistrictNotUpdateException;
+import com.example.exception.address.province.ProvinceNotUpdateException;
 import com.example.exception.address.village.VillageNotSaveException;
 import com.example.exception.address.village.VillageNotUpdateException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
@@ -257,6 +259,32 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .messageError(ex.getMessage())
                 .fecha(LocalDate.now())
                 .data((data==null)?"":data)
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * EXCEPCIONES DE PROVINCE
+     */
+    @ExceptionHandler(ProvinceNotUpdateException.class)
+    public ResponseEntity<ErrorResponseDto> handleVillageNotUpdate(ProvinceNotUpdateException ex){
+
+        Map<String, Object> data=null;
+        if(ex.getData()!=null) {
+
+            ProvinceDto villageDto = (ProvinceDto) ex.getData();
+            data= new HashMap<>();
+            data.put("idProvince", villageDto.getId());
+            data.put("name", villageDto.getName());
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data(
+                        (data==null)?"":data
+                )
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
