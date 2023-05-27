@@ -1,129 +1,186 @@
 package com.example.service.address;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
 import com.example.dtomapper.address.DistrictMapper;
+import com.example.entity.address.Tdistrict;
+import com.example.entity.address.Tprovince;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.address.district.DistrictNotSaveException;
+import com.example.exception.address.district.DistrictNotUpdateException;
+import com.example.mapper.address.MapperDistrict;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.example.entity.address.Tdistrict;
-import com.example.entity.address.Tprovince;
-import com.example.mapper.address.MapperDistrict;
-import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+/**
+ * Implementación de la interfaz IServiceDistrict para gestionar la lógica de los distritos.
+ */
 @RequiredArgsConstructor
 @Service
 public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Integer>{
 	
 	private final MapperDistrict mapperDistrict;
-	private  final DistrictMapper districtMapper;
+	private  final DistrictMapper dtoMapper;
 
-	
+
+	/**
+	 * OBTENER LISTA DE DISTRITO DISPONIBLE
+	 * @return id, nombre y idProvincia asociado cada distrito
+	 * @throws NoDataFoundException si no encuentra datos disponibles
+	 */
 	@Override
 	public List<DistrictDto> getAll() {
-		
-		List<Tdistrict> districts=this.mapperDistrict.getAll();
-		if(districts.isEmpty()) {
-			return Collections.emptyList();
+
+		Optional<List<Tdistrict>> tdistricts = Optional.ofNullable(this.mapperDistrict.getAll());
+		if(tdistricts.isPresent() && !tdistricts.get().isEmpty()) {
+			return tdistricts.get()
+					.stream()
+					.map(this.dtoMapper::tdistrictToDistrictDto)
+					.collect(Collectors.toList());
 		}
 
-		List<DistrictDto> districtDtos = new ArrayList<>();
-
-		for (Tdistrict tdistrict:
-			 districts) {
-			districtDtos.add(this.districtMapper.tdistrictToDistrictDto(tdistrict));
-		}
-
-		return districtDtos;
+		throw new NoDataFoundException();
 	}
 
+	/**
+	 * OBTENER DISTRITO POR ID
+	 * @param id
+	 * @return devuelve id, nombre y provincia relaciona al distrito encontrado
+	 * @throws NoDataFoundException si no encuentra datos disponibles
+	 */
 	@Override
 	public DistrictDto getById(Integer id) {
-		return Optional.ofNullable(id).map(mapperDistrict::getById).map(districtMapper::tdistrictToDistrictDto)
+		return Optional.ofNullable(id).map(mapperDistrict::getById).map(dtoMapper::tdistrictToDistrictDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
+	/**
+	 * Actualiza un distrito existente con la información proporcionada en el objeto DistrictDto.
+	 *
+	 * @param districtDto El objeto DistrictDto con la información del distrito a actualizar.
+	 * @return El identificador del distrito actualizado.
+	 * @throws DistrictNotUpdateException Si los datos del distrito no son válidos para la actualización.
+	 */
 	@Override
 	public Integer update(DistrictDto districtDto) {
 
 		if (districtDto == null || districtDto.getId()==null || districtDto.getName() == null
-				|| districtDto.getId()<=0 || districtDto.getName().isEmpty()) {
-			return 0;
+				|| districtDto.getId()<=0 || districtDto.getName().trim().isEmpty()
+				|| districtDto.getProvinceId()==null || districtDto.getProvinceId()<=0) {
+			throw new DistrictNotUpdateException("Datos de distrito no valido",districtDto);
 		}
 
-		Tdistrict tdistrict= this.districtMapper.districtDtoToTdistrict(districtDto);
-
-
-		return this.mapperDistrict.update(tdistrict);
+		return Optional.of(districtDto)
+				.map(this.dtoMapper::districtDtoToTdistrict)
+				.map(this.mapperDistrict::update)
+				.orElseThrow(()-> new DistrictNotUpdateException("Datos de distrito no valido",districtDto));
 	}
 
+	/**
+	 * Guarda un objeto DistrictDto en el sistema.
+	 *
+	 * @param districtDto El objeto DistrictDto a ser guardado.
+	 * @return cantidad de registro guardados
+	 * @throws DistrictNotSaveException Si los datos no son válidos o no se puede guardar el distrito.
+	 */
 	@Override
 	public Integer save(DistrictDto districtDto) {
-		if (districtDto == null || districtDto.getName() == null || districtDto.getName().isEmpty()) {
-			return 0;
+		if (districtDto == null || districtDto.getName() == null || districtDto.getName().trim().isEmpty()
+			|| districtDto.getProvinceId()==null || districtDto.getProvinceId()<=0) {
+			throw new DistrictNotSaveException("Datos no Validos", districtDto);
 		}
 
-		Tdistrict tdistrict = this.districtMapper.districtDtoToTdistrict(districtDto);
-		return this.mapperDistrict.save(tdistrict);
+		return Optional.of(districtDto)
+				.map(this.dtoMapper::districtDtoToTdistrict)
+				.map(this.mapperDistrict::save)
+				.orElseThrow(()-> new DistrictNotSaveException("Datos no validos", districtDto));
 	}
 
-
+	/**
+	 * OBTENER PROVINCIA POR ID
+	 * @param id - id de distrito
+	 * @return devolvera solo el id y nombre de distrito
+	 */
 	@Override
 	public DistrictDto getByIdName(Integer id) {
-		return Optional.ofNullable(id)
+		return Optional.of(id)
 				.map(mapperDistrict::getByIdName)
-				.map(districtMapper::tdistrictToDistrictDto)
-				.orElse(null);
+				.map(dtoMapper::tdistrictToDistrictDto)
+				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
+	/**
+	 * OBTENER LISTA DE DISTRITO DISPONIBLE
+	 * @return solo id y nombre de distritos disponibles
+	 */
 	@Override
 	public List<DistrictDto> getAllIdName() {
-		List<Tdistrict> districts=this.mapperDistrict.getAllIdName();
-		if(districts.isEmpty()) {
-			return Collections.emptyList();
+
+		Optional<List<Tdistrict>> optionalTdistricts = Optional.ofNullable(this.mapperDistrict.getAllIdName());
+
+		if(optionalTdistricts.isPresent() && !optionalTdistricts.get().isEmpty()){
+
+			return optionalTdistricts.get()
+					.stream()
+					.map(this.dtoMapper::tdistrictToDistrictDto)
+					.collect(Collectors.toList());
 		}
 
-		List<DistrictDto> districtAllDtos= new ArrayList<>();
-
-		for (Tdistrict tdistrict:
-				districts) {
-			districtAllDtos.add(this.districtMapper.tdistrictToDistrictDto(tdistrict));
-		}
-
-		return districtAllDtos;
+		throw new NoDataFoundException();
 	}
 
 
+	/**
+	 * Obtiene una lista de DistrictDto por el identificador de la provincia.
+	 *
+	 * @param id El identificador de la provincia.
+	 * @return Una lista de DistrictDto que pertenecen a la provincia especificada.
+	 * @throws NoDataFoundException Si no se encuentra ningún distrito para el identificador de la provincia.
+	 */
 	@Override
 	public List<DistrictDto> getByProvinceId(Integer id) {
 		if(id==null || id<=0){
-			return  Collections.emptyList();
+			throw new NoDataFoundException(id);
 		}
 
-		List<Tdistrict> tdistricts = this.mapperDistrict.getByProvinceId(new Tprovince(id));
+		Optional<List<Tdistrict>> tdistricts = Optional.of(id)
+				.map(Tprovince::new)
+				.map(this.mapperDistrict::getByProvinceId);
 
-		if(tdistricts.isEmpty()){
-			return  Collections.emptyList();
+		if(tdistricts.isPresent() && !tdistricts.get().isEmpty()){
+			return tdistricts
+					.get()
+					.stream()
+					.map(this.dtoMapper::tdistrictToDistrictDto)
+					.collect(Collectors.toList());
 		}
-		List<DistrictDto> districtDtos = new ArrayList<>();
-		for(Tdistrict tdistrict:tdistricts ){
-			districtDtos.add(this.districtMapper.tdistrictToDistrictDto(tdistrict));
-		}
-		return districtDtos;
+
+		throw new NoDataFoundException(id);
 	}
 
+
+	/**
+	 * Obtiene un objeto DistrictAllDto por su identificador.
+	 *
+	 * @param id El identificador del distrito.
+	 * @return Un objeto DistrictAllDto que contiene información del distrito y su provincia.
+	 * @throws NoDataFoundException Si no se encuentra ningún distrito para el identificador especificado.
+	 */
 	@Override
 	public DistrictAllDto getDistrictAndProvinceById(Integer id) {
 
-		return Optional.ofNullable(id)
+		if(id==null || id<=0){
+			throw new NoDataFoundException(id);
+		}
+
+		return Optional.of(id)
 				.map(mapperDistrict::getDistrictAndProvinceById)
-				.map(districtMapper::tdistrictToDistrictAll)
-				.orElse(null);
+				.map(dtoMapper::tdistrictToDistrictAll)
+				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
 }
