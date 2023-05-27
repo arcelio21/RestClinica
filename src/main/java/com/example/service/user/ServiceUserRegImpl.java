@@ -47,6 +47,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 	private final PasswordEncoder passwordEncoder;
 
 
+	//TODO CAMBIAR IMPLEMENTACION, DE ESTA FORMA NO DEVUELVE EXCEPCION
 	@Override
 	public List<UserRegDto> getAll() {
 
@@ -67,16 +68,16 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 
 	@Transactional
 	@Override
-	public Integer update(UserRegDto t) {
+	public Integer update(UserRegDto userRegDto) {
 
-		if(t==null || t.getId()==null) {
+		if(userRegDto==null || userRegDto.getId()==null) {
 			throw  new UserNotUpdateException("Datos no validos ");
 		}
 
 
-		if(!t.getClass().equals(UserRegUpdateDto.class)) throw new UserNotUpdateException("Datos no validos");
+		if(!userRegDto.getClass().equals(UserRegUpdateDto.class)) throw new UserNotUpdateException("Datos no validos");
 
-		Taddress address = this.addressMappper.userRegUpdateDtoToTaddres((UserRegUpdateDto) t);
+		Taddress address = this.addressMappper.userRegUpdateDtoToTaddres((UserRegUpdateDto) userRegDto);
 
 		try {
 			Optional.ofNullable(address)
@@ -84,12 +85,12 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 					.orElseThrow(()-> new AddressNotUpdateException("Datos de direccion no son validos"));
 		}catch (Exception e){
 			log.info(e.getMessage());
-			throw new AddressNotUpdateException("Datos de direccion no validos", t);
+			throw new AddressNotUpdateException("Datos de direccion no validos", userRegDto);
 		}
 
 		try {
 
-			return Optional.of(t)
+			return Optional.of(userRegDto)
 					.map(this.userRegMapper::userRegDtoToTuserReg)
 					.map(tuserReg -> {
 						tuserReg.setAddressId(new Taddress(address.getId()));
@@ -99,11 +100,12 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 					.orElseThrow(()-> new UserNotUpdateException("Datos no validos de usuario"));
 
 		}catch (Exception e){
-			throw new UserNotUpdateException("Datos no validos de usuario",(UserRegUpdateDto) t);
+			throw new UserNotUpdateException("Datos no validos de usuario",(UserRegUpdateDto) userRegDto);
 		}
 		
 	}
 
+	//TODO HACER TEST SI O SI
 	@Transactional
 	@Override
 	public Integer save(UserRegDto user)  {
