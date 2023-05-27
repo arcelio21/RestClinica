@@ -18,5 +18,5 @@ public class  ProvinceDto{
     @Schema(description = "Nombre de la provincia", example = "Chiriqui")
     @NotEmpty(message = "Campo no puede estar vacio")
     @Min(value = 4, message = "Valor debe ser de minimo 4 caracteres")
-    private String nombre;
+    private String name;
 }
