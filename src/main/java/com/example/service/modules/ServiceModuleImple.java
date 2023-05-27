@@ -1,19 +1,18 @@
 package com.example.service.modules;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import com.example.dto.modules.ModulesDto;
 import com.example.dtomapper.modules.ModulesMapper;
 import com.example.entity.modules.Tmodule;
-import com.example.exception.modules.modules.ModulesNoFoundException;
+import com.example.exception.NoDataFoundException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
 import com.example.mapper.modules.MapperModules;
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -36,8 +35,8 @@ public class ServiceModuleImple implements IServiceModule{
 					.map(this.modulesMapper::TmoduleToModulesDto)
 					.collect(Collectors.toList());
 		}
-		
-		throw new ModulesNoFoundException("Data Not Found");
+		//TODO CAMBIAR A EXCEPION GENERICA Y BORRAR LA QUE SE CREO
+		throw new NoDataFoundException("Data Not Found");
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class ServiceModuleImple implements IServiceModule{
 		return Optional.of(id)
 				.map(this.mapperModules::getById)
 				.map(this.modulesMapper::TmoduleToModulesDto)
-				.orElseThrow(()-> new ModulesNoFoundException("Id Not Valid",id));
+				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
 	@Override
