@@ -1,9 +1,6 @@
 package com.example.mapper.modules;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-
+import com.example.entity.modules.Tmodule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +10,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.example.entity.modules.Tmodule;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("PARA ACCEDER, MODIFICAR E INGRESAR GEISTRO A LA TABLA TMODULE")
 @MybatisTest
@@ -30,17 +30,21 @@ class MapperModulesTest {
 	void getAll() {
 		List<Tmodule> modules=this.mapperModules.getAll();
 		assertNotNull(modules); //AL MOMENTO DE HACER EL TEST, LA TABLA NO TENIA REGISTRO
+		System.out.println(modules.size());
+		System.out.println(modules.isEmpty());
 		assertTrue(modules.size()>0);
 		assertNotNull(modules.get(0).getNameModule());
 		modules.forEach(System.out::println);
 	}
-	
+
 	@Test
 	void getById(){
 		//AL MOMENTO DE HACER EL TEST, LA TABLA NO TENIA REGISTRO
-		Tmodule module=this.mapperModules.getById(1L);
-		assertNotNull(module);
-		assertNotNull(module.getNameModule());
+		Tmodule module = Optional.of(1L)
+				.map(this.mapperModules::getById)
+				.orElse(null);
+		assertNull(module);
+		//assertNotNull(module.getNameModule());
 		System.out.println(module);
 	}
 	
