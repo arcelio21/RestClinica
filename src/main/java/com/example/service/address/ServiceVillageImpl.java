@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Implementación de la interfaz IServiceVillage que proporciona métodos para operaciones relacionadas con Villages.
+ */
 @RequiredArgsConstructor
 @Service
 public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
