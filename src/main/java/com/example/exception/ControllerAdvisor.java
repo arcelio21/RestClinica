@@ -3,6 +3,7 @@ package com.example.exception;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.address.AddressRequestDto;
 import com.example.dto.address.district.DistrictDto;
+import com.example.dto.address.village.VillageDto;
 import com.example.dto.modules.ModulesDto;
 import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
@@ -12,6 +13,8 @@ import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
 import com.example.exception.address.district.DistrictNotSaveException;
 import com.example.exception.address.district.DistrictNotUpdateException;
+import com.example.exception.address.village.VillageNotSaveException;
+import com.example.exception.address.village.VillageNotUpdateException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
@@ -212,6 +215,53 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * EXCEPCIONES DE VILLAGE
+     */
+    @ExceptionHandler(VillageNotUpdateException.class)
+    public ResponseEntity<ErrorResponseDto> handleVillageNotUpdate(VillageNotUpdateException ex){
+
+        Map<String, Object> data=null;
+        if(ex.getData()!=null) {
+
+            VillageDto villageDto = (VillageDto) ex.getData();
+            data= new HashMap<>();
+            data.put("idVillage", villageDto.getId());
+            data.put("name", villageDto.getName());
+            data.put("districtId", villageDto.getDistrictId());
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data(
+                        (data==null)?"":data
+                )
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(VillageNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto> handleDistrictNotSave(VillageNotSaveException ex){
+
+        Map<String, Object> data=null;
+        if(ex.getData()!=null){
+            VillageDto district = (VillageDto) ex.getData();
+            data= new HashMap<>();
+            data.put("name", district.getName());
+            data.put("districtId", district.getDistrictId());
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data((data==null)?"":data)
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(PasswordNotUpdateException.class)
     public ResponseEntity<ErrorResponseDto> handlePaawordNotUpdate(PasswordNotUpdateException ex){
@@ -371,4 +421,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .build()
         );
     }
+
+    //TODO CAPRTURAR EXCEPCIONES SQL
 }
