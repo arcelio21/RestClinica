@@ -19,7 +19,6 @@ import java.util.function.Function;
 public class JwtUtils {
 
     private final String jwtSigningKey = "holaarceliomontezumanorielmelendezestasbien";
-    //TODO ARREGLAR ERROR
 
     /**
      * Extrae informacion de usuario del token
