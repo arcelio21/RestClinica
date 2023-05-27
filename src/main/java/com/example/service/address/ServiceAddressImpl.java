@@ -3,10 +3,16 @@ package com.example.service.address;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.AddressRequestDto;
 import com.example.dtomapper.address.AddressMappper;
+import com.example.exception.NoDataFoundException;
+import com.example.exception.address.AddressNotSaveException;
+import com.example.exception.address.AddressNotUpdateException;
+import com.example.exception.address.province.ProvinceNotSaveException;
+import com.example.exception.address.province.ProvinceNotUpdateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.entity.address.Taddress;
@@ -23,27 +29,30 @@ public class ServiceAddressImpl implements IServiceAddress{
 	@Override
 	public List<AddressGetDto> getAll() {
 
-		List<Taddress> taddresses= this.mapper.getAll();
-		List<AddressGetDto> addressGetDtos = new ArrayList<>();
+		Optional<List<Taddress>> optionalTaddresses = Optional.ofNullable(this.mapper.getAll());
 
-		for(Taddress taddress:taddresses){
-			addressGetDtos.add(this.addressMappper.taddressToAddressGetDto(taddress));
+		if(optionalTaddresses.isPresent() && !optionalTaddresses.get().isEmpty()){
+			return optionalTaddresses
+					.get()
+					.stream()
+					.map(this.addressMappper::taddressToAddressGetDto)
+					.collect(Collectors.toList());
 		}
 
-		return addressGetDtos;
+		throw new NoDataFoundException();
 	}
 
 	@Override
 	public AddressGetDto getById(Integer id) {
 
 		if(id==null || id<=0){
-			return null;
+			throw new NoDataFoundException(id);
 		}
 
 		return Optional.of(id)
 				.map(this.mapper::getById)
 				.map(this.addressMappper::taddressToAddressGetDto)
-				.orElse(null);
+				.orElseThrow(()-> new NoDataFoundException(id));
 		
 	}
 
@@ -52,20 +61,31 @@ public class ServiceAddressImpl implements IServiceAddress{
 		
 		if(addressRequestDto ==null || addressRequestDto.getId()==null || addressRequestDto.getId()<=0
 				|| addressRequestDto.getVillageId()==null || addressRequestDto.getVillageId()<=0) {
-			return 0;
+
+			throw new AddressNotUpdateException("Fallo en actualizacion",addressRequestDto);
 		}
-		Taddress taddress = this.addressMappper.AddressRequestDtoToTaddress(addressRequestDto);
-		return this.mapper.update(taddress);
+
+		return Optional.of(addressRequestDto)
+				.map(this.addressMappper::AddressRequestDtoToTaddress)
+				.map(this.mapper::update)
+				.orElseThrow(()-> new ProvinceNotUpdateException("Fallo en actualizacion", addressRequestDto));
+
 	}
 
 	@Override
 	public Integer save(AddressRequestDto addressRequestDto) {
 
 		if(addressRequestDto ==null
-				|| addressRequestDto.getVillageId()==null || addressRequestDto.getVillageId()<=0) {
-			return 0;
+				|| addressRequestDto.getId()==null || addressRequestDto.getId()<=0
+				|| addressRequestDto.getVillageId()==null || addressRequestDto.getVillageId()<=0
+				|| addressRequestDto.getSpecificAddress()==null) {
+
+			throw new AddressNotSaveException("Fallo al guardar", addressRequestDto);
 		}
-		Taddress taddress = this.addressMappper.AddressRequestDtoToTaddress(addressRequestDto);
-		return this.mapper.save(taddress);
+
+		return Optional.of(addressRequestDto)
+				.map(this.addressMappper::AddressRequestDtoToTaddress)
+				.map(this.mapper::save)
+				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar", addressRequestDto));
 	}
 }
