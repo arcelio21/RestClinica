@@ -10,8 +10,8 @@ import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
+import com.example.exception.address.district.DistrictNotSaveException;
 import com.example.exception.address.district.DistrictNotUpdateException;
-import com.example.exception.modules.modules.ModulesNoFoundException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
@@ -149,7 +149,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
             AddressRequestDto address = (AddressRequestDto) ex.getData();
             data= new HashMap<>();
-            data.put("idAddress", address.getId())
+            data.put("idAddress", address.getId());
             data.put("villageId", address.getVillageId());
             data.put("direcSpecific", address.getSpecificAddress());
         }
@@ -187,6 +187,26 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .data(
                         (data==null)?"":data
                 )
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DistrictNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto> handleDistrictNotSave(DistrictNotUpdateException ex){
+
+        Map<String, Object> data=null;
+        if(ex.getData()!=null){
+            DistrictDto district = (DistrictDto) ex.getData();
+            data= new HashMap<>();
+            data.put("name", district.getName());
+            data.put("provinceId", district.getProvinceId());
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data((data==null)?"":data)
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -305,19 +325,6 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
 
     //EXCEPTION MODULES
-    @ExceptionHandler(ModulesNoFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handlerModulesNotFound(ModulesNoFoundException ex){
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-            ErrorResponseDto.builder()
-            .fecha(LocalDate.now())
-            .messageError(ex.getMessage())
-            .data((ex.getData()==null)?"":"ID: "+ex.getData())
-            .build()
-        );
-
-    }
-
     @ExceptionHandler(ModulesNotUpdateException.class)
     public ResponseEntity<ErrorResponseDto> handlerModulesNotUpdate(ModulesNotUpdateException ex){
 
