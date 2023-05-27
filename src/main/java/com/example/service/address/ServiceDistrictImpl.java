@@ -54,7 +54,12 @@ public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Intege
 	 */
 	@Override
 	public DistrictDto getById(Integer id) {
-		return Optional.ofNullable(id).map(mapperDistrict::getById).map(dtoMapper::tdistrictToDistrictDto)
+
+		if(id==null || id<=0){
+			throw new NoDataFoundException(id);
+		}
+
+		return Optional.of(id).map(mapperDistrict::getById).map(dtoMapper::tdistrictToDistrictDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
@@ -107,6 +112,11 @@ public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Intege
 	 */
 	@Override
 	public DistrictDto getByIdName(Integer id) {
+
+		if(id==null || id<=0){
+			throw new NoDataFoundException(id);
+		}
+
 		return Optional.of(id)
 				.map(mapperDistrict::getByIdName)
 				.map(dtoMapper::tdistrictToDistrictDto)
