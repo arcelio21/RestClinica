@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+import com.example.entity.address.Tprovince;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -37,12 +38,44 @@ class MapperDistrictTest {
 		assertNotNull(district);
 	}
 	
-	/*
-	 * @Test void getByProvince(){ List<Tdistrict>
-	 * districtProv=this.mapperDistrict.getByProvince(1);
-	 * districtProv.forEach(x->System.out.println(x.getName()));
-	 * assertNotNull(districtProv); }
-	 */
+
+	@Test
+  	void getByProvinceWithIdNotValid(){
+		List<Tdistrict> districtProv=this.mapperDistrict.getByProvinceId(new Tprovince(23));
+		assertNotNull(districtProv);
+		assertTrue(districtProv.isEmpty());
+	}
+
+	@Test
+	void save(){
+		Tdistrict tdistrict = new Tdistrict(1);
+		tdistrict.setName("Bocas");
+		tdistrict.setProvince(new Tprovince(1));
+		System.out.println(this.mapperDistrict.save(tdistrict));
+	}
+
+	@Test
+	void saveNotValid(){
+		Tdistrict tdistrict = new Tdistrict(1);
+		tdistrict.setName("Bocas");
+		tdistrict.setProvince(new Tprovince(67));
+		System.out.println(this.mapperDistrict.save(tdistrict));
+	}
+
+	@Test
+	void getByProvinceId(){
+
+		List<Tdistrict> tdistricts = this.mapperDistrict.getByProvinceId(new Tprovince(4));
+		assertTrue(tdistricts.size()>0);
+
+		for (Tdistrict tdistrict:
+			  tdistricts) {
+
+			System.out.println(tdistrict.getId() + " "+tdistrict.getName());
+		}
+
+	}
+
 	
 
 	
