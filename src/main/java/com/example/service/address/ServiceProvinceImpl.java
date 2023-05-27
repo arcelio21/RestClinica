@@ -3,9 +3,14 @@ package com.example.service.address;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.example.dto.address.province.ProvinceDto;
 import com.example.dtomapper.address.ProvinceMapper;
+import com.example.exception.NoDataFoundException;
+import com.example.exception.address.province.ProvinceNotSaveException;
+import com.example.exception.address.province.ProvinceNotUpdateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,56 +26,61 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 	private final ProvinceMapper provinceMapper;
 	
 
-	/**
-     * SE EJECUTARA UN QUERY QUE TRAERA LAS PROVINCIAS, CON
-     * LOS DISTRITOS ASOCIADO A CADA PROVINCIA Y LOS CORREGIMIENTOS ASOCIADO A CADA DISTRITOS
-     */
 	@Override
 	public List<ProvinceDto> getAll() {
-		List<Tprovince> tprovinces = this.mapperProvince.getAll();
-		if(tprovinces==null || tprovinces.isEmpty()){
-			return Collections.emptyList();
+
+		Optional<List<Tprovince>> optionalTprovinces = Optional.ofNullable(this.mapperProvince.getAll());
+
+		if(optionalTprovinces.isPresent() && !optionalTprovinces.get().isEmpty()){
+			return optionalTprovinces
+					.get()
+					.stream()
+					.map(this.provinceMapper::tprovinceToProvinceDto)
+					.collect(Collectors.toList());
 		}
-		List<ProvinceDto> provinceDtos = new ArrayList<>();
-		for (Tprovince province:
-			 tprovinces) {
-			provinceDtos.add(this.provinceMapper.tprovinceToProvinceDto(province));
-		}
-		return provinceDtos;
+
+		throw new NoDataFoundException();
 	}
 
-	/**
-	 * SE OBTENDRA UN PROVINCIA POR ID 
-	 */
+
 	@Override
 	public ProvinceDto getById(Integer id) {
 		if(id==null || id==0) {
-			return null;
+			throw new NoDataFoundException(id);
 		}
-		return this.provinceMapper.tprovinceToProvinceDto(this.mapperProvince.getById(id));
+		return Optional.of(id)
+				.map(this.mapperProvince::getById)
+				.map(this.provinceMapper::tprovinceToProvinceDto)
+				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
 	@Override
 	public Integer update(ProvinceDto provinceDto) {
 		
-		if(provinceDto==null || provinceDto.getId()==null || provinceDto.getId()==0) {
-			return 0;
+		if(provinceDto==null || provinceDto.getId()==null || provinceDto.getId()==0
+			|| provinceDto.getName()==null || provinceDto.getName().trim().isEmpty()
+			) {
+
+			throw new ProvinceNotUpdateException("Fallo de actualizacion de provincia",provinceDto);
 		}
 
-		Tprovince tprovince = this.provinceMapper.provinceDtoToTprovince(provinceDto);
-		
-		return this.mapperProvince.update(tprovince);
+		return Optional.of(provinceDto)
+				.map(this.provinceMapper::provinceDtoToTprovince)
+				.map(this.mapperProvince::update)
+				.orElseThrow(()-> new ProvinceNotUpdateException("Fallo de actualizacion de provincia",provinceDto));
 	}
 
 	@Override
 	public Integer save(ProvinceDto provinceDto) {
 
-		if(provinceDto==null || provinceDto.getNombre()==null || provinceDto.getNombre().isEmpty()){
-			return 0;
+		if(provinceDto==null || provinceDto.getName()==null || provinceDto.getName().trim().isEmpty()){
+			throw new ProvinceNotSaveException("Fallo al guardar province",provinceDto);
 		}
 
-		Tprovince tprovince =this.provinceMapper.provinceDtoToTprovince(provinceDto);
-		return this.mapperProvince.save(tprovince);
+		return Optional.of(provinceDto)
+				.map(this.provinceMapper::provinceDtoToTprovince)
+				.map(this.mapperProvince::save)
+				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar province",provinceDto));
 	}
 
 }
