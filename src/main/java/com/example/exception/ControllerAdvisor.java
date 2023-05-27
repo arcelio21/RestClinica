@@ -14,6 +14,7 @@ import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
 import com.example.exception.address.district.DistrictNotSaveException;
 import com.example.exception.address.district.DistrictNotUpdateException;
+import com.example.exception.address.province.ProvinceNotSaveException;
 import com.example.exception.address.province.ProvinceNotUpdateException;
 import com.example.exception.address.village.VillageNotSaveException;
 import com.example.exception.address.village.VillageNotUpdateException;
@@ -273,10 +274,10 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         Map<String, Object> data=null;
         if(ex.getData()!=null) {
 
-            ProvinceDto villageDto = (ProvinceDto) ex.getData();
+            ProvinceDto provinceDto = (ProvinceDto) ex.getData();
             data= new HashMap<>();
-            data.put("idProvince", villageDto.getId());
-            data.put("name", villageDto.getName());
+            data.put("idProvince", provinceDto.getId());
+            data.put("name", provinceDto.getName());
         }
 
         var error = ErrorResponseDto.builder()
@@ -285,6 +286,25 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                 .data(
                         (data==null)?"":data
                 )
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProvinceNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto> handleDistrictNotSave(ProvinceNotSaveException ex){
+
+        Map<String, Object> data=null;
+        if(ex.getData()!=null){
+            ProvinceDto province = (ProvinceDto) ex.getData();
+            data= new HashMap<>();
+            data.put("name", province.getName());
+        }
+
+        var error = ErrorResponseDto.builder()
+                .messageError(ex.getMessage())
+                .fecha(LocalDate.now())
+                .data((data==null)?"":data)
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
