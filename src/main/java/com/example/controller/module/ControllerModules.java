@@ -1,6 +1,8 @@
 package com.example.controller.module;
 
 import com.example.dto.ErrorResponseDto;
+import com.example.dto.address.AddressGetDto;
+import com.example.dto.modules.ModulesDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.controller.ControllerTemplate;
@@ -84,6 +87,63 @@ public class ControllerModules extends ControllerTemplate{
                 .build()
         );
         
+    }
+
+    @Operation(
+            summary = "Obtener modulos por ID",
+            description = "Se obtiene los modulos filtrado por el ID que el usuario proporciones",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Modulo encontrado",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ModulesDto.class,
+                                            description = "Datos de modulo"
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Modulo no encontrado, Id no valido",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = ErrorResponseDto.class,
+                                            description = "Datos de error"
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "NO tiene permisos para acceder a esta ruta",
+                            useReturnTypeSchema = true,
+                            content = @Content(
+                                    mediaType = MediaType.TEXT_PLAIN_VALUE,
+                                    schema = @Schema
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Es necesario que se autentifique para poder acceder a la operacion de esta ruta",
+                            useReturnTypeSchema = true,
+                            content = @Content(
+                                    mediaType = MediaType.TEXT_PLAIN_VALUE,
+                                    schema = @Schema
+                            )
+                    )
+
+            }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDTO> getById(@RequestParam("id") Long id){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Datos encontrados")
+                        .data(this.serviceModuleImple.getById(id))
+                        .build()
+        );
     }
 
     //TODO HACER METODO POR PARA EXEPCIOON GENERADA POR SRPIGN SECURITY

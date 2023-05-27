@@ -46,7 +46,6 @@ public class ControllerProvince extends ControllerTemplate {
         return ResponseEntity.ok(responseDTO);
     }
 
-    // TODO probar el usereturntypeshcema en false haber si usa la configuracion que le pongo
     @Operation(summary = "Obtener provincias por ID",description = "Se podra obtener la provincia que se desee filtrandolo por su ID",
             method = "GET", responses = {
             @ApiResponse(responseCode = "200",description = "Provincia encontrada",
