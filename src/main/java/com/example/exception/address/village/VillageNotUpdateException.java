@@ -1,15 +1,15 @@
 package com.example.exception.address.village;
 
-public class VillageNotUpdateExcepction extends RuntimeException{
+public class VillageNotUpdateException extends RuntimeException{
 
     private final Object data;
 
-    public VillageNotUpdateExcepction(String message, Object data) {
+    public VillageNotUpdateException(String message, Object data) {
         super(message);
         this.data=data;
     }
 
-    public VillageNotUpdateExcepction(String message) {
+    public VillageNotUpdateException(String message) {
         super(message);
         this.data=null;
     }
