@@ -119,6 +119,13 @@ public class ServiceAddressImpl implements IServiceAddress{
 				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar", addressRequestDto));
 	}
 
+	/**
+	 * Obtiene todas las direcciones asociadas a un pueblo (Village) dado su ID.
+	 *
+	 * @param idVillage ID del pueblo para el cual se obtendrán las direcciones
+	 * @return Lista de objetos AddressGetDto que representan las direcciones asociadas al pueblo
+	 * @throws NoDataFoundException si no se encuentran direcciones para el pueblo especificado
+	 */
 	@Override
 	public List<AddressGetDto> getAddressByVillage(Integer idVillage) {
 
@@ -138,6 +145,14 @@ public class ServiceAddressImpl implements IServiceAddress{
 		throw new NoDataFoundException(idVillage);
 	}
 
+
+	/**
+	 * Obtiene todas las direcciones asociadas a un distrito (District) dado su ID.
+	 *
+	 * @param idDistrict ID del distrito para el cual se obtendrán las direcciones
+	 * @return Lista de objetos AddressGetDto que representan las direcciones asociadas al distrito
+	 * @throws NoDataFoundException si no se encuentran direcciones para el distrito especificado
+	 */
 	@Override
 	public List<AddressGetDto> getAddressByDistrict(Integer idDistrict) {
 
@@ -157,6 +172,13 @@ public class ServiceAddressImpl implements IServiceAddress{
 		throw new NoDataFoundException(idDistrict);
 	}
 
+	/**
+	 * Obtiene todas las direcciones asociadas a una provincia (Province) dada su ID.
+	 *
+	 * @param idProvince ID de la provincia para la cual se obtendrán las direcciones
+	 * @return Lista de objetos AddressGetDto que representan las direcciones asociadas a la provincia
+	 * @throws NoDataFoundException si no se encuentran direcciones para la provincia especificada
+	 */
 	@Override
 	public List<AddressGetDto> getAddressByProvince(Integer idProvince) {
 
@@ -176,6 +198,12 @@ public class ServiceAddressImpl implements IServiceAddress{
 		throw new NoDataFoundException(idProvince);
 	}
 
+	/**
+	 * Valida si el ID proporcionado es válido.
+	 *
+	 * @param id ID a validar
+	 * @throws NoDataFoundException si el ID es nulo o no
+	 */
 	private void validId(Integer id){
 		if(id==null || id<=0){
 			throw new NoDataFoundException(id);
