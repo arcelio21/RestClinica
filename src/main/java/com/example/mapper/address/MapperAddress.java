@@ -1,6 +1,9 @@
 package com.example.mapper.address;
 
 import com.example.entity.address.Taddress;
+import com.example.entity.address.Tdistrict;
+import com.example.entity.address.Tprovince;
+import com.example.entity.address.Tvillage;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -31,6 +34,30 @@ public interface MapperAddress {
 			"WHERE a.id=#{id}")
 	@ResultMap(value = "address")
 	Taddress getById(@Param("id") Integer id);
+
+	@Select("SELECT a.id as id,v.id vid, v.name as vname, d.name as dname, p.name as pname, specific_address " +
+			"FROM Taddress a INNER JOIN Tvillages v ON a.village_id=v.id " +
+			"INNER JOIN Tdistricts d ON v.district_id=d.id " +
+			"INNER JOIN Tprovinces p ON d.province_id=p.id " +
+			"WHERE a.village_id=#{village.id}")
+	@ResultMap(value = "address")
+	List<Taddress> getAddressByVillage(@Param("village") Tvillage tvillage);
+
+	@Select("SELECT a.id as id,v.id vid, v.name as vname, d.name as dname, p.name as pname, specific_address " +
+			"FROM Taddress a INNER JOIN Tvillages v ON a.village_id=v.id " +
+			"INNER JOIN Tdistricts d ON v.district_id=d.id " +
+			"INNER JOIN Tprovinces p ON d.province_id=p.id " +
+			"WHERE d.id=#{district.id}")
+	@ResultMap(value = "address")
+	List<Taddress> getAddressByDistrict(@Param("district") Tdistrict tdistrict);
+
+	@Select("SELECT a.id as id,v.id vid, v.name as vname, d.name as dname, p.name as pname, specific_address " +
+			"FROM Taddress a INNER JOIN Tvillages v ON a.village_id=v.id " +
+			"INNER JOIN Tdistricts d ON v.district_id=d.id " +
+			"INNER JOIN Tprovinces p ON d.province_id=p.id " +
+			"WHERE p.id=#{province.id}")
+	@ResultMap(value = "address")
+	List<Taddress> getAddressByProvince(@Param("province") Tprovince tprovince);
 
 	@Insert("INSERT INTO Taddress (specific_address,village_id) VALUES(#{addr.specificAddress},#{addr.villageId.id})")
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
