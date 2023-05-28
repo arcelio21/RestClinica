@@ -4,6 +4,9 @@ import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.AddressRequestDto;
 import com.example.dtomapper.address.AddressMappper;
 import com.example.entity.address.Taddress;
+import com.example.entity.address.Tdistrict;
+import com.example.entity.address.Tprovince;
+import com.example.entity.address.Tvillage;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
@@ -60,9 +63,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 	@Override
 	public AddressGetDto getById(Integer id) {
 
-		if(id==null || id<=0){
-			throw new NoDataFoundException(id);
-		}
+		this.validId(id);
 
 		return Optional.of(id)
 				.map(this.mapper::getById)
@@ -116,5 +117,68 @@ public class ServiceAddressImpl implements IServiceAddress{
 				.map(this.addressMappper::AddressRequestDtoToTaddress)
 				.map(this.mapper::save)
 				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar", addressRequestDto));
+	}
+
+	@Override
+	public List<AddressGetDto> getAddressByVillage(Integer idVillage) {
+
+		this.validId(idVillage);
+
+		Optional<List<Taddress>> optionalTaddresses = Optional.of(new Tvillage(idVillage))
+														.map(this.mapper::getAddressByVillage);
+
+		if(optionalTaddresses.isPresent() && !optionalTaddresses.get().isEmpty()){
+			return optionalTaddresses
+					.get()
+					.stream()
+					.map(this.addressMappper::taddressToAddressGetDto)
+					.collect(Collectors.toList());
+		}
+
+		throw new NoDataFoundException(idVillage);
+	}
+
+	@Override
+	public List<AddressGetDto> getAddressByDistrict(Integer idDistrict) {
+
+		this.validId(idDistrict);
+
+		Optional<List<Taddress>> optionalTaddresses = Optional.of(new Tdistrict(idDistrict))
+				.map(this.mapper::getAddressByDistrict);
+
+		if(optionalTaddresses.isPresent() && !optionalTaddresses.get().isEmpty()){
+			return optionalTaddresses
+					.get()
+					.stream()
+					.map(this.addressMappper::taddressToAddressGetDto)
+					.collect(Collectors.toList());
+		}
+
+		throw new NoDataFoundException(idDistrict);
+	}
+
+	@Override
+	public List<AddressGetDto> getAddressByProvince(Integer idProvince) {
+
+		this.validId(idProvince);
+
+		Optional<List<Taddress>> optionalTaddresses = Optional.of(new Tprovince(idProvince))
+				.map(this.mapper::getAddressByProvince);
+
+		if(optionalTaddresses.isPresent() && !optionalTaddresses.get().isEmpty()){
+			return optionalTaddresses
+					.get()
+					.stream()
+					.map(this.addressMappper::taddressToAddressGetDto)
+					.collect(Collectors.toList());
+		}
+
+		throw new NoDataFoundException(idProvince);
+	}
+
+	private void validId(Integer id){
+		if(id==null || id<=0){
+			throw new NoDataFoundException(id);
+		}
 	}
 }
