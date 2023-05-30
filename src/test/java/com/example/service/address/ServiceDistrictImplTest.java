@@ -279,9 +279,15 @@ class ServiceDistrictImplTest {
 
 	@Test
 	void getByIdNameWithIdValidAndDistrictNotExits(){
-		Tdistrict tdistrict = new Tdistrict(1,"Bocas",new Tprovince(1));
 		Integer id = 1;
 		when(this.mapper.getByIdName(id)).thenReturn(null);
+
+		assertThrows(NoDataFoundException.class,()-> this.service.getByIdName(id));
+	}
+
+	@Test
+	void getByIdNameWithIdNoValidA(){
+		Integer id = null;
 
 		assertThrows(NoDataFoundException.class,()-> this.service.getByIdName(id));
 	}
