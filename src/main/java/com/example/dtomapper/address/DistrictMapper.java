@@ -33,7 +33,7 @@ public interface DistrictMapper {
             @Mapping(source = "tdistrict.id", target = "id"),
             @Mapping(source = "tdistrict.name", target = "name"),
             @Mapping(source = "tdistrict.province.id", target = "tprovince.id"),
-            @Mapping(source = "tdistrict.province.name", target = "tprovince.nombre"),
+            @Mapping(source = "tdistrict.province.name", target = "tprovince.name"),
             @Mapping(target = "tprovince", ignore = true)
     })
     DistrictAllDto tdistrictToDistrictAll(Tdistrict tdistrict);
@@ -43,7 +43,7 @@ public interface DistrictMapper {
             @Mapping(target = "name", source = "districtAllDto.name"),
             @Mapping(target = "villages", ignore = true),
             @Mapping(target = "province.id", source = "districtAllDto.tprovince.id"),
-            @Mapping(target = "province.name", source = "districtAllDto.tprovince.nombre"),
+            @Mapping(target = "province.name", source = "districtAllDto.tprovince.name"),
             @Mapping(target = "province", ignore = true),
             @Mapping(target = "province.districts", ignore = true)
     })

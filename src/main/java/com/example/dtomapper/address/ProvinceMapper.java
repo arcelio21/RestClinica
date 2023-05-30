@@ -15,14 +15,14 @@ public interface ProvinceMapper {
     @Mappings(value = {
             //@Mapping(ignore = true, source = "districts"),
             @Mapping(target = "id",source = "tprovince.id",defaultValue = "0"),
-            @Mapping(target ="nombre",source ="tprovince.name", defaultValue = ""),
+            @Mapping(target ="name",source ="tprovince.name"),
 
     })
     ProvinceDto tprovinceToProvinceDto(Tprovince tprovince);
 
     @Mappings(value = {
             @Mapping(target = "id",source = "provinceDto.id", resultType = Integer.class),
-            @Mapping(target ="name",source = "provinceDto.nombre"),
+            @Mapping(target ="name",source = "provinceDto.name"),
             @Mapping(target = "districts", ignore = true)
     })
     Tprovince provinceDtoToTprovince(ProvinceDto provinceDto);
