@@ -2,7 +2,7 @@ package com.example.service.address;
 
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
-import com.example.dtomapper.address.DistrictMapper;
+import com.example.dtomapper.address.DtoDistrictMapper;
 import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tprovince;
 import com.example.exception.NoDataFoundException;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Integer>{
 	
 	private final MapperDistrict mapperDistrict;
-	private  final DistrictMapper dtoMapper;
+	private  final DtoDistrictMapper dtoMapper;
 
 
 	/**

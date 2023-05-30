@@ -2,7 +2,7 @@ package com.example.service.address;
 
 import com.example.dto.address.village.VillageDistrictDto;
 import com.example.dto.address.village.VillageDto;
-import com.example.dtomapper.address.VillageMapper;
+import com.example.dtomapper.address.DtoVillageMapper;
 import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tvillage;
 import com.example.exception.NoDataFoundException;
@@ -25,7 +25,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 
 	
 	private final MapperVillage mapperVillage;
-	private final VillageMapper villageMapper;
+	private final DtoVillageMapper dtoVillageMapper;
 
 	/**
 	 * Obtiene una lista de todos los pueblos disponibles.
@@ -42,7 +42,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 
 		  return villagesList.get()
 			.stream()
-			.map(this.villageMapper::tvillageToVillageDto)
+			.map(this.dtoVillageMapper::tvillageToVillageDto)
 			.collect(Collectors.toList());
 		}
 
@@ -65,7 +65,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 		}
 		return Optional.of(id)
 				.map(this.mapperVillage::getById)
-				.map(this.villageMapper::tvillageToVillageDto)
+				.map(this.dtoVillageMapper::tvillageToVillageDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
@@ -88,7 +88,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 		}
 
 		return Optional.of(villageDto)
-				.map(this.villageMapper::villageDtoToTvillage)
+				.map(this.dtoVillageMapper::villageDtoToTvillage)
 				.map(this.mapperVillage::update)
 				.orElseThrow(()-> new VillageNotUpdateException("Error de actualizacion", villageDto));
 	}
@@ -112,7 +112,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 		}
 
 		return Optional.of(villageDto)
-				.map(this.villageMapper::villageDtoToTvillage)
+				.map(this.dtoVillageMapper::villageDtoToTvillage)
 				.map(this.mapperVillage::save)
 				.orElseThrow(()-> new VillageNotSaveException("Error de guardado",villageDto));
 	}
@@ -136,7 +136,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 		if(optionalTvillages.isPresent() && !optionalTvillages.get().isEmpty()){
 			return optionalTvillages.get()
 					.stream()
-					.map(this.villageMapper::tvillageToVillageDto)
+					.map(this.dtoVillageMapper::tvillageToVillageDto)
 					.collect(Collectors.toList());
 		}
 
@@ -159,7 +159,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 
 		return Optional.of(id)
 				.map(this.mapperVillage::getDistrictAllById)
-				.map(this.villageMapper::tvillageToVillageDistritcDto)
+				.map(this.dtoVillageMapper::tvillageToVillageDistritcDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
@@ -178,7 +178,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 			return  optionalTvillageList
 					.get()
 					.stream()
-					.map(this.villageMapper::tvillageToVillageDto)
+					.map(this.dtoVillageMapper::tvillageToVillageDto)
 					.collect(Collectors.toList());
 		}
 
@@ -200,7 +200,7 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
 		}
 
 		return Optional.of(id).map(this.mapperVillage::getByIdName)
-				.map(this.villageMapper::tvillageToVillageDto)
+				.map(this.dtoVillageMapper::tvillageToVillageDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 

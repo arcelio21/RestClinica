@@ -8,9 +8,9 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface TypeUserMapper {
+public interface DtoTypeUserMapper {
 
-    TypeUserMapper INSTANCE = Mappers.getMapper(TypeUserMapper.class);
+    DtoTypeUserMapper INSTANCE = Mappers.getMapper(DtoTypeUserMapper.class);
 
     @Mappings({
             @Mapping(source = "tUser.id", target = "id"),

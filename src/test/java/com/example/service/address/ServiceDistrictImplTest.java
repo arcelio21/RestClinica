@@ -3,7 +3,7 @@ package com.example.service.address;
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.province.ProvinceDto;
-import com.example.dtomapper.address.DistrictMapper;
+import com.example.dtomapper.address.DtoDistrictMapper;
 import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tprovince;
 import com.example.exception.NoDataFoundException;
@@ -31,7 +31,7 @@ class ServiceDistrictImplTest {
 	@Mock
 	private MapperDistrict mapper;
 	@Mock
-	private DistrictMapper dtoMapper;
+	private DtoDistrictMapper dtoMapper;
 
 	@InjectMocks
 	private ServiceDistrictImpl service;

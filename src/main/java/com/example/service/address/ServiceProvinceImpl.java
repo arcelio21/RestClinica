@@ -1,7 +1,7 @@
 package com.example.service.address;
 
 import com.example.dto.address.province.ProvinceDto;
-import com.example.dtomapper.address.ProvinceMapper;
+import com.example.dtomapper.address.DtoProvinceMapper;
 import com.example.entity.address.Tprovince;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.address.province.ProvinceNotSaveException;
@@ -23,7 +23,7 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 
 
 	private final MapperProvince mapperProvince;
-	private final ProvinceMapper provinceMapper;
+	private final DtoProvinceMapper dtoProvinceMapper;
 
 
 	/**
@@ -41,7 +41,7 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 			return optionalTprovinces
 					.get()
 					.stream()
-					.map(this.provinceMapper::tprovinceToProvinceDto)
+					.map(this.dtoProvinceMapper::tprovinceToProvinceDto)
 					.collect(Collectors.toList());
 		}
 
@@ -63,7 +63,7 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 		}
 		return Optional.of(id)
 				.map(this.mapperProvince::getById)
-				.map(this.provinceMapper::tprovinceToProvinceDto)
+				.map(this.dtoProvinceMapper::tprovinceToProvinceDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
@@ -85,7 +85,7 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 		}
 
 		return Optional.of(provinceDto)
-				.map(this.provinceMapper::provinceDtoToTprovince)
+				.map(this.dtoProvinceMapper::provinceDtoToTprovince)
 				.map(this.mapperProvince::update)
 				.orElseThrow(()-> new ProvinceNotUpdateException("Fallo de actualizacion de provincia",provinceDto));
 	}
@@ -105,7 +105,7 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 		}
 
 		return Optional.of(provinceDto)
-				.map(this.provinceMapper::provinceDtoToTprovince)
+				.map(this.dtoProvinceMapper::provinceDtoToTprovince)
 				.map(this.mapperProvince::save)
 				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar province",provinceDto));
 	}

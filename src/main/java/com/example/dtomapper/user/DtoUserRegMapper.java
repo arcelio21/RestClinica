@@ -10,9 +10,9 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface UserRegMapper {
+public interface DtoUserRegMapper {
 
-    UserRegMapper INSTANCE = Mappers.getMapper(UserRegMapper.class);
+    DtoUserRegMapper INSTANCE = Mappers.getMapper(DtoUserRegMapper.class);
 
     @Mappings({
             @Mapping(source = "user.id", target = "id"),

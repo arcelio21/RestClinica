@@ -9,9 +9,9 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface DistrictMapper {
+public interface DtoDistrictMapper {
 
-    DistrictMapper INSTANCE = Mappers.getMapper(DistrictMapper.class);
+    DtoDistrictMapper INSTANCE = Mappers.getMapper(DtoDistrictMapper.class);
 
     @Mappings({
             @Mapping(source = "tdistrict.id", target = "id"),

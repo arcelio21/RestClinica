@@ -1,7 +1,7 @@
 package com.example.service.modules;
 
 import com.example.dto.modules.ModulesDto;
-import com.example.dtomapper.modules.ModulesMapper;
+import com.example.dtomapper.modules.DtoModulesMapper;
 import com.example.entity.modules.Tmodule;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class ServiceModuleImple implements IServiceModule{
 
 	private MapperModules mapperModules;
-	private ModulesMapper modulesMapper;
+	private DtoModulesMapper dtoModulesMapper;
 
 	/**
 	 * Obtiene todos los módulos.
@@ -38,7 +38,7 @@ public class ServiceModuleImple implements IServiceModule{
 		if(tmodules.isPresent() && !tmodules.get().isEmpty()){
 			
 			return tmodules.get().stream()
-					.map(this.modulesMapper::TmoduleToModulesDto)
+					.map(this.dtoModulesMapper::TmoduleToModulesDto)
 					.collect(Collectors.toList());
 		}
 		throw new NoDataFoundException("Data Not Found");
@@ -60,7 +60,7 @@ public class ServiceModuleImple implements IServiceModule{
 		
 		return Optional.of(id)
 				.map(this.mapperModules::getById)
-				.map(this.modulesMapper::TmoduleToModulesDto)
+				.map(this.dtoModulesMapper::TmoduleToModulesDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
@@ -82,7 +82,7 @@ public class ServiceModuleImple implements IServiceModule{
 		
 		//TODO RECORDA IMPLEMENTAR VALIDACION POR GRUPOS EN EL CONTROLLER
 		return Optional.of(modulesDto)
-				.map(this.modulesMapper::modulesDtoToTmodule)
+				.map(this.dtoModulesMapper::modulesDtoToTmodule)
 				.map(this.mapperModules::update)
 				.orElseThrow(()-> new ModulesNotUpdateException("Data Modules Not Valid", modulesDto));
 	}
@@ -104,7 +104,7 @@ public class ServiceModuleImple implements IServiceModule{
 		}
 
 		return Optional.of(modulesDto)
-			.map(this.modulesMapper::modulesDtoToTmodule)
+			.map(this.dtoModulesMapper::modulesDtoToTmodule)
 			.map(this.mapperModules::insert)
 			.orElseThrow(()-> new ModulesNotSaveException("Error, Modules Not Saved", modulesDto))
 		;

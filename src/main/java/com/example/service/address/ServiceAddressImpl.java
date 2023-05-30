@@ -2,7 +2,7 @@ package com.example.service.address;
 
 import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.AddressRequestDto;
-import com.example.dtomapper.address.AddressMappper;
+import com.example.dtomapper.address.DtoAddressMappper;
 import com.example.entity.address.Taddress;
 import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tprovince;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class ServiceAddressImpl implements IServiceAddress{
 
 	private final MapperAddress mapper;
-	private final AddressMappper addressMappper;
+	private final DtoAddressMappper dtoAddressMappper;
 
 
 	/**
@@ -45,7 +45,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 			return optionalTaddresses
 					.get()
 					.stream()
-					.map(this.addressMappper::taddressToAddressGetDto)
+					.map(this.dtoAddressMappper::taddressToAddressGetDto)
 					.collect(Collectors.toList());
 		}
 
@@ -66,7 +66,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 
 		return Optional.of(id)
 				.map(this.mapper::getById)
-				.map(this.addressMappper::taddressToAddressGetDto)
+				.map(this.dtoAddressMappper::taddressToAddressGetDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 		
 	}
@@ -88,7 +88,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 		}
 
 		return Optional.of(addressRequestDto)
-				.map(this.addressMappper::AddressRequestDtoToTaddress)
+				.map(this.dtoAddressMappper::AddressRequestDtoToTaddress)
 				.map(this.mapper::update)
 				.orElseThrow(()-> new AddressNotUpdateException("Fallo en actualizacion", addressRequestDto));
 
@@ -113,7 +113,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 		}
 
 		return Optional.of(addressRequestDto)
-				.map(this.addressMappper::AddressRequestDtoToTaddress)
+				.map(this.dtoAddressMappper::AddressRequestDtoToTaddress)
 				.map(this.mapper::save)
 				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar", addressRequestDto));
 	}
@@ -137,7 +137,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 			return optionalTaddresses
 					.get()
 					.stream()
-					.map(this.addressMappper::taddressToAddressGetDto)
+					.map(this.dtoAddressMappper::taddressToAddressGetDto)
 					.collect(Collectors.toList());
 		}
 
@@ -164,7 +164,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 			return optionalTaddresses
 					.get()
 					.stream()
-					.map(this.addressMappper::taddressToAddressGetDto)
+					.map(this.dtoAddressMappper::taddressToAddressGetDto)
 					.collect(Collectors.toList());
 		}
 
@@ -190,7 +190,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 			return optionalTaddresses
 					.get()
 					.stream()
-					.map(this.addressMappper::taddressToAddressGetDto)
+					.map(this.dtoAddressMappper::taddressToAddressGetDto)
 					.collect(Collectors.toList());
 		}
 

@@ -2,7 +2,7 @@ package com.example.service.address;
 
 import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.AddressRequestDto;
-import com.example.dtomapper.address.AddressMappper;
+import com.example.dtomapper.address.DtoAddressMappper;
 import com.example.entity.address.Taddress;
 import com.example.entity.address.Tvillage;
 import com.example.exception.NoDataFoundException;
@@ -30,7 +30,7 @@ class ServiceAddressImplTest {
 	private MapperAddress mapper;
 
 	@Mock
-	private AddressMappper dtoMapper;
+	private DtoAddressMappper dtoMapper;
 
 	@InjectMocks
 	private ServiceAddressImpl serviceAddress;

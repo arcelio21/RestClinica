@@ -8,9 +8,9 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface ModulesMapper {
+public interface DtoModulesMapper {
 
-    ModulesMapper INSTANCE = Mappers.getMapper(ModulesMapper.class);
+    DtoModulesMapper INSTANCE = Mappers.getMapper(DtoModulesMapper.class);
 
     @Mappings({
             @Mapping(source = "module.id", target = "id"),

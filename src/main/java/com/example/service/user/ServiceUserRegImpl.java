@@ -5,8 +5,8 @@ import com.example.dto.user.user_reg.UserRegDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
 import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.dto.user.user_reg.UserUpdatePassDto;
-import com.example.dtomapper.address.AddressMappper;
-import com.example.dtomapper.user.UserRegMapper;
+import com.example.dtomapper.address.DtoAddressMappper;
+import com.example.dtomapper.user.DtoUserRegMapper;
 import com.example.entity.address.Taddress;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.address.AddressNotSaveException;
@@ -37,9 +37,9 @@ import java.util.Optional;
 public class ServiceUserRegImpl implements IServiceUserReg{
 
 	private final MapperUserReg mapperUserReg;
-	private final UserRegMapper userRegMapper;
+	private final DtoUserRegMapper dtoUserRegMapper;
 	private final AuthenticationManager authenticationManager;
-	private final AddressMappper addressMappper;
+	private final DtoAddressMappper dtoAddressMappper;
 	private final MapperAddress mapperAddress;
 
 	private final UserDetailsService userDetailsService;
@@ -54,7 +54,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 		return Optional.ofNullable(this.mapperUserReg.getAll())
 				.orElseThrow(NoDataFoundException::new)
 				.stream()
-				.map(this.userRegMapper::TuserRegToUserRegDto)
+				.map(this.dtoUserRegMapper::TuserRegToUserRegDto)
 				.toList();
 	}
 
@@ -62,7 +62,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 	public UserRegDto getById(Long id) {
 		return Optional.ofNullable(id)
 				.map(this.mapperUserReg::getById)
-				.map(this.userRegMapper::TuserRegToUserRegDto)
+				.map(this.dtoUserRegMapper::TuserRegToUserRegDto)
 				.orElseThrow(() -> new NoDataFoundException(id));
 	}
 
@@ -77,7 +77,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 
 		if(!userRegDto.getClass().equals(UserRegUpdateDto.class)) throw new UserNotUpdateException("Datos no validos");
 
-		Taddress address = this.addressMappper.userRegUpdateDtoToTaddres((UserRegUpdateDto) userRegDto);
+		Taddress address = this.dtoAddressMappper.userRegUpdateDtoToTaddres((UserRegUpdateDto) userRegDto);
 
 		try {
 			Optional.ofNullable(address)
@@ -91,7 +91,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 		try {
 
 			return Optional.of(userRegDto)
-					.map(this.userRegMapper::userRegDtoToTuserReg)
+					.map(this.dtoUserRegMapper::userRegDtoToTuserReg)
 					.map(tuserReg -> {
 						tuserReg.setAddressId(new Taddress(address.getId()));
 						return tuserReg;
@@ -113,7 +113,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 		if( user == null || !user.getClass().equals(UserRegSaveDto.class)) throw  new UserNotSaveException("Datos de usuario no guardado", user);
 
 
-		Taddress taddress = this.addressMappper.userRegSaveDtoToTaddres((UserRegSaveDto) user);
+		Taddress taddress = this.dtoAddressMappper.userRegSaveDtoToTaddres((UserRegSaveDto) user);
 
 
 		try {
@@ -128,7 +128,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 
 		try {
 			return Optional.of(user)
-					.map(this.userRegMapper::userRegDtoToTuserReg)
+					.map(this.dtoUserRegMapper::userRegDtoToTuserReg)
 					.map((tuserReg -> {tuserReg.setAddressId(new Taddress(taddress.getId()));
 						return tuserReg;
 					}))
@@ -153,7 +153,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 			  .map(this.mapperUserReg::getByName)
 			  .orElseThrow(NoDataFoundException::new)
 			  .stream()
-			  .map(this.userRegMapper::TuserRegToUserRegDto)
+			  .map(this.dtoUserRegMapper::TuserRegToUserRegDto)
 			  .toList();
 	}
 
@@ -179,7 +179,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 
 		
 		return this.mapperUserReg.getByIdenCard(user.getIdenCard())
-				.map(this.userRegMapper::TuserRegToUserRegDto)
+				.map(this.dtoUserRegMapper::TuserRegToUserRegDto)
 				.orElseThrow(() -> new UsernameInvalid("Datos no valido"));
 	}
 
@@ -223,7 +223,7 @@ public class ServiceUserRegImpl implements IServiceUserReg{
 		}
 
 		return Optional.of(user)
-					.map(this.userRegMapper::userUpdatePassToTuserReg)
+					.map(this.dtoUserRegMapper::userUpdatePassToTuserReg)
 					.map(tuserReg -> this.mapperUserReg.updatePassword(tuserReg,userValid.getNewPassword()))
 					.orElseThrow(()-> new PasswordNotUpdateException("Error al actualizar usuario, datos de usuario no validos", user));
 

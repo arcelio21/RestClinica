@@ -1,7 +1,7 @@
 package com.example.service.user;
 
 import com.example.dto.user.type_user.TypeUserDto;
-import com.example.dtomapper.user.TypeUserMapper;
+import com.example.dtomapper.user.DtoTypeUserMapper;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
@@ -18,7 +18,7 @@ public class ServiceTypeUserImpl implements IServiceTypeUser{
 
 	
 	private final MapperTypeUser mapperTypeUser;
-	private final TypeUserMapper typeUserMapper;
+	private final DtoTypeUserMapper dtoTypeUserMapper;
 
 	@Override
 	public List<TypeUserDto> getAll() {
@@ -26,7 +26,7 @@ public class ServiceTypeUserImpl implements IServiceTypeUser{
 		return Optional.ofNullable(this.mapperTypeUser.getAll())
 				.orElseThrow(NoDataFoundException::new)
 				.stream()
-				.map(this.typeUserMapper::ttypeUserToTypeUserDto)
+				.map(this.dtoTypeUserMapper::ttypeUserToTypeUserDto)
 				.toList();
 	}
 
@@ -38,7 +38,7 @@ public class ServiceTypeUserImpl implements IServiceTypeUser{
 		}
 		
 		return Optional.ofNullable(this.mapperTypeUser.getById(id))
-				.map(this.typeUserMapper::ttypeUserToTypeUserDto)
+				.map(this.dtoTypeUserMapper::ttypeUserToTypeUserDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
@@ -50,7 +50,7 @@ public class ServiceTypeUserImpl implements IServiceTypeUser{
 		}
 		
 		return Optional.of(t)
-				.map(this.typeUserMapper::typeUserDtoToTtypeUser)
+				.map(this.dtoTypeUserMapper::typeUserDtoToTtypeUser)
 				.map(this.mapperTypeUser::update)
 				.orElseThrow(() -> new TypeUserNotUpdateException("Error al intentar actualizar, Datos no validos",t));
 	}
@@ -63,7 +63,7 @@ public class ServiceTypeUserImpl implements IServiceTypeUser{
 		}
 
 		return Optional.of(t)
-				.map(this.typeUserMapper::typeUserDtoToTtypeUser)
+				.map(this.dtoTypeUserMapper::typeUserDtoToTtypeUser)
 				.map(this.mapperTypeUser::save)
 				.orElseThrow(()-> new TypeUserNotSaveException("Error al intentar guardar", t));
 	}

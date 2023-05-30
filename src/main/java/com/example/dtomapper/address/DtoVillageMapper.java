@@ -9,9 +9,9 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface VillageMapper {
+public interface DtoVillageMapper {
 
-    VillageMapper INSTANCE = Mappers.getMapper(VillageMapper.class);
+    DtoVillageMapper INSTANCE = Mappers.getMapper(DtoVillageMapper.class);
 
     @Mappings({
             @Mapping(target = "id",source = "tvillage.id", defaultValue = "0"),

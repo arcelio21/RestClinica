@@ -8,9 +8,9 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface ProvinceMapper {
+public interface DtoProvinceMapper {
 
-    ProvinceMapper INSTANCE = Mappers.getMapper(ProvinceMapper.class);
+    DtoProvinceMapper INSTANCE = Mappers.getMapper(DtoProvinceMapper.class);
 
     @Mappings(value = {
             //@Mapping(ignore = true, source = "districts"),

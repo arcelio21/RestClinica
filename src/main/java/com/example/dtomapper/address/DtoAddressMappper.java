@@ -11,9 +11,9 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface AddressMappper {
+public interface DtoAddressMappper {
 
-    AddressMappper INSTANCE = Mappers.getMapper(AddressMappper.class);
+    DtoAddressMappper INSTANCE = Mappers.getMapper(DtoAddressMappper.class);
     @Mappings({
             @Mapping(source = "taddress.id", target = "id", defaultValue = "0L"),
             @Mapping(source = "taddress.villageId.id", target = "villageId", defaultValue = "0"),
