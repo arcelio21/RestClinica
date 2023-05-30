@@ -14,13 +14,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Clase de implementación para el módulo de servicio.
+ */
 @AllArgsConstructor
 @Service
 public class ServiceModuleImple implements IServiceModule{
 
 	private MapperModules mapperModules;
 	private ModulesMapper modulesMapper;
-	
+
+	/**
+	 * Obtiene todos los módulos.
+	 *
+	 * @return Lista de objetos ModulesDto.
+	 * @throws NoDataFoundException si no se encuentra ningún dato.
+	 */
 	@Override
 	public List<ModulesDto> getAll() {
 		
@@ -35,6 +44,13 @@ public class ServiceModuleImple implements IServiceModule{
 		throw new NoDataFoundException("Data Not Found");
 	}
 
+	/**
+	 * Obtiene un módulo por su ID.
+	 *
+	 * @param id ID del módulo.
+	 * @return Objeto ModulesDto correspondiente al ID.
+	 * @throws NoDataFoundException si no se encuentra el módulo.
+	 */
 	@Override
 	public ModulesDto getById(Long id) {
 
@@ -48,6 +64,13 @@ public class ServiceModuleImple implements IServiceModule{
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
+	/**
+	 * Actualiza un módulo.
+	 *
+	 * @param modulesDto Objeto ModulesDto con los datos a actualizar.
+	 * @return Número de registros actualizados.
+	 * @throws ModulesNotUpdateException si los datos del módulo no son válidos.
+	 */
 	@Override
 	public Integer update(ModulesDto modulesDto) {
 
@@ -64,6 +87,14 @@ public class ServiceModuleImple implements IServiceModule{
 				.orElseThrow(()-> new ModulesNotUpdateException("Data Modules Not Valid", modulesDto));
 	}
 
+
+	/**
+	 * Guarda un nuevo módulo.
+	 *
+	 * @param modulesDto Objeto ModulesDto con los datos del módulo a guardar.
+	 * @return Número de registros guardados.
+	 * @throws ModulesNotSaveException si los datos del módulo no son válidos.
+	 */
 	@Override
 	public Integer save(ModulesDto modulesDto) {
 
