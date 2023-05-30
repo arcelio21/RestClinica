@@ -393,7 +393,7 @@ class ServiceDistrictImplTest {
 						.name("David")
 						.tprovince(ProvinceDto.builder()
 								.id(4)
-								.nombre("Chiriqui")
+								.name("Chiriqui")
 								.build())
 				.build());
 
