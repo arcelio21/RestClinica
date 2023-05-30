@@ -11,7 +11,6 @@ import com.example.exception.NoDataFoundException;
 import com.example.exception.address.AddressNotSaveException;
 import com.example.exception.address.AddressNotUpdateException;
 import com.example.exception.address.province.ProvinceNotSaveException;
-import com.example.exception.address.province.ProvinceNotUpdateException;
 import com.example.mapper.address.MapperAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -91,7 +90,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 		return Optional.of(addressRequestDto)
 				.map(this.addressMappper::AddressRequestDtoToTaddress)
 				.map(this.mapper::update)
-				.orElseThrow(()-> new ProvinceNotUpdateException("Fallo en actualizacion", addressRequestDto));
+				.orElseThrow(()-> new AddressNotUpdateException("Fallo en actualizacion", addressRequestDto));
 
 	}
 
