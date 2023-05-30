@@ -21,9 +21,6 @@ public class ServiceModuleImple implements IServiceModule{
 	private MapperModules mapperModules;
 	private ModulesMapper modulesMapper;
 	
-	
-	
-
 	@Override
 	public List<ModulesDto> getAll() {
 		
@@ -35,12 +32,15 @@ public class ServiceModuleImple implements IServiceModule{
 					.map(this.modulesMapper::TmoduleToModulesDto)
 					.collect(Collectors.toList());
 		}
-		//TODO CAMBIAR A EXCEPION GENERICA Y BORRAR LA QUE SE CREO
 		throw new NoDataFoundException("Data Not Found");
 	}
 
 	@Override
 	public ModulesDto getById(Long id) {
+
+		if(id==null ||id<=0){
+			throw new NoDataFoundException(id);
+		}
 		
 		return Optional.of(id)
 				.map(this.mapperModules::getById)
@@ -51,6 +51,11 @@ public class ServiceModuleImple implements IServiceModule{
 	@Override
 	public Integer update(ModulesDto modulesDto) {
 
+		if(modulesDto==null || modulesDto.getId()==null || modulesDto.getId()<=0
+			|| modulesDto.getName()==null || modulesDto.getName().trim().isEmpty()){
+
+			throw new ModulesNotUpdateException("Data Modules Not Valid", modulesDto);
+		}
 		
 		//TODO RECORDA IMPLEMENTAR VALIDACION POR GRUPOS EN EL CONTROLLER
 		return Optional.of(modulesDto)
@@ -61,6 +66,11 @@ public class ServiceModuleImple implements IServiceModule{
 
 	@Override
 	public Integer save(ModulesDto modulesDto) {
+
+		if(modulesDto==null || modulesDto.getName()==null || modulesDto.getName().trim().isEmpty()){
+
+			throw new ModulesNotUpdateException("Error, Modules Not Saved", modulesDto);
+		}
 
 		return Optional.of(modulesDto)
 			.map(this.modulesMapper::modulesDtoToTmodule)
