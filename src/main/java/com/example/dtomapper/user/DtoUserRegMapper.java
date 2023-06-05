@@ -97,6 +97,21 @@ public interface DtoUserRegMapper {
     })
     TuserReg userRegUpdateDtoToTuserReg(UserRegUpdateDto userUpdate);
 
- 
+    @Mappings({
+            @Mapping(source = "userRegSaveDto.id", target = "id"),
+            @Mapping(source = "userRegSaveDto.name", target = "name"),
+            @Mapping(source = "userRegSaveDto.lastName", target = "lastName"),
+            @Mapping(source = "userRegSaveDto.addressId", target = "addressId.id"),
+            @Mapping(source = "userRegSaveDto.password", target = "password"),
+            @Mapping(source = "userRegSaveDto.villageId", target = "addressId.villageId.id"),
+            @Mapping(source = "userRegSaveDto.direcSpecific", target = "addressId.specificAddress"),
+            @Mapping(source = "userRegSaveDto.birthday", target = "birthday"),
+            @Mapping(source = "userRegSaveDto.email", target = "email"),
+            @Mapping(source = "userRegSaveDto.idenCard", target = "idenCard"),
+            @Mapping(source = "userRegSaveDto.contact", target = "contact"),
+            @Mapping(target = "addressId", ignore = true),
+            @Mapping(target = "usersTypesRegs", ignore = true)
+    })
+    TuserReg userRegSaveDtoToTuserReg(UserRegSaveDto userRegSaveDto);
 
 }
