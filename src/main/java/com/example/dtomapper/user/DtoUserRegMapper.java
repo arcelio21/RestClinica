@@ -2,6 +2,8 @@ package com.example.dtomapper.user;
 
 import com.example.dto.AuthenticationRequest;
 import com.example.dto.user.user_reg.UserRegDto;
+import com.example.dto.user.user_reg.UserRegSaveDto;
+import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.entity.user.TuserReg;
 import org.mapstruct.Mapper;
@@ -77,5 +79,24 @@ public interface DtoUserRegMapper {
             @Mapping(target = "authorities", ignore = true)
     })
     TuserReg userUpdatePassToTuserReg(UserUpdatePassDto user);
+
+    @Mappings({
+            @Mapping(source = "userUpdate.id", target = "id"),
+            @Mapping(source = "userUpdate.name", target = "name"),
+            @Mapping(source = "userUpdate.contact", target = "contact"),
+            @Mapping(source = "userUpdate.idenCard", target = "idenCard"),
+            @Mapping(source = "userUpdate.email", target = "email"),
+            @Mapping(source = "userUpdate.birthday", target = "birthday"),
+            @Mapping(source = "userUpdate.password", target = "password"),
+            @Mapping(source = "userUpdate.lastName", target = "lastName"),
+            @Mapping(target = "addressId", ignore = true),
+            @Mapping(source = "userUpdate.addressId", target = "addressId.id"),
+            @Mapping(source = "userUpdate.villageId", target = "addressId.villageId.id"),
+            @Mapping(source = "userUpdate.direcSpecific", target = "addressId.specificAddress"),
+            @Mapping(target = "usersTypesRegs", ignore = true)
+    })
+    TuserReg userRegUpdateDtoToTuserReg(UserRegUpdateDto userUpdate);
+
+ 
 
 }
