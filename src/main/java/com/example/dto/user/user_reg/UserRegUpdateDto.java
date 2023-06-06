@@ -12,11 +12,9 @@ import java.time.LocalDateTime;
 public class UserRegUpdateDto extends UserRegDto{
 
 
+    //TODO SOLUCIONAR LA DUPLICACION DE ADDRESSID
     @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     private Long addressId;
-
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private String password;
 
     @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     private Long villageId;
@@ -25,13 +23,14 @@ public class UserRegUpdateDto extends UserRegDto{
     private String direcSpecific;
 
     @Builder(builderMethodName = "userUpdateBuilder")
-    public UserRegUpdateDto(Long id, Long idenCard, String name, String lastName, String password, String contact, String email,
+    public UserRegUpdateDto(Long id, Long idenCard, String name, String lastName, String contact, String email,
                           LocalDate birthday, LocalDateTime creationDate, Long addressId,
                           Long villageId, String direcSpecific
     ) {
-        super(id, idenCard, name, lastName, password, contact, email, birthday, creationDate, addressId);
-        this.addressId= addressId;
+        super(id, idenCard, name, lastName, null, contact, email, birthday, creationDate, addressId);
         this.direcSpecific=direcSpecific;
         this.villageId=villageId;
+        this.addressId = addressId;
     }
+
 }
