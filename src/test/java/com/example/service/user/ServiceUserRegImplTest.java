@@ -8,17 +8,15 @@ import com.example.dtomapper.user.DtoUserRegMapper;
 import com.example.entity.address.Taddress;
 import com.example.entity.address.Tvillage;
 import com.example.entity.user.TuserReg;
+import com.example.exception.user.user_reg.UserNotUpdateException;
 import com.example.mapper.address.MapperAddress;
 import com.example.mapper.user.MapperUserReg;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,12 +25,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doAnswer;
-
-;
 
 @ExtendWith(MockitoExtension.class)
 class ServiceUserRegImplTest {
@@ -91,7 +87,6 @@ class ServiceUserRegImplTest {
                 .lastName("Montezuma")
                 .birthday(LocalDate.of(2000,9,2))
                 .idenCard(12000704001435L)
-                .password("HolaCOMO")
                 .direcSpecific("San jose")
                 .villageId(1L)
                 .build();
@@ -111,7 +106,6 @@ class ServiceUserRegImplTest {
                 .addressId(0L)
                 .birthday(LocalDate.of(2000,9,2))
                 .idenCard(12000704001435L)
-                .password("HolaCOMO")
                 .direcSpecific("San jose")
                 .villageId(1L)
                 .build();
@@ -168,6 +162,12 @@ class ServiceUserRegImplTest {
         then(this.dtoUserRegMapper).should().userRegUpdateDtoToTuserReg(this.userRegUpdateDtoValid);
         then(this.mapperUserReg).should().update(any(TuserReg.class));
 
+    }
+
+    @Test
+    void update_data_notValid(){
+
+        assertThrows(UserNotUpdateException.class,()-> this.serviceUserReg.update(this.userRegUpdateDtoNotValid));
     }
 
 }
