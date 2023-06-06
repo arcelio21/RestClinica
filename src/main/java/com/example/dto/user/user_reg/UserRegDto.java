@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder(toBuilder = true)
-@Getter
+@Getter()
 @Schema(name = "UserReg", description = "Tendra toda la informacion disponible de los usuarios registrados")
 public class UserRegDto {
 
@@ -18,6 +18,7 @@ public class UserRegDto {
     private String name;
     private String lastName;
 
+    @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
     private String password;
     private String contact;
@@ -28,7 +29,6 @@ public class UserRegDto {
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long addressId;
-
 
 
 
