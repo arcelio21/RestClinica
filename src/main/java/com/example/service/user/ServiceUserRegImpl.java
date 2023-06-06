@@ -221,6 +221,13 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 				.orElseThrow(()-> new AddressNotUpdateException("Datos de direccion no son validos"));
 	}
 
+	/**
+	 * Guarda la dirección del usuario.
+	 *
+	 * @param user El objeto UserRegSaveDto que contiene los datos de la dirección.
+	 * @return El identificador de la dirección guardada.
+	 * @throws AddressNotSaveException Si los datos de la dirección no son válidos para ser guardados.
+	 */
 	private Long saveAddress(UserRegSaveDto user){
 		return Optional.of(user)
 				.map(this.dtoAddressMappper::userRegSaveDtoToTaddres)

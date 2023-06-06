@@ -8,6 +8,7 @@ import com.example.dtomapper.user.DtoUserRegMapper;
 import com.example.entity.address.Taddress;
 import com.example.entity.address.Tvillage;
 import com.example.entity.user.TuserReg;
+import com.example.exception.user.user_reg.UserNotSaveException;
 import com.example.exception.user.user_reg.UserNotUpdateException;
 import com.example.mapper.address.MapperAddress;
 import com.example.mapper.user.MapperUserReg;
@@ -189,6 +190,11 @@ class ServiceUserRegImplTest {
         then(this.dtoAddressMappper).should().userRegSaveDtoToTaddres(this.userRegSaveDtoValid);
         then(this.mapperAddress).should().save(any(Taddress.class));
         then(this.mapperUserReg).should().save(any(TuserReg.class));
+    }
+
+    @Test
+    void save_data_NotValid(){
+        assertThrows(UserNotSaveException.class, ()-> this.serviceUserReg.save(this.userRegSaveDtoNotValid));   
     }
 
 }
