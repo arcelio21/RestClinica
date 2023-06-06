@@ -18,6 +18,7 @@ public class UserRegSaveDto extends UserRegDto{
     private String direcSpecific;
 
 
+
     @Builder(builderMethodName = "userSaveBUilder")
     public UserRegSaveDto(Long id, Long idenCard, String name, String lastName, String password, String contact, String email,
                           LocalDate birthday, LocalDateTime creationDate, Long addressId,
@@ -26,6 +27,12 @@ public class UserRegSaveDto extends UserRegDto{
         super(id, idenCard, name, lastName, password, contact, email, birthday, creationDate, addressId);
         this.villageId= villageId;
         this.direcSpecific=direcSpecific;
+    }
+
+
+    @Schema(hidden = true)
+    public Long getId(){
+        return  super.getId();
     }
 
 }
