@@ -34,8 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Test para metodos de la clase ServiceUserRegImpl.class")
 @ExtendWith(MockitoExtension.class)
@@ -247,6 +246,66 @@ class ServiceUserRegImplTest {
         // Act & Assert
         assertThrows(NoDataFoundException.class, () -> this.serviceUserReg.getById(id));
         then(mapperUserReg).should(never()).getById(anyLong());
+        then(dtoUserRegMapper).should(never()).TuserRegToUserRegDto(any(TuserReg.class));
+    }
+
+
+    /**
+     * Prueba unitaria para verificar que el método getByName() devuelve una lista válida de UserRegDto cuando se proporciona un nombre válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se inicializa el nombre con un valor válido ("arcelio").</li>
+     *   <li>Se configura el objeto simulado mapperUserReg para que devuelva una lista de TuserReg cuando se le pase el nombre válido.</li>
+     *   <li>Se configura el objeto simulado dtoUserRegMapper para que convierta correctamente un TuserReg en un UserRegDto.</li>
+     *   <li>Se realiza la llamada al método getByName() del servicio UserReg con el nombre válido.</li>
+     *   <li>Se verifica que el tamaño de la lista devuelta sea igual al tamaño de la lista de TuserReg esperada.</li>
+     *   <li>Se verifica que el método simulado getByName() haya sido llamado correctamente.</li>
+     *   <li>Se verifica que el método simulado TuserRegToUserRegDto() haya sido llamado el número correcto de veces.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getByName() devuelve una lista válida de UserRegDto cuando se proporciona un nombre válido")
+    public void testGetByName_ValidName_ReturnsListOfUserRegDto() {
+
+
+        String name = "arcelio";
+        List<TuserReg> tuserRegs = List.of(this.tuserReg);
+        given(mapperUserReg.getByName(name)).willReturn(tuserRegs);
+        given(dtoUserRegMapper.TuserRegToUserRegDto(any(TuserReg.class))).willReturn(UserRegDto.builder().build());
+
+        // Act
+        List<UserRegDto> result = this.serviceUserReg.getByName(name);
+
+        // Assert
+        assertEquals(tuserRegs.size(), result.size());
+        then(mapperUserReg).should().getByName(name);
+        then(dtoUserRegMapper).should(times(tuserRegs.size())).TuserRegToUserRegDto(any(TuserReg.class));
+    }
+
+
+
+    /**
+     * Prueba unitaria para verificar que el método getByName() lanza una excepción NoDataFoundException cuando se proporciona un nombre no válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se inicializa el nombre con un valor no válido (null).</li>
+     *   <li>Se realiza la llamada al método getByName() del servicio UserReg con el nombre no válido.</li>
+     *   <li>Se verifica que se lance una excepción NoDataFoundException.</li>
+     *   <li>Se verifica que el método simulado getByName() no haya sido llamado.</li>
+     *   <li>Se verifica que el método simulado TuserRegToUserRegDto() no haya sido llamado.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getByName() lanza una excepción NoDataFoundException cuando se proporciona un nombre no válido")
+    public void testGetByName_NotValidName_ThrowsNoDataFoundException() {
+        // Arrange
+        String name = null;
+
+        // Act & Assert
+        assertThrows(NoDataFoundException.class, () -> this.serviceUserReg.getByName(name));
+        then(mapperUserReg).should(never()).getByName(anyString());
         then(dtoUserRegMapper).should(never()).TuserRegToUserRegDto(any(TuserReg.class));
     }
 
