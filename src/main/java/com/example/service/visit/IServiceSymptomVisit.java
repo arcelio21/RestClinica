@@ -6,10 +6,10 @@ import com.example.entity.visit.Tsymptom;
 import com.example.entity.visit.Tvisit;
 import com.example.service.ServiceTemplateCrud;
 
-public interface IServiceSymptomVisit<T, I> extends ServiceTemplateCrud<T, I> {
+public interface IServiceSymptomVisit<GET,ID,UPDATE,SAVE> extends ServiceTemplateCrud<GET,ID,UPDATE,SAVE> {
 
-	List<T> getByVisitId(Tvisit tvisit);
+	List<GET> getByVisitId(Tvisit tvisit);
 
-	List<T> getBySymptomId(Tsymptom tsymptom);
+	List<GET> getBySymptomId(Tsymptom tsymptom);
 
 }

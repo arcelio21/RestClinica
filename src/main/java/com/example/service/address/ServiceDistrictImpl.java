@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Service
-public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Integer>{
+public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Integer, DistrictDto,DistrictDto>{
 	
 	private final MapperDistrict mapperDistrict;
 	private  final DtoDistrictMapper dtoMapper;

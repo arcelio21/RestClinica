@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Service
-public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Integer> {
+public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Integer,ProvinceDto,ProvinceDto> {
 
 
 	private final MapperProvince mapperProvince;

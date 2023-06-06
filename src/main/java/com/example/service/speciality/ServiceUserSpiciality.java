@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ServiceUserSpiciality implements IServiceUserSpeciality<TuserSpeciality,Integer>{
+public class ServiceUserSpiciality implements IServiceUserSpeciality<TuserSpeciality,Integer,TuserSpeciality,TuserSpeciality>{
 
 	private MapperUserSpeciality mapperUserSpeciality;
 

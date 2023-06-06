@@ -5,13 +5,13 @@ import java.util.List;
 import com.example.dto.address.village.VillageDistrictDto;
 import com.example.service.ServiceTemplateCrud;
 
-public interface IServiceVillage<T,I> extends ServiceTemplateCrud<T, I>{
+public interface IServiceVillage<GET,ID,UPDATE,SAVE> extends ServiceTemplateCrud<GET,ID,UPDATE,SAVE>{
 
-	List<T> getByDistrictId(I id);
-	VillageDistrictDto getDistrictAllById( I id);
+	List<GET> getByDistrictId(ID id);
+	VillageDistrictDto getDistrictAllById( ID id);
 
-	List<T> getAllIdName();
+	List<GET> getAllIdName();
 
-	T getByIdName(I id);
+	GET getByIdName(ID id);
 
 }

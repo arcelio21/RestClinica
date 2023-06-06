@@ -26,6 +26,13 @@ public class AuthenticationService {
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * TODO CREO QUE SE DEBE CAMBIAR LO QUE DEVUELVE EL METODO POR UN MENSAJE
+     * Y AL VALIDARSE ENTONCES DEVOLVER EL TOKEN, PUESTO QUE HABRA UN ADMINISTRADOR QUE CREAR LOS USUARIOS
+     * TAMBIEN VER LOS TIPOS DE USUARIO
+     * @param request
+     * @return
+     */
     @Transactional
     public AuthenticationResponse register(RegisterRequest request){
 
@@ -34,7 +41,7 @@ public class AuthenticationService {
                 .villageId(new Tvillage(request.getIdVillage()))
                 .build();
 
-        int rowAffected = this.mapperAddress.save(addressAuth);
+        Long rowAffected = this.mapperAddress.save(addressAuth);
         if(rowAffected==1){
             var userAuth = new TuserReg();
             userAuth.setIdenCard(request.getIdenCard());

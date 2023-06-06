@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ServiceVisitImpl implements IServiceVisit<Tvisit, Integer> {
+public class ServiceVisitImpl implements IServiceVisit<Tvisit, Integer,Tvisit,Tvisit> {
 
 	private MapperVisit mapperVisit;
 

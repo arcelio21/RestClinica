@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ServiceSymptomsImpl implements IServiceSymptoms<Tsymptom,Integer> {
+public class ServiceSymptomsImpl implements IServiceSymptoms<Tsymptom,Integer,Tsymptom,Tsymptom> {
 
 	private MapperSymptoms mapperSymptoms;
 

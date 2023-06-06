@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ServiceVitalSignVisitImpl implements IServiceVitalSignVisit<TvitalSignVisit,Integer> {
+public class ServiceVitalSignVisitImpl implements IServiceVitalSignVisit<TvitalSignVisit,Integer,TvitalSignVisit,TvitalSignVisit> {
 
 	private MapperVitalSignVisit mapperVitalSignVisit;
 

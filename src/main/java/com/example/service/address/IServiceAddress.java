@@ -2,7 +2,6 @@ package com.example.service.address;
 
 import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.AddressRequestDto;
-import com.example.entity.address.Taddress;
 
 import java.util.List;
 

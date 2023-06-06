@@ -5,15 +5,15 @@ import java.util.List;
 import com.example.entity.user.TuserTypeReg;
 import com.example.service.ServiceTemplateCrud;
 
-public interface IServiceUserTypeReg<T,I> extends ServiceTemplateCrud<T,I>{
+public interface IServiceUserTypeReg<GET,ID,UPDATE,SAVE> extends ServiceTemplateCrud<GET,ID,UPDATE,SAVE>{
 
  
 
-	 List<TuserTypeReg> getByIdUserReg(Integer id);
+	 List<GET> getByIdUserReg(ID id);
 
-	List<TuserTypeReg> getByIdTypeUser( Integer id);
+	List<GET> getByIdTypeUser( ID id);
 
-	 List<TuserTypeReg> getByIdStatus(Integer id);
+	 List<GET> getByIdStatus(ID id);
 
 }
 

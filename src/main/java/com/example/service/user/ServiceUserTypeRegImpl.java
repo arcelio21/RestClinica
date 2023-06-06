@@ -9,7 +9,7 @@ import com.example.mapper.user.MapperUserTypeReg;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<TuserTypeReg, Integer> {
+public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<TuserTypeReg, Integer,TuserTypeReg,TuserTypeReg> {
 
 	private MapperUserTypeReg mapperUserTypeReg;
 

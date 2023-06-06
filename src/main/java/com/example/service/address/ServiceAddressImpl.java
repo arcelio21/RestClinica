@@ -94,9 +94,9 @@ public class ServiceAddressImpl implements IServiceAddress{
 
 	}
 
+	//todo PROBAR EL TEST EN CASO DE QUE NO DEVULVE EL id generado, o investigar que devuelve en ese caso
 	/**
 	 * Guarda un objeto AddressRequestDto en el sistema.
-	 *
 	 * @param addressRequestDto El objeto AddressRequestDto a ser guardado.
 	 * @return La cantidad de registros guardados.
 	 * @throws AddressNotSaveException Si los datos no son válidos o no se puede guardar la dirección.
@@ -115,6 +115,7 @@ public class ServiceAddressImpl implements IServiceAddress{
 		return Optional.of(addressRequestDto)
 				.map(this.dtoAddressMappper::AddressRequestDtoToTaddress)
 				.map(this.mapper::save)
+				.map(addres -> (addres>0)?1:0)
 				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar", addressRequestDto));
 	}
 

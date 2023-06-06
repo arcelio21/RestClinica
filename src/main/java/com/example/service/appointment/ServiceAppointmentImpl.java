@@ -14,7 +14,7 @@ import com.example.mapper.appointment.MapperAppointment;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServiceAppointmentImpl implements IServiceAppointment<Tappointment, Integer> {
+public class ServiceAppointmentImpl implements IServiceAppointment<Tappointment, Integer,Tappointment,Tappointment> {
 
 	private MapperAppointment mapperAppointment;
 

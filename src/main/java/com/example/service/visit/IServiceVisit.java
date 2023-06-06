@@ -9,18 +9,18 @@ import com.example.entity.status.Tstatus;
 import com.example.entity.user.TuserTypeReg;
 import com.example.service.ServiceTemplateCrud;
 
-public interface IServiceVisit<T, I> extends ServiceTemplateCrud<T, I> {
+public interface IServiceVisit<GET,ID,UPDATE,SAVE> extends ServiceTemplateCrud<GET,ID,UPDATE,SAVE> {
 
-	List<T> getByPatientId(TuserTypeReg reg, Tstatus tstatus);
+	List<GET> getByPatientId(TuserTypeReg reg, Tstatus tstatus);
 
-	List<T> getByNurseId(TuserSpeciality tuserSpeciality, Tstatus tstatus);
+	List<GET> getByNurseId(TuserSpeciality tuserSpeciality, Tstatus tstatus);
 
-	List<T> getByPhysicianId(TuserSpeciality speciality, Tstatus tstatus);
+	List<GET> getByPhysicianId(TuserSpeciality speciality, Tstatus tstatus);
 
-	List<T> getBySpecialityId(Tspeciality tspeciality, Tstatus tstatus);
+	List<GET> getBySpecialityId(Tspeciality tspeciality, Tstatus tstatus);
 
-	List<T> getByCreationDate(Tstatus tstatus, LocalDateTime date);
+	List<GET> getByCreationDate(Tstatus tstatus, LocalDateTime date);
 
-	List<T> getByStatusId(Tstatus tstatus);
+	List<GET> getByStatusId(Tstatus tstatus);
 
 }

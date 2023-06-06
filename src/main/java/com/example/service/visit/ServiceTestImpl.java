@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ServiceTestImpl implements IServiceTest<Ttest,Integer>{
+public class ServiceTestImpl implements IServiceTest<Ttest,Integer,Ttest,Ttest>{
 
 	private MapperTest mapperTest;
 

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Service
-public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer>{
+public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer, VillageDto,VillageDto>{
 
 	
 	private final MapperVillage mapperVillage;

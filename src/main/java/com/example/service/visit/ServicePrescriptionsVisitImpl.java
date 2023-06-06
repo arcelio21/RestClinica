@@ -7,7 +7,7 @@ import com.example.entity.visit.TprescriptionVisit;
 import com.example.entity.visit.Tvisit;
 import com.example.mapper.visit.MapperPrescriptionVisit;
 
-public class ServicePrescriptionsVisitImpl implements IServicePrescriptionsVisit<TprescriptionVisit, Integer> {
+public class ServicePrescriptionsVisitImpl implements IServicePrescriptionsVisit<TprescriptionVisit, Integer,TprescriptionVisit,TprescriptionVisit> {
 
 	private MapperPrescriptionVisit mapperPrescriptionVisit;
 

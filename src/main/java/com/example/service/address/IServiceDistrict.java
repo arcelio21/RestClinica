@@ -5,10 +5,10 @@ import java.util.List;
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.service.ServiceTemplateCrud;
 
-public interface IServiceDistrict<T, I> extends ServiceTemplateCrud<T, I>{
+public interface IServiceDistrict<GET, ID, UPDATE, SAVE> extends ServiceTemplateCrud<GET, ID, UPDATE, SAVE>{
 
-	T getByIdName(I id);
-	List<T> getAllIdName();
-	List<T> getByProvinceId(I id);
-	DistrictAllDto getDistrictAndProvinceById(I id);
+	GET getByIdName(ID id);
+	List<GET> getAllIdName();
+	List<GET> getByProvinceId(ID id);
+	DistrictAllDto getDistrictAndProvinceById(ID id);
 }
