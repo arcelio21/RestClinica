@@ -1,16 +1,15 @@
 package com.example.service.user;
 
-import java.util.List;
-
 import com.example.dto.AuthenticationRequest;
-import com.example.dto.user.user_reg.UserRegDto;
 import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.service.ServiceTemplateCrud;
 
-public interface IServiceUserReg extends ServiceTemplateCrud<UserRegDto, Long>{
+import java.util.List;
 
-	List<UserRegDto> getByName(String name);
-	UserRegDto validateAccount(AuthenticationRequest user);
+public interface IServiceUserReg<GET,ID,UPDATE,SAVE> extends ServiceTemplateCrud<GET,ID,UPDATE,SAVE>{
+
+	List<GET> getByName(String name);
+	GET authenticateUserReg(AuthenticationRequest user);
 	Integer updatePassword(UserUpdatePassDto user);
 	
 }
