@@ -31,9 +31,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
 
 @DisplayName("Test para metodos de la clase ServiceUserRegImpl.class")
 @ExtendWith(MockitoExtension.class)
@@ -192,6 +194,63 @@ class ServiceUserRegImplTest {
         // THEN
         assertThrows(NoDataFoundException.class, () -> serviceUserReg.getAll());
     }
+
+
+    /**
+     * Prueba unitaria para verificar que el método getById() devuelve un UserRegDto válido cuando se proporciona un ID válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configura el objeto simulado mapperUserReg para que devuelva un TuserReg cuando se le pase el ID válido.</li>
+     *   <li>Se configura el objeto simulado dtoUserRegMapper para que convierta correctamente un TuserReg en un UserRegDto.</li>
+     *   <li>Se realiza la llamada al método getById() del servicio UserReg con el ID válido.</li>
+     *   <li>Se verifica que el resultado sea igual al UserRegDto válido esperado.</li>
+     *   <li>Se verifica que los métodos simulados hayan sido llamados correctamente.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getById() devuelve un UserRegDto válido cuando se proporciona un ID válido")
+    public void testGetById_ValidId_ReturnsUserRegDto() {
+        // Arrange
+        Long id = 1L;
+
+        given(mapperUserReg.getById(id)).willReturn(this.tuserReg);
+        given(dtoUserRegMapper.TuserRegToUserRegDto(any(TuserReg.class))).willReturn(this.userRegDtoValid);
+
+        // Act
+        UserRegDto result = this.serviceUserReg.getById(id);
+
+        // Assert
+        assertEquals(this.userRegDtoValid, result);
+        then(mapperUserReg).should().getById(id);
+        then(dtoUserRegMapper).should().TuserRegToUserRegDto(this.tuserReg);
+    }
+
+
+    /**
+     * Prueba unitaria para verificar que el método getById() lance una excepción NoDataFoundException cuando se proporciona un ID no válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se inicializa el ID con un valor no válido (null).</li>
+     *   <li>Se llama al método getById() del servicio UserReg pasando el ID no válido.</li>
+     *   <li>Se verifica que se lance una excepción NoDataFoundException.</li>
+     *   <li>Se verifica que los métodos simulados no hayan sido llamados.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getById() lanza NoDataFoundException cuando se proporciona un ID no válido")
+    public void testGetById_NotValidId_ThrowsNoDataFoundException() {
+        // Arrange
+        Long id = null;
+
+        // Act & Assert
+        assertThrows(NoDataFoundException.class, () -> this.serviceUserReg.getById(id));
+        then(mapperUserReg).should(never()).getById(anyLong());
+        then(dtoUserRegMapper).should(never()).TuserRegToUserRegDto(any(TuserReg.class));
+    }
+
+
 
 
     /**
