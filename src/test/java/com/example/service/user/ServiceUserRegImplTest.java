@@ -8,6 +8,7 @@ import com.example.dtomapper.user.DtoUserRegMapper;
 import com.example.entity.address.Taddress;
 import com.example.entity.address.Tvillage;
 import com.example.entity.user.TuserReg;
+import com.example.exception.NoDataFoundException;
 import com.example.exception.user.user_reg.UserNotSaveException;
 import com.example.exception.user.user_reg.UserNotUpdateException;
 import com.example.mapper.address.MapperAddress;
@@ -25,6 +26,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -135,6 +138,61 @@ class ServiceUserRegImplTest {
                 .build();
 
     }
+
+    /**
+     * Prueba unitaria para verificar que el método getAll() devuelve una lista de UserRegDto.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configura el objeto simulado dtoUserRegMapper para que convierta correctamente un TuserReg en un UserRegDto.</li>
+     *   <li>Se configura el objeto simulado mapperUserReg para que devuelva una lista que contiene un TuserReg.</li>
+     *   <li>Se realiza la llamada al método getAll() del servicio UserReg.</li>
+     *   <li>Se verifica que el resultado sea una lista con un solo elemento.</li>
+     *   <li>Se verifica que los métodos simulados hayan sido llamados correctamente.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getAll() devuelve una lista de UserRegDto")
+    void getAll_ReturnsListOfUserRegDto() {
+
+        //GIVEN
+        given(this.dtoUserRegMapper.TuserRegToUserRegDto(this.tuserReg)).willReturn(this.userRegDtoValid);
+        List<TuserReg> tuserRegs = List.of(this.tuserReg);
+        given(mapperUserReg.getAll()).willReturn(tuserRegs);
+
+        // Act
+        List<UserRegDto> result = serviceUserReg.getAll();
+
+        // Assert
+        assertEquals(1, result.size());
+
+        then(this.mapperUserReg).should().getAll();
+        then(this.dtoUserRegMapper).should().TuserRegToUserRegDto(this.tuserReg);
+
+    }
+
+    /**
+     * Prueba  para verificar que se lance la excepción NoDataFoundException al llamar al método getAll()
+     * cuando no hay datos disponibles.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configura el objeto simulado mapperUserReg para que devuelva una lista vacía de TuserReg.</li>
+     *   <li>Se realiza la llamada al método getAll() del servicio UserReg.</li>
+     *   <li>Se verifica que se lance la excepción NoDataFoundException.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getAll() lanza NoDataFoundException cuando no hay datos disponibles")
+
+    void getAll_ThrowsNoDataFoundException_WhenNoDataAvailable() {
+        // GIVEN
+        given(mapperUserReg.getAll()).willReturn(Collections.emptyList());
+
+        // THEN
+        assertThrows(NoDataFoundException.class, () -> serviceUserReg.getAll());
+    }
+
 
     /**
      * Prueba unitaria para el método de actualización de datos válidos.
