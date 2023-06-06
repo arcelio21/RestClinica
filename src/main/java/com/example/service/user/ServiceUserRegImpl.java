@@ -66,7 +66,7 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 		throw new NoDataFoundException();
 	}
-
+	
 	@Override
 	public UserRegDto getById(Long id) {
 
@@ -121,6 +121,14 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 	/*-------------------------------METODOS DE PERSISTENCIA ---------------------------------------------*/
 
+	/**
+	 * Actualiza los datos de un usuario en la base de datos.
+	 * Se lleva a cabo dentro de una transacción.
+	 *
+	 * @param user Objeto UserRegUpdateDto con los datos de actualización del usuario.
+	 * @return El número de filas afectadas por la actualización.
+	 * @throws UserNotUpdateException si los datos de usuario no son válidos.
+	 */
 	@Transactional
 	@Override
 	public Integer update(UserRegUpdateDto user) {
@@ -211,8 +219,14 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 	/* --------------------METODOS RELACIONADO CON DIRECCIONES ----------------------- */
 
-	private Integer updateAddress(UserRegUpdateDto user){
-		return Optional.of(user)
+	/**
+	 * Actualiza la dirección de un usuario en la base de datos.
+	 *
+	 * @param user Objeto UserRegUpdateDto con los datos de actualización de la dirección.
+	 * @throws AddressNotUpdateException si los datos de la dirección no son válidos.
+	 */
+	private void updateAddress(UserRegUpdateDto user){
+		 Optional.of(user)
 				.map(this.dtoAddressMappper::userRegUpdateDtoToTaddres)
 				.map(this.mapperAddress::update)
 				.orElseThrow(()-> new AddressNotUpdateException("Datos de direccion no son validos"));
