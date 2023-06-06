@@ -147,7 +147,7 @@ public class ControllerUserReg extends ControllerTemplate {
 
 
         return ResponseEntity.ok(
-                this.serviceUserReg.validateAccount(auth)
+                this.serviceUserReg.authenticateUserReg(auth)
         );
     }
 
