@@ -13,6 +13,7 @@ import com.example.exception.user.user_reg.UserNotUpdateException;
 import com.example.mapper.address.MapperAddress;
 import com.example.mapper.user.MapperUserReg;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,25 +32,26 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
 
+@DisplayName("Test para metodos de la clase ServiceUserRegImpl.class")
 @ExtendWith(MockitoExtension.class)
 class ServiceUserRegImplTest {
 
     @Mock
-    private  MapperUserReg mapperUserReg;
+    private MapperUserReg mapperUserReg;
     @Mock
-    private  DtoUserRegMapper dtoUserRegMapper;
+    private DtoUserRegMapper dtoUserRegMapper;
     @Mock
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     @Mock
-    private  DtoAddressMappper dtoAddressMappper;
+    private DtoAddressMappper dtoAddressMappper;
     @Mock
-    private  MapperAddress mapperAddress;
+    private MapperAddress mapperAddress;
 
     @Mock
-    private  UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Mock
-    private  PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private ServiceUserRegImpl serviceUserReg;
@@ -74,7 +76,7 @@ class ServiceUserRegImplTest {
                 .email("arcelio@gmail.com")
                 .contact("65723832")
                 .name("Arcelio")
-                .birthday(LocalDate.of(2000,9,2))
+                .birthday(LocalDate.of(2000, 9, 2))
                 .creationDate(LocalDateTime.now())
                 .idenCard(12000704001435L)
                 .build();
@@ -86,18 +88,18 @@ class ServiceUserRegImplTest {
                 .contact("65723832")
                 .name("Arcelio")
                 .lastName("Montezuma")
-                .birthday(LocalDate.of(2000,9,2))
+                .birthday(LocalDate.of(2000, 9, 2))
                 .idenCard(12000704001435L)
                 .direcSpecific("San jose")
                 .villageId(1L)
                 .build();
         tuserReg = new TuserReg();
         tuserReg.setId(1L);
-        tuserReg.setAddressId(new Taddress(1L, new Tvillage(1),"San jose"));
+        tuserReg.setAddressId(new Taddress(1L, new Tvillage(1), "San jose"));
         tuserReg.setPassword("holaCOMO");
         tuserReg.setContact("65723832");
         tuserReg.setIdenCard(12000704001435L);
-        tuserReg.setBirthday(LocalDate.of(2000,9,2));
+        tuserReg.setBirthday(LocalDate.of(2000, 9, 2));
         tuserReg.setEmail("arcelio@gmail.com");
         tuserReg.setLastName("MOntezuma");
         tuserReg.setName("Arcelio");
@@ -105,7 +107,7 @@ class ServiceUserRegImplTest {
         userRegUpdateDtoNotValid = UserRegUpdateDto.userUpdateBuilder()
                 .id(1L)
                 .addressId(0L)
-                .birthday(LocalDate.of(2000,9,2))
+                .birthday(LocalDate.of(2000, 9, 2))
                 .idenCard(12000704001435L)
                 .direcSpecific("San jose")
                 .villageId(1L)
@@ -117,7 +119,7 @@ class ServiceUserRegImplTest {
                 .contact("65723832")
                 .name("Arcelio")
                 .lastName("Montezuma")
-                .birthday(LocalDate.of(2000,9,2))
+                .birthday(LocalDate.of(2000, 9, 2))
                 .idenCard(12000704001435L)
                 .villageId(1L)
                 .direcSpecific("SAN JOSE")
@@ -134,6 +136,18 @@ class ServiceUserRegImplTest {
 
     }
 
+    /**
+     * Prueba unitaria para el método de actualización de datos válidos.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configuran los objetos simulados para que devuelvan los valores esperados.</li>
+     *   <li>Se llama al método de actualización con los datos válidos.</li>
+     *   <li>Se verifica que el número de filas afectadas sea igual a 1.</li>
+     *   <li>Se verifica que los métodos simulados hayan sido llamados correctamente.</li>
+     * </ul>
+     */
+    @DisplayName("Prueba de actualización con datos válidos")
     @Test
     void update_data_valid(){
 
@@ -165,13 +179,31 @@ class ServiceUserRegImplTest {
 
     }
 
+    /**
+     * Prueba unitaria para el método de actualización con datos no válidos.
+     *
+     * <p>Se espera que se lance una excepción UserNotUpdateException al intentar actualizar con datos no válidos.</p>
+     */
     @Test
+    @DisplayName("Prueba de actualización con datos no válidos")
     void update_data_notValid(){
 
         assertThrows(UserNotUpdateException.class,()-> this.serviceUserReg.update(this.userRegUpdateDtoNotValid));
     }
 
+    /**
+     * Prueba unitaria para el método de guardado de datos válidos.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configuran los objetos simulados para que devuelvan los valores esperados.</li>
+     *   <li>Se llama al método de guardado con los datos válidos.</li>
+     *   <li>Se verifica que el número de filas afectadas sea igual a 1.</li>
+     *   <li>Se verifica que los métodos simulados hayan sido llamados correctamente.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de guardado con datos válidos")
     void save_Data_Valid(){
         given(this.dtoAddressMappper.userRegSaveDtoToTaddres(this.userRegSaveDtoValid)).willReturn(Taddress.builder()
                 .villageId(new Tvillage(1))
@@ -192,9 +224,16 @@ class ServiceUserRegImplTest {
         then(this.mapperUserReg).should().save(any(TuserReg.class));
     }
 
+
+    /**
+     * Prueba unitaria para el método de guardado con datos no válidos.
+     *
+     * <p>Se espera que se lance una excepción UserNotSaveException al intentar guardar datos no válidos.</p>
+     */
     @Test
+    @DisplayName("Prueba de guardado con datos no válidos")
     void save_data_NotValid(){
-        assertThrows(UserNotSaveException.class, ()-> this.serviceUserReg.save(this.userRegSaveDtoNotValid));   
+        assertThrows(UserNotSaveException.class, ()-> this.serviceUserReg.save(this.userRegSaveDtoNotValid));
     }
 
 }
