@@ -112,10 +112,10 @@ class ServiceUserRegImplTest {
 
         userRegSaveDtoValid = UserRegSaveDto.userSaveBUilder()
                 .id(1L)
-                .addressId(1L)
                 .email("arcelio@gmail.com")
                 .contact("65723832")
                 .name("Arcelio")
+                .lastName("Montezuma")
                 .birthday(LocalDate.of(2000,9,2))
                 .idenCard(12000704001435L)
                 .villageId(1L)
@@ -168,6 +168,27 @@ class ServiceUserRegImplTest {
     void update_data_notValid(){
 
         assertThrows(UserNotUpdateException.class,()-> this.serviceUserReg.update(this.userRegUpdateDtoNotValid));
+    }
+
+    @Test
+    void save_Data_Valid(){
+        given(this.dtoAddressMappper.userRegSaveDtoToTaddres(this.userRegSaveDtoValid)).willReturn(Taddress.builder()
+                .villageId(new Tvillage(1))
+                .specificAddress("San jose")
+                .build());
+        given(this.dtoUserRegMapper.userRegSaveDtoToTuserReg(this.userRegSaveDtoValid)).willReturn( this.tuserReg);
+
+        given(this.mapperAddress.save((any(Taddress.class)))).willReturn(1L);
+        given(this.mapperUserReg.save(any(TuserReg.class))).willReturn(1);
+
+        Integer rowAffected = this.serviceUserReg.save(this.userRegSaveDtoValid);
+
+        assertEquals(1,rowAffected);
+
+        then(this.dtoUserRegMapper).should().userRegSaveDtoToTuserReg(this.userRegSaveDtoValid);
+        then(this.dtoAddressMappper).should().userRegSaveDtoToTaddres(this.userRegSaveDtoValid);
+        then(this.mapperAddress).should().save(any(Taddress.class));
+        then(this.mapperUserReg).should().save(any(TuserReg.class));
     }
 
 }
