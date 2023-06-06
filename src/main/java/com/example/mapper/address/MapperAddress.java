@@ -61,7 +61,7 @@ public interface MapperAddress {
 
 	@Insert("INSERT INTO Taddress (specific_address,village_id) VALUES(#{addr.specificAddress},#{addr.villageId.id})")
 	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-	int save(@Param("addr")Taddress address);
+	Long save(@Param("addr")Taddress address);
 	
 	
 	@Update("UPDATE Taddress SET specific_address=#{addr.specificAddress},village_id=#{addr.villageId.id} WHERE id=#{addr.id}")
