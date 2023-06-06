@@ -127,26 +127,10 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 		this.validateNullFieldUpdate(user);
 
-		Integer rowUpdateAddress ;
-
-		rowUpdateAddress = Optional.of(user)
-				.map(this.dtoAddressMappper::userRegUpdateDtoToTaddres)
-				.map(this.mapperAddress::update)
-				.orElseThrow(()-> new AddressNotUpdateException("Datos de direccion no son validos"));
-
-		if (rowUpdateAddress==0) throw  new AddressNotUpdateException("Datos de direccion no son validos");
-
-
+		this.updateAddress(user);
 
 		return Optional.of(user)
 				.map(this.dtoUserRegMapper::userRegUpdateDtoToTuserReg)
-				.map(tuserReg -> {
-
-					if(tuserReg.getPassword()!=null && !tuserReg.getPassword().trim().isEmpty()){
-						tuserReg.setPassword(passwordEncoder.encode(tuserReg.getPassword()));
-					}
-					return tuserReg;
-				})
 				.map(this.mapperUserReg::update)
 				.orElseThrow(()-> new UserNotUpdateException("Datos no validos de usuario"));
 
@@ -171,8 +155,6 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 				.map(this.dtoAddressMappper::userRegSaveDtoToTaddres)
 				.map(this.mapperAddress::save)
 				.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos"));
-
-		if(idAddress==null || idAddress==0) throw new AddressNotSaveException("Datos de direccion no son validos");
 
 
 		return Optional.of(user)
@@ -227,6 +209,14 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 	}
 
+	/* --------------------METODOS RELACIONADO CON DIRECCIONES ----------------------- */
+
+	private Integer updateAddress(UserRegUpdateDto user){
+		return Optional.of(user)
+				.map(this.dtoAddressMappper::userRegUpdateDtoToTaddres)
+				.map(this.mapperAddress::update)
+				.orElseThrow(()-> new AddressNotUpdateException("Datos de direccion no son validos"));
+	}
 
 	/* -------------------- METODOS DE VALIDACION DE DATOS DE LOS CAMPOS -------------------*/
 	private void validateNullFieldUpdate(UserRegUpdateDto user) throws UserNotUpdateException{
@@ -259,5 +249,6 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 			throw  new UserNotSaveException("Datos no validos");
 		}
 	}
+
 
 }
