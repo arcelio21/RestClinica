@@ -2,14 +2,21 @@ package com.example.service;
 
 import java.util.List;
 
-public interface ServiceTemplateCrud<T,I> {
+/**
+ * Interfaz genérica que define las operaciones CRUD (crear, leer, actualizar, eliminar) para un tipo de entidad determinado.
+ * @param <GET> El tipo de objeto utilizado para obtener una entidad por su ID Y PARA LISTAR DATOS.
+ * @param <ID> El tipo de dato utilizado para identificar una entidad.
+ * @param <UPDATE> El tipo de objeto utilizado para actualizar una entidad.
+ * @param <SAVE> El tipo de objeto utilizado para guardar una nueva entidad.
+ */
+public interface ServiceTemplateCrud<GET,ID,UPDATE,SAVE> {
 
-	List<T> getAll();
+	List<GET> getAll();
 	
-	T getById(I id);
+	GET getById(ID id);
 	
-	Integer update(T t);
+	Integer update(UPDATE t);
 	
-	Integer save(T t);
+	Integer save(SAVE t);
 	
 }
