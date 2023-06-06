@@ -199,7 +199,7 @@ class ServiceAddressImplTest {
 	void testSave_ValidAddressRequestDto_ReturnsRowAffected() {
 
 		when(dtoMapper.AddressRequestDtoToTaddress(this.addressRequestDtoValid)).thenReturn(new Taddress());
-		when(mapper.save(any(Taddress.class))).thenReturn(1);
+		when(mapper.save(any(Taddress.class))).thenReturn(1L);
 
 		// Act
 		Integer result = serviceAddress.save(this.addressRequestDtoValid);
