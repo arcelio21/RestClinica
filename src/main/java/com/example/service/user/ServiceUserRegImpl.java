@@ -145,36 +145,25 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 	}
 
 	/**
-	 * ESTE METODO APLICARA PARA CUALQUIER USUARIO QUE SE VAYA A GUARDAR USUARIOS, EN CASO DE QUE EL USUARIO SEA UN CLIENTE,
-	 * SE LE DARA LA OPCION DE ENVIO DE LINK PARA CONTRASEÑA Y UNA PREGUNTA PARA VALIDAR IDENTIDAD
-	 * @param user
-	 * @return
+	 * Guarda los datos de registro de usuario.
+	 *
+	 * @param user Objeto UserRegSaveDto que contiene los datos de registro del usuario.
+	 * @return El identificador del usuario guardado.
+	 * @throws UserNotSaveException si los datos no son válidos para ser guardados.
 	 */
-	//TODO HACER TEST SI O SI | SEPARAR CODIGO DE VALIDACION EN UN METODO
 	@Transactional
 	@Override
 	public Integer save(UserRegSaveDto user)  {
 
 		this.validateNullFieldSave(user);
 
-		Long idAddress;
-
-		idAddress=Optional.of(user)
-				.map(this.dtoAddressMappper::userRegSaveDtoToTaddres)
-				.map(this.mapperAddress::save)
-				.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos"));
+		Long idAddress = this.saveAddress(user);
 
 
 		return Optional.of(user)
 				.map(this.dtoUserRegMapper::userRegSaveDtoToTuserReg)
-				.map(tuserReg -> {
-					tuserReg.setAddressId(new Taddress(idAddress));
-
-					if(tuserReg.getPassword()!=null && !tuserReg.getPassword().trim().isEmpty()){
-						tuserReg.setPassword(passwordEncoder.encode(tuserReg.getPassword()));
-					}
-					return tuserReg;
-				})
+				.map((tuserReg) -> this.addDataAddress(tuserReg,idAddress))
+				.map(this::encrypPaswwordUserSave)
 				.map(this.mapperUserReg::save)
 				.orElseThrow(()-> new UserNotSaveException("Datos no son validos para ser guardados"));
 
@@ -232,6 +221,13 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 				.orElseThrow(()-> new AddressNotUpdateException("Datos de direccion no son validos"));
 	}
 
+	private Long saveAddress(UserRegSaveDto user){
+		return Optional.of(user)
+				.map(this.dtoAddressMappper::userRegSaveDtoToTaddres)
+				.map(this.mapperAddress::save)
+				.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos"));
+	}
+
 	/* -------------------- METODOS DE VALIDACION DE DATOS DE LOS CAMPOS -------------------*/
 	private void validateNullFieldUpdate(UserRegUpdateDto user) throws UserNotUpdateException{
 
@@ -262,6 +258,31 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 			throw  new UserNotSaveException("Datos no validos");
 		}
+	}
+
+	/**
+	 * Agrega la dirección del usuario a la entidad TuserReg.
+	 *
+	 * @param user      La entidad TuserReg a la que se agregará la dirección.
+	 * @param idAddress El identificador de la dirección.
+	 * @return La entidad TuserReg con la dirección agregada.
+	 */
+	private TuserReg addDataAddress(TuserReg user, Long idAddress){
+		user.setAddressId(new Taddress(idAddress));
+		return user;
+	}
+
+	/**
+	 * Encripta la contraseña del usuario en la entidad TuserReg.
+	 *
+	 * @param user La entidad TuserReg a la que se encriptará la contraseña.
+	 * @return La entidad TuserReg con la contraseña encriptada.
+	 */
+	private TuserReg encrypPaswwordUserSave(TuserReg user){
+		if(user.getPassword()!=null && !user.getPassword().trim().isEmpty()){
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+		}
+		return user;
 	}
 
 
