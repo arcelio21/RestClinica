@@ -1,6 +1,5 @@
 package com.example.service.user;
 
-import com.example.dto.AuthenticationRequest;
 import com.example.dto.user.user_reg.UserRegDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
 import com.example.dto.user.user_reg.UserRegUpdateDto;
@@ -21,7 +20,6 @@ import com.example.mapper.user.MapperUserReg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -72,7 +69,6 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 		if(id==null || id<=0){
 			throw new NoDataFoundException(id);
-
 		}
 
 		return Optional.of(id)
@@ -96,28 +92,6 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 				.collect(Collectors.toList());
 	}
 
-	//TODO CREO QUE AGREGO LOS USUARIOS ANTES DE VALIDAR, ARREGLAR O VERIFICAR ESO
-	@Override
-	public UserRegDto authenticateUserReg(AuthenticationRequest user) {
-
-		if(user==null || user.getIdenCard()==null || user.getPassword()==null || user.getPassword().trim().equals("")) {
-
-			throw new UsernameInvalid("Datos no validos");
-		}
-
-
-		this.authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						user.getIdenCard(),
-						user.getPassword()
-				)
-		);
-
-
-		return this.mapperUserReg.getByIdenCard(user.getIdenCard())
-				.map(this.dtoUserRegMapper::TuserRegToUserRegDto)
-				.orElseThrow(() -> new UsernameInvalid("Datos no valido"));
-	}
 
 	/*-------------------------------METODOS DE PERSISTENCIA ---------------------------------------------*/
 
