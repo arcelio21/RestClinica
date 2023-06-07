@@ -19,7 +19,6 @@ import com.example.mapper.address.MapperAddress;
 import com.example.mapper.user.MapperUserReg;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,7 +36,6 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 	private final MapperUserReg mapperUserReg;
 	private final DtoUserRegMapper dtoUserRegMapper;
-	private final AuthenticationManager authenticationManager;
 	private final DtoAddressMappper dtoAddressMappper;
 	private final MapperAddress mapperAddress;
 
