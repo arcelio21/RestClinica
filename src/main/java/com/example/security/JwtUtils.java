@@ -84,6 +84,7 @@ public class JwtUtils {
         return createToken(claims,userDetails);
     }
 
+    //TODO EN EL FUTURO INCLUIRLE MAS INFORMACION DEL USUARIO AL TOKEN
     private String createToken(Map<String, Object> claims, UserDetails userDetails) {
 
         return  Jwts.builder().setClaims(claims)

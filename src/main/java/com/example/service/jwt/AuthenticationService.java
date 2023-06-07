@@ -1,5 +1,6 @@
 package com.example.service.jwt;
 
+import com.example.exception.user.user_reg.UsernameInvalid;
 import com.example.security.JwtUtils;
 import com.example.dto.AuthenticationRequest;
 import com.example.dto.AuthenticationResponse;
@@ -75,6 +76,12 @@ public class AuthenticationService {
      * @return
      */
     public AuthenticationResponse authenticate(AuthenticationRequest request){
+
+        if(request==null || request.getIdenCard()==null || request.getPassword()==null || request.getPassword().trim().equals("")) {
+
+            throw new UsernameInvalid("Datos no validos");
+        }
+
         this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getIdenCard(),
