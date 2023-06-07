@@ -23,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -47,8 +46,7 @@ class ServiceUserRegImplTest {
     private MapperUserReg mapperUserReg;
     @Mock
     private DtoUserRegMapper dtoUserRegMapper;
-    @Mock
-    private AuthenticationManager authenticationManager;
+
     @Mock
     private DtoAddressMappper dtoAddressMappper;
     @Mock
@@ -65,7 +63,6 @@ class ServiceUserRegImplTest {
 
 
     private UserRegDto userRegDtoValid;
-    //private UserRegDto userRegDtoNotValid;
     private UserRegUpdateDto userRegUpdateDtoValid;
     private UserRegUpdateDto userRegUpdateDtoNotValid;
     private UserRegSaveDto userRegSaveDtoValid;
