@@ -145,7 +145,14 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 	}
 
 
-
+	/**
+	 * Actualiza la contraseña del usuario.
+	 *
+	 * @param user Objeto UserUpdatePassDto que contiene los datos de actualización de contraseña.
+	 * @return El número de filas afectadas por la actualización.
+	 * @throws PasswordNotUpdateException Si hay un error al actualizar la contraseña del usuario.
+	 * @throws UsernameInvalid Si la contraseña actual no es válida.
+	 */
 	@Override
 	public Integer updatePassword( UserUpdatePassDto user) {
 		
