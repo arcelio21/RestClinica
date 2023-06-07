@@ -145,38 +145,29 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 	}
 
 
-	//TODO VERIFICAR SI ES NECESARIO LA CONTRASEÑA OLD, EN CASO DE QUE NO SE HAYA AGREGADO AL USUARIO
+
 	@Override
 	public Integer updatePassword( UserUpdatePassDto user) {
 		
-		if(user==null || user.getNewPassword()==null || user.getNewPassword().trim().isEmpty()
-			|| user.getIndeCard()==null || user.getIndeCard()<=0
-			){
-			throw new PasswordNotUpdateException("Datos no validos");
-		}
+		this.validateNullDataUpdatePassword(user);
 
 
 		UserDetails userDetails = userDetailsService.loadUserByUsername(user.getIndeCard().toString());
 
-		UserUpdatePassDto userValid;
-		if(passwordEncoder.matches(user.getOldPassword(), userDetails.getPassword())){
 
-			log.info("Funciona el emparejamiento de contraseña");
-			String newPassEncode = passwordEncoder.encode(user.getNewPassword());
-			String oldPassEncode = passwordEncoder.encode(user.getOldPassword());
-			userValid = UserUpdatePassDto.builder()
-					.indeCard(user.getIndeCard())
-					.oldPassword(oldPassEncode)
-					.newPassword(newPassEncode)
-					.build();
+		if(this.isPasswordNewEqualpasswordOld(user.getOldPassword(), userDetails.getPassword())){
+
+			UserUpdatePassDto userValid = this.passwordsEncode(user);
+
+			return Optional.of(userValid)
+					.map(this.dtoUserRegMapper::userUpdatePassToTuserReg)
+					.map(tuserReg -> this.mapperUserReg.updatePassword(tuserReg,userValid.getNewPassword()))
+					.orElseThrow(()-> new PasswordNotUpdateException("Error al actualizar usuario, datos de usuario no validos", user));
+
 		}else {
 			throw new UsernameInvalid("Contraseña de usuario no valida");
 		}
 
-		return Optional.of(user)
-					.map(this.dtoUserRegMapper::userUpdatePassToTuserReg)
-					.map(tuserReg -> this.mapperUserReg.updatePassword(tuserReg,userValid.getNewPassword()))
-					.orElseThrow(()-> new PasswordNotUpdateException("Error al actualizar usuario, datos de usuario no validos", user));
 
 	}
 
@@ -209,6 +200,18 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 				.orElseThrow(()-> new AddressNotSaveException("Datos de direccion no son validos"));
 	}
 
+	/**
+	 * Agrega la dirección del usuario a la entidad TuserReg.
+	 *
+	 * @param user      La entidad TuserReg a la que se agregará la dirección.
+	 * @param idAddress El identificador de la dirección.
+	 * @return La entidad TuserReg con la dirección agregada.
+	 */
+	private TuserReg addDataAddress(TuserReg user, Long idAddress){
+		user.setAddressId(new Taddress(idAddress));
+		return user;
+	}
+
 	/* -------------------- METODOS DE VALIDACION DE DATOS DE LOS CAMPOS -------------------*/
 	private void validateNullFieldUpdate(UserRegUpdateDto user) throws UserNotUpdateException{
 
@@ -227,7 +230,7 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 	}
 
-	private void validateNullFieldSave(UserRegSaveDto user){
+	private void validateNullFieldSave(UserRegSaveDto user) throws UserNotSaveException{
 		if(user.getEmail()==null || user.getEmail().trim().isEmpty()
 				|| user.getDirecSpecific()==null || user.getDirecSpecific().trim().isEmpty()
 				|| user.getName()==null || user.getName().trim().isEmpty()
@@ -241,17 +244,28 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 		}
 	}
 
-	/**
-	 * Agrega la dirección del usuario a la entidad TuserReg.
-	 *
-	 * @param user      La entidad TuserReg a la que se agregará la dirección.
-	 * @param idAddress El identificador de la dirección.
-	 * @return La entidad TuserReg con la dirección agregada.
-	 */
-	private TuserReg addDataAddress(TuserReg user, Long idAddress){
-		user.setAddressId(new Taddress(idAddress));
-		return user;
+	private void validateNullDataUpdatePassword(UserUpdatePassDto user) throws PasswordNotUpdateException{
+		if(user==null || user.getNewPassword()==null || user.getNewPassword().trim().isEmpty()
+				|| user.getIndeCard()==null || user.getIndeCard()<=0
+		){
+			throw new PasswordNotUpdateException("Datos no validos");
+		}
 	}
+
+	private boolean isPasswordNewEqualpasswordOld(String newPassword, String oldPassword){
+		return this.passwordEncoder.matches(newPassword, oldPassword);
+	}
+
+	private UserUpdatePassDto passwordsEncode(UserUpdatePassDto user){
+
+		return UserUpdatePassDto.builder()
+				.indeCard(user.getIndeCard())
+				.oldPassword(passwordEncoder.encode(user.getOldPassword()))
+				.newPassword(passwordEncoder.encode(user.getNewPassword()))
+				.build();
+	}
+
+
 
 	/**
 	 * Encripta la contraseña del usuario en la entidad TuserReg.
