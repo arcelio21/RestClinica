@@ -325,7 +325,19 @@ class ServiceUserRegImplTest {
     }
 
 
+    /**
+     * Prueba unitaria para el método updatePassword() con datos válidos.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configuran los objetos simulados para que devuelvan los valores esperados.</li>
+     *   <li>Se llama al método updatePassword() del servicio UserReg con los datos válidos.</li>
+     *   <li>Se verifica que el número de filas afectadas sea igual a 1.</li>
+     *   <li>Se verifica que los métodos simulados hayan sido llamados correctamente.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de updatePassword() con datos válidos")
     void updatePassword_ValidData(){
 
         //GIVE
@@ -351,7 +363,18 @@ class ServiceUserRegImplTest {
 
     }
 
+    /**
+     * Prueba unitaria para el método updatePassword() con datos inválidos.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se llama al método updatePassword() del servicio UserReg con los datos inválidos.</li>
+     *   <li>Se verifica que se lance una excepción del tipo PasswordNotUpdateException.</li>
+     *   <li>Se verifica que los métodos simulados no hayan sido llamados.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de updatePassword() con datos inválidos")
     public void testUpdatePassword_InvalidData_ThrowsPasswordNotUpdateException() {
 
         assertThrows(PasswordNotUpdateException.class, () -> this.serviceUserReg.updatePassword(this.userUpdatePassDtoNotValid));
@@ -362,7 +385,23 @@ class ServiceUserRegImplTest {
         then(mapperUserReg).should(never()).updatePassword(any(TuserReg.class), anyString());
     }
 
+    /**
+     * Prueba unitaria para el método updatePassword() con contraseña antigua incorrecta.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configura el objeto simulado del servicio UserDetailsService para que devuelva el usuario existente.</li>
+     *   <li>Se configura el objeto simulado del passwordEncoder para que devuelva "false" al comparar la contraseña antigua.</li>
+     *   <li>Se llama al método updatePassword() del servicio UserReg con los datos de actualización.</li>
+     *   <li>Se verifica que se lance una excepción del tipo UsernameInvalid.</li>
+     *   <li>Se verifica que se haya llamado al método loadUserByUsername() del UserDetailsService una vez.</li>
+     *   <li>Se verifica que se haya llamado al método matches() del passwordEncoder una vez.</li>
+     *   <li>Se verifica que no se haya llamado al método encode() del passwordEncoder.</li>
+     *   <li>Se verifica que no se hayan llamado a los métodos simulados de mapeo.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de updatePassword() con contraseña antigua incorrecta")
     public void testUpdatePassword_IncorrectOldPassword_ThrowsUsernameInvalidException() {
 
         //GIVE
