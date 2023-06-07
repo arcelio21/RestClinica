@@ -341,7 +341,6 @@ class ServiceUserRegImplTest {
         given(this.userDetailsService.loadUserByUsername(this.userUpdatePassDto.getIndeCard().toString())).willReturn(this.tuserReg);
 
         given(this.passwordEncoder.matches(this.userUpdatePassDto.getOldPassword(), this.tuserReg.getPassword())).willReturn(true);
-        given(this.passwordEncoder.encode(this.userUpdatePassDto.getOldPassword())).willReturn("passwordOldEncode");
         given(this.passwordEncoder.encode(this.userUpdatePassDto.getNewPassword())).willReturn("passwordNewEncode");
         given(this.dtoUserRegMapper.userUpdatePassToTuserReg(any(UserUpdatePassDto.class))).willReturn(new TuserReg());
         given(this.mapperUserReg.updatePassword(any(TuserReg.class), anyString())).willReturn(1);
@@ -354,7 +353,7 @@ class ServiceUserRegImplTest {
 
         then(userDetailsService).should().loadUserByUsername(userUpdatePassDto.getIndeCard().toString());
         then(passwordEncoder).should().matches(userUpdatePassDto.getOldPassword(), tuserReg.getPassword());
-        then(passwordEncoder).should(times(2)).encode(anyString());
+        then(passwordEncoder).should(times(1)).encode(anyString());
         then(dtoUserRegMapper).should().userUpdatePassToTuserReg(any(UserUpdatePassDto.class));
         then(mapperUserReg).should().updatePassword(any(TuserReg.class), anyString());
 
