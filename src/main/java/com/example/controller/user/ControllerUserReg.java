@@ -136,21 +136,6 @@ public class ControllerUserReg extends ControllerTemplate {
     }
 
 
-    @Operation(summary = "Validar usuario",description = "Se valida el usuario para saber su existencia con contraseña y cedula, principalmente para obtener informacion",
-                method = "POST", responses = {
-                @ApiResponse(responseCode = "200",description = "Usuario validado",
-                        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de usuarios"))),
-                @ApiResponse(responseCode = "403",description = "Datos de usuario no valido",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
-        })
-    @PostMapping("/Validate")
-    public ResponseEntity<UserRegDto> validateAcount(@RequestBody AuthenticationRequest auth){
-
-
-        return ResponseEntity.ok(
-                this.serviceUserReg.authenticateUserReg(auth)
-        );
-    }
-
     @Operation(summary = "Actualizar contraseña de usuario",description = "Se encargara de actualizar contraseña de usuario cuando se desee",
             method = "POST", responses = {
             @ApiResponse(responseCode = "200",description = "Usuario Actualizado",
