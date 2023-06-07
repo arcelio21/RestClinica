@@ -162,7 +162,13 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 
 		if(this.isPasswordNewEqualpasswordOld(user.getOldPassword(), userDetails.getPassword())){
 
-			UserUpdatePassDto userValid = this.passwordsEncode(user);
+			UserUpdatePassDto userMap = UserUpdatePassDto.builder()
+					.indeCard(user.getIndeCard())
+					.newPassword(user.getNewPassword())
+					.oldPassword(userDetails.getPassword())
+					.build();
+
+			UserUpdatePassDto userValid = this.newPasswordEncode(userMap);
 
 			return Optional.of(userValid)
 					.map(this.dtoUserRegMapper::userUpdatePassToTuserReg)
@@ -261,11 +267,11 @@ public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, Use
 		return this.passwordEncoder.matches(newPassword, oldPassword);
 	}
 
-	private UserUpdatePassDto passwordsEncode(UserUpdatePassDto user){
+	private UserUpdatePassDto newPasswordEncode(UserUpdatePassDto user){
 
 		return UserUpdatePassDto.builder()
 				.indeCard(user.getIndeCard())
-				.oldPassword(passwordEncoder.encode(user.getOldPassword()))
+				.oldPassword(user.getOldPassword())
 				.newPassword(passwordEncoder.encode(user.getNewPassword()))
 				.build();
 	}
