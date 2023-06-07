@@ -3,14 +3,17 @@ package com.example.service.user;
 import com.example.dto.user.user_reg.UserRegDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
 import com.example.dto.user.user_reg.UserRegUpdateDto;
+import com.example.dto.user.user_reg.UserUpdatePassDto;
 import com.example.dtomapper.address.DtoAddressMappper;
 import com.example.dtomapper.user.DtoUserRegMapper;
 import com.example.entity.address.Taddress;
 import com.example.entity.address.Tvillage;
 import com.example.entity.user.TuserReg;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.user_reg.PasswordNotUpdateException;
 import com.example.exception.user.user_reg.UserNotSaveException;
 import com.example.exception.user.user_reg.UserNotUpdateException;
+import com.example.exception.user.user_reg.UsernameInvalid;
 import com.example.mapper.address.MapperAddress;
 import com.example.mapper.user.MapperUserReg;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +72,10 @@ class ServiceUserRegImplTest {
     private UserRegSaveDto userRegSaveDtoNotValid;
 
     private TuserReg tuserReg;
+
+    private UserUpdatePassDto userUpdatePassDto;
+    private UserUpdatePassDto userUpdatePassDtoNotValid;
+
 
 
     @BeforeEach
@@ -137,6 +144,14 @@ class ServiceUserRegImplTest {
                 .direcSpecific("SAN JOSE")
                 .password("Hola")
                 .build();
+
+        userUpdatePassDto = UserUpdatePassDto.builder()
+                .indeCard(12000704001435L)
+                .oldPassword("holaCOMO")
+                .newPassword("Hola")
+                .build();
+
+        userUpdatePassDtoNotValid = UserUpdatePassDto.builder().build();
 
     }
 
@@ -307,6 +322,63 @@ class ServiceUserRegImplTest {
         assertThrows(NoDataFoundException.class, () -> this.serviceUserReg.getByName(name));
         then(mapperUserReg).should(never()).getByName(anyString());
         then(dtoUserRegMapper).should(never()).TuserRegToUserRegDto(any(TuserReg.class));
+    }
+
+
+    @Test
+    void updatePassword_ValidData(){
+
+        //GIVE
+        given(this.userDetailsService.loadUserByUsername(this.userUpdatePassDto.getIndeCard().toString())).willReturn(this.tuserReg);
+
+        given(this.passwordEncoder.matches(this.userUpdatePassDto.getOldPassword(), this.tuserReg.getPassword())).willReturn(true);
+        given(this.passwordEncoder.encode(this.userUpdatePassDto.getOldPassword())).willReturn("passwordOldEncode");
+        given(this.passwordEncoder.encode(this.userUpdatePassDto.getNewPassword())).willReturn("passwordNewEncode");
+        given(this.dtoUserRegMapper.userUpdatePassToTuserReg(any(UserUpdatePassDto.class))).willReturn(new TuserReg());
+        given(this.mapperUserReg.updatePassword(any(TuserReg.class), anyString())).willReturn(1);
+
+        //WHEN
+        Integer rowAffected = this.serviceUserReg.updatePassword(this.userUpdatePassDto);
+
+        //THEN
+        assertEquals(1,rowAffected);
+
+        then(userDetailsService).should().loadUserByUsername(userUpdatePassDto.getIndeCard().toString());
+        then(passwordEncoder).should().matches(userUpdatePassDto.getOldPassword(), tuserReg.getPassword());
+        then(passwordEncoder).should(times(2)).encode(anyString());
+        then(dtoUserRegMapper).should().userUpdatePassToTuserReg(any(UserUpdatePassDto.class));
+        then(mapperUserReg).should().updatePassword(any(TuserReg.class), anyString());
+
+    }
+
+    @Test
+    public void testUpdatePassword_InvalidData_ThrowsPasswordNotUpdateException() {
+
+        assertThrows(PasswordNotUpdateException.class, () -> this.serviceUserReg.updatePassword(this.userUpdatePassDtoNotValid));
+        then(userDetailsService).should(never()).loadUserByUsername(anyString());
+        then(passwordEncoder).should(never()).matches(anyString(), anyString());
+        then(passwordEncoder).should(never()).encode(anyString());
+        then(dtoUserRegMapper).should(never()).userUpdatePassToTuserReg(any(UserUpdatePassDto.class));
+        then(mapperUserReg).should(never()).updatePassword(any(TuserReg.class), anyString());
+    }
+
+    @Test
+    public void testUpdatePassword_IncorrectOldPassword_ThrowsUsernameInvalidException() {
+
+        //GIVE
+        given(this.userDetailsService.loadUserByUsername(this.userUpdatePassDto.getIndeCard().toString())).willReturn(this.tuserReg);
+
+        given(this.passwordEncoder.matches(this.userUpdatePassDto.getOldPassword(), this.tuserReg.getPassword())).willReturn(false);
+
+        //WHEN
+        assertThrows(UsernameInvalid.class,()-> this.serviceUserReg.updatePassword(this.userUpdatePassDto));
+
+        //THEN
+        then(userDetailsService).should(times(1)).loadUserByUsername(userUpdatePassDto.getIndeCard().toString());
+        then(passwordEncoder).should(times(1)).matches(userUpdatePassDto.getOldPassword(), tuserReg.getPassword());
+        then(passwordEncoder).should(never()).encode(anyString());
+        then(dtoUserRegMapper).should(never()).userUpdatePassToTuserReg(any(UserUpdatePassDto.class));
+        then(mapperUserReg).should(never()).updatePassword(any(TuserReg.class), anyString());
     }
 
 
