@@ -4,6 +4,7 @@ import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dtomapper.user.DtoTypeUserMapper;
 import com.example.entity.user.TtypeUser;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.type_user.TypeUserNotUpdateException;
 import com.example.mapper.user.MapperTypeUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -203,5 +204,44 @@ class ServiceTypeUserImplTest {
         then(this.mapperTypeUser).should().getById(id);
         then(this.dtoTypeUserMapper).shouldHaveNoInteractions();
     }
+
+    @Test
+    public void testUpdate_ValidTypeUserDto_ReturnsUpdatedTypeUser() {
+        // Arrange
+
+        given(this.dtoTypeUserMapper.typeUserDtoToTtypeUser(this.typeUserDtoValid)).willReturn(this.ttypeUserValid);
+        given(this.mapperTypeUser.update(this.ttypeUserValid)).willReturn(1);
+
+        // Act
+        Integer result = this.serviceTypeUser.update(this.typeUserDtoValid);
+
+        // Assert
+        assertEquals(1, result);
+        then(this.dtoTypeUserMapper).should().typeUserDtoToTtypeUser(this.typeUserDtoValid);
+        then(this.mapperTypeUser).should().update(this.ttypeUserValid);
+    }
+
+    @Test
+    public void testUpdate_InvalidTypeUserDto_ThrowsTypeUserNotUpdateException() {
+        // Arrange
+
+        // Act & Assert
+        assertThrows(TypeUserNotUpdateException.class, () -> this.serviceTypeUser.update(this.typeUserDtoNotValid));
+        then(this.dtoTypeUserMapper).shouldHaveNoInteractions();
+        then(this.mapperTypeUser).shouldHaveNoInteractions();
+    }
+
+    @Test
+    public void testUpdate_NonexistentTypeUserDto_ThrowsTypeUserNotUpdateException() {
+        // Arrange
+
+        given(this.dtoTypeUserMapper.typeUserDtoToTtypeUser(this.typeUserDtoValid)).willReturn(null);
+
+        // Act & Assert
+        assertThrows(TypeUserNotUpdateException.class, () -> this.serviceTypeUser.update(this.typeUserDtoValid));
+        then(this.dtoTypeUserMapper).should().typeUserDtoToTtypeUser(this.typeUserDtoValid);
+        then(this.mapperTypeUser).shouldHaveNoInteractions();
+    }
+
 
 }
