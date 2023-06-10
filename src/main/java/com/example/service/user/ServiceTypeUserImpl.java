@@ -45,7 +45,8 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 			throw new NoDataFoundException("Valor de ID no valido");
 		}
 		
-		return Optional.ofNullable(this.mapperTypeUser.getById(id))
+		return Optional.of(id)
+				.map(this.mapperTypeUser::getById)
 				.map(this.dtoTypeUserMapper::ttypeUserToTypeUserDto)
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
