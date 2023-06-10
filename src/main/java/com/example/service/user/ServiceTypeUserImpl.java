@@ -2,6 +2,7 @@ package com.example.service.user;
 
 import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dtomapper.user.DtoTypeUserMapper;
+import com.example.entity.user.TtypeUser;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +25,17 @@ public class ServiceTypeUserImpl implements IServiceTypeUser{
 	@Override
 	public List<TypeUserDto> getAll() {
 
-		return Optional.ofNullable(this.mapperTypeUser.getAll())
-				.orElseThrow(NoDataFoundException::new)
-				.stream()
-				.map(this.dtoTypeUserMapper::ttypeUserToTypeUserDto)
-				.toList();
+		Optional<List<TtypeUser>> optionalTtypeUsers = Optional.ofNullable(this.mapperTypeUser.getAll());
+
+		if(optionalTtypeUsers.isPresent() && !optionalTtypeUsers.get().isEmpty()){
+			return optionalTtypeUsers
+						.get()
+						.stream()
+						.map(this.dtoTypeUserMapper::ttypeUserToTypeUserDto)
+						.collect(Collectors.toList());
+		}
+
+		throw new NoDataFoundException();
 	}
 
 	@Override
