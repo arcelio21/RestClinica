@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceTypeUserImpl implements IServiceTypeUser{
+public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integer,TypeUserDto,TypeUserDto>{
 
 	
 	private final MapperTypeUser mapperTypeUser;
