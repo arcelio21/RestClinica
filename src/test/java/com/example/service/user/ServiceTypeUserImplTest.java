@@ -205,7 +205,23 @@ class ServiceTypeUserImplTest {
         then(this.dtoTypeUserMapper).shouldHaveNoInteractions();
     }
 
+    //UPDATE
+
+    /**
+     * Prueba unitaria para el método update() del servicio TypeUser cuando se proporciona un TypeUserDto válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configura el objeto simulado dtoTypeUserMapper para que convierta el TypeUserDto válido en un objeto TtypeUser válido.</li>
+     *   <li>Se configura el objeto simulado mapperTypeUser para que devuelva 1 al llamar al método update() con el objeto TtypeUser válido.</li>
+     *   <li>Se llama al método update() del servicio TypeUser con el TypeUserDto válido.</li>
+     *   <li>Se verifica que el resultado retornado sea igual a 1.</li>
+     *   <li>Se verifica que se haya realizado una interacción con el objeto simulado dtoTypeUserMapper, llamando al método typeUserDtoToTtypeUser() con el TypeUserDto válido.</li>
+     *   <li>Se verifica que se haya realizado una interacción con el objeto simulado mapperTypeUser, llamando al método update() con el objeto TtypeUser válido.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de actualización de TypeUserDto válido")
     public void testUpdate_ValidTypeUserDto_ReturnsUpdatedTypeUser() {
         // Arrange
 
@@ -221,7 +237,19 @@ class ServiceTypeUserImplTest {
         then(this.mapperTypeUser).should().update(this.ttypeUserValid);
     }
 
+    /**
+     * Prueba unitaria para el método update() del servicio TypeUser cuando se proporciona un TypeUserDto no válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>No se configuran objetos simulados, ya que se espera que no haya interacciones con ellos.</li>
+     *   <li>Se llama al método update() del servicio TypeUser con el TypeUserDto no válido.</li>
+     *   <li>Se verifica que se lance una excepción del tipo TypeUserNotUpdateException.</li>
+     *   <li>Se verifica que no haya interacciones con los objetos simulados dtoTypeUserMapper y mapperTypeUser.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de actualización de TypeUserDto no válido")
     public void testUpdate_InvalidTypeUserDto_ThrowsTypeUserNotUpdateException() {
         // Arrange
 
@@ -231,7 +259,22 @@ class ServiceTypeUserImplTest {
         then(this.mapperTypeUser).shouldHaveNoInteractions();
     }
 
+
+    /**
+     * Prueba unitaria para el método update() del servicio TypeUser cuando se proporciona un TypeUserDto que no existe.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configura el objeto simulado dtoTypeUserMapper para que devuelva null al convertir el TypeUserDto válido.</li>
+     *   <li>No se configuran otros objetos simulados, ya que se espera que no haya interacciones con ellos.</li>
+     *   <li>Se llama al método update() del servicio TypeUser con el TypeUserDto válido.</li>
+     *   <li>Se verifica que se lance una excepción del tipo TypeUserNotUpdateException.</li>
+     *   <li>Se verifica que se haya llamado al método typeUserDtoToTtypeUser() del objeto simulado dtoTypeUserMapper con el TypeUserDto válido.</li>
+     *   <li>Se verifica que no haya interacciones con el objeto simulado mapperTypeUser.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de actualización de TypeUserDto no existente")
     public void testUpdate_NonexistentTypeUserDto_ThrowsTypeUserNotUpdateException() {
         // Arrange
 
