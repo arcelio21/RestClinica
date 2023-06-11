@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 @Service
-public class ServiceModuleImple implements IServiceModule{
+public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,ModulesDto, ModulesDto>{
 
 	private MapperModules mapperModules;
 	private DtoModulesMapper dtoModulesMapper;
