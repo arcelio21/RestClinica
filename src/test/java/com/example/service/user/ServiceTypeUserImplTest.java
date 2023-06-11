@@ -4,6 +4,7 @@ import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dtomapper.user.DtoTypeUserMapper;
 import com.example.entity.user.TtypeUser;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
 import com.example.mapper.user.MapperTypeUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -285,6 +286,61 @@ class ServiceTypeUserImplTest {
         then(this.dtoTypeUserMapper).should().typeUserDtoToTtypeUser(this.typeUserDtoValid);
         then(this.mapperTypeUser).shouldHaveNoInteractions();
     }
+
+    // SAVE
+
+    /**
+     * Prueba unitaria para el método save() del servicio TypeUser cuando se proporciona un TypeUserDto válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se configura el objeto simulado dtoTypeUserMapper para que convierta el TypeUserDto válido en el objeto TtypeUser válido.</li>
+     *   <li>Se configura el objeto simulado mapperTypeUser para que devuelva el ID del TtypeUser guardado.</li>
+     *   <li>Se llama al método save() del servicio TypeUser con el TypeUserDto válido.</li>
+     *   <li>Se verifica que se retorne el ID del TtypeUser guardado.</li>
+     *   <li>Se verifica que se haya llamado al método typeUserDtoToTtypeUser() del objeto simulado dtoTypeUserMapper con el TypeUserDto válido.</li>
+     *   <li>Se verifica que se haya llamado al método save() del objeto simulado mapperTypeUser con el TtypeUser válido.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de TypeUserDto válido")
+    public void testSave_ValidTypeUserDto_ReturnsSavedTypeUserId() {
+        // Arrange
+
+        given(this.dtoTypeUserMapper.typeUserDtoToTtypeUser(this.typeUserDtoValid)).willReturn(this.ttypeUserValid);
+        given(this.mapperTypeUser.save(this.ttypeUserValid)).willReturn(1);
+
+        // Act
+        Integer result = this.serviceTypeUser.save(this.typeUserDtoValid);
+
+        // Assert
+        assertEquals(1, result);
+        then(this.dtoTypeUserMapper).should().typeUserDtoToTtypeUser(this.typeUserDtoValid);
+        then(this.mapperTypeUser).should().save(this.ttypeUserValid);
+    }
+
+    /**
+     * Prueba unitaria para el método save() del servicio TypeUser cuando se proporciona un TypeUserDto inválido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se lanza una excepción TypeUserNotSaveException al llamar al método save() del servicio TypeUser con el TypeUserDto inválido.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoTypeUserMapper.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado mapperTypeUser.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de TypeUserDto inválido")
+    public void testSave_InvalidTypeUserDto_ThrowsTypeUserNotSaveException() {
+        // Arrange
+
+        // Act & Assert
+        assertThrows(TypeUserNotSaveException.class, () -> this.serviceTypeUser.save(this.typeUserDtoNotValid));
+        then(this.dtoTypeUserMapper).shouldHaveNoInteractions();
+        then(this.mapperTypeUser).shouldHaveNoInteractions();
+    }
+
+
 
 
 }
