@@ -52,16 +52,14 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 	}
 
 	@Override
-	public Integer update(TypeUserDto t) {
+	public Integer update(TypeUserDto typeUserDto) {
 
-		if(t==null || t.getId()==null || t.getId()<=0) {
-			throw new TypeUserNotUpdateException("Datos no validos", t);
-		}
+		this.validDataTypeUserUpdate(typeUserDto);
 		
-		return Optional.of(t)
+		return Optional.of(typeUserDto)
 				.map(this.dtoTypeUserMapper::typeUserDtoToTtypeUser)
 				.map(this.mapperTypeUser::update)
-				.orElseThrow(() -> new TypeUserNotUpdateException("Error al intentar actualizar, Datos no validos",t));
+				.orElseThrow(() -> new TypeUserNotUpdateException("Error al intentar actualizar, Datos no validos",typeUserDto));
 	}
 
 	@Override
@@ -79,6 +77,12 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 
 
 
-
+	private void validDataTypeUserUpdate(TypeUserDto typeUserDto) throws TypeUserNotUpdateException{
+		if(typeUserDto==null || typeUserDto.getId()==null || typeUserDto.getId()<=0
+				|| typeUserDto.getName()==null || typeUserDto.getName().trim().isEmpty()
+		) {
+			throw new TypeUserNotUpdateException("Datos no validos", typeUserDto);
+		}
+	}
 
 }
