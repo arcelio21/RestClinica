@@ -63,16 +63,14 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 	}
 
 	@Override
-	public Integer save(TypeUserDto t) {
+	public Integer save(TypeUserDto typeUserDto) {
 
-		if(t==null || t.getName().trim().equals("") ) {
-			throw new TypeUserNotSaveException("Datos no validos", t);
-		}
+		this.validDataTypeUserSave(typeUserDto);
 
-		return Optional.of(t)
+		return Optional.of(typeUserDto)
 				.map(this.dtoTypeUserMapper::typeUserDtoToTtypeUser)
 				.map(this.mapperTypeUser::save)
-				.orElseThrow(()-> new TypeUserNotSaveException("Error al intentar guardar", t));
+				.orElseThrow(()-> new TypeUserNotSaveException("Error al intentar guardar", typeUserDto));
 	}
 
 
@@ -82,6 +80,12 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 				|| typeUserDto.getName()==null || typeUserDto.getName().trim().isEmpty()
 		) {
 			throw new TypeUserNotUpdateException("Datos no validos", typeUserDto);
+		}
+	}
+
+	private void validDataTypeUserSave(TypeUserDto typeUserDto){
+		if(typeUserDto==null || typeUserDto.getName()==null ||typeUserDto.getName().trim().equals("") ) {
+			throw new TypeUserNotSaveException("Datos no validos", typeUserDto);
 		}
 	}
 
