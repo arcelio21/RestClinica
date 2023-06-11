@@ -22,6 +22,12 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 	private final MapperTypeUser mapperTypeUser;
 	private final DtoTypeUserMapper dtoTypeUserMapper;
 
+	/**
+	 * Obtiene todos los objetos TypeUserDto.
+	 *
+	 * @return Lista de objetos TypeUserDto
+	 * @throws NoDataFoundException si no se encuentran datos
+	 */
 	@Override
 	public List<TypeUserDto> getAll() {
 
@@ -38,6 +44,15 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 		throw new NoDataFoundException();
 	}
 
+
+	/**
+	 * Obtiene un objeto TypeUserDto por su ID.
+	 *
+	 * @param id ID del objeto TypeUserDto a buscar
+	 * @return Objeto TypeUserDto correspondiente al ID proporcionado
+	 * @throws NoDataFoundException si no se encuentra ningún objeto con el ID proporcionado
+	 *         o si se proporciona un valor de ID no válido
+	 */
 	@Override
 	public TypeUserDto getById(Integer id) {
 
@@ -51,6 +66,13 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
+	/**
+	 * Actualiza un objeto TypeUserDto.
+	 *
+	 * @param typeUserDto Objeto TypeUserDto a actualizar
+	 * @return ID del objeto TypeUserDto actualizado
+	 * @throws TypeUserNotUpdateException si se produjo un error al intentar actualizar los datos o si los datos proporcionados no son válidos
+	 */
 	@Override
 	public Integer update(TypeUserDto typeUserDto) {
 
@@ -62,6 +84,14 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 				.orElseThrow(() -> new TypeUserNotUpdateException("Error al intentar actualizar, Datos no validos",typeUserDto));
 	}
 
+	/**
+	 * Guarda un objeto TypeUserDto.
+	 *
+	 * @param typeUserDto Objeto TypeUserDto a guardar
+	 * @return ID del objeto TypeUserDto guardado
+	 * @throws TypeUserNotSaveException si se produjo un error al intentar guardar el objeto
+	 *         o si los datos proporcionados no son válidos
+	 */
 	@Override
 	public Integer save(TypeUserDto typeUserDto) {
 
@@ -74,7 +104,12 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 	}
 
 
-
+	/**
+	 * Valida los datos de un objeto TypeUserDto antes de realizar una actualización.
+	 *
+	 * @param typeUserDto Objeto TypeUserDto a validar
+	 * @throws TypeUserNotUpdateException si los datos proporcionados no son válidos para una actualización
+	 */
 	private void validDataTypeUserUpdate(TypeUserDto typeUserDto) throws TypeUserNotUpdateException{
 		if(typeUserDto==null || typeUserDto.getId()==null || typeUserDto.getId()<=0
 				|| typeUserDto.getName()==null || typeUserDto.getName().trim().isEmpty()
@@ -83,6 +118,12 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 		}
 	}
 
+	/**
+	 * Valida los datos de un objeto TypeUserDto antes de realizar un guardado.
+	 *
+	 * @param typeUserDto Objeto TypeUserDto a validar
+	 * @throws TypeUserNotSaveException si los datos proporcionados no son válidos para un guardado
+	 */
 	private void validDataTypeUserSave(TypeUserDto typeUserDto){
 		if(typeUserDto==null || typeUserDto.getName()==null ||typeUserDto.getName().trim().equals("") ) {
 			throw new TypeUserNotSaveException("Datos no validos", typeUserDto);
