@@ -5,6 +5,8 @@ import com.example.dto.modules.ModulesDto;
 import com.example.dtomapper.modules.DtoModulesMapper;
 import com.example.entity.modules.Tmodule;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.modules.modules.ModulesNotSaveException;
+import com.example.exception.modules.modules.ModulesNotUpdateException;
 import com.example.mapper.modules.MapperModules;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +24,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
+/**
+ * Clase de prueba para ServiceModuleImple.
+ * Prueba las funcionalidades del servicio ServiceModuleImple.
+ */
+@DisplayName("Test para metodos de ServiceModuleImple")
 @ExtendWith(MockitoExtension.class)
 class ServiceModuleImpleTest {
 
@@ -191,6 +198,145 @@ class ServiceModuleImpleTest {
         assertThrows(NoDataFoundException.class, () -> this.serviceModuleImple.getById(moduleId));
         then(this.mapperModules).should().getById(moduleId);
         then(this.dtoModulesMapper).shouldHaveNoInteractions();
+    }
+
+
+    /**
+     * Prueba unitaria para el método update() del servicio Module cuando se proporciona un objeto ModulesDto válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto ModulesDto válido se retorne el ID del módulo actualizado.</li>
+     *   <li>Se verifica que se haya interactuado con el objeto simulado dtoModulesMapper al llamar al método modulesDtoToTmodule().</li>
+     *   <li>Se verifica que se haya interactuado con el objeto simulado mapperModules al llamar al método update().</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de módulo válido")
+    public void testUpdate_ValidModulesDto_ReturnsUpdatedModuleId() {
+        // Arrange
+
+        given(this.dtoModulesMapper.modulesDtoToTmodule(this.modulesDtoValid)).willReturn(this.tmoduleValid);
+        given(this.mapperModules.update(this.tmoduleValid)).willReturn(1);
+
+        // Act
+        Integer result = this.serviceModuleImple.update(this.modulesDtoValid);
+
+        // Assert
+        assertEquals(Integer.valueOf(1), result);
+        then(this.dtoModulesMapper).should().modulesDtoToTmodule(this.modulesDtoValid);
+        then(this.mapperModules).should().update(this.tmoduleValid);
+    }
+
+    /**
+     * Prueba unitaria para el método update() del servicio Module cuando se proporciona un objeto ModulesDto nulo.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto ModulesDto nulo se lance una excepción del tipo ModulesNotUpdateException.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoModulesMapper.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado mapperModules.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de módulo con objeto nulo")
+    public void testUpdate_NullModulesDto_ThrowsModulesNotUpdateException() {
+        // Arrange
+
+        ModulesDto modulesDto = null;
+
+        // Act & Assert
+        assertThrows(ModulesNotUpdateException.class, () -> this.serviceModuleImple.update(modulesDto));
+        then(this.dtoModulesMapper).shouldHaveNoInteractions();
+        then(this.mapperModules).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método update() del servicio Module cuando se proporciona un objeto ModulesDto inválido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto ModulesDto inválido se lance una excepción del tipo ModulesNotUpdateException.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoModulesMapper.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado mapperModules.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de módulo con objeto inválido")
+    public void testUpdate_InvalidModulesDto_ThrowsModulesNotUpdateException() {
+        // Act & Assert
+        assertThrows(ModulesNotUpdateException.class, () -> this.serviceModuleImple.update(this.modulesDtoNotValid));
+        then(this.dtoModulesMapper).shouldHaveNoInteractions();
+        then(this.mapperModules).shouldHaveNoInteractions();
+    }
+
+
+    /**
+     * Prueba unitaria para el método save() del servicio Module cuando se proporciona un objeto ModulesDto válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() con un objeto ModulesDto válido se retorne el ID del módulo guardado.</li>
+     *   <li>Se verifica que se haya llamado al método modulesDtoToTmodule() del objeto simulado dtoModulesMapper.</li>
+     *   <li>Se verifica que se haya llamado al método insert() del objeto simulado mapperModules.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de módulo con objeto válido")
+    public void testSave_ValidModulesDto_ReturnsSavedModuleId() {
+        // Arrange
+
+        given(this.dtoModulesMapper.modulesDtoToTmodule(this.modulesDtoValid)).willReturn(this.tmoduleValid);
+        given(this.mapperModules.insert(this.tmoduleValid)).willReturn(1);
+
+        // Act
+        Integer result = this.serviceModuleImple.save(this.modulesDtoValid);
+
+        // Assert
+        assertEquals(Integer.valueOf(1), result);
+        then(this.dtoModulesMapper).should().modulesDtoToTmodule(this.modulesDtoValid);
+        then(this.mapperModules).should().insert(this.tmoduleValid);
+    }
+
+    /**
+     * Prueba unitaria para el método save() del servicio Module cuando se proporciona un objeto ModulesDto nulo.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() con un objeto ModulesDto nulo se lance una excepción del tipo ModulesNotSaveException.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoModulesMapper.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado mapperModules.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de módulo con objeto nulo")
+    public void testSave_NullModulesDto_ThrowsModulesNotSaveException() {
+        // Arrange
+        ModulesDto modulesDto = null;
+
+        // Act & Assert
+        assertThrows(ModulesNotSaveException.class, () -> this.serviceModuleImple.save(modulesDto));
+        then(this.dtoModulesMapper).shouldHaveNoInteractions();
+        then(this.mapperModules).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método save() del servicio Module cuando se proporciona un objeto ModulesDto inválido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() con un objeto ModulesDto inválido se lance una excepción del tipo ModulesNotSaveException.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoModulesMapper.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado mapperModules.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de módulo con objeto inválido")
+    public void testSave_InvalidModulesDto_ThrowsModulesNotSaveException() {
+        // Act & Assert
+        assertThrows(ModulesNotSaveException.class, () -> this.serviceModuleImple.save(this.modulesDtoNotValid));
+        then(this.dtoModulesMapper).shouldHaveNoInteractions();
+        then(this.mapperModules).shouldHaveNoInteractions();
     }
 
 
