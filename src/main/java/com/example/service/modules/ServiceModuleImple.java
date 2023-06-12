@@ -57,7 +57,7 @@ public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,Modul
 		if(id==null ||id<=0){
 			throw new NoDataFoundException(id);
 		}
-		
+
 		return Optional.of(id)
 				.map(this.mapperModules::getById)
 				.map(this.dtoModulesMapper::TmoduleToModulesDto)
@@ -79,7 +79,7 @@ public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,Modul
 
 			throw new ModulesNotUpdateException("Data Modules Not Valid", modulesDto);
 		}
-		
+
 		//TODO RECORDA IMPLEMENTAR VALIDACION POR GRUPOS EN EL CONTROLLER
 		return Optional.of(modulesDto)
 				.map(this.dtoModulesMapper::modulesDtoToTmodule)
@@ -100,7 +100,7 @@ public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,Modul
 
 		if(modulesDto==null || modulesDto.getName()==null || modulesDto.getName().trim().isEmpty()){
 
-			throw new ModulesNotUpdateException("Error, Modules Not Saved", modulesDto);
+			throw new ModulesNotSaveException("Error, Modules Not Saved", modulesDto);
 		}
 
 		return Optional.of(modulesDto)
