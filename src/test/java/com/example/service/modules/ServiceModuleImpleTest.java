@@ -8,6 +8,7 @@ import com.example.exception.NoDataFoundException;
 import com.example.mapper.modules.MapperModules;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -54,7 +55,21 @@ class ServiceModuleImpleTest {
     }
 
     //GET
+    /**
+     * Prueba unitaria para el método getAll() del servicio Module cuando existen módulos.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se simula la obtención de una lista de módulos válidos a través del método getAll() del objeto simulado mapperModules.</li>
+     *   <li>Se simula la conversión de cada módulo Tmodule a ModulesDto a través del método TmoduleToModulesDto() del objeto simulado dtoModulesMapper.</li>
+     *   <li>Se verifica que la lista de módulos obtenida no sea nula.</li>
+     *   <li>Se verifica que la lista de módulos obtenida tenga el tamaño esperado.</li>
+     *   <li>Se verifica que se haya interactuado una vez con el objeto simulado mapperModules al llamar al método getAll().</li>
+     *   <li>Se verifica que se haya interactuado una vez con el objeto simulado dtoModulesMapper al llamar al método TmoduleToModulesDto() por cada módulo.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de obtención de módulos existentes")
      void testGetAll_ExistingModules_ReturnsListOfModulesDto() {
         // Arrange
 
@@ -75,7 +90,19 @@ class ServiceModuleImpleTest {
         then(this.dtoModulesMapper).should(times(1)).TmoduleToModulesDto(any(Tmodule.class));
     }
 
+    /**
+     * Prueba unitaria para el método getAll() del servicio Module cuando no existen módulos.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se simula la obtención de una lista vacía de módulos a través del método getAll() del objeto simulado mapperModules.</li>
+     *   <li>Se verifica que al llamar al método getAll() se lance una excepción del tipo NoDataFoundException.</li>
+     *   <li>Se verifica que se haya interactuado una vez con el objeto simulado mapperModules al llamar al método getAll().</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoModulesMapper.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de obtención de módulos cuando no existen")
     public void testGetAll_NoModules_ThrowsNoDataFoundException() {
         // Arrange
 
