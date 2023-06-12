@@ -6,7 +6,6 @@ import com.example.dtomapper.modules.DtoModulesMapper;
 import com.example.entity.modules.Tmodule;
 import com.example.exception.NoDataFoundException;
 import com.example.mapper.modules.MapperModules;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,8 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -109,8 +107,89 @@ class ServiceModuleImpleTest {
         given(this.mapperModules.getAll()).willReturn(List.of());
 
         // Act & Assert
-        Assertions.assertThrows(NoDataFoundException.class, () -> this.serviceModuleImple.getAll());
+        assertThrows(NoDataFoundException.class, () -> this.serviceModuleImple.getAll());
         then(this.mapperModules).should().getAll();
+        then(this.dtoModulesMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método getById() del servicio Module cuando se encuentra un módulo existente.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se simula la obtención de un módulo válido a través del método getById() del objeto simulado mapperModules.</li>
+     *   <li>Se simula la conversión del módulo válido a un objeto ModulesDto válido a través del método TmoduleToModulesDto() del objeto simulado dtoModulesMapper.</li>
+     *   <li>Se verifica que al llamar al método getById() se obtenga un objeto ModulesDto no nulo y coincidente con el objeto ModulesDto válido esperado.</li>
+     *   <li>Se verifica que se haya interactuado una vez con el objeto simulado mapperModules al llamar al método getById().</li>
+     *   <li>Se verifica que se haya interactuado una vez con el objeto simulado dtoModulesMapper al llamar al método TmoduleToModulesDto().</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de módulo existente por ID")
+    public void testGetById_ExistingModule_ReturnsModulesDto() {
+        // Arrange
+
+        long moduleId = 1;
+
+        given(this.mapperModules.getById(moduleId)).willReturn(this.tmoduleValid);
+        given(this.dtoModulesMapper.TmoduleToModulesDto(this.tmoduleValid)).willReturn(this.modulesDtoValid);
+
+        // Act
+        ModulesDto result = this.serviceModuleImple.getById(moduleId);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(this.modulesDtoValid, result);
+        then(this.mapperModules).should().getById(moduleId);
+        then(this.dtoModulesMapper).should().TmoduleToModulesDto(this.tmoduleValid);
+    }
+
+    /**
+     * Prueba unitaria para el método getById() del servicio Module cuando se proporciona un ID no válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getById() con un ID no válido se lance una excepción de tipo NoDataFoundException.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado mapperModules al llamar al método getById().</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoModulesMapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de módulo con ID no válido")
+    public void testGetById_InvalidId_ThrowsNoDataFoundException() {
+        // Arrange
+
+
+        long moduleId = -1;
+
+        // Act & Assert
+        assertThrows(NoDataFoundException.class, () -> this.serviceModuleImple.getById(moduleId));
+        then(this.mapperModules).shouldHaveNoInteractions();
+        then(this.dtoModulesMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método getById() del servicio Module cuando se proporciona un ID de un módulo que no existe.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getById() con un ID de un módulo que no existe se lance una excepción de tipo NoDataFoundException.</li>
+     *   <li>Se verifica que se haya interactuado con el objeto simulado mapperModules al llamar al método getById().</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoModulesMapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de módulo no existente")
+    public void testGetById_NonExistingModule_ThrowsNoDataFoundException() {
+        // Arrange
+
+        long moduleId = 1;
+
+        given(this.mapperModules.getById(moduleId)).willReturn(null);
+
+        // Act & Assert
+        assertThrows(NoDataFoundException.class, () -> this.serviceModuleImple.getById(moduleId));
+        then(this.mapperModules).should().getById(moduleId);
         then(this.dtoModulesMapper).shouldHaveNoInteractions();
     }
 
