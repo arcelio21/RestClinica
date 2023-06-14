@@ -1,7 +1,6 @@
 package com.example.controller.user;
 
 import com.example.controller.ControllerTemplate;
-import com.example.dto.AuthenticationRequest;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.user.user_reg.UserRegDto;
