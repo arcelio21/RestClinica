@@ -26,6 +26,7 @@ import com.example.exception.user.user_reg.PasswordNotUpdateException;
 import com.example.exception.user.user_reg.UserNotSaveException;
 import com.example.exception.user.user_reg.UserNotUpdateException;
 import com.example.exception.user.user_reg.UsernameInvalid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +38,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoDataFoundException.class)
@@ -470,5 +473,12 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         );
     }
 
-    //TODO CAPRTURAR EXCEPCIONES SQL
+    //EXCEPCION SQL
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<Map<String,Object>> handlerSqlException(SQLException ex){
+        log.error(ex.getMessage()+ ", SqlState: "+ex.getSQLState());
+        Map<String,Object> response = Map.of("message", "Datos no válidos", "Fecha", LocalDate.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }
