@@ -1,7 +1,6 @@
 package com.example.controller.module;
 
 import com.example.dto.ErrorResponseDto;
-import com.example.dto.address.AddressGetDto;
 import com.example.dto.modules.ModulesDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
