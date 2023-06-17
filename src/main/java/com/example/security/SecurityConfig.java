@@ -17,6 +17,7 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 
     /**
@@ -48,6 +49,9 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
                 .and()
                 .authenticationProvider(this.authenticationProvider)
                 .addFilterBefore(this.jwtFilter,UsernamePasswordAuthenticationFilter.class);
