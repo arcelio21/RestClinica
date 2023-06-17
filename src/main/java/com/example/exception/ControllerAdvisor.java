@@ -31,6 +31,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -480,5 +481,16 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         log.error(ex.getMessage()+ ", SqlState: "+ex.getSQLState());
         Map<String,Object> response = Map.of("message", "Datos no válidos", "Fecha", LocalDate.now());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+
+    //EXCEPTION AUTHORIZATION
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Map<String,Object>> handlerAuthenticationEntryPointException(AuthenticationException ex){
+
+        Map<String,Object> responseError = Map.of("MessageError", ex.getMessage(),"Fecha", LocalDate.now());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                responseError
+        );
     }
 }
