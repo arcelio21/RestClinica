@@ -28,7 +28,6 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     /**
-     * TODO CREO QUE SE DEBE CAMBIAR LO QUE DEVUELVE EL METODO POR UN MENSAJE
      * Y AL VALIDARSE ENTONCES DEVOLVER EL TOKEN, PUESTO QUE HABRA UN ADMINISTRADOR QUE CREAR LOS USUARIOS
      * TAMBIEN VER LOS TIPOS DE USUARIO
      * @param request

@@ -20,10 +20,6 @@ public class SecurityConfig {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 
-    /**
-     *  TODO VER COMO SE PUEDE MODIFICAR LAS RUTAS A LAS QUE PUEDE ACCEDER DINAMICAMENTE
-     *  DESDE BASE DE DATOS
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         

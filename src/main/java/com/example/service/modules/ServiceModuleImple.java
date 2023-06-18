@@ -80,7 +80,6 @@ public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,Modul
 			throw new ModulesNotUpdateException("Data Modules Not Valid", modulesDto);
 		}
 
-		//TODO RECORDA IMPLEMENTAR VALIDACION POR GRUPOS EN EL CONTROLLER
 		return Optional.of(modulesDto)
 				.map(this.dtoModulesMapper::modulesDtoToTmodule)
 				.map(this.mapperModules::update)
