@@ -144,6 +144,19 @@ public class ControllerModules extends ControllerTemplate{
         );
     }
 
+    @Operation(
+            summary = "Actualizar modules",
+            description = "Se actualizara los modulos que se desee",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Modulo actualizada correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
     public ResponseEntity<ResponseDTO> update(@Validated(value = {ValidateGroupA.class}) @RequestBody ModulesDto modulesDto){
 
         return ResponseEntity.ok(
