@@ -97,7 +97,64 @@ class ServicePrivilegeImplTest {
     }
 
     @Test
-    void getById() {
+    void getById_Exist() {
+        Integer id=1;
+        given(this.mapperPrivilege.getByid(id)).willReturn(this.tprivilegeValid);
+        given(this.dtoPrivilegeMapper.TprivilegeToPrivilegDto(this.tprivilegeValid)).willReturn(this.privilegeDtoValid);
+
+        PrivilegeDto privilegeDto = this.servicePrivilege.getById(id);
+
+        assertNotNull(privilegeDto);
+        assertNotNull(privilegeDto.getId());
+        assertNotNull(privilegeDto.getName());
+
+        then(this.mapperPrivilege).should(times(1)).getByid(id);
+        then(this.dtoPrivilegeMapper).should(times(1)).TprivilegeToPrivilegDto(this.tprivilegeValid);
+    }
+
+    /**
+     * Prueba unitaria para el método getById() del servicio Privilege cuando se proporciona un ID nulo.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getById() con un ID nulo se lance una excepción NoDataFoundException.</li>
+     *   <li>Se verifica que no se haya interactuado con las dependencias mapperPrivilege y dtoPrivilegeMapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de privilegio con ID nulo")
+    public void getById_NullId_ThrowsNoDataFoundException() {
+
+        Integer id = null;
+
+        // Act & Assert
+        assertThrows(NoDataFoundException.class, () -> this.servicePrivilege.getById(id));
+        then(this.mapperPrivilege).shouldHaveNoInteractions();
+        then(this.dtoPrivilegeMapper).shouldHaveNoInteractions();
+    }
+
+
+    /**
+     * Prueba unitaria para el método getById() del servicio Privilege cuando el dato no existe.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getById() con un ID de un dato inexistente se lance una excepción NoDataFoundException.</li>
+     *   <li>Se verifica que se haya llamado al método getByid() del objeto simulado mapperPrivilege.</li>
+     *   <li>Se verifica que no se haya interactuado con la dependencia dtoPrivilegeMapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de privilegio con dato inexistente")
+    public void getById_DataNotExist() {
+
+        Integer id = 34;
+
+        given(this.mapperPrivilege.getByid(id)).willReturn(null);
+        // Act & Assert
+        assertThrows(NoDataFoundException.class, () -> this.servicePrivilege.getById(id));
+        then(this.mapperPrivilege).should(times(1)).getByid(id);
+        then(this.dtoPrivilegeMapper).shouldHaveNoInteractions();
     }
 
     @Test
