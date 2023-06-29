@@ -19,6 +19,13 @@ public class ServicePrivilegeImpl implements IServicePrivilege{
 
 	private final MapperPrivilege mapperPrivilege;
 	private final DtoPrivilegeMapper dtoPrivilegeMapper;
+
+	/**
+	 * Obtiene todos los objetos PrivilegeDto.
+	 *
+	 * @return Lista de objetos PrivilegeDto
+	 * @throws NoDataFoundException si no se encuentran datos
+	 */
 	@Override
 	public List<PrivilegeDto> getAll() {
 

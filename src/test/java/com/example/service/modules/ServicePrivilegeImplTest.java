@@ -49,7 +49,20 @@ class ServicePrivilegeImplTest {
         tprivilegeValid = new Tprivilege(1,"READ");
     }
 
+    /**
+     * Prueba unitaria para el método getAll() del servicio Privilege cuando existen privilegios.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getAll() se retorne una lista de PrivilegeDto no nula.</li>
+     *   <li>Se verifica que la lista de PrivilegeDto tenga un tamaño de 1.</li>
+     *   <li>Se verifica que el primer elemento de la lista de PrivilegeDto sea una instancia de PrivilegeDto.</li>
+     *   <li>Se verifica que se haya llamado al método getAll() del objeto simulado mapperPrivilege.</li>
+     *   <li>Se verifica que se haya llamado al método TprivilegeToPrivilegDto() del objeto simulado dtoPrivilegeMapper al menos una vez.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de obtención de privilegios existentes")
     void getAll_Privileges_Exists() {
 
         given(this.mapperPrivilege.getAll()).willReturn(List.of(tprivilegeValid));
@@ -64,7 +77,17 @@ class ServicePrivilegeImplTest {
         then(this.dtoPrivilegeMapper).should(times(1)).TprivilegeToPrivilegDto(any(Tprivilege.class));
     }
 
+    /**
+     * Prueba unitaria para el método getAll() del servicio Privilege cuando no existen privilegios.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getAll() se lance una excepción NoDataFoundException.</li>
+     *   <li>Se verifica que se haya llamado al método getAll() del objeto simulado mapperPrivilege.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de obtención de privilegios vacía")
     void getAll_Privileges_isEmpty(){
         given(this.mapperPrivilege.getAll()).willReturn(Collections.emptyList());
 
