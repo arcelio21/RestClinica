@@ -157,6 +157,7 @@ public class ControllerModules extends ControllerTemplate{
                     })
             }
     )
+    @PutMapping
     public ResponseEntity<ResponseDTO> update(@Validated(value = {ValidateGroupA.class}) @RequestBody ModulesDto modulesDto){
 
         return ResponseEntity.ok(
