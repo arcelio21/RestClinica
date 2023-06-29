@@ -166,4 +166,28 @@ public class ControllerModules extends ControllerTemplate{
                         .build()
         );
     }
+
+    @Operation(
+            summary = "Guardar modules",
+            description = "Se guardara los modulos que se desee",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Modulo guardado correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PostMapping
+    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody ModulesDto modulesDto){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Cantidad de registros guardados")
+                        .data(this.serviceModuleImple.save(modulesDto))
+                        .build()
+        );
+    }
 }
