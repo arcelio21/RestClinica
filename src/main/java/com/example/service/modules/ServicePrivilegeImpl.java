@@ -42,9 +42,25 @@ public class ServicePrivilegeImpl implements IServicePrivilege{
 		throw new NoDataFoundException("Datos no encontrados");
 	}
 
+	/**
+	 * Obtiene un objeto PrivilegeDto por su ID.
+	 *
+	 * @param id ID del objeto PrivilegeDto a buscar
+	 * @return Objeto PrivilegeDto correspondiente al ID proporcionado
+	 * @throws NoDataFoundException si no se encuentra ningún objeto con el ID proporcionado
+	 *         o si se proporciona un valor de ID no válido
+	 */
 	@Override
 	public PrivilegeDto getById(Integer id) {
-		return null;
+
+		if(id==null || id<=0){
+			throw new NoDataFoundException(id);
+		}
+
+		return Optional.of(id)
+				.map(this.mapperPrivilege::getByid)
+				.map(this.dtoPrivilegeMapper::TprivilegeToPrivilegDto)
+				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
 	@Override
