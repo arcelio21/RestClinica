@@ -134,7 +134,7 @@ public class ControllerModules extends ControllerTemplate{
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO> getById(@RequestParam("id") Long id){
+    public ResponseEntity<ResponseDTO> getById(@PathVariable("id") Long id){
 
         return ResponseEntity.ok(
                 ResponseDTO.builder()
