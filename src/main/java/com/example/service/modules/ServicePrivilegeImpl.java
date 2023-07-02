@@ -84,15 +84,16 @@ public class ServicePrivilegeImpl implements IServicePrivilege{
 			throw new PrivilegeNotUpdateException("Data No Valid", privilegeUpdateDto);
 		}
 
-		Optional<Integer> rowAffected= Optional.of(privilegeUpdateDto)
+		Integer rowAffected= Optional.of(privilegeUpdateDto)
 				.map(this.dtoPrivilegeMapper::privilegeUpdateDtoToTprivilege)
-				.map(this.mapperPrivilege::update);
+				.map(this.mapperPrivilege::update)
+				.orElseThrow(()-> new PrivilegeNotUpdateException("Datos no validos", privilegeUpdateDto));
 
-		if (rowAffected.isEmpty() || rowAffected.get()<1){
+		if (rowAffected==null || rowAffected<=0){
 			throw new PrivilegeNotUpdateException("Error de actualizacion, datos no encontrados", privilegeUpdateDto);
 		}
 
-		return rowAffected.get();
+		return rowAffected;
 	}
 
 	@Override
