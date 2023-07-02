@@ -1,9 +1,11 @@
 package com.example.service.modules;
 
 import com.example.dto.modules.privileges.PrivilegeDto;
+import com.example.dto.modules.privileges.PrivilegeUpdateDto;
 import com.example.dtomapper.modules.DtoPrivilegeMapper;
 import com.example.entity.modules.Tprivilege;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.modules.privilege.PrivilegeNotUpdateException;
 import com.example.mapper.modules.MapperPrivilege;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -64,8 +66,23 @@ public class ServicePrivilegeImpl implements IServicePrivilege{
 	}
 
 	@Override
-	public Integer update(Tprivilege tprivilege) {
-		return null;
+	public Integer update(PrivilegeUpdateDto privilegeUpdateDto) {
+
+		if(privilegeUpdateDto==null || privilegeUpdateDto.getId()==null || privilegeUpdateDto.getId()<=0
+			|| privilegeUpdateDto.getName()==null || privilegeUpdateDto.getName().trim().isEmpty()){
+
+			throw new PrivilegeNotUpdateException("Data No Valid", privilegeUpdateDto);
+		}
+
+		Optional<Integer> rowAffected= Optional.of(privilegeUpdateDto)
+				.map(this.dtoPrivilegeMapper::privilegeUpdateDtoToTprivilege)
+				.map(this.mapperPrivilege::update);
+
+		if (rowAffected.isEmpty() || rowAffected.get()<1){
+			throw new PrivilegeNotUpdateException("Error de actualizacion, datos no encontrados", privilegeUpdateDto);
+		}
+
+		return rowAffected.get();
 	}
 
 	@Override
