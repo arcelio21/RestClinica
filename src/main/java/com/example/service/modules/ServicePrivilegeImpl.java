@@ -1,10 +1,12 @@
 package com.example.service.modules;
 
 import com.example.dto.modules.privileges.PrivilegeDto;
+import com.example.dto.modules.privileges.PrivilegeSaveDto;
 import com.example.dto.modules.privileges.PrivilegeUpdateDto;
 import com.example.dtomapper.modules.DtoPrivilegeMapper;
 import com.example.entity.modules.Tprivilege;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.modules.privilege.PrivilegeNotSaveException;
 import com.example.exception.modules.privilege.PrivilegeNotUpdateException;
 import com.example.mapper.modules.MapperPrivilege;
 import lombok.RequiredArgsConstructor;
@@ -94,7 +96,21 @@ public class ServicePrivilegeImpl implements IServicePrivilege{
 	}
 
 	@Override
-	public Integer save(Tprivilege tprivilege){
-	    return null;
+	public Integer save(PrivilegeSaveDto privilegeSaveDto){
+
+		if(privilegeSaveDto==null || privilegeSaveDto.getName()==null || privilegeSaveDto.getName().trim().isEmpty()){
+			throw new PrivilegeNotSaveException("Datos no validos", privilegeSaveDto);
+		}
+
+		Integer rowAffected = Optional.of(privilegeSaveDto)
+				.map(this.dtoPrivilegeMapper::privilegeSaveDtoToTprivilege)
+				.map(this.mapperPrivilege::save)
+				.orElseThrow(()-> new PrivilegeNotSaveException("Datos no válidos",privilegeSaveDto));
+
+		if(rowAffected==null || rowAffected<=0){
+			throw new PrivilegeNotSaveException("Error al guardar informacion", privilegeSaveDto);
+		}
+
+	    return rowAffected;
 	}
 }
