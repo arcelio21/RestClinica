@@ -1,60 +1,49 @@
 package com.example.service.modules;
 
-import java.util.Collections;
-import java.util.List;
-
-import com.example.entity.modules.TmodulePrivilege;
+import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
+import com.example.dto.modules.modulesprivileges.ModulePrivilegeUpdateDto;
+import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
 import com.example.mapper.modules.MapperModulePrivilege;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@RequiredArgsConstructor
 @Service
 public class ServiceModulePrivilegeImpl implements IServiceModulePrivilege{
 	
-	private MapperModulePrivilege mapperModulePrivilege;
-	
-	
-	public ServiceModulePrivilegeImpl(MapperModulePrivilege mapperModulePrivilege) {
-		this.mapperModulePrivilege = mapperModulePrivilege;
+	private final MapperModulePrivilege mapperModulePrivilege;
+
+
+	/**
+	 * @return 
+	 */
+	@Override
+	public List<ModulePrivilegesDto> getAll() {
+		return null;
 	}
 
 	@Override
-	public List<TmodulePrivilege> getAll() {
-
-		List<TmodulePrivilege> modulesPriv=this.mapperModulePrivilege.getAll();
-		if(modulesPriv==null || modulesPriv.isEmpty()) {
-			return Collections.emptyList();
-		}
-		
-		return modulesPriv;
+	public ModulePrivilegesDto getById(Long id) {
+		return null;
 	}
 
+	/**
+	 * @param t 
+	 * @return
+	 */
 	@Override
-	public TmodulePrivilege getById(Integer id) {
-
-		if(id==null || id<=0) {
-			return null;
-		}
-		
-		return this.mapperModulePrivilege.getById(id);
+	public Integer update(ModulePrivilegeUpdateDto modulePrivilegeUpdateDto) {
+		return null;
 	}
 
+	/**
+	 * @param t 
+	 * @return
+	 */
 	@Override
-	public Integer update(TmodulePrivilege tmodulePrivilege) {
-
-		if(tmodulePrivilege==null || tmodulePrivilege.getId()==null || tmodulePrivilege.getId()<=0) {
-			return 0;
-		}
-		return this.mapperModulePrivilege.update(tmodulePrivilege);
+	public Integer save(ModulePrivilegeSaveDto modulePrivilegeSaveDto) {
+		return null;
 	}
-
-	@Override
-	public Integer save(TmodulePrivilege tmodulePrivilege) {
-
-		if(tmodulePrivilege==null || tmodulePrivilege.getId()<=0) {
-			return 0;
-		}
-		return this.mapperModulePrivilege.save(tmodulePrivilege);
-	}
-
 }
