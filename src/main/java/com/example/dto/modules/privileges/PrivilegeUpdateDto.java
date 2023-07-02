@@ -13,12 +13,12 @@ import javax.validation.constraints.NotNull;
 @Schema(name = "PrivilegesUpdate", description = "Estructura de informacion para actualizar privileges")
 public class PrivilegeUpdateDto {
 
-    @Schema(name = "ID", description = "Valor único de indetificacion")
+    @Schema(name = "id", description = "Valor único de indetificacion")
     @NotNull(message = "Valor de ID no valido")
     @Min(value = 1, message = "Valor de ID no valido")
     private Integer id;
 
-    @Schema(name = "Name", description = "Nombre de privilegio")
+    @Schema(name = "name", description = "Nombre de privilegio")
     @NotBlank(message = "Campo debe contener información")
     private String name;
 }
