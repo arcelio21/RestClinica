@@ -16,15 +16,15 @@ public interface MapperPrivilege {
 
 	@Select("SELECT * FROM Tprivileges")
 	@Result(column = "name_privilege",property = "namePrivilege")
-	public List<Tprivilege> getAll();
+	List<Tprivilege> getAll();
 	
 	@Select("SELECT * FROM Tprivileges WHERE id=#{id}")
 	@Result(column = "name_privilege",property = "namePrivilege")
-	public Tprivilege getByid(@Param("id") Integer id);
+	Tprivilege getByid(@Param("id") Integer id);
 	
 	@Update("UPDATE Tprivileges SET name_privilege=#{priv.namePrivilege} WHERE id=#{priv.id}")
-	public Integer update(@Param("priv")Tprivilege tprivilege);
+	Integer update(@Param("priv")Tprivilege tprivilege);
 	
 	@Insert("INSERT INTO Tprivileges (name_privilege) VALUES (#{priv.namePrivilege})")
-	public Integer save(@Param("priv")Tprivilege tprivilege);
+	Integer save(@Param("priv")Tprivilege tprivilege);
 }
