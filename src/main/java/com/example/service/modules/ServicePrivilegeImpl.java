@@ -65,6 +65,14 @@ public class ServicePrivilegeImpl implements IServicePrivilege{
 				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
+	/**
+	 * Actualiza un objeto Privilege a partir de los datos proporcionados en PrivilegeUpdateDto.
+	 *
+	 * @param privilegeUpdateDto Objeto PrivilegeUpdateDto con los datos de actualización
+	 * @return Número de filas afectadas por la actualización
+	 * @throws PrivilegeNotUpdateException si los datos proporcionados no son válidos para la actualización
+	 *         o si se produce un error durante la actualización
+	 */
 	@Override
 	public Integer update(PrivilegeUpdateDto privilegeUpdateDto) {
 

@@ -168,7 +168,18 @@ class ServicePrivilegeImplTest {
         then(this.dtoPrivilegeMapper).shouldHaveNoInteractions();
     }
 
+    /**
+     * Prueba unitaria para el método update() del servicio Privilege cuando se proporciona un objeto PrivilegeUpdateDto válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto PrivilegeUpdateDto válido se retorne el número de filas afectadas.</li>
+     *   <li>Se verifica que se haya llamado al método privilegeUpdateDtoToTprivilege() del objeto simulado dtoPrivilegeMapper.</li>
+     *   <li>Se verifica que se haya llamado al método update() del objeto simulado mapperPrivilege.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de actualización de privilegio con objeto válido")
     void update_with_DataValid(){
 
         given(this.dtoPrivilegeMapper.privilegeUpdateDtoToTprivilege(this.privilegeUpdateDtoValid)).willReturn(new Tprivilege());
@@ -182,14 +193,37 @@ class ServicePrivilegeImplTest {
         then(this.dtoPrivilegeMapper).should(times(1)).privilegeUpdateDtoToTprivilege(this.privilegeUpdateDtoValid);
     }
 
+
+    /**
+     * Prueba unitaria para el método update() del servicio Privilege cuando se proporciona un objeto PrivilegeUpdateDto no válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto PrivilegeUpdateDto no válido se lance la excepción PrivilegeNotUpdateException.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado mapperPrivilege.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoPrivilegeMapper.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de actualización de privilegio con objeto no válido")
     void update_With_Data_NotValid() {
         assertThrows(PrivilegeNotUpdateException.class, ()-> this.servicePrivilege.update(this.privilegeUpdateDtoNotValid));
         then(this.mapperPrivilege).shouldHaveNoInteractions();
         then(this.dtoPrivilegeMapper).shouldHaveNoInteractions();
     }
 
+    /**
+     * Prueba unitaria para el método update() del servicio Privilege cuando se proporciona un ID que no existe.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un ID que no existe se lance la excepción PrivilegeNotUpdateException.</li>
+     *   <li>Se verifica que se haya llamado al método privilegeUpdateDtoToTprivilege() del objeto simulado dtoPrivilegeMapper.</li>
+     *   <li>Se verifica que se haya llamado al método update() del objeto simulado mapperPrivilege.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de actualización de privilegio con ID inexistente")
     void update_with_ID_notExist(){
         given(this.dtoPrivilegeMapper.privilegeUpdateDtoToTprivilege(this.privilegeUpdateDtoValid)).willReturn(new Tprivilege());
         given(this.mapperPrivilege.update(any(Tprivilege.class))).willReturn(0);
