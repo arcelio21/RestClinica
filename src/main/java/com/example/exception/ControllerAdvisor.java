@@ -6,6 +6,7 @@ import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.province.ProvinceDto;
 import com.example.dto.address.village.VillageDto;
 import com.example.dto.modules.ModulesDto;
+import com.example.dto.modules.privileges.PrivilegeSaveDto;
 import com.example.dto.modules.privileges.PrivilegeUpdateDto;
 import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
@@ -21,6 +22,7 @@ import com.example.exception.address.village.VillageNotSaveException;
 import com.example.exception.address.village.VillageNotUpdateException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
+import com.example.exception.modules.privilege.PrivilegeNotSaveException;
 import com.example.exception.modules.privilege.PrivilegeNotUpdateException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
@@ -498,6 +500,28 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                   .messageError(ex.getMessage())
                   .fecha(LocalDate.now())
                   .build()
+        );
+    }
+
+    @ExceptionHandler(PrivilegeNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto> handlerPrivilegesNotUpdate(PrivilegeNotSaveException ex){
+
+        Map<String, Object> data =null;
+
+        if(ex.getData()!=null){
+            PrivilegeSaveDto privilege = (PrivilegeSaveDto) ex.getData();
+            data = new HashMap<>();
+            data.put("Name", privilege.getName());
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ErrorResponseDto.builder()
+                        .data( (data==null)
+                                ?""
+                                :data)
+                        .messageError(ex.getMessage())
+                        .fecha(LocalDate.now())
+                        .build()
         );
     }
 
