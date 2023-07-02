@@ -1,9 +1,11 @@
 package com.example.service.modules;
 
 import com.example.dto.modules.privileges.PrivilegeDto;
+import com.example.dto.modules.privileges.PrivilegeUpdateDto;
 import com.example.dtomapper.modules.DtoPrivilegeMapper;
 import com.example.entity.modules.Tprivilege;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.modules.privilege.PrivilegeNotUpdateException;
 import com.example.mapper.modules.MapperPrivilege;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +40,9 @@ class ServicePrivilegeImplTest {
     private PrivilegeDto privilegeDtoValid;
     private Tprivilege tprivilegeValid;
 
+    private PrivilegeUpdateDto privilegeUpdateDtoValid;
+    private PrivilegeUpdateDto privilegeUpdateDtoNotValid;
+
     @BeforeEach
     void setUp() {
 
@@ -47,6 +52,12 @@ class ServicePrivilegeImplTest {
                 .build();
 
         tprivilegeValid = new Tprivilege(1,"READ");
+
+        privilegeUpdateDtoValid = PrivilegeUpdateDto.builder()
+                .id(1)
+                .name("WRITE")
+                .build();
+        privilegeUpdateDtoNotValid = PrivilegeUpdateDto.builder().build();
     }
 
     /**
@@ -158,7 +169,35 @@ class ServicePrivilegeImplTest {
     }
 
     @Test
-    void update() {
+    void update_with_DataValid(){
+
+        given(this.dtoPrivilegeMapper.privilegeUpdateDtoToTprivilege(this.privilegeUpdateDtoValid)).willReturn(new Tprivilege());
+        given(this.mapperPrivilege.update(any(Tprivilege.class))).willReturn(1);
+
+        Integer rowAffected = this.servicePrivilege.update(this.privilegeUpdateDtoValid);
+        assertNotNull(rowAffected);
+        assertEquals(1,rowAffected);
+
+        then(this.mapperPrivilege).should(times(1)).update(any(Tprivilege.class));
+        then(this.dtoPrivilegeMapper).should(times(1)).privilegeUpdateDtoToTprivilege(this.privilegeUpdateDtoValid);
+    }
+
+    @Test
+    void update_With_Data_NotValid() {
+        assertThrows(PrivilegeNotUpdateException.class, ()-> this.servicePrivilege.update(this.privilegeUpdateDtoNotValid));
+        then(this.mapperPrivilege).shouldHaveNoInteractions();
+        then(this.dtoPrivilegeMapper).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void update_with_ID_notExist(){
+        given(this.dtoPrivilegeMapper.privilegeUpdateDtoToTprivilege(this.privilegeUpdateDtoValid)).willReturn(new Tprivilege());
+        given(this.mapperPrivilege.update(any(Tprivilege.class))).willReturn(0);
+
+        assertThrows(PrivilegeNotUpdateException.class,()-> this.servicePrivilege.update(this.privilegeUpdateDtoValid));
+
+        then(this.mapperPrivilege).should(times(1)).update(any(Tprivilege.class));
+        then(this.dtoPrivilegeMapper).should(times(1)).privilegeUpdateDtoToTprivilege(this.privilegeUpdateDtoValid);
     }
 
     @Test
