@@ -8,7 +8,7 @@ import com.example.entity.status.Tstatus;
 public class TmodulePrivilege {
 
 	@Positive
-	private Integer id;
+	private Long id;
 	
 	@NotNull
 	private Tprivilege privilege;
@@ -25,13 +25,13 @@ public class TmodulePrivilege {
 	}
 
 
-	public TmodulePrivilege(@Positive Integer id) {
+	public TmodulePrivilege(@Positive Long id) {
 		super();
 		this.id = id;
 	}
 
 
-	public TmodulePrivilege(@Positive Integer id, @NotNull Tprivilege privilege, @NotNull Tmodule module,
+	public TmodulePrivilege(@Positive Long id, @NotNull Tprivilege privilege, @NotNull Tmodule module,
 			@NotNull Tstatus status) {
 		super();
 		this.id = id;
@@ -41,12 +41,12 @@ public class TmodulePrivilege {
 	}
 
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
