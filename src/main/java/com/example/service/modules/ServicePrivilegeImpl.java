@@ -96,6 +96,14 @@ public class ServicePrivilegeImpl implements IServicePrivilege{
 		return rowAffected;
 	}
 
+	/**
+	 * Guarda un nuevo objeto Privilege a partir de los datos proporcionados en PrivilegeSaveDto.
+	 *
+	 * @param privilegeSaveDto Objeto PrivilegeSaveDto con los datos a guardar
+	 * @return Número de filas afectadas por el guardado
+	 * @throws PrivilegeNotSaveException si los datos proporcionados no son válidos para el guardado
+	 *         o si se produce un error durante el guardado
+	 */
 	@Override
 	public Integer save(PrivilegeSaveDto privilegeSaveDto){
 

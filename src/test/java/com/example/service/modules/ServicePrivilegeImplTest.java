@@ -246,7 +246,18 @@ class ServicePrivilegeImplTest {
         then(this.dtoPrivilegeMapper).should(times(1)).privilegeUpdateDtoToTprivilege(this.privilegeUpdateDtoValid);
     }
 
+    /**
+     * Prueba unitaria para el método save() del servicio Privilege cuando se proporciona un objeto PrivilegeSaveDto válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() con un objeto PrivilegeSaveDto válido se retorne el número de filas afectadas.</li>
+     *   <li>Se verifica que se haya llamado al método privilegeSaveDtoToTprivilege() del objeto simulado dtoPrivilegeMapper.</li>
+     *   <li>Se verifica que se haya llamado al método save() del objeto simulado mapperPrivilege.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de guardado de privilegio con datos válidos")
     void save_data_valid() {
         given(this.dtoPrivilegeMapper.privilegeSaveDtoToTprivilege(this.privilegeSaveDtoValid)).willReturn(new Tprivilege());
         given(this.mapperPrivilege.save(any(Tprivilege.class))).willReturn(1);
@@ -260,7 +271,18 @@ class ServicePrivilegeImplTest {
         then(this.dtoPrivilegeMapper).should(times(1)).privilegeSaveDtoToTprivilege(this.privilegeSaveDtoValid);
     }
 
+    /**
+     * Prueba unitaria para el método save() del servicio Privilege cuando se proporciona un objeto PrivilegeSaveDto no válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() con un objeto PrivilegeSaveDto no válido se lance una excepción de tipo PrivilegeNotSaveException.</li>
+     *   <li>Se verifica que no se haya llamado al método save() del objeto simulado mapperPrivilege.</li>
+     *   <li>Se verifica que no se haya llamado al método privilegeSaveDtoToTprivilege() del objeto simulado dtoPrivilegeMapper.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de guardado de privilegio con datos no válidos")
     void save_data_notValid(){
         assertThrows(PrivilegeNotSaveException.class, ()-> this.servicePrivilege.save(this.privilegeSaveDtoNotValid));
 
@@ -268,7 +290,18 @@ class ServicePrivilegeImplTest {
         then(this.dtoPrivilegeMapper).shouldHaveNoInteractions();
     }
 
+    /**
+     * Prueba unitaria para el método save() del servicio Privilege cuando ocurre un error al guardar los datos.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() se lance una excepción de tipo PrivilegeNotSaveException.</li>
+     *   <li>Se verifica que se haya llamado al método save() del objeto simulado mapperPrivilege.</li>
+     *   <li>Se verifica que se haya llamado al método privilegeSaveDtoToTprivilege() del objeto simulado dtoPrivilegeMapper.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de guardado de privilegio con error en el guardado")
     void save_Data_ErrorToTheSave(){
         given(this.dtoPrivilegeMapper.privilegeSaveDtoToTprivilege(this.privilegeSaveDtoValid)).willReturn(new Tprivilege());
         given(this.mapperPrivilege.save(any(Tprivilege.class))).willReturn(0);
