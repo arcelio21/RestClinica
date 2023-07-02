@@ -1,10 +1,12 @@
 package com.example.service.modules;
 
 import com.example.dto.modules.privileges.PrivilegeDto;
+import com.example.dto.modules.privileges.PrivilegeSaveDto;
 import com.example.dto.modules.privileges.PrivilegeUpdateDto;
 import com.example.dtomapper.modules.DtoPrivilegeMapper;
 import com.example.entity.modules.Tprivilege;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.modules.privilege.PrivilegeNotSaveException;
 import com.example.exception.modules.privilege.PrivilegeNotUpdateException;
 import com.example.mapper.modules.MapperPrivilege;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +45,10 @@ class ServicePrivilegeImplTest {
     private PrivilegeUpdateDto privilegeUpdateDtoValid;
     private PrivilegeUpdateDto privilegeUpdateDtoNotValid;
 
+    private PrivilegeSaveDto privilegeSaveDtoValid;
+    private PrivilegeSaveDto privilegeSaveDtoNotValid;
+
+
     @BeforeEach
     void setUp() {
 
@@ -58,6 +64,12 @@ class ServicePrivilegeImplTest {
                 .name("WRITE")
                 .build();
         privilegeUpdateDtoNotValid = PrivilegeUpdateDto.builder().build();
+
+        this.privilegeSaveDtoValid = PrivilegeSaveDto.builder()
+                .name("READ")
+                .build();
+
+        this.privilegeSaveDtoNotValid = PrivilegeSaveDto.builder().build();
     }
 
     /**
@@ -235,6 +247,35 @@ class ServicePrivilegeImplTest {
     }
 
     @Test
-    void save() {
+    void save_data_valid() {
+        given(this.dtoPrivilegeMapper.privilegeSaveDtoToTprivilege(this.privilegeSaveDtoValid)).willReturn(new Tprivilege());
+        given(this.mapperPrivilege.save(any(Tprivilege.class))).willReturn(1);
+
+        Integer rowAffected = this.servicePrivilege.save(this.privilegeSaveDtoValid);
+
+        assertNotNull(rowAffected);
+        assertEquals(1,rowAffected);
+
+        then(this.mapperPrivilege).should(times(1)).save(any(Tprivilege.class));
+        then(this.dtoPrivilegeMapper).should(times(1)).privilegeSaveDtoToTprivilege(this.privilegeSaveDtoValid);
+    }
+
+    @Test
+    void save_data_notValid(){
+        assertThrows(PrivilegeNotSaveException.class, ()-> this.servicePrivilege.save(this.privilegeSaveDtoNotValid));
+
+        then(this.mapperPrivilege).shouldHaveNoInteractions();
+        then(this.dtoPrivilegeMapper).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void save_Data_ErrorToTheSave(){
+        given(this.dtoPrivilegeMapper.privilegeSaveDtoToTprivilege(this.privilegeSaveDtoValid)).willReturn(new Tprivilege());
+        given(this.mapperPrivilege.save(any(Tprivilege.class))).willReturn(0);
+
+        assertThrows(PrivilegeNotSaveException.class, ()-> this.servicePrivilege.save(this.privilegeSaveDtoValid));
+
+        then(this.mapperPrivilege).should(times(1)).save(any(Tprivilege.class));
+        then(this.dtoPrivilegeMapper).should(times(1)).privilegeSaveDtoToTprivilege(this.privilegeSaveDtoValid);
     }
 }
