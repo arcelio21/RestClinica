@@ -67,7 +67,7 @@ class MapperTypeUserModuleTest {
 
 	@Test
 	void update() {
-		TmodulePrivilege privilege=this.mapperModulePrivilege.getById(1);
+		TmodulePrivilege privilege=this.mapperModulePrivilege.getById(1L);
 		assertNotNull(privilege);
 		
 		TtypeUser ttypeUser=this.mapperTypeUser.getById(1);
@@ -83,7 +83,7 @@ class MapperTypeUserModuleTest {
 	}
 	@Test
 	void save() {
-		TmodulePrivilege privilege=this.mapperModulePrivilege.getById(1);
+		TmodulePrivilege privilege=this.mapperModulePrivilege.getById(1L);
 		assertNotNull(privilege);
 		
 		TtypeUser ttypeUser=this.mapperTypeUser.getById(1);
