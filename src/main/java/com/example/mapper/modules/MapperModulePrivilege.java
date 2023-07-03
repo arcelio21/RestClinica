@@ -1,38 +1,41 @@
 package com.example.mapper.modules;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.mapping.FetchType;
-import org.apache.ibatis.annotations.One;
-
 import com.example.entity.modules.TmodulePrivilege;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface MapperModulePrivilege {
 
-	@Select("SELECT * FROM Tmodules_privileges")
+	/**
+	 * @Results(
+	 *                        id = "modulPrivMap",
+	 * 			value = {
+	 *                @Result(column = "id",property = "id"),
+	 *                @Result(column = "privilege_id", property = "privilege", one = @One(select="com.example.mapper.modules.MapperPrivilege.getByid",fetchType = FetchType.LAZY)),
+	 *                @Result(column = "module_id",property = "module", one = @One(select="com.example.mapper.modules.MapperModules.getById",fetchType = FetchType.LAZY)),
+	 *                @Result(column = "status_id",property = "status", one = @One(select="com.example.mapper.status.MapperStatus.getById",fetchType = FetchType.LAZY))
+	 *            }
+	 * 	)
+	 * @return
+	 */
+	@Select("SELECT id,module_id,privilege_id,status_id FROM Tmodules_privileges")
 	@Results(
-			id = "modulPrivMap",
+			id = "ModulePrivilegeSimpleDat",
 			value = {
-				@Result(column = "id",property = "id"),
-				@Result(column = "privilege_id", property = "privilege", one = @One(select="com.example.mapper.modules.MapperPrivilege.getByid",fetchType = FetchType.LAZY)),
-				@Result(column = "module_id",property = "module", one = @One(select="com.example.mapper.modules.MapperModules.getById",fetchType = FetchType.LAZY)),
-				@Result(column = "status_id",property = "status", one = @One(select="com.example.mapper.status.MapperStatus.getById",fetchType = FetchType.LAZY))
+					@Result(column = "id", property = "id"),
+					@Result(column = "privilege_id", property = "privilege.id"),
+					@Result(column = "module_id", property = "module.id"),
+					@Result(column = "status_id", property = "status.id")
 			}
 	)
 	List<TmodulePrivilege> getAll();
 	
 	@Select("SELECT * FROM Tmodules_privileges WHERE id=#{id}")
-	@ResultMap(value = "modulPrivMap")
+	@ResultMap(value = "ModulePrivilegeSimpleDat")
 	TmodulePrivilege getById(@Param("id") Integer id);
+
 	
 	@Update("UPDATE Tmodules_privileges "
 			+ "SET privilege_id=#{modPriv.privilege.id},module_id=#{modPriv.module.id},status_id=#{modPriv.status.id} "
