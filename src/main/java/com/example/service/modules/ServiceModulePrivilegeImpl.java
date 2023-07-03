@@ -45,9 +45,24 @@ public class ServiceModulePrivilegeImpl implements IServiceModulePrivilege{
 
 	}
 
+	/**
+	 * Obtiene un objeto ModulePrivilegesDto por su ID.
+	 *
+	 * @param id ID del objeto a obtener
+	 * @return Objeto ModulePrivilegesDto correspondiente al ID proporcionado
+	 * @throws NoDataFoundException si el ID es nulo, menor o igual a cero o si no se encuentra ningún objeto con el ID proporcionado
+	 */
 	@Override
 	public ModulePrivilegesDto getById(Long id) {
-		return null;
+
+		if(id==null || id<=0){
+			throw new NoDataFoundException(id);
+		}
+
+		return Optional.of(id)
+				.map(this.mapperModulePrivilege::getById)
+				.map(this.dtoModulesPrivilegesMapper::TmodulePrivilegeToModulePrivilegeDto)
+				.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
 	/**
