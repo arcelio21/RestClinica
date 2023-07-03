@@ -34,7 +34,7 @@ public interface MapperModulePrivilege {
 	
 	@Select("SELECT * FROM Tmodules_privileges WHERE id=#{id}")
 	@ResultMap(value = "ModulePrivilegeSimpleDat")
-	TmodulePrivilege getById(@Param("id") Integer id);
+	TmodulePrivilege getById(@Param("id") Long id);
 
 	
 	@Update("UPDATE Tmodules_privileges "
