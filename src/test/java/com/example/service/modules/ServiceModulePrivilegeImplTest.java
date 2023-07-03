@@ -37,10 +37,12 @@ class ServiceModulePrivilegeImplTest {
     private ModulePrivilegesDto modulePrivilegesDtoValid;
 
     private ModulePrivilegesDto modulePrivilegesDtoNotValid;
+
+
     @BeforeEach
     void setUp() {
 
-        modulePrivilegesDtoNotValid = ModulePrivilegesDto.builder()
+        modulePrivilegesDtoValid = ModulePrivilegesDto.builder()
                 .id(1L)
                 .moduleId(1L)
                 .privilegeId(1)
@@ -116,6 +118,54 @@ class ServiceModulePrivilegeImplTest {
         assertThrows(NoDataFoundException.class,()-> this.service.getAll());
 
         then(this.mapper).should(times(1)).getAll();
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método getById() del servicio ModulePrivilege cuando se proporciona un ID existente.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getById() con un ID existente se retorne el objeto ModulePrivilegesDto correspondiente.</li>
+     *   <li>Se verifica que se haya llamado al método getById() del objeto simulado mapper con el ID proporcionado.</li>
+     *   <li>Se verifica que se haya llamado al método TmodulePrivilegeToModulePrivilegeDto() del objeto simulado dtoMapper con el objeto TmodulePrivilege correspondiente.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de datos por ID existente")
+    void getById_data_exits(){
+
+        Long id= 1L;
+        TmodulePrivilege tmodulePrivilege = new TmodulePrivilege(id);
+
+        given(this.mapper.getById(id)).willReturn(tmodulePrivilege);
+        given(this.dtoMapper.TmodulePrivilegeToModulePrivilegeDto(tmodulePrivilege)).willReturn(this.modulePrivilegesDtoValid);
+
+        ModulePrivilegesDto modulePrivilegesDto = this.service.getById(id);
+
+        assertNotNull(modulePrivilegesDto);
+        then(this.mapper).should(times(1)).getById(id);
+        then(this.dtoMapper).should(times(1)).TmodulePrivilegeToModulePrivilegeDto(tmodulePrivilege);
+    }
+
+    /**
+     * Prueba unitaria para el método getById() del servicio ModulePrivilege cuando se proporciona un ID no válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getById() con un ID no válido se lance una excepción de tipo NoDataFoundException.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado mapper.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoMapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de datos por ID no válido")
+    void getById_ID_NotValid(){
+        Long id= -1L;
+
+        assertThrows(NoDataFoundException.class,()-> this.service.getById(id));
+
+        then(this.mapper).shouldHaveNoInteractions();
         then(this.dtoMapper).shouldHaveNoInteractions();
     }
 }
