@@ -6,6 +6,7 @@ import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
 import com.example.dtomapper.modules.DtoModulesPrivilegesMapper;
 import com.example.entity.modules.TmodulePrivilege;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotSaveException;
 import com.example.mapper.modules.MapperModulePrivilege;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -74,12 +75,34 @@ public class ServiceModulePrivilegeImpl implements IServiceModulePrivilege{
 		return null;
 	}
 
+
 	/**
-	 * @param t 
-	 * @return
+	 * Guarda un nuevo objeto ModulePrivilege a partir de los datos proporcionados en ModulePrivilegeSaveDto.
+	 *
+	 * @param modulePrivilegeSaveDto Objeto ModulePrivilegeSaveDto con los datos a guardar
+	 * @return Número de filas afectadas por el guardado
+	 * @throws ModulePrivilegesNotSaveException si los datos proporcionados no son válidos para el guardado
+	 *         o si se produce un error durante el guardado
 	 */
 	@Override
 	public Integer save(ModulePrivilegeSaveDto modulePrivilegeSaveDto) {
-		return null;
+
+		if (modulePrivilegeSaveDto == null || modulePrivilegeSaveDto.getPrivilegeId()==null || modulePrivilegeSaveDto.getPrivilegeId()<=0
+			|| modulePrivilegeSaveDto.getModuleId()==null || modulePrivilegeSaveDto.getModuleId()<=0
+			|| modulePrivilegeSaveDto.getStatusId()==null || modulePrivilegeSaveDto.getStatusId()<=0
+		) {
+			throw new ModulePrivilegesNotSaveException("Data Not Valid", modulePrivilegeSaveDto);
+		}
+
+		Integer rowAffected = Optional.of(modulePrivilegeSaveDto)
+				.map(this.dtoModulesPrivilegesMapper::ModulePrivilegeSaveDtoToTmodulePrivilege)
+				.map(this.mapperModulePrivilege::save)
+				.orElseThrow(()-> new ModulePrivilegesNotSaveException("Data not valid", modulePrivilegeSaveDto));
+
+		if (rowAffected==null || rowAffected<=0){
+			throw new ModulePrivilegesNotSaveException("Error to update", modulePrivilegeSaveDto);
+		}
+
+		return rowAffected;
 	}
 }
