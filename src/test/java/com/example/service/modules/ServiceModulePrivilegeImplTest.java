@@ -1,11 +1,13 @@
 package com.example.service.modules;
 
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
+import com.example.dto.modules.modulesprivileges.ModulePrivilegeUpdateDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
 import com.example.dtomapper.modules.DtoModulesPrivilegesMapper;
 import com.example.entity.modules.TmodulePrivilege;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotSaveException;
+import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotUpdateException;
 import com.example.mapper.modules.MapperModulePrivilege;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,6 +47,9 @@ class ServiceModulePrivilegeImplTest {
 
     private ModulePrivilegeSaveDto modulePrivilegeSaveDtoNotValid;
 
+    private ModulePrivilegeUpdateDto modulePrivilegeUpdateDtoValid;
+    private ModulePrivilegeUpdateDto modulePrivilegeUpdateDtoNotValid;
+
     @BeforeEach
     void setUp() {
 
@@ -63,6 +68,15 @@ class ServiceModulePrivilegeImplTest {
                 .build();
 
         modulePrivilegeSaveDtoNotValid = ModulePrivilegeSaveDto.builder().build();
+
+        this.modulePrivilegeUpdateDtoValid = ModulePrivilegeUpdateDto.builder()
+                .id(1L)
+                .privilegeId(1)
+                .moduleId(1L)
+                .statusId(1)
+                .build();
+
+        this.modulePrivilegeUpdateDtoNotValid = ModulePrivilegeUpdateDto.builder().build();
 
     }
 
@@ -241,5 +255,72 @@ class ServiceModulePrivilegeImplTest {
 
         then(this.dtoMapper).should(times(1)).ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid);
         then(this.mapper).should(times(1)).save(any(TmodulePrivilege.class));
+    }
+
+    /**
+     * Prueba unitaria para el método update() del servicio ModulePrivilege cuando se proporciona un objeto ModulePrivilegeUpdateDto válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto ModulePrivilegeUpdateDto válido se retorne el número de filas afectadas.</li>
+     *   <li>Se verifica que se haya llamado al método ModulePrivilegeUpdateDtoToTmoduloPrivilege() del objeto simulado dtoMapper.</li>
+     *   <li>Se verifica que se haya llamado al método update() del objeto simulado mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de datos válidos")
+    void update_data_valid(){
+        given(this.dtoMapper.ModulePrivilegeUpdateDtoToTmoduloPrivilege(this.modulePrivilegeUpdateDtoValid)).willReturn(new TmodulePrivilege());
+        given(this.mapper.update(any(TmodulePrivilege.class))).willReturn(1);
+
+        Integer rowAffected = this.service.update(this.modulePrivilegeUpdateDtoValid);
+
+        assertNotNull(rowAffected);
+        assertEquals(1, rowAffected);
+
+        then(this.dtoMapper).should(times(1)).ModulePrivilegeUpdateDtoToTmoduloPrivilege(this.modulePrivilegeUpdateDtoValid);
+        then(this.mapper).should(times(1)).update(any(TmodulePrivilege.class));
+    }
+
+    /**
+     * Prueba unitaria para el método update() del servicio ModulePrivilege cuando se proporciona un objeto ModulePrivilegeUpdateDto no válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto ModulePrivilegeUpdateDto no válido se lance una excepción ModulePrivilegesNotUpdateException.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado dtoMapper.</li>
+     *   <li>Se verifica que no se haya interactuado con el objeto simulado mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de datos no válidos")
+    void update_data_NotValid(){
+
+        assertThrows(ModulePrivilegesNotUpdateException.class, ()-> this.service.update(this.modulePrivilegeUpdateDtoNotValid));
+
+        then(this.dtoMapper).shouldHaveNoInteractions();
+        then(this.mapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método update() del servicio ModulePrivilege cuando se proporciona un objeto ModulePrivilegeUpdateDto válido pero la actualización retorna 0 filas afectadas.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto ModulePrivilegeUpdateDto válido pero la actualización retorna 0 filas afectadas se lance una excepción ModulePrivilegesNotUpdateException.</li>
+     *   <li>Se verifica que se haya llamado al método ModulePrivilegeUpdateDtoToTmoduloPrivilege() del objeto simulado dtoMapper con el objeto ModulePrivilegeUpdateDto válido.</li>
+     *   <li>Se verifica que se haya llamado al método update() del objeto simulado mapper con el objeto TmodulePrivilege resultante.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de datos con retorno de 0 filas afectadas")
+    void update_data_return0(){
+        given(this.dtoMapper.ModulePrivilegeUpdateDtoToTmoduloPrivilege(this.modulePrivilegeUpdateDtoValid)).willReturn(new TmodulePrivilege());
+        given(this.mapper.update(any(TmodulePrivilege.class))).willReturn(0);
+
+        assertThrows(ModulePrivilegesNotUpdateException.class, ()-> this.service.update(this.modulePrivilegeUpdateDtoValid));
+
+        then(this.dtoMapper).should(times(1)).ModulePrivilegeUpdateDtoToTmoduloPrivilege(this.modulePrivilegeUpdateDtoValid);
+        then(this.mapper).should(times(1)).update(any(TmodulePrivilege.class));
     }
 }
