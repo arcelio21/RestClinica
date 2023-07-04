@@ -7,6 +7,7 @@ import com.example.dtomapper.modules.DtoModulesPrivilegesMapper;
 import com.example.entity.modules.TmodulePrivilege;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotSaveException;
+import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotUpdateException;
 import com.example.mapper.modules.MapperModulePrivilege;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -67,12 +68,33 @@ public class ServiceModulePrivilegeImpl implements IServiceModulePrivilege{
 	}
 
 	/**
-	 * @param t 
-	 * @return
+	 * Actualiza un objeto ModulePrivilege a partir de los datos proporcionados en ModulePrivilegeUpdateDto.
+	 *
+	 * @param modulePrivilegeUpdateDto Objeto ModulePrivilegeUpdateDto con los datos a actualizar
+	 * @return Número de filas afectadas por la actualización
+	 * @throws ModulePrivilegesNotUpdateException si los datos proporcionados no son válidos para la actualización
+	 *         o si se produce un error durante la actualización
 	 */
 	@Override
 	public Integer update(ModulePrivilegeUpdateDto modulePrivilegeUpdateDto) {
-		return null;
+
+		if(modulePrivilegeUpdateDto==null || modulePrivilegeUpdateDto.getId()==null || modulePrivilegeUpdateDto.getId()<=0
+			|| modulePrivilegeUpdateDto.getPrivilegeId()==null || modulePrivilegeUpdateDto.getPrivilegeId()<=0
+			|| modulePrivilegeUpdateDto.getModuleId()==null || modulePrivilegeUpdateDto.getModuleId()<=0
+			|| modulePrivilegeUpdateDto.getStatusId()==null || modulePrivilegeUpdateDto.getStatusId()<=0
+		){
+			throw new ModulePrivilegesNotUpdateException("Data Not Valid", modulePrivilegeUpdateDto);
+		}
+
+		Integer rowAffected = Optional.of(modulePrivilegeUpdateDto)
+				.map(this.dtoModulesPrivilegesMapper::ModulePrivilegeUpdateDtoToTmoduloPrivilege)
+				.map(this.mapperModulePrivilege::update)
+				.orElseThrow(()-> new ModulePrivilegesNotUpdateException("Error to save", modulePrivilegeUpdateDto));
+
+		if(rowAffected<=0){
+			throw new ModulePrivilegesNotUpdateException("Error to save", modulePrivilegeUpdateDto);
+		}
+		return rowAffected;
 	}
 
 
