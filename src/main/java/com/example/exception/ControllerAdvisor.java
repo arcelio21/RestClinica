@@ -6,6 +6,7 @@ import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.province.ProvinceDto;
 import com.example.dto.address.village.VillageDto;
 import com.example.dto.modules.ModulesDto;
+import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.privileges.PrivilegeSaveDto;
 import com.example.dto.modules.privileges.PrivilegeUpdateDto;
 import com.example.dto.user.type_user.TypeUserDto;
@@ -525,6 +526,34 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         );
     }
 
+    // EXCEPTION MODULEPRIVILEGES
+
+    @ExceptionHandler(ModulesNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto>  handlerModulesPrivilegeNotSave(ModulesNotSaveException ex){
+
+        Map<String, Object> data = null;
+
+        if(ex.getData()!=null){
+            data = new HashMap<>();
+            ModulePrivilegeSaveDto privilege = (ModulePrivilegeSaveDto) ex.getData();
+            data.put("privilegeId", privilege.getPrivilegeId());
+            data.put("modulesId", privilege.getModuleId());
+            data.put("statusId", privilege.getStatusId());
+        }
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponseDto.builder()
+                        .fecha(LocalDate.now())
+                        .messageError(ex.getMessage())
+                        .data(
+                                (ex.getData()!=null)
+                                ?ex.getData()
+                                :""
+                        )
+                        .build()
+        );
+
+    }
     //EXCEPCION SQL
 
     @ExceptionHandler(SQLException.class)
