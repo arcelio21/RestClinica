@@ -1,9 +1,11 @@
 package com.example.service.modules;
 
+import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
 import com.example.dtomapper.modules.DtoModulesPrivilegesMapper;
 import com.example.entity.modules.TmodulePrivilege;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotSaveException;
 import com.example.mapper.modules.MapperModulePrivilege;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +41,10 @@ class ServiceModulePrivilegeImplTest {
     private ModulePrivilegesDto modulePrivilegesDtoNotValid;
 
 
+    private ModulePrivilegeSaveDto modulePrivilegeSaveDtoValid;
+
+    private ModulePrivilegeSaveDto modulePrivilegeSaveDtoNotValid;
+
     @BeforeEach
     void setUp() {
 
@@ -49,6 +55,14 @@ class ServiceModulePrivilegeImplTest {
                 .statusId(1)
                 .build();
         modulePrivilegesDtoNotValid = ModulePrivilegesDto.builder().build();
+
+        modulePrivilegeSaveDtoValid = ModulePrivilegeSaveDto.builder()
+                .privilegeId(1)
+                .moduleId(1L)
+                .statusId(1)
+                .build();
+
+        modulePrivilegeSaveDtoNotValid = ModulePrivilegeSaveDto.builder().build();
 
     }
 
@@ -167,5 +181,65 @@ class ServiceModulePrivilegeImplTest {
 
         then(this.mapper).shouldHaveNoInteractions();
         then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método save() del servicio ModulePrivilege cuando se proporciona un objeto ModulePrivilegeSaveDto válido.
+     *
+     * <p>Se realiza la simulación del comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() con un objeto ModulePrivilegeSaveDto válido se retorne el número de filas afectadas.</li>
+     *   <li>Se verifica que se haya llamado al método ModulePrivilegeSaveDtoToTmodulePrivilege() del objeto simulado dtoMapper.</li>
+     *   <li>Se verifica que se haya llamado al método save() del objeto simulado mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de datos con objeto válido")
+    void save_data_valid(){
+        given(this.dtoMapper.ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid)).willReturn(new TmodulePrivilege());
+        given(this.mapper.save(any(TmodulePrivilege.class))).willReturn(1);
+
+        Integer rowAffected = this.service.save(this.modulePrivilegeSaveDtoValid);
+
+        assertNotNull(rowAffected);
+        assertEquals(1,rowAffected);
+
+        then(this.dtoMapper).should(times(1)).ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid);
+        then(this.mapper).should(times(1)).save(any(TmodulePrivilege.class));
+    }
+
+
+    /**
+     * Prueba unitaria para el método save() del servicio ModulePrivilege cuando se proporciona un objeto ModulePrivilegeSaveDto no válido.
+     *
+     * <p>Se verifica que al intentar guardar los datos con un objeto ModulePrivilegeSaveDto no válido se lance una excepción del tipo ModulePrivilegesNotSaveException.</p>
+     * <p>También se verifica que no se hayan realizado interacciones con los objetos simulados dtoMapper y mapper.</p>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de datos con objeto no válido")
+    void save_data_notValid(){
+
+        assertThrows(ModulePrivilegesNotSaveException.class, ()-> this.service.save(this.modulePrivilegeSaveDtoNotValid));
+        then(this.dtoMapper).shouldHaveNoInteractions();
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método save() del servicio ModulePrivilege cuando el método save() del objeto simulado mapper devuelve 0.
+     *
+     * <p>Se verifica que al intentar guardar los datos con un objeto ModulePrivilegeSaveDto válido, pero el método save() del objeto mapper devuelve 0, se lance una excepción del tipo ModulePrivilegesNotSaveException.</p>
+     * <p>También se verifica que se haya realizado la interacción esperada con el objeto simulado dtoMapper para convertir el objeto ModulePrivilegeSaveDto.</p>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de datos con retorno 0 en el método save() del mapper")
+    void save_data_mapperReturn_0(){
+        given(this.dtoMapper.ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid)).willReturn(new TmodulePrivilege());
+        given(this.mapper.save(any(TmodulePrivilege.class))).willReturn(0);
+
+        assertThrows(ModulePrivilegesNotSaveException.class,()-> this.service.save(this.modulePrivilegeSaveDtoValid));
+
+
+        then(this.dtoMapper).should(times(1)).ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid);
+        then(this.mapper).should(times(1)).save(any(TmodulePrivilege.class));
     }
 }
