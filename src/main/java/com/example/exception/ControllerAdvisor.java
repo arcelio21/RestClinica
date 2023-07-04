@@ -23,6 +23,8 @@ import com.example.exception.address.village.VillageNotSaveException;
 import com.example.exception.address.village.VillageNotUpdateException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
+import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotSaveException;
+import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotUpdateException;
 import com.example.exception.modules.privilege.PrivilegeNotSaveException;
 import com.example.exception.modules.privilege.PrivilegeNotUpdateException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
@@ -528,8 +530,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     // EXCEPTION MODULEPRIVILEGES
 
-    @ExceptionHandler(ModulesNotSaveException.class)
-    public ResponseEntity<ErrorResponseDto>  handlerModulesPrivilegeNotSave(ModulesNotSaveException ex){
+    @ExceptionHandler(ModulePrivilegesNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto>  handlerModulesPrivilegeNotSave(ModulePrivilegesNotSaveException ex){
 
         Map<String, Object> data = null;
 
@@ -554,6 +556,25 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         );
 
     }
+
+    @ExceptionHandler(ModulePrivilegesNotUpdateException.class)
+    public ResponseEntity<ErrorResponseDto>  handlerModulesPrivilegeNotSave(ModulePrivilegesNotUpdateException ex){
+
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponseDto.builder()
+                        .fecha(LocalDate.now())
+                        .messageError(ex.getMessage())
+                        .data(
+                                (ex.getData()!=null)
+                                        ?ex.getData()
+                                        :""
+                        )
+                        .build()
+        );
+
+    }
+
     //EXCEPCION SQL
 
     @ExceptionHandler(SQLException.class)
