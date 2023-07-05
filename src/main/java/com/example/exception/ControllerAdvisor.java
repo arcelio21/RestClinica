@@ -61,6 +61,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         var error = ErrorResponseDto.builder()
                 .fecha(LocalDate.now())
                 .messageError(ex.getMessage())
+                .data("")
                 .build();
 
         return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
