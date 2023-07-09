@@ -50,5 +50,26 @@ public interface MapperTypeUserModule {
 			"WHERE Ttm.id = #{id}")
 	@ResultMap(value = "typeUserModuleMap")
 	TtypeUserModule getById(@Param("id") Long id);
+
+	/**
+	 * OBTENER LISTA DE MODULOS A LOS QUE LOS TIPOS DE USUARIOS TIENE PRIVILEGIOS
+	 * @return TtypeUserModule
+	 */
+	@Select("""
+	SELECT DISTINCT(Tm.name_modules) as nameModule,Tm.id as idModule, Tu.name_type_user as typeUser, Tu.id AS idTypeUser
+		FROM Ttypeusers_modules Ttm
+				INNER JOIN Tmodules_privileges Tp on Ttm.modls_privgs_id = Tp.id
+				INNER JOIN Tmodules Tm on Tp.module_id = Tm.id
+				INNER JOIN Ttypes_users Tu on Ttm.type_user_id = Tu.id
+	""")
+	@Results(id = "moduleAndTypeUserDistinct",
+			value = {
+					@Result(column = "nameModule", property = "modulePrivilegeId.module.nameModule"),
+					@Result(column = "idModule", property = "modulePrivilegeId.module.id"),
+					@Result(column = "typeUser", property = "typeUser.nameTypeUser"),
+					@Result(column = "idTypeUser", property = "typeUser.id")
+			}
+	)
+	List<TtypeUserModule> getModuleAndTypeUserDistinct();
 	
 }
