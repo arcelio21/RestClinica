@@ -146,4 +146,16 @@ public interface MapperTypeUserModule {
 			@Result(column = "nameStatus", property = "modulePrivilegeId.status.name")
 	})
 	List<TtypeUserModule> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(@Param("ids") TtypeUserModule ttypeUserModule);
+
+	@Select("""
+		SELECT  Tu.name_type_user AS typeUser,Ts.name_status AS nameStatus, Tp.name_privilege AS namePrivileg, Tm.name_modules AS nameModule
+				FROM Ttypeusers_modules Ttm
+				   INNER JOIN Tmodules_privileges Tmp on Ttm.modls_privgs_id = Tmp.id
+				   INNER JOIN Tmodules Tm on Tmp.module_id = Tm.id
+				   INNER JOIN Tstatus Ts on Tmp.status_id = Ts.id
+				   INNER JOIN Ttypes_users Tu on Ttm.type_user_id = Tu.id
+				   INNER JOIN Tprivileges Tp on Tmp.privilege_id = Tp.id
+				   WHERE  Ttm.type_user_id=#{idTypeUser} AND Tmp.status_id=1;
+	""")
+	List<TtypeUserModule> getTypeModulePrivilegeByidTypeUserAndStatusActived(@Param("idTypeUser") Integer idTypeUser);
 }
