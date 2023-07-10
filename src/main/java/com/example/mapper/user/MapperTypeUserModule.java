@@ -97,5 +97,19 @@ public interface MapperTypeUserModule {
 			@Result(column = "idModule", property = "modulePrivilegeId.module.id")
 	})
 	List<TtypeUserModule> getModuleDistinctByIdTypeUserAndIdStatus(@Param("idTypeUser") Integer idTypeUser, @Param("idStatus") Integer idStatus);
-	
+
+	@Select("""
+	SELECT DISTINCT Tu.name_type_user AS typeUser, Tu.id AS idTypeUser
+		FROM Ttypeusers_modules Ttm
+				 INNER JOIN Tmodules_privileges Tp on Ttm.modls_privgs_id = Tp.id
+				 INNER JOIN Tmodules Tm on Tp.module_id = Tm.id
+				 INNER JOIN Tstatus Ts on Tp.status_id = Ts.id
+				 INNER JOIN Ttypes_users Tu on Ttm.type_user_id = Tu.id
+					WHERE  Tp.module_id=#{idModule} AND Tp.status_id=1
+	""")
+	@Results(value = {
+			@Result(column = "typeUser", property = "typeUser.nameTypeUser"),
+			@Result(column = "idTypeUser", property = "typeUser.id")
+	})
+	List<TtypeUserModule> getTypeUserDistinctByIdModuleAndStatusActivated( @Param("idModule") Long idModule);
 }
