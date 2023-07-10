@@ -112,4 +112,16 @@ public interface MapperTypeUserModule {
 			@Result(column = "idTypeUser", property = "typeUser.id")
 	})
 	List<TtypeUserModule> getTypeUserDistinctByIdModuleAndStatusActivated( @Param("idModule") Long idModule);
+
+	/**
+	 * Obtener los tipos de usuarios que pueden tienen algun privilegio sobre un modulo
+	 * @param idModule
+	 * @return List<TtypeUserModule>
+	 */
+	@SelectProvider(type = TypeUserModuleProviderSql.class, method = "getTypeUserDistinctByIdModuleAndIdStatus")
+	@Results(value = {
+			@Result(column = "typeUser", property = "typeUser.nameTypeUser"),
+			@Result(column = "idTypeUser", property = "typeUser.id")
+	})
+	List<TtypeUserModule> getTypeUserDistinctByIdModuleAndIdStatus( @Param("idModule") Long idModule,@Param("idStatus") Integer idStatus);
 }
