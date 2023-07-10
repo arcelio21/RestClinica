@@ -124,4 +124,26 @@ public interface MapperTypeUserModule {
 			@Result(column = "idTypeUser", property = "typeUser.id")
 	})
 	List<TtypeUserModule> getTypeUserDistinctByIdModuleAndIdStatus( @Param("idModule") Long idModule,@Param("idStatus") Integer idStatus);
+
+	/**
+	 * METODO QUE RECIBE EL ID DEL TIPO DE USUARIO, Y DEVUELVE LOS PRIVILEGIOS
+	 * QUE TIENE ESE TIPO DE USUARIO
+	 * @param ttypeUserModule
+	 * @return List<TtypeUserModule>
+	 */
+	@Select("""
+	SELECT Tpr.id as idPrivilege, Tpr.name_privilege as namePrivilege,Ts.id as idStatus,Ts.name_status as nameStatus
+		FROM Ttypeusers_modules tpm
+			 INNER JOIN Tmodules_privileges Tp on tpm.modls_privgs_id = Tp.id
+			 INNER JOIN Tprivileges Tpr on Tp.privilege_id = Tpr.id
+			 INNER JOIN Tstatus Ts on Tp.status_id = Ts.id
+			 WHERE tpm.type_user_id =#{ids.typeUser.id} AND Tp.module_id=#{ids.modulePrivilegeId.module.id} AND Ts.id=1
+	""")
+	@Results(value = {
+			@Result(column = "idPrivilege", property = "modulePrivilegeId.privilege.id"),
+			@Result(column = "namePrivelege", property = "modulePrivilegeId.privilege.namePrivilege"),
+			@Result(column = "idStatus", property = "modulePrivilegeId.status.id"),
+			@Result(column = "nameStatus", property = "modulePrivilegeId.status.name")
+	})
+	List<TtypeUserModule> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(@Param("ids") TtypeUserModule ttypeUserModule);
 }
