@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -158,4 +159,14 @@ public interface MapperTypeUserModule {
 				   WHERE  Ttm.type_user_id=#{idTypeUser} AND Tmp.status_id=1;
 	""")
 	List<TtypeUserModule> getTypeModulePrivilegeByidTypeUserAndStatusActived(@Param("idTypeUser") Integer idTypeUser);
+
+	/**
+	 * Metodo que  actualizara por medio de id de tipo de usuario e id del modulo de referencia
+	 * @param typeUserModule
+	 * @return Integer
+	 */
+	@Update("UPDATE Ttypeusers_modules "
+			+ "SET modls_privgs_id=#{typeUserModule.modulePrivilegeId.id}, type_user_id=#{typeUserModule.typeUser.id} "
+			+ "WHERE id=#{typeUserModule.id}")
+	Integer update(@Param("typeUserModule") TtypeUserModule typeUserModule);
 }
