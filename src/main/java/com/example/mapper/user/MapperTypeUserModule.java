@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Param;
-
+import org.apache.ibatis.annotations.SelectProvider;
 
 import java.util.List;
 
@@ -90,5 +90,12 @@ public interface MapperTypeUserModule {
 			@Result(column = "idModule", property = "modulePrivilegeId.module.id")
 	})
 	List<TtypeUserModule> getModuleDistinctByIdTypeUserAndStatusActived(@Param("idTypeUser") Integer idTypeUser);
+
+	@SelectProvider(type = TypeUserModuleProviderSql.class,method = "getModuleDistinctByIdTypeUserAndIdStatus")
+	@Results(value = {
+			@Result(column = "nameModule", property = "modulePrivilegeId.module.nameModule"),
+			@Result(column = "idModule", property = "modulePrivilegeId.module.id")
+	})
+	List<TtypeUserModule> getModuleDistinctByIdTypeUserAndIdStatus(@Param("idTypeUser") Integer idTypeUser, @Param("idStatus") Integer idStatus);
 	
 }
