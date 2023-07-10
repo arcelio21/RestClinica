@@ -71,5 +71,24 @@ public interface MapperTypeUserModule {
 			}
 	)
 	List<TtypeUserModule> getModuleAndTypeUserDistinct();
+
+	/**
+	 * Obtener los modulos a los que tiene algun tipo de privilegio un tipo de usuario
+	 * @param idTypeUser
+	 * @return
+	 */
+	@Select("""
+	SELECT DISTINCT Tm.name_modules as nameModule, Tm.id as idModule
+		 FROM Ttypeusers_modules Ttm
+				INNER JOIN Tmodules_privileges Tp on Ttm.modls_privgs_id = Tp.id
+				INNER JOIN Tmodules Tm on Tp.module_id = Tm.id
+				INNER JOIN Ttypes_users Tu on Ttm.type_user_id = Tu.id
+				WHERE Ttm.type_user_id=#{idTypeUser} AND Tp.status_id=1
+	""")
+	@Results(value = {
+			@Result(column = "nameModule", property = "modulePrivilegeId.module.nameModule"),
+			@Result(column = "idModule", property = "modulePrivilegeId.module.id")
+	})
+	List<TtypeUserModule> getModuleDistinctByIdTypeUserAndStatusActived(@Param("idTypeUser") Integer idTypeUser);
 	
 }
