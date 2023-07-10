@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.Insert;
 
 import java.util.List;
 
@@ -169,4 +170,9 @@ public interface MapperTypeUserModule {
 			+ "SET modls_privgs_id=#{typeUserModule.modulePrivilegeId.id}, type_user_id=#{typeUserModule.typeUser.id} "
 			+ "WHERE id=#{typeUserModule.id}")
 	Integer update(@Param("typeUserModule") TtypeUserModule typeUserModule);
+
+	@Insert("INSERT INTO Ttypeusers_modules "
+			+ "(modls_privgs_id,type_user_id) "
+			+ "VALUES (#{typeUserModule.modulePrivilegeId.id},#{typeUserModule.typeUser.id})")
+	Integer save(@Param("typeUserModule") TtypeUserModule ttypeUserModule);
 }
