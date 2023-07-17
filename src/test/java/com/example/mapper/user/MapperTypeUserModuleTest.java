@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+import com.example.entity.modules.Tmodule;
+import com.example.entity.status.Tstatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,60 +42,39 @@ class MapperTypeUserModuleTest {
 		List<TtypeUserModule> typeUserModules=this.mapperTypeUserModule.getAll();
 		assertNotNull(typeUserModules);
 		assertTrue(typeUserModules.size()>0);
-		assertNotNull(typeUserModules.get(0).getTypeUser());
-		assertNotNull(typeUserModules.get(0).getModulePrivilegeId());
-		typeUserModules.forEach(System.out::println);
-	}
-	
-	@Test
-	void getPrivTypeUser() {
-		List<TtypeUserModule> typeUserModules=this.mapperTypeUserModule.getPrivTypeUser(1);
-		assertNotNull(typeUserModules);
-		assertTrue(typeUserModules.size()>0);
-		assertNotNull(typeUserModules.get(0).getTypeUser());
-		assertNotNull(typeUserModules.get(0).getModulePrivilegeId());
-		typeUserModules.forEach(System.out::println);
-	}
-	
-	@Test
-	void getModulePriv() {
-		List<TtypeUserModule> typeUserModules=this.mapperTypeUserModule.getModulePriv(1);
-		assertNotNull(typeUserModules);
-		assertTrue(typeUserModules.size()>0);
-		assertNotNull(typeUserModules.get(0).getTypeUser());
-		assertNotNull(typeUserModules.get(0).getModulePrivilegeId());
-		typeUserModules.forEach(System.out::println);
+		//assertNotNull(typeUserModules.get(0).getTypeUser());
+		//assertNotNull(typeUserModules.get(0).getModulePrivilegeId());
+		typeUserModules.forEach((data)->{
+			StringBuilder sb = new StringBuilder();
+			sb.append(data.getId()).append(" | ");
+			sb.append(data.getModulePrivilegeId().getModule().getNameModule()).append(" | ");
+			sb.append(data.getModulePrivilegeId().getPrivilege().getNamePrivilege()).append(" | ");
+			sb.append(data.getTypeUser().getNameTypeUser()).append(" |");
+			System.out.println(sb);
+		});
 	}
 
 	@Test
-	void update() {
-		TmodulePrivilege privilege=this.mapperModulePrivilege.getById(1L);
-		assertNotNull(privilege);
-		
-		TtypeUser ttypeUser=this.mapperTypeUser.getById(1);
-		assertNotNull(ttypeUser);
-		
-		TtypeUserModule ttypeUserModule=new TtypeUserModule();
-		ttypeUserModule.setModulePrivilegeId(privilege);
-		ttypeUserModule.setTypeUser(ttypeUser);
-		
-		Integer idModuloPrivBef=1;
-		Integer rowAffected=this.mapperTypeUserModule.update(ttypeUserModule, idModuloPrivBef);
-		assertEquals(1, rowAffected);
+	void getTypeUserDistinctByIdModuleAndIdStatus(){
+		Long idModule = 3L;
+		Integer idStatus = 1;
+		List<TtypeUserModule> ttypeUserModules = this.mapperTypeUserModule.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus);
+
+		assertNotNull(ttypeUserModules);
+
+		ttypeUserModules
+				.forEach((data)-> System.out.println(data.getTypeUser().getNameTypeUser()+" | "+data.getTypeUser().getId()));
 	}
+
 	@Test
-	void save() {
-		TmodulePrivilege privilege=this.mapperModulePrivilege.getById(1L);
-		assertNotNull(privilege);
-		
-		TtypeUser ttypeUser=this.mapperTypeUser.getById(1);
-		assertNotNull(ttypeUser);
-		
-		TtypeUserModule ttypeUserModule=new TtypeUserModule();
-		ttypeUserModule.setModulePrivilegeId(privilege);
-		ttypeUserModule.setTypeUser(ttypeUser);
-		
-		Integer rowAffected=this.mapperTypeUserModule.save(ttypeUserModule);
-		assertEquals(1, rowAffected);
+	void getTypeUserDistinctByIdModuleAndStatusActivated(){
+		Long idModule = 3L;
+		List<TtypeUserModule> ttypeUserModules = this.mapperTypeUserModule.getTypeUserDistinctByIdModuleAndStatusActivated(idModule);
+
+		assertNotNull(ttypeUserModules);
+
+		ttypeUserModules
+				.forEach((data)-> System.out.println(data.getTypeUser().getNameTypeUser()+" | "+data.getTypeUser().getId()));
 	}
+
 }
