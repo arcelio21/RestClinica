@@ -21,4 +21,7 @@ public class TypeUserModuleGetDto {
     @Schema(description = "Nombre de privilegio")
     private String namePrivilege;
 
+    @Schema(description = "Name status")
+    private String nameStatus;
+
 }
