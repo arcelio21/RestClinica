@@ -9,15 +9,16 @@ import lombok.Getter;
 @Schema(name = "Type User Module Get Data", description = "Estructura de informacion que se devolvera al consultar datos")
 public class TypeUserModuleGetDto {
 
-    @Schema(description = "ID  de modulo actual asociado a un privilegio")
-    private Long oldIdModulePrivilege;
+    @Schema(description = "ID tipo de usuario asignado a un privilegio de un modulo")
+    private Long id;
 
-    @Schema(description = "ID de actual tipo de usuario")
-    private Integer oldtTypeUser;
+    @Schema(description = "Nombre de modulo")
+    private String nameModule;
 
-    @Schema(description = "ID de modulo nuevo asociado a un privilegio")
-    private Long idModulePrivilege;
+    @Schema(description = "Nombre de tipo de usuario")
+    private String nameTypeUser;
 
-    @Schema(description = "ID de tipo de usuario nuevo")
-    private Integer typeUser;
+    @Schema(description = "Nombre de privilegio")
+    private String namePrivilege;
+
 }
