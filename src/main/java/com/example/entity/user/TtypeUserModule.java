@@ -3,9 +3,13 @@ package com.example.entity.user;
 import javax.validation.constraints.NotNull;
 
 import com.example.entity.modules.TmodulePrivilege;
+import lombok.ToString;
 
+@ToString
 public class TtypeUserModule {
-	
+
+	private Long id;
+
 	@NotNull
 	private TmodulePrivilege modulePrivilegeId;
 	
@@ -18,7 +22,7 @@ public class TtypeUserModule {
 	}
 
 
-	public TtypeUserModule(@NotNull TmodulePrivilege modulePrivilegeId, @NotNull TtypeUser typeUser) {
+	public TtypeUserModule(Long id,@NotNull TmodulePrivilege modulePrivilegeId, @NotNull TtypeUser typeUser) {
 		super();
 		this.modulePrivilegeId = modulePrivilegeId;
 		this.typeUser = typeUser;
@@ -45,12 +49,11 @@ public class TtypeUserModule {
 	}
 
 
-	@Override
-	public String toString() {
-		return "TtypeUserModule [modulePrivilegeId=" + modulePrivilegeId + ", typeUser=" + typeUser + "]";
+	public Long getId() {
+		return id;
 	}
-	
-	
 
-	
+	public void setId(Long id) {
+		this.id = id;
+	}
 }
