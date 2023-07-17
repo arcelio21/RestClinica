@@ -21,15 +21,17 @@ public interface MapperTypeUserModule {
 	 *
 	 * @return Lista de TtypeUserModule con la información solicitada.
 	 */
-	@Select("SELECT Ttm.id, Tm.name_modules AS nameModule, Tu.name_type_user AS nameTypeUser, tpr.name_privilege AS namePrivilege " +
+	@Select("SELECT Ttm.id, Tm.name_modules AS nameModule,Ts.name_status as nameStatus, Tu.name_type_user AS nameTypeUser, tpr.name_privilege AS namePrivilege " +
 			"FROM Ttypeusers_modules Ttm " +
 			"INNER JOIN Tmodules_privileges Tp on Ttm.modls_privgs_id = Tp.id " +
 			"INNER JOIN Tmodules Tm on Tp.module_id = Tm.id " +
+			"INNER JOIN Tstatus Ts on Tp.status_id = Ts.id " +
 			"INNER JOIN Tprivileges tpr ON Tp.privilege_id = tpr.id " +
 			"INNER JOIN Ttypes_users Tu on Ttm.type_user_id = Tu.id")
 	@Results(id = "typeUserModuleMap",
 			value = {
 					@Result(column = "id", property = "id"),
+					@Result(column = "nameStatus", property = "modulePrivilegeId.status.name"),
 					@Result(column = "nameModule",property = "modulePrivilegeId.module.nameModule"),
 					@Result(column = "nameTypeUser",property = "typeUser.nameTypeUser"),
 					@Result(column = "namePrivilege", property = "modulePrivilegeId.privilege.namePrivilege")
@@ -130,7 +132,8 @@ public interface MapperTypeUserModule {
 	/**
 	 * METODO QUE RECIBE EL ID DEL TIPO DE USUARIO, Y DEVUELVE LOS PRIVILEGIOS
 	 * QUE TIENE ESE TIPO DE USUARIO
-	 * @param ttypeUserModule
+	 * @param idTypeUser
+	 * @param idModule
 	 * @return List<TtypeUserModule>
 	 */
 	@Select("""
@@ -139,7 +142,7 @@ public interface MapperTypeUserModule {
 			 INNER JOIN Tmodules_privileges Tp on tpm.modls_privgs_id = Tp.id
 			 INNER JOIN Tprivileges Tpr on Tp.privilege_id = Tpr.id
 			 INNER JOIN Tstatus Ts on Tp.status_id = Ts.id
-			 WHERE tpm.type_user_id =#{ids.typeUser.id} AND Tp.module_id=#{ids.modulePrivilegeId.module.id} AND Ts.id=1
+			 WHERE tpm.type_user_id =#{idTypeUser} AND Tp.module_id=#{idModule} AND Ts.id=1
 	""")
 	@Results(value = {
 			@Result(column = "idPrivilege", property = "modulePrivilegeId.privilege.id"),
@@ -147,10 +150,10 @@ public interface MapperTypeUserModule {
 			@Result(column = "idStatus", property = "modulePrivilegeId.status.id"),
 			@Result(column = "nameStatus", property = "modulePrivilegeId.status.name")
 	})
-	List<TtypeUserModule> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(@Param("ids") TtypeUserModule ttypeUserModule);
+	List<TtypeUserModule> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(Integer idTypeUser, Long idModule);
 
 	@Select("""
-		SELECT  Tu.name_type_user AS typeUser,Ts.name_status AS nameStatus, Tp.name_privilege AS namePrivileg, Tm.name_modules AS nameModule
+		SELECT Ttm.id as id ,Tu.name_type_user AS typeUser,Ts.name_status AS nameStatus, Tp.name_privilege AS namePrivilege, Tm.name_modules AS nameModule
 				FROM Ttypeusers_modules Ttm
 				   INNER JOIN Tmodules_privileges Tmp on Ttm.modls_privgs_id = Tmp.id
 				   INNER JOIN Tmodules Tm on Tmp.module_id = Tm.id
@@ -159,6 +162,13 @@ public interface MapperTypeUserModule {
 				   INNER JOIN Tprivileges Tp on Tmp.privilege_id = Tp.id
 				   WHERE  Ttm.type_user_id=#{idTypeUser} AND Tmp.status_id=1;
 	""")
+	@Results(
+			@Result(column = "id", property = "id"),
+			@Result(column = "typeUser", property = "typeUser.nameTypeUser"),
+			@Result(column = "nameStatus", property = "modulePrivilegeId.status.name"),
+			@Result(column = "namePrivilege", property = "modulePrivilegeId.privilege.namePrivilege"),
+			@Result(column = "nameModule", property = "modulePrivilegeId.module.nameModule")
+	)
 	List<TtypeUserModule> getTypeModulePrivilegeByidTypeUserAndStatusActived(@Param("idTypeUser") Integer idTypeUser);
 
 	/**
