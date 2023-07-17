@@ -163,12 +163,13 @@ public interface MapperTypeUserModule {
 				   WHERE  Ttm.type_user_id=#{idTypeUser} AND Tmp.status_id=1;
 	""")
 	@Results(
-			@Result(column = "id", property = "id"),
-			@Result(column = "typeUser", property = "typeUser.nameTypeUser"),
-			@Result(column = "nameStatus", property = "modulePrivilegeId.status.name"),
-			@Result(column = "namePrivilege", property = "modulePrivilegeId.privilege.namePrivilege"),
-			@Result(column = "nameModule", property = "modulePrivilegeId.module.nameModule")
-	)
+			{
+				@Result(column = "id", property = "id"),
+				@Result(column = "typeUser", property = "typeUser.nameTypeUser"),
+				@Result(column = "nameStatus", property = "modulePrivilegeId.status.name"),
+				@Result(column = "namePrivilege", property = "modulePrivilegeId.privilege.namePrivilege"),
+				@Result(column = "nameModule", property = "modulePrivilegeId.module.nameModule")
+			}	)
 	List<TtypeUserModule> getTypeModulePrivilegeByidTypeUserAndStatusActived(@Param("idTypeUser") Integer idTypeUser);
 
 	/**
