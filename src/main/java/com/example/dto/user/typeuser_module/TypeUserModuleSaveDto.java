@@ -14,7 +14,7 @@ public class TypeUserModuleSaveDto {
 
     @NotNull
     @Min(1)
-    @Schema(description = "ID  de modulo asociado a un privilegio")
+    @Schema(description = "ID  de privilegio asociado a un modulo")
     private Long idModulePrivilege;
 
     @NotNull
