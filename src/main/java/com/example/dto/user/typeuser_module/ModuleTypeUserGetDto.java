@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @param typeUser
  */
 @Schema(description = "Estructura de informacion de los modulos que tienes asociado un tipo de usuarios ")
-public record ModuleTypeUserGet(
+public record ModuleTypeUserGetDto(
         @Schema(description = "ID module")
         Long idModule,
         @Schema(description = "Name module")
