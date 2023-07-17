@@ -22,4 +22,5 @@ target/
 #IGNORAR ARCHIVOS JAR
 *.jar
 
-
+# ARCHIVOS INNCESARIOS
+SQL_PrivilegeModule_TypeUser.txt
