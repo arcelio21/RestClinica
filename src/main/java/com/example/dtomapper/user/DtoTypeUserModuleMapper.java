@@ -13,8 +13,11 @@ public interface DtoTypeUserModuleMapper {
     DtoTypeUserModuleMapper INSTANCE = Mappers.getMapper(DtoTypeUserModuleMapper.class);
 
     @Mappings({
-            @Mapping(source = "userModule.typeUser.id", target = "typeUser"),
-            @Mapping(source = "userModule.modulePrivilegeId.id", target = "idModulePrivilege")
+            @Mapping(source = "userModule.id",target = "id"),
+            @Mapping(source = "userModule.typeUser.nameTypeUser", target = "nameTypeUser"),
+            @Mapping(source = "userModule.modulePrivilegeId.module.nameModule", target = "nameModule"),
+            @Mapping(source = "userModule.modulePrivilegeId.privilege.namePrivilege", target = "namePrivilege"),
+            @Mapping(source = "userModule.modulePrivilegeId.status.name", target = "nameStatus")
     })
     TypeUserModuleGetDto tTypeUserModuleToTypeUserModuleGetDto(TtypeUserModule userModule);
 
