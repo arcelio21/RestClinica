@@ -96,5 +96,76 @@ class ServiceTypeUserModuleImplTest {
 
     }
 
+    /**
+     * Prueba unitaria para el método getById() del servicio TypeUserModule cuando se proporciona un ID válido.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getById() con un ID válido se retorne el objeto TypeUserModuleGetDto correspondiente.</li>
+     *   <li>Se verifica que se haya llamado al método getById() del objeto simulado mapper con el ID proporcionado.</li>
+     *   <li>Se verifica que se haya llamado al método tTypeUserModuleToTypeUserModuleGetDto() del objeto simulado dtoMapper con el objeto TtypeUserModule correspondiente.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getById() con datos válidos")
+    void getById_DataValid(){
+        Long id = 1L;
+        given(this.mapper.getById(id)).willReturn(new TtypeUserModule());
+        given(this.dtoMapper.tTypeUserModuleToTypeUserModuleGetDto(any(TtypeUserModule.class))).willReturn(this.dataValid);
+
+        TypeUserModuleGetDto data = this.service.getById(id);
+
+        assertNotNull(data);
+
+        then(this.mapper).should(times(1)).getById(id);
+        then(this.dtoMapper).should(times(1)).tTypeUserModuleToTypeUserModuleGetDto(any(TtypeUserModule.class));
+    }
+
+    /**
+     * Prueba unitaria para el método getById() del servicio TypeUserModule cuando se proporciona un ID no válido.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getById() con un ID no válido se lance una excepción del tipo NoDataFoundException.</li>
+     *   <li>Se verifica que no se haya llamado al método getById() del objeto simulado mapper.</li>
+     *   <li>Se verifica que no se haya llamado al método tTypeUserModuleToTypeUserModuleGetDto() del objeto simulado dtoMapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getById() con ID no válido")
+    void getById_IdNotValid(){
+        Long idInvalid = 0L;
+
+        assertThrows(NoDataFoundException.class,()-> this.service.getById(idInvalid));
+
+        then(this.mapper).shouldHaveNoInteractions();
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método getById() del servicio TypeUserModule cuando el resultado es nulo.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getById() y el resultado es nulo se lance una excepción del tipo NoDataFoundException.</li>
+     *   <li>Se verifica que se haya llamado al método getById() del objeto simulado mapper.</li>
+     *   <li>Se verifica que no se haya llamado al método tTypeUserModuleToTypeUserModuleGetDto() del objeto simulado dtoMapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getById() con resultado nulo")
+    void getById_ReturnNull(){
+        Long id = 1L;
+        given(this.mapper.getById(id)).willReturn(null);
+
+
+        assertThrows(NoDataFoundException.class,()-> this.service.getById(id));
+
+        then(this.mapper).should(times(1)).getById(id);
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+
+
 
 }
