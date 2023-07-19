@@ -40,9 +40,24 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 		return typeusermodules;
 	}
 
+	/**
+	 * Obtiene un objeto TypeUserModuleGetDto por su ID.
+	 *
+	 * @param id ID del objeto a obtener
+	 * @return Objeto TypeUserModuleGetDto correspondiente al ID proporcionado
+	 * @throws NoDataFoundException si el ID es nulo, menor o igual a cero o si no se encuentra ningún objeto con el ID proporcionado
+	 */
 	@Override
-	public TypeUserModuleGetDto getById(Long aLong) {
-		return null;
+	public TypeUserModuleGetDto getById(Long id) {
+
+		if(id==null || id<=0){
+			throw new NoDataFoundException(id);
+		}
+
+		return Optional.of(id)
+				.map(this.mapperTypeUserModule::getById)
+				.map(this.dtoTypeUserModuleMapper::tTypeUserModuleToTypeUserModuleGetDto)
+				.orElseThrow(NoDataFoundException::new);
 	}
 
 	@Override
