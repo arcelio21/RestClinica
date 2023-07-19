@@ -1,14 +1,20 @@
 package com.example.service.user;
-import com.example.dto.user.typeuser_module.TypeUserModuleGetDto;
-import com.example.dto.user.typeuser_module.TypeUserModuleSaveDto;
-import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
+
+import com.example.dto.user.typeuser_module.ModuleOfTypeUserGetDto;
+import com.example.dto.user.typeuser_module.ModuleTypeUserGetDto;
+import com.example.dto.user.typeuser_module.PrivilegeOfModuleGetDto;
+import com.example.dto.user.typeuser_module.TypeUserOfModuleGetDto;
 import com.example.service.ServiceTemplateCrud;
 
 import java.util.List;
 
-import com.example.entity.user.TtypeUserModule;
+public interface IServiceTypeUserModule<GET,ID,UPDATE,SAVE> extends ServiceTemplateCrud<GET,ID,UPDATE,SAVE>{
 
-public interface IServiceTypeUserModule extends ServiceTemplateCrud<TypeUserModuleGetDto, TypeUserModuleGetDto, TypeUserModuleUpdateDto, TypeUserModuleSaveDto>{
-    List<TtypeUserModule> getPrivTypeUser(Integer typeUserId);
-    List<TtypeUserModule> getModulePriv(Long modulePrivilegeId);
+    List<ModuleTypeUserGetDto> getModuleAndTypeUserDistinct();
+    List<ModuleOfTypeUserGetDto> getModuleDistinctByIdTypeUserAndStatusActived(Integer idTypeUser);
+    List<ModuleOfTypeUserGetDto> getModuleDistinctByIdTypeUserAndIdStatus(Integer idTypeUser, Integer idStatus);
+    List<TypeUserOfModuleGetDto> getTypeUserDistinctByIdModuleAndStatusActivated(Long idModule);
+    List<TypeUserOfModuleGetDto> getTypeUserDistinctByIdModuleAndIdStatus(Long idModule, Integer idStatus);
+    List<PrivilegeOfModuleGetDto> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(Integer idTypeUser, Long idModule);
+    List<ModuleTypeUserGetDto> getTypeModulePrivilegeByidTypeUserAndStatusActived( Integer idTypeUser);
 }
