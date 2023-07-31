@@ -1,9 +1,11 @@
 package com.example.service.user;
 
 import com.example.dto.user.typeuser_module.TypeUserModuleGetDto;
+import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
 import com.example.dtomapper.user.DtoTypeUserModuleMapper;
 import com.example.entity.user.TtypeUserModule;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.typeuser_module.TypeUserModuleNotUpdateException;
 import com.example.mapper.user.MapperTypeUserModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +37,7 @@ class ServiceTypeUserModuleImplTest {
     private ServiceTypeUserModuleImpl service;
 
     private TypeUserModuleGetDto dataValid;
+    private TypeUserModuleUpdateDto typeUserModuleUpdateValid;
 
     @BeforeEach
     void setUp() {
@@ -44,6 +47,12 @@ class ServiceTypeUserModuleImplTest {
                 .nameTypeUser("ADMIN")
                 .namePrivilege("WRITE")
                 .nameStatus("ACTIVATED")
+                .build();
+
+        this.typeUserModuleUpdateValid = TypeUserModuleUpdateDto.builder()
+                .id(1L)
+                .idTypeUser(1)
+                .idModulePrivilege(1L)
                 .build();
     }
 
@@ -166,6 +175,77 @@ class ServiceTypeUserModuleImplTest {
     }
 
 
+    /**
+     * Prueba unitaria para el método update() del servicio TypeUserModule cuando se proporciona un objeto TypeUserModuleUpdateDto válido.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto TypeUserModuleUpdateDto válido se retorne el número de filas afectadas (1).</li>
+     *   <li>Se verifica que se haya llamado al método TypeUserModuleUpdateDtoToTtypeUserModule() del objeto simulado dtoMapper.</li>
+     *   <li>Se verifica que se haya llamado al método update() del objeto simulado mapper con el objeto TtypeUserModule generado.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de datos válidos")
+    void update_ValidData(){
+
+        given(this.dtoMapper.TypeUserModuleUpdateDtoToTtypeUserModule(this.typeUserModuleUpdateValid)).willReturn(new TtypeUserModule());
+        given(this.mapper.update(any(TtypeUserModule.class))).willReturn(1);
+
+        Integer rowAffected = this.service.update(this.typeUserModuleUpdateValid);
+
+        assertNotNull(rowAffected);
+        assertEquals(1,rowAffected);
+
+        then(this.dtoMapper).should(times(1)).TypeUserModuleUpdateDtoToTtypeUserModule(this.typeUserModuleUpdateValid);
+        then(this.mapper).should(times(1)).update(any(TtypeUserModule.class));
+    }
+
+
+    /**
+     * Prueba unitaria para el método update() del servicio TypeUserModule cuando se proporciona un objeto TypeUserModuleUpdateDto no válido.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto TypeUserModuleUpdateDto no válido se lance una excepción del tipo TypeUserModuleNotUpdateException.</li>
+     *   <li>Se verifica que no se haya llamado a ningún método del objeto simulado dtoMapper.</li>
+     *   <li>Se verifica que no se haya llamado a ningún método del objeto simulado mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de datos no válidos")
+    void update_NotValidData(){
+
+        TypeUserModuleUpdateDto updateNotValid = TypeUserModuleUpdateDto.builder().build();
+
+        assertThrows(TypeUserModuleNotUpdateException.class, ()-> this.service.update(updateNotValid));
+
+        then(this.dtoMapper).shouldHaveNoInteractions();
+        then(this.mapper).shouldHaveNoInteractions();
+
+    }
+
+    /**
+     * Prueba unitaria para el método update() del servicio TypeUserModule cuando el método de actualización devuelve 0 filas afectadas.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método update() con un objeto TypeUserModuleUpdateDto válido y el método de actualización devuelve 0 filas afectadas, se lance una excepción del tipo TypeUserModuleNotUpdateException.</li>
+     *   <li>Se verifica que se haya llamado al método TypeUserModuleUpdateDtoToTtypeUserModule() del objeto simulado dtoMapper.</li>
+     *   <li>Se verifica que se haya llamado al método update() del objeto simulado mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización con 0 filas afectadas")
+    void updtae_rowAffectedZero(){
+        given(this.dtoMapper.TypeUserModuleUpdateDtoToTtypeUserModule(this.typeUserModuleUpdateValid)).willReturn(new TtypeUserModule());
+        given(this.mapper.update(any(TtypeUserModule.class))).willReturn(0);
+
+        assertThrows(TypeUserModuleNotUpdateException.class,()-> this.service.update(this.typeUserModuleUpdateValid));
+
+        then(this.dtoMapper).should(times(1)).TypeUserModuleUpdateDtoToTtypeUserModule(this.typeUserModuleUpdateValid);
+        then(this.mapper).should(times(1)).update(any(TtypeUserModule.class));
+    }
 
 
 }
