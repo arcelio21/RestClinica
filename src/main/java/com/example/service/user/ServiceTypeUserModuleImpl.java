@@ -3,6 +3,7 @@ package com.example.service.user;
 import com.example.dto.user.typeuser_module.*;
 import com.example.dtomapper.user.DtoTypeUserModuleMapper;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.typeuser_module.TypeUserModuleNotUpdateException;
 import com.example.mapper.user.MapperTypeUserModule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,9 +61,34 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 				.orElseThrow(NoDataFoundException::new);
 	}
 
+	/**
+	 * Actualiza un objeto TypeUserModule a partir de los datos proporcionados en TypeUserModuleUpdateDto.
+	 *
+	 * @param typeUserModuleUpdateDto Objeto TypeUserModuleUpdateDto con los datos a actualizar
+	 * @return Número de filas afectadas por la actualización
+	 * @throws TypeUserModuleNotUpdateException si los datos proporcionados no son válidos para la actualización
+	 *         o si se produce un error durante la actualización
+	 */
 	@Override
-	public Integer update(TypeUserModuleUpdateDto t) {
-		return null;
+	public Integer update(TypeUserModuleUpdateDto typeUserModuleUpdateDto) {
+
+		if(typeUserModuleUpdateDto==null || typeUserModuleUpdateDto.getIdTypeUser()==null || typeUserModuleUpdateDto.getIdTypeUser()<=0
+			|| typeUserModuleUpdateDto.getIdModulePrivilege()==null || typeUserModuleUpdateDto.getIdModulePrivilege()<=0
+			|| typeUserModuleUpdateDto.getId()==null || typeUserModuleUpdateDto.getId()<=0
+		){
+			throw new TypeUserModuleNotUpdateException("Data not valid", typeUserModuleUpdateDto);
+		}
+
+		Integer rowAffected = Optional.of(typeUserModuleUpdateDto)
+				.map(this.dtoTypeUserModuleMapper::TypeUserModuleUpdateDtoToTtypeUserModule)
+				.map(this.mapperTypeUserModule::update)
+				.orElseThrow(()-> new TypeUserModuleNotUpdateException("Failed to update", typeUserModuleUpdateDto));
+
+		if(rowAffected==null || rowAffected<=0){
+			throw new TypeUserModuleNotUpdateException("Failed to update", typeUserModuleUpdateDto);
+		}
+
+		return rowAffected;
 	}
 
 	@Override
