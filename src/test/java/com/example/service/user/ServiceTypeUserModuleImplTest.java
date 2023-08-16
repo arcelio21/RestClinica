@@ -1,10 +1,12 @@
 package com.example.service.user;
 
 import com.example.dto.user.typeuser_module.TypeUserModuleGetDto;
+import com.example.dto.user.typeuser_module.TypeUserModuleSaveDto;
 import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
 import com.example.dtomapper.user.DtoTypeUserModuleMapper;
 import com.example.entity.user.TtypeUserModule;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.typeuser_module.TypeUserModuleNotSaveException;
 import com.example.exception.user.typeuser_module.TypeUserModuleNotUpdateException;
 import com.example.mapper.user.MapperTypeUserModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +41,12 @@ class ServiceTypeUserModuleImplTest {
     private TypeUserModuleGetDto dataValid;
     private TypeUserModuleUpdateDto typeUserModuleUpdateValid;
 
+    //ESTE OBJETO SE UTILIZA PARA GUARDAR DATOS CORRECTAMENTE
+    private TypeUserModuleSaveDto typeUserModuleSaveDto;
+
+    //OBJETO PARA DATOS NO VALIDOS AL GUARDAR
+    private TypeUserModuleSaveDto typeUserModuleSaveDtoNotValid;
+
     @BeforeEach
     void setUp() {
         dataValid = TypeUserModuleGetDto.builder()
@@ -53,6 +61,15 @@ class ServiceTypeUserModuleImplTest {
                 .id(1L)
                 .idTypeUser(1)
                 .idModulePrivilege(1L)
+                .build();
+
+
+        this.typeUserModuleSaveDto = TypeUserModuleSaveDto.builder()
+                .typeUser(1)
+                .idModulePrivilege(1L)
+                .build();
+
+        this.typeUserModuleSaveDtoNotValid = TypeUserModuleSaveDto.builder()
                 .build();
     }
 
@@ -245,6 +262,77 @@ class ServiceTypeUserModuleImplTest {
 
         then(this.dtoMapper).should(times(1)).TypeUserModuleUpdateDtoToTtypeUserModule(this.typeUserModuleUpdateValid);
         then(this.mapper).should(times(1)).update(any(TtypeUserModule.class));
+    }
+
+
+    /**
+     * Prueba unitaria para el método save() del servicio TypeUserModule cuando se proporciona un objeto TypeUserModuleSaveDto válido.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() con un objeto TypeUserModuleSaveDto válido se retorne el número de filas afectadas.</li>
+     *   <li>Se verifica que se haya llamado al método TypeUserModuleSaveDtoToTtypeUserModule() del objeto simulado dtoMapper.</li>
+     *   <li>Se verifica que se haya llamado al método save() del objeto simulado mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado con datos válidos")
+    void save_dataValid(){
+        given(this.dtoMapper.TypeUserModuleSaveDtoToTtypeUserModule(this.typeUserModuleSaveDto)).willReturn(new TtypeUserModule());
+        given(this.mapper.save(any(TtypeUserModule.class))).willReturn(1);
+
+        Integer rowAffected = this.service.save(this.typeUserModuleSaveDto);
+
+        assertNotNull(rowAffected);
+        assertEquals(1,rowAffected);
+
+        then(this.dtoMapper).should(times(1)).TypeUserModuleSaveDtoToTtypeUserModule(this.typeUserModuleSaveDto);
+        then(this.mapper).should(times(1)).save(any(TtypeUserModule.class));
+    }
+
+
+    /**
+     * Prueba unitaria para el método save() del servicio TypeUserModule cuando se proporciona un objeto TypeUserModuleSaveDto no válido.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() con un objeto TypeUserModuleSaveDto no válido se lance una excepción de tipo TypeUserModuleNotSaveException.</li>
+     *   <li>Se verifica que no haya interacciones con los objetos simulados dtoMapper y mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado con datos no válidos")
+    void save_throwException_dataNoValid(){
+
+        assertThrows(TypeUserModuleNotSaveException.class, ()-> this.service.save(this.typeUserModuleSaveDtoNotValid));
+
+        then(this.dtoMapper).shouldHaveNoInteractions();
+        then(this.mapper).shouldHaveNoInteractions();
+    }
+
+
+    /**
+     * Prueba unitaria para el método save() del servicio TypeUserModule cuando la operación de guardado devuelve una fila afectada igual a cero.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método save() con un objeto TypeUserModuleSaveDto y la operación de guardado devuelve una fila afectada igual a cero, se lance una excepción de tipo TypeUserModuleNotSaveException.</li>
+     *   <li>Se verifica que el objeto simulado dtoMapper se utiliza para convertir el objeto TypeUserModuleSaveDto al tipo TtypeUserModule.</li>
+     *   <li>Se verifica que el objeto simulado mapper se utiliza para realizar la operación de guardado.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado con fila afectada igual a cero")
+    void save_returnRowAffectedZero(){
+
+        given(this.dtoMapper.TypeUserModuleSaveDtoToTtypeUserModule(this.typeUserModuleSaveDto)).willReturn(new TtypeUserModule());
+        given(this.mapper.save(any(TtypeUserModule.class))).willReturn(0);
+
+        assertThrows(TypeUserModuleNotSaveException.class,()-> this.service.save(this.typeUserModuleSaveDto));
+
+        then(this.dtoMapper).should(times(1)).TypeUserModuleSaveDtoToTtypeUserModule(this.typeUserModuleSaveDto);
+        then(this.mapper).should(times(1)).save(any(TtypeUserModule.class));
+
     }
 
 
