@@ -3,6 +3,7 @@ package com.example.service.user;
 import com.example.dto.user.typeuser_module.*;
 import com.example.dtomapper.user.DtoTypeUserModuleMapper;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.typeuser_module.TypeUserModuleNotSaveException;
 import com.example.exception.user.typeuser_module.TypeUserModuleNotUpdateException;
 import com.example.mapper.user.MapperTypeUserModule;
 import lombok.RequiredArgsConstructor;
@@ -91,9 +92,34 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 		return rowAffected;
 	}
 
+
+	/**
+	 * Guarda un nuevo objeto TypeUserModule a partir de los datos proporcionados en TypeUserModuleSaveDto.
+	 *
+	 * @param typeUserModuleSaveDto Objeto TypeUserModuleSaveDto con los datos a guardar
+	 * @return Número de filas afectadas por el guardado
+	 * @throws TypeUserModuleNotSaveException si los datos proporcionados no son válidos para el guardado
+	 *         o si se produce un error durante el guardado
+	 */
 	@Override
-	public Integer save(TypeUserModuleSaveDto t) {
-		return null;
+	public Integer save(TypeUserModuleSaveDto typeUserModuleSaveDto) {
+
+		if(typeUserModuleSaveDto==null || typeUserModuleSaveDto.getTypeUser()==null || typeUserModuleSaveDto.getTypeUser()<=0
+			|| typeUserModuleSaveDto.getIdModulePrivilege()==null || typeUserModuleSaveDto.getIdModulePrivilege()<=0
+		){
+			throw new TypeUserModuleNotSaveException(typeUserModuleSaveDto,"Data no valid");
+		}
+
+		Integer rowAffected = Optional.of(typeUserModuleSaveDto)
+				.map(this.dtoTypeUserModuleMapper::TypeUserModuleSaveDtoToTtypeUserModule)
+				.map(this.mapperTypeUserModule::save)
+				.orElseThrow(()-> new TypeUserModuleNotSaveException(typeUserModuleSaveDto,"Data no valid"));
+
+		if(rowAffected==null || rowAffected<=0){
+			throw new TypeUserModuleNotSaveException(typeUserModuleSaveDto,"Record creation failed");
+		}
+
+		return rowAffected;
 	}
 
 	@Override
