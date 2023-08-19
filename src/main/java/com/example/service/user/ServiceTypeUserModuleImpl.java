@@ -122,9 +122,26 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 		return rowAffected;
 	}
 
+	/**
+	 * Obtiene una lista de objetos ModuleTypeUserGetDto con combinaciones únicas de módulos y tipos de usuario.
+	 *
+	 * @return Lista de objetos ModuleTypeUserGetDto con combinaciones únicas de módulos y tipos de usuario
+	 * @throws NoDataFoundException si no se encuentran datos o la lista está vacía
+	 */
 	@Override
 	public List<ModuleTypeUserGetDto> getModuleAndTypeUserDistinct() {
-		return null;
+
+		List<ModuleTypeUserGetDto> moduleTypeUserGetDtoList = Optional.of(this.mapperTypeUserModule.getModuleAndTypeUserDistinct())
+				.orElseThrow(NoDataFoundException::new)
+				.stream()
+				.map(this.dtoTypeUserModuleMapper::tTypeUserModuleToModuleTypeUserGetDto)
+				.toList();
+
+		if(moduleTypeUserGetDtoList.isEmpty()){
+			throw new NoDataFoundException();
+		}
+
+		return moduleTypeUserGetDtoList;
 	}
 
 	@Override
