@@ -1,9 +1,10 @@
 package com.example.service.user;
 
-import com.example.dto.user.typeuser_module.TypeUserModuleGetDto;
-import com.example.dto.user.typeuser_module.TypeUserModuleSaveDto;
-import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
+import com.example.dto.user.typeuser_module.*;
 import com.example.dtomapper.user.DtoTypeUserModuleMapper;
+import com.example.entity.modules.Tmodule;
+import com.example.entity.modules.TmodulePrivilege;
+import com.example.entity.user.TtypeUser;
 import com.example.entity.user.TtypeUserModule;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.user.typeuser_module.TypeUserModuleNotSaveException;
@@ -46,6 +47,7 @@ class ServiceTypeUserModuleImplTest {
 
     //OBJETO PARA DATOS NO VALIDOS AL GUARDAR
     private TypeUserModuleSaveDto typeUserModuleSaveDtoNotValid;
+
 
     @BeforeEach
     void setUp() {
@@ -333,6 +335,60 @@ class ServiceTypeUserModuleImplTest {
         then(this.dtoMapper).should(times(1)).TypeUserModuleSaveDtoToTtypeUserModule(this.typeUserModuleSaveDto);
         then(this.mapper).should(times(1)).save(any(TtypeUserModule.class));
 
+    }
+
+
+    /**
+     * Prueba unitaria para el método getModuleAndTypeUserDistinct() del servicio TypeUserModule cuando la función devuelve datos válidos.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getModuleAndTypeUserDistinct() y la función devuelve datos válidos, se retorne una lista de objetos ModuleTypeUserGetDto.</li>
+     *   <li>Se verifica que el objeto simulado mapper se utiliza para obtener los datos.</li>
+     *   <li>Se verifica que el objeto simulado dtoMapper se utiliza para convertir los datos del tipo TtypeUserModule a ModuleTypeUserGetDto.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de módulos y tipos de usuario asociados distintos")
+    void getModuleAndTypeUserDistinct_DataValid(){
+        ModuleTypeUserGetDto moduleOfTypeUserGetDto = new ModuleTypeUserGetDto(1L,"USER",1,"ADMIN");
+
+        TtypeUserModule ttypeUserModule = new TtypeUserModule();
+        ttypeUserModule.setModulePrivilegeId(new TmodulePrivilege(0L,null,new Tmodule(1L,"USER"),null));
+        ttypeUserModule.setTypeUser(new TtypeUser(1,"ADMIN"));
+
+        given(this.mapper.getModuleAndTypeUserDistinct()).willReturn(List.of(ttypeUserModule));
+        given(this.dtoMapper.tTypeUserModuleToModuleTypeUserGetDto(ttypeUserModule)).willReturn(moduleOfTypeUserGetDto);
+
+        List<ModuleTypeUserGetDto> moduleTypeUserGetDtoList = this.service.getModuleAndTypeUserDistinct();
+
+        assertNotNull(moduleTypeUserGetDtoList);
+        assertFalse(moduleTypeUserGetDtoList.isEmpty());
+
+        then(this.mapper).should(times(1)).getModuleAndTypeUserDistinct();
+        then(this.dtoMapper).should(times(1)).tTypeUserModuleToModuleTypeUserGetDto(ttypeUserModule);
+    }
+
+
+    /**
+     * Prueba unitaria para el método getModuleAndTypeUserDistinct() del servicio TypeUserModule cuando la función no devuelve datos válidos.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getModuleAndTypeUserDistinct() y la función no devuelve datos válidos, se lance una excepción del tipo NoDataFoundException.</li>
+     *   <li>Se verifica que el objeto simulado mapper se utiliza para obtener los datos.</li>
+     *   <li>Se verifica que el objeto simulado dtoMapper no tenga interacciones.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de módulos y tipos de usuario asociados distintos sin datos válidos")
+    void getModuleAndTypeUserDistinct_DataNotValid(){
+        given(this.mapper.getModuleAndTypeUserDistinct()).willReturn(Collections.emptyList());
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getModuleAndTypeUserDistinct());
+
+        then(this.mapper).should(times(1)).getModuleAndTypeUserDistinct();
+        then(this.dtoMapper).shouldHaveNoInteractions();
     }
 
 
