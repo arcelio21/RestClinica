@@ -174,9 +174,35 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 
 	}
 
+	/**
+	 * Obtiene una lista de objetos ModuleOfTypeUserGetDto con módulos distintos para un tipo de usuario y un estado de módulo dados.
+	 *
+	 * @param idTypeUser ID del tipo de usuario para el que se obtienen los módulos
+	 * @param idStatus ID del estado de módulo para el que se obtienen los módulos
+	 * @return Lista de objetos ModuleOfTypeUserGetDto con módulos distintos para el tipo de usuario y estado dados
+	 * @throws NoDataFoundException si los ID de tipo de usuario o estado son nulos o menores o iguales a cero,
+	 *         si no se encuentran datos o la lista está vacía
+	 */
 	@Override
 	public List<ModuleOfTypeUserGetDto> getModuleDistinctByIdTypeUserAndIdStatus(Integer idTypeUser, Integer idStatus) {
-		return null;
+
+		if(idTypeUser == null || idTypeUser<=0
+		   || idStatus == null || idStatus<=0 ){
+
+			throw new NoDataFoundException("Parameter Not Valid");
+		}
+
+		List<ModuleOfTypeUserGetDto> moduleOfTypeUserGetDtoList = Optional.ofNullable(this.mapperTypeUserModule.getModuleDistinctByIdTypeUserAndIdStatus(idTypeUser,idStatus))
+									.orElseThrow(()-> new NoDataFoundException("DATA NO VALID"))
+									.stream()
+									.map(this.dtoTypeUserModuleMapper::tTypeUserModuleToModuleOfTypeUserGetDto)
+									.toList();
+
+		if (moduleOfTypeUserGetDtoList.isEmpty()){
+			throw new NoDataFoundException("Data is empty");
+		}
+
+		return moduleOfTypeUserGetDtoList;
 	}
 
 	@Override
