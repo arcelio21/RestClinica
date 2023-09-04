@@ -19,6 +19,8 @@ public class TypeUserModuleProviderSql{
 
         if ( idStatus!=null &&idStatus>0){
             query.AND().WHERE("Tp.status_id=#{idStatus}");
+        }else {
+            query.AND().WHERE("Tp.status_id=1");
         }
 
         return query.toString();
@@ -38,7 +40,10 @@ public class TypeUserModuleProviderSql{
 
         if(idStatus!=null && idStatus>0){
             query.WHERE("Tp.status_id=#{idStatus}");
+        }else {
+            query.AND().WHERE("Tp.status_id=1");
         }
+
         return query.toString();
     }
 
