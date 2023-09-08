@@ -207,7 +207,22 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 
 	@Override
 	public List<TypeUserOfModuleGetDto> getTypeUserDistinctByIdModuleAndStatusActivated(Long idModule) {
-		return null;
+
+		if(idModule==null || idModule<=0){
+			throw new NoDataFoundException("Parameter No valid");
+		}
+
+		List<TypeUserOfModuleGetDto> typeUserOfModuleGetDtoList = Optional.of(idModule)
+				.map(this.mapperTypeUserModule::getTypeUserDistinctByIdModuleAndStatusActivated)
+				.orElseThrow(NoDataFoundException::new)
+				.stream()
+				.map(this.dtoTypeUserModuleMapper::tTypeUserModuleToTypeUserOfModuleGetDto)
+				.toList();
+
+		if(typeUserOfModuleGetDtoList.isEmpty()){
+			throw new NoDataFoundException("Data empty");
+		}
+		return typeUserOfModuleGetDtoList;
 	}
 
 	@Override
