@@ -587,6 +587,106 @@ class ServiceTypeUserModuleImplTest {
 
          then(this.mapper).should(times(1)).getModuleDistinctByIdTypeUserAndIdStatus(idTypeUser,idStatus);
          then(this.dtoMapper).shouldHaveNoInteractions();
-     }
+    }
 
+    //--------------------------------------------------------------------------------------------------
+
+    /**
+     * Prueba unitaria para el método getTypeUserDistinctByIdModuleAndStatusActivated() del servicio TypeUserModule cuando se retorna una lista válida de usuarios por módulo y estado activado.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getTypeUserDistinctByIdModuleAndStatusActivated() con un ID de módulo válido, y el mapper retorna una lista válida de usuarios, se obtenga una lista no vacía de objetos DTO.</li>
+     *   <li>Se verifica que el método del mapper se haya llamado una vez y que el método del dtoMapper se haya llamado una vez.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de usuarios distintos por ID de módulo y estado activado con datos válidos")
+    void getTypeUserDistinctByIdModuleAndStatusActivated_dataValid(){
+
+        TypeUserOfModuleGetDto typeUserOfModuleGetDto = new TypeUserOfModuleGetDto(1,"ADMIN");
+
+        Long idModule = 1L;
+
+        given(this.mapper.getTypeUserDistinctByIdModuleAndStatusActivated(idModule)).willReturn(List.of(new TtypeUserModule()));
+        given(this.dtoMapper.tTypeUserModuleToTypeUserOfModuleGetDto(any(TtypeUserModule.class))).willReturn(typeUserOfModuleGetDto);
+
+        List<TypeUserOfModuleGetDto> typeUserOfModuleGetDtoList = this.service.getTypeUserDistinctByIdModuleAndStatusActivated(idModule);
+
+        assertNotNull(typeUserOfModuleGetDtoList);
+        assertFalse(typeUserOfModuleGetDtoList.isEmpty());
+
+        then(this.mapper).should(times(1)).getTypeUserDistinctByIdModuleAndStatusActivated(idModule);
+        then(this.dtoMapper).should(times(1)).tTypeUserModuleToTypeUserOfModuleGetDto(any(TtypeUserModule.class));
+    }
+
+
+    /**
+     * Prueba unitaria para el método getTypeUserDistinctByIdModuleAndStatusActivated() del servicio TypeUserModule cuando se proporcionan parámetros no válidos.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getTypeUserDistinctByIdModuleAndStatusActivated() con un ID de módulo no válido, se lance una excepción del tipo NoDataFoundException.</li>
+     *   <li>Se verifica que el método del mapper y el método del dtoMapper no se hayan llamado en absoluto.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de usuarios distintos por ID de módulo y estado activado con parámetros no válidos")
+    void getTypeUserDistinctByIdModuleAndStatusActivated_parameterNotValid(){
+
+        Long idModule = 0L;
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getTypeUserDistinctByIdModuleAndStatusActivated(idModule));
+
+        then(this.mapper).shouldHaveNoInteractions();
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+
+    /**
+     * Prueba unitaria para el método getTypeUserDistinctByIdModuleAndStatusActivated() del servicio TypeUserModule cuando el método del mapper devuelve un valor nulo.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getTypeUserDistinctByIdModuleAndStatusActivated() con un ID de módulo válido y el método del mapper devuelve nulo, se lance una excepción del tipo NoDataFoundException.</li>
+     *   <li>Se verifica que el método del mapper se haya llamado exactamente una vez y que el método del dtoMapper no se haya llamado en absoluto.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de usuarios distintos por ID de módulo y estado activado cuando el método del mapper devuelve nulo")
+    void getTypeUserDistinctByIdModuleAndStatusActivated_returnDataNotValid(){
+
+        Long idModule = 1L;
+
+        given(this.mapper.getTypeUserDistinctByIdModuleAndStatusActivated(idModule)).willReturn(null);
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getTypeUserDistinctByIdModuleAndStatusActivated(idModule));
+
+        then(this.mapper).should(times(1)).getTypeUserDistinctByIdModuleAndStatusActivated(idModule);
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+
+    /**
+     * Prueba unitaria para el método getTypeUserDistinctByIdModuleAndStatusActivated() del servicio TypeUserModule cuando el método del mapper devuelve una lista vacía.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getTypeUserDistinctByIdModuleAndStatusActivated() con un ID de módulo válido y el método del mapper devuelve una lista vacía, se lance una excepción del tipo NoDataFoundException.</li>
+     *   <li>Se verifica que el método del mapper se haya llamado exactamente una vez y que el método del dtoMapper no se haya llamado en absoluto.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de obtención de usuarios distintos por ID de módulo y estado activado cuando el método del mapper devuelve una lista vacía")
+    void getTypeUserDistinctByIdModuleAndStatusActivated_returnEmptyData(){
+
+        Long idModule = 1L;
+
+        given(this.mapper.getTypeUserDistinctByIdModuleAndStatusActivated(idModule)).willReturn(Collections.emptyList());
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getTypeUserDistinctByIdModuleAndStatusActivated(idModule));
+
+        then(this.mapper).should(times(1)).getTypeUserDistinctByIdModuleAndStatusActivated(idModule);
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
 }
