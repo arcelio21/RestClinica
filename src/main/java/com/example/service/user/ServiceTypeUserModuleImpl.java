@@ -205,6 +205,14 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 		return moduleOfTypeUserGetDtoList;
 	}
 
+	/**
+	 * Obtiene una lista de objetos TypeUserOfModuleGetDto con tipos de usuario distintos activos para un módulo dado.
+	 *
+	 * @param idModule ID del módulo para el que se obtienen los tipos de usuario
+	 * @return Lista de objetos TypeUserOfModuleGetDto con tipos de usuario distintos activos para el módulo dado
+	 * @throws NoDataFoundException si el ID del módulo es nulo o menor o igual a cero,
+	 *         si no se encuentran datos o la lista está vacía
+	 */
 	@Override
 	public List<TypeUserOfModuleGetDto> getTypeUserDistinctByIdModuleAndStatusActivated(Long idModule) {
 
