@@ -776,7 +776,8 @@ class ServiceTypeUserModuleImplTest {
      *
      * <p>Se simula el comportamiento esperado:</p>
      * <ul>
-     *   <li>Se verifica que al llamar al método getTypeUserDistinctByIdModuleAndIdStatus() con un ID de módulo y un ID de estado válidos, pero el método del mapper devuelve una lista vacía, se lance una excepción de tipo NoDataFoundException.</li>
+     *   <li>Se verifica que al llamar al método getTypeUserDistinctByIdModuleAndIdStatus() con un ID de módulo y un ID de estado válidos,
+     *      pero el método del mapper devuelve una lista vacía, se lance una excepción de tipo NoDataFoundException.</li>
      *   <li>Se verifica que el método del mapper se haya llamado exactamente una vez y que el método del dtoMapper no se haya llamado en este escenario.</li>
      * </ul>
      */
@@ -792,6 +793,67 @@ class ServiceTypeUserModuleImplTest {
         assertThrows(NoDataFoundException.class, ()-> this.service.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus));
 
         then(this.mapper).should(times(1)).getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus);
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived_dataValid(){
+
+        Integer idTypeUser = 1;
+        Long idModule = 1L;
+
+        PrivilegeOfModuleGetDto privilegeOfModuleGetDto = new PrivilegeOfModuleGetDto(1,"READ",1,"ACTIVE");
+
+        given(this.mapper.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule)).willReturn(List.of(new TtypeUserModule()));
+        given(this.dtoMapper.tTypeUserModuleToPrivilegeOfModuleGetDto(any(TtypeUserModule.class))).willReturn(privilegeOfModuleGetDto);
+
+        List<PrivilegeOfModuleGetDto> privilegeOfModuleGetDtoList = this.service.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule);
+
+        assertNotNull(privilegeOfModuleGetDtoList);
+        assertFalse(privilegeOfModuleGetDtoList.isEmpty());
+
+        then(this.mapper).should(times(1)).getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule);
+        then(this.dtoMapper).should(times(1)).tTypeUserModuleToPrivilegeOfModuleGetDto(any(TtypeUserModule.class));
+    }
+
+    @Test
+    void getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived_parameterNotValid(){
+
+        Integer idTypeUser = 0;
+        Long idModule = 0L;
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule));
+
+        then(this.mapper).shouldHaveNoInteractions();
+        then(this.dtoMapper).shouldHaveNoInteractions();
+
+    }
+
+    @Test
+    void getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived_dataReturnNotValid(){
+
+        Integer idTypeUser = 1;
+        Long idModule = 1L;
+
+        given(this.mapper.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule)).willReturn(null);
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule));
+
+        then(this.mapper).should(times(1)).getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule);
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived_datReturnEmpty(){
+
+        Integer idTypeUser = 1;
+        Long idModule = 1L;
+
+        given(this.mapper.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule)).willReturn(Collections.emptyList());
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule));
+
+        then(this.mapper).should(times(1)).getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule);
         then(this.dtoMapper).shouldHaveNoInteractions();
     }
 }
