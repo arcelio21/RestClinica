@@ -689,4 +689,64 @@ class ServiceTypeUserModuleImplTest {
         then(this.mapper).should(times(1)).getTypeUserDistinctByIdModuleAndStatusActivated(idModule);
         then(this.dtoMapper).shouldHaveNoInteractions();
     }
+
+    @Test
+    void getTypeUserDistinctByIdModuleAndIdStatus_dataValid(){
+
+        TypeUserOfModuleGetDto typeUserOfModuleGetDto = new TypeUserOfModuleGetDto(1,"ADMIN");
+
+        Long idModule = 1L;
+        Integer idStatus = 1;
+
+        given(this.mapper.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus)).willReturn(List.of(new TtypeUserModule()));
+        given(this.dtoMapper.tTypeUserModuleToTypeUserOfModuleGetDto(any(TtypeUserModule.class))).willReturn(typeUserOfModuleGetDto);
+
+        List<TypeUserOfModuleGetDto> typeUserOfModuleGetDtoList = this.service.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus);
+
+        assertNotNull(typeUserOfModuleGetDtoList);
+        assertFalse(typeUserOfModuleGetDtoList.isEmpty());
+
+        then(this.mapper).should(times(1)).getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus);
+        then(this.dtoMapper).should(times(1)).tTypeUserModuleToTypeUserOfModuleGetDto(any(TtypeUserModule.class));
+    }
+
+    @Test
+    void getTypeUserDistinctByIdModuleAndIdStatus_parameterNotValid(){
+
+        Long idModule = 0L;
+        Integer idStatus = 0;
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus));
+
+        then(this.mapper).shouldHaveNoInteractions();
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void getTypeUserDistinctByIdModuleAndIdStatus_dataReturnNotValid(){
+
+        Long idModule = 1L;
+        Integer idStatus = 1;
+
+        given(this.mapper.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus)).willReturn(null);
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus));
+
+        then(this.mapper).should(times(1)).getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus);
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void getTypeUserDistinctByIdModuleAndIdStatus_dataReturnEmpty(){
+
+        Long idModule = 1L;
+        Integer idStatus = 1;
+
+        given(this.mapper.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus)).willReturn(Collections.emptyList());
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus));
+
+        then(this.mapper).should(times(1)).getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus);
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
 }
