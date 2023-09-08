@@ -265,7 +265,24 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 
 	@Override
 	public List<PrivilegeOfModuleGetDto> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(Integer idTypeUser, Long idModule) {
-		return null;
+
+		if(idTypeUser == null || idTypeUser <= 0
+			|| idModule == null || idModule <= 0
+		){
+			throw new NoDataFoundException("Parameter Not Valid");
+		}
+
+		List<PrivilegeOfModuleGetDto> privilegeOfModuleGetDtoList = Optional.ofNullable(this.mapperTypeUserModule.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule))
+				.orElseThrow(NoDataFoundException::new)
+				.stream()
+				.map(this.dtoTypeUserModuleMapper::tTypeUserModuleToPrivilegeOfModuleGetDto)
+				.toList();
+
+		if(privilegeOfModuleGetDtoList.isEmpty()){
+			throw new NoDataFoundException("Data is Empty");
+		}
+
+		return privilegeOfModuleGetDtoList;
 	}
 
 	@Override
