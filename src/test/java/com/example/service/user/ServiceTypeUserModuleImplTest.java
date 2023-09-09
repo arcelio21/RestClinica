@@ -796,7 +796,20 @@ class ServiceTypeUserModuleImplTest {
         then(this.dtoMapper).shouldHaveNoInteractions();
     }
 
+    //---------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * Prueba unitaria para el método getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived() del servicio TypeUserModule cuando el método del mapper devuelve datos válidos.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived() con un ID de tipo de usuario y un ID de módulo válidos, y el método del mapper devuelve datos válidos, se obtenga una lista de objetos PrivilegeOfModuleGetDto no nula y no vacía.</li>
+     *   <li>Se verifica que el método del mapper se haya llamado exactamente una vez y que el método del dtoMapper también se haya llamado exactamente una vez.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de obtención de privilegios de módulo por ID de tipo de usuario, ID de módulo y estado activo con datos válidos")
     void getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived_dataValid(){
 
         Integer idTypeUser = 1;
@@ -816,7 +829,17 @@ class ServiceTypeUserModuleImplTest {
         then(this.dtoMapper).should(times(1)).tTypeUserModuleToPrivilegeOfModuleGetDto(any(TtypeUserModule.class));
     }
 
+    /**
+     * Prueba unitaria para el método getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived() del servicio TypeUserModule cuando los parámetros no son válidos.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived() con un ID de tipo de usuario y un ID de módulo no válidos, se lance una excepción NoDataFoundException.</li>
+     *   <li>Se verifica que el método del mapper y el método del dtoMapper no se hayan llamado.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de obtención de privilegios de módulo por ID de tipo de usuario, ID de módulo y estado activo con parámetros no válidos")
     void getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived_parameterNotValid(){
 
         Integer idTypeUser = 0;
@@ -829,7 +852,17 @@ class ServiceTypeUserModuleImplTest {
 
     }
 
+    /**
+     * Prueba unitaria para el método getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived() del servicio TypeUserModule cuando los datos devueltos no son válidos.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived() con un ID de tipo de usuario y un ID de módulo válidos, y cuando el método del mapper devuelve un valor nulo, se lance una excepción NoDataFoundException.</li>
+     *   <li>Se verifica que el método del dtoMapper no se haya llamado.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de obtención de privilegios de módulo por ID de tipo de usuario, ID de módulo y estado activo con datos no válidos")
     void getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived_dataReturnNotValid(){
 
         Integer idTypeUser = 1;
@@ -843,7 +876,17 @@ class ServiceTypeUserModuleImplTest {
         then(this.dtoMapper).shouldHaveNoInteractions();
     }
 
+    /**
+     * Prueba unitaria para el método getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived() del servicio TypeUserModule cuando los datos devueltos son una lista vacía.
+     *
+     * <p>Se simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>Se verifica que al llamar al método getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived() con un ID de tipo de usuario y un ID de módulo válidos, y cuando el método del mapper devuelve una lista vacía, se lance una excepción NoDataFoundException.</li>
+     *   <li>Se verifica que el método del dtoMapper no se haya llamado.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba de obtención de privilegios de módulo por ID de tipo de usuario, ID de módulo y estado activo con datos no encontrados")
     void getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived_datReturnEmpty(){
 
         Integer idTypeUser = 1;
