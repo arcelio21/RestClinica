@@ -899,4 +899,110 @@ class ServiceTypeUserModuleImplTest {
         then(this.mapper).should(times(1)).getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule);
         then(this.dtoMapper).shouldHaveNoInteractions();
     }
+
+    //-------------------------------------------------------------------------------------
+
+    /**
+     * Unit test for the `getTypeModulePrivilegeByidTypeUserAndStatusActived` method of the TypeUserModule service
+     * when valid data is returned.
+     *
+     * <p>It simulates the expected behavior:</p>
+     * <ul>
+     *   <li>Verifies that when calling the `getTypeModulePrivilegeByidTypeUserAndStatusActived` method with a valid type user ID,
+     *       and when the mapper's method returns a list of type-user modules, the service returns a non-empty list of ModuleTypeUserGetDto.</li>
+     *   <li>Verifies that the mapper's method is called exactly once and that the dtoMapper's method is called exactly once.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Test getTypeModulePrivilegeByidTypeUserAndStatusActived with valid data")
+    void getTypeModulePrivilegeByidTypeUserAndStatusActived_dataValid(){
+
+        Integer idTypeUser = 1;
+
+        ModuleTypeUserGetDto moduleTypeUserGetDto = new ModuleTypeUserGetDto(1L,"USER",1,"ADMIN");
+
+        given(this.mapper.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser)).willReturn(List.of(new TtypeUserModule()));
+        given(this.dtoMapper.tTypeUserModuleToModuleTypeUserGetDto(any(TtypeUserModule.class))).willReturn(moduleTypeUserGetDto);
+
+        List<ModuleTypeUserGetDto> moduleTypeUserGetDtoList = this.service.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser);
+
+        assertNotNull(moduleTypeUserGetDtoList);
+        assertFalse(moduleTypeUserGetDtoList.isEmpty());
+
+        then(this.mapper).should(times(1)).getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser);
+        then(this.dtoMapper).should(times(1)).tTypeUserModuleToModuleTypeUserGetDto(any(TtypeUserModule.class));
+    }
+
+    /**
+     * Unit test for the `getTypeModulePrivilegeByidTypeUserAndStatusActived` method of the TypeUserModule service
+     * when invalid parameters are provided.
+     *
+     * <p>It simulates the expected behavior:</p>
+     * <ul>
+     *   <li>Verifies that when calling the `getTypeModulePrivilegeByidTypeUserAndStatusActived` method with an invalid (zero) type user ID,
+     *       it throws a NoDataFoundException.</li>
+     *   <li>Verifies that neither the mapper's method nor the dtoMapper's method are called.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Test getTypeModulePrivilegeByidTypeUserAndStatusActived with invalid parameters")
+    void getTypeModulePrivilegeByidTypeUserAndStatusActived_parameterNotValid(){
+
+        Integer idTypeUser = 0;
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser));
+
+        then(this.mapper).shouldHaveNoInteractions();
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Unit test for the `getTypeModulePrivilegeByidTypeUserAndStatusActived` method of the TypeUserModule service
+     * when the method returns null data.
+     *
+     * <p>It simulates the expected behavior:</p>
+     * <ul>
+     *   <li>Verifies that when calling the `getTypeModulePrivilegeByidTypeUserAndStatusActived` method with a valid type user ID,
+     *       and the method returns null data, it throws a NoDataFoundException.</li>
+     *   <li>Verifies that the mapper's method is called exactly once, and the dtoMapper's method has no interactions.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Test getTypeModulePrivilegeByidTypeUserAndStatusActived with null data")
+    void getTypeModulePrivilegeByidTypeUserAndStatusActived_returnDataNull(){
+
+        Integer idTypeUser = 1;
+
+        given(this.mapper.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser)).willReturn(null);
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser));
+
+        then(this.mapper).should(times(1)).getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser);
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Unit test for the `getTypeModulePrivilegeByidTypeUserAndStatusActived` method of the TypeUserModule service
+     * when the method returns an empty list.
+     *
+     * <p>It simulates the expected behavior:</p>
+     * <ul>
+     *   <li>Verifies that when calling the `getTypeModulePrivilegeByidTypeUserAndStatusActived` method with a valid type user ID,
+     *       and the method returns an empty list, it throws a NoDataFoundException.</li>
+     *   <li>Verifies that the mapper's method is called exactly once, and the dtoMapper's method has no interactions.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Test getTypeModulePrivilegeByidTypeUserAndStatusActived with empty data")
+    void getTypeModulePrivilegeByidTypeUserAndStatusActived_returnDataEmpty(){
+
+        Integer idTypeUser = 1;
+
+        given(this.mapper.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser)).willReturn(Collections.emptyList());
+
+        assertThrows(NoDataFoundException.class, ()-> this.service.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser));
+
+        then(this.mapper).should(times(1)).getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser);
+        then(this.dtoMapper).shouldHaveNoInteractions();
+    }
 }
