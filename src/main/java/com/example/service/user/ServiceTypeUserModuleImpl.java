@@ -263,6 +263,15 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 		return typeUserOfModuleGetDtoList;
 	}
 
+	/**
+	 * Obtiene una lista de objetos PrivilegeOfModuleGetDto con privilegios de un módulo activos para un tipo de usuario y un módulo dados.
+	 *
+	 * @param idTypeUser ID del tipo de usuario para el que se obtienen los privilegios
+	 * @param idModule ID del módulo para el que se obtienen los privilegios
+	 * @return Lista de objetos PrivilegeOfModuleGetDto con privilegios activos para el tipo de usuario y módulo dados
+	 * @throws NoDataFoundException si el ID del tipo de usuario o el ID del módulo son nulos o menores o iguales a cero,
+	 *         si no se encuentran datos o la lista está vacía
+	 */
 	@Override
 	public List<PrivilegeOfModuleGetDto> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(Integer idTypeUser, Long idModule) {
 
