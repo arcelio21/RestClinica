@@ -294,8 +294,33 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 		return privilegeOfModuleGetDtoList;
 	}
 
+
+	/**
+	 * Retrieves a list of ModuleTypeUserGetDto objects representing active module privileges for a given type of user.
+	 *
+	 * @param idTypeUser The ID of the type of user for which module privileges are retrieved.
+	 * @return A list of ModuleTypeUserGetDto objects representing active module privileges.
+	 * @throws NoDataFoundException if the provided 'idTypeUser' is null or less than or equal to zero,
+	 *         if no data is found, or if the resulting list is empty.
+	 */
 	@Override
 	public List<ModuleTypeUserGetDto> getTypeModulePrivilegeByidTypeUserAndStatusActived(Integer idTypeUser) {
-		return null;
+
+		if(idTypeUser == null || idTypeUser <= 0 ){
+			throw new NoDataFoundException("Parameter Not Valid");
+		}
+
+		List<ModuleTypeUserGetDto> moduleTypeUserGetDtoList = Optional.of(idTypeUser)
+				.map(this.mapperTypeUserModule::getTypeModulePrivilegeByidTypeUserAndStatusActived)
+				.orElseThrow(NoDataFoundException::new)
+				.stream()
+				.map(this.dtoTypeUserModuleMapper::tTypeUserModuleToModuleTypeUserGetDto)
+				.toList();
+
+		if(moduleTypeUserGetDtoList.isEmpty()){
+			throw new NoDataFoundException("Data is empty");
+		}
+
+		return moduleTypeUserGetDtoList;
 	}
 }
