@@ -142,7 +142,7 @@ public interface MapperTypeUserModule {
 			 INNER JOIN Tmodules_privileges Tp on tpm.modls_privgs_id = Tp.id
 			 INNER JOIN Tprivileges Tpr on Tp.privilege_id = Tpr.id
 			 INNER JOIN Tstatus Ts on Tp.status_id = Ts.id
-			 WHERE tpm.type_user_id =#{idTypeUser} AND Tp.module_id=#{idModule} AND Ts.id=1
+			 WHERE tpm.type_user_id =#{idTypeUser} AND Tp.module_id=#{idModule} AND tp.status_id=1
 	""")
 	@Results(value = {
 			@Result(column = "idPrivilege", property = "modulePrivilegeId.privilege.id"),
