@@ -48,4 +48,23 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                         .data(this.serviceTypeUserModule.getAll())
                 .build());
     }
+
+    @Operation(summary = "Tipo de usuario asignados a modulos filtrado por ID de registro",description = "Muestra informacion de tipo de usuario que se le " +
+            "asigno modulos con sus privilegios filtrado por ID de registro",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Registro encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Tipo de usuario"))),
+            @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
+    }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDTO> getById(@PathVariable(name = "id") Long id ){
+
+        return ResponseEntity.ok(ResponseDTO.builder()
+                .info("Tipos de usuarios con sus modulos asociados filtrado por ID de registro")
+                .data(this.serviceTypeUserModule.getById(id))
+                .build());
+    }
 }
