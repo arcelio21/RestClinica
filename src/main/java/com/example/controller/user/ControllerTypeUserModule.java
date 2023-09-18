@@ -3,6 +3,7 @@ package com.example.controller.user;
 import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
+import com.example.dto.user.typeuser_module.TypeUserModuleSaveDto;
 import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
 import com.example.dto.user.user_reg.UserRegDto;
 import com.example.service.user.ServiceTypeUserModuleImpl;
@@ -89,6 +90,30 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                 ResponseDTO.builder()
                         .info("Datos actualizados correctamente")
                         .data(this.serviceTypeUserModule.update(updateDto))
+                        .build()
+        );
+    }
+
+    @Operation(
+            summary = "Guardar registro Modulos para tipo de usuario",
+            description = "Se asignara un nuevo de registro donde se le asigna un modulo a un tipo de usuario",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Registro creada correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PostMapping
+    public ResponseEntity<ResponseDTO> save(@Validated @NotNull @RequestBody TypeUserModuleSaveDto saveDto){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Datos guardado correctamente")
+                        .data(this.serviceTypeUserModule.save(saveDto))
                         .build()
         );
     }
