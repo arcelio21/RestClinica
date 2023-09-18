@@ -17,7 +17,8 @@ import java.util.List;
 public interface MapperTypeUserModule {
 
 	/**
-	 * Recupera una lista de TtypeUserModule que contiene información sobre los módulos, privilegios y estados asignados a cada tipo de usuario.
+	 * Recupera una lista de TtypeUserModule que contiene información sobre los módulos, privilegios y
+	 * estados asignados a cada tipo de usuario.
 	 *
 	 * @return Lista de TtypeUserModule con la información solicitada.
 	 */
