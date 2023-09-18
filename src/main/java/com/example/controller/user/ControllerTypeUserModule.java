@@ -29,7 +29,7 @@ import javax.validation.constraints.NotNull;
 public class ControllerTypeUserModule extends ControllerTemplate {
 
 
-    private ServiceTypeUserModuleImpl serviceTypeUserModule;
+    private final ServiceTypeUserModuleImpl serviceTypeUserModule;
 
     @Operation(summary = "Todos los tipos de  usuarios asignados a modulos ", description = "Muestra informacion de los tipos de usuarios que se le " +
             "asgino modulos con sus privilegios",
