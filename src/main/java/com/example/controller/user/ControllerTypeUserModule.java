@@ -3,6 +3,7 @@ package com.example.controller.user;
 import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
+import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
 import com.example.dto.user.user_reg.UserRegDto;
 import com.example.service.user.ServiceTypeUserModuleImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,10 +16,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/v1/typeusermodule")
@@ -66,5 +67,29 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                 .info("Tipos de usuarios con sus modulos asociados filtrado por ID de registro")
                 .data(this.serviceTypeUserModule.getById(id))
                 .build());
+    }
+
+    @Operation(
+            summary = "Actualizar modulos asignados a un tipo de usuario",
+            description = "Se actualizara modulo asignado a  tipo de usuario",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Registro actualizada correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PutMapping
+    public ResponseEntity<ResponseDTO> update(@Validated @NotNull @RequestBody TypeUserModuleUpdateDto updateDto){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Datos actualizados correctamente")
+                        .data(this.serviceTypeUserModule.update(updateDto))
+                        .build()
+        );
     }
 }
