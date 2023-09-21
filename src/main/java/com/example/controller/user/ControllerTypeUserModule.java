@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @RestController
@@ -136,6 +137,27 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                 ResponseDTO.builder()
                         .info("Registros obtenidos")
                         .data(this.serviceTypeUserModule.getModuleAndTypeUserDistinct())
+                        .build()
+        );
+    }
+
+    @Operation(summary = "Modulos asignados a tipos de usuario filtrado por ID de tipo de usuario",
+            description = "Muestra todos los modulos que han sido asignado a un tipo de usuario y que siga activado",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Registro encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Tipo de usuario"))),
+            @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
+    }
+    )
+    @GetMapping("/moduleTypeUser/{idTypeUser}")
+    public ResponseEntity<ResponseDTO> getModuleDistinctByIdTypeUserAndStatusActived(@NotNull @Min(1) @PathVariable("idTypeUser") Integer id){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Registros obtenidos")
+                        .data(this.serviceTypeUserModule.getModuleDistinctByIdTypeUserAndStatusActived(id))
                         .build()
         );
     }
