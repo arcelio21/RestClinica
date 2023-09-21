@@ -117,4 +117,26 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                         .build()
         );
     }
+
+
+    @Operation(summary = "Modulos asignados a tipos de usuario ", description = "Muestra todos los modulos que existen y que tipo de usuario lo puede acceder",
+            method = "Get",responses = {
+            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
+                    content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                    @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+            })
+    }
+    )
+    @GetMapping("/moduleTypeUser")
+    public ResponseEntity<ResponseDTO> getModuleAndTypeUserDistinct(){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Registros obtenidos")
+                        .data(this.serviceTypeUserModule.getModuleAndTypeUserDistinct())
+                        .build()
+        );
+    }
 }
