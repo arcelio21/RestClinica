@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @RestController
@@ -160,5 +161,31 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                         .data(this.serviceTypeUserModule.getModuleDistinctByIdTypeUserAndStatusActived(id))
                         .build()
         );
+    }
+
+
+    @Operation(summary = "Tipos de usuarios asignados a un modulo segun su estado",
+            description = "Muestra los tipos de usuarios que se han asignado a un modulo y que estadio tiene esta asignacion o privilegio",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Registro encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Tipo de usuario"))),
+            @ApiResponse(responseCode = "404",description = "Registro no encontrado, Ids no validos",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "idModule", in = ParameterIn.QUERY, description = "ID de module",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64")),
+            @Parameter(name = "idStatus", in = ParameterIn.QUERY, description = "ID de status", example = "1", required = true, schema = @Schema(implementation = Integer.class, type = "int", format = "int32", defaultValue = "0"))
+    }
+    )
+    @GetMapping("/typeUser")
+    public ResponseEntity<ResponseDTO> getTypeUserDistinctByIdModuleAndIdStatus(
+            @NotBlank @RequestParam("idModule") Long idModule,
+            @NotBlank @RequestParam("idStatus") Integer idStatus){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Registros encontrados")
+                        .data(this.serviceTypeUserModule.getTypeUserDistinctByIdModuleAndIdStatus(idModule,idStatus))
+                        .build()
+        );
+
     }
 }
