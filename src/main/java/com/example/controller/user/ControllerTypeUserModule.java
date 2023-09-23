@@ -149,16 +149,16 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Tipo de usuario"))),
             @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     },parameters = {
-            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
+            @Parameter(name = "idTypeUser", in = ParameterIn.PATH, description = "ID de tipo de usuario",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
     }
     )
     @GetMapping("/moduleTypeUser/{idTypeUser}")
-    public ResponseEntity<ResponseDTO> getModuleDistinctByIdTypeUserAndStatusActived(@NotNull @Min(1) @PathVariable("idTypeUser") Integer id){
+    public ResponseEntity<ResponseDTO> getModuleDistinctByIdTypeUserAndStatusActived(@NotNull @Min(1) @PathVariable("idTypeUser") Integer idTypeUser){
 
         return ResponseEntity.ok(
                 ResponseDTO.builder()
                         .info("Registros obtenidos")
-                        .data(this.serviceTypeUserModule.getModuleDistinctByIdTypeUserAndStatusActived(id))
+                        .data(this.serviceTypeUserModule.getModuleDistinctByIdTypeUserAndStatusActived(idTypeUser))
                         .build()
         );
     }
