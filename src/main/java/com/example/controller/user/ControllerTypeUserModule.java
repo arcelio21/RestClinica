@@ -5,6 +5,7 @@ import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.user.typeuser_module.TypeUserModuleSaveDto;
 import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
+import com.example.dto.user.typeuser_module.TypeUserOfModuleGetDto;
 import com.example.dto.user.user_reg.UserRegDto;
 import com.example.service.user.ServiceTypeUserModuleImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -187,5 +188,27 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                         .build()
         );
 
+    }
+
+
+    @Operation(summary = "Tipos de usuarios asignacion activada a un modulo",
+            description = "Muestra los tipos de usuarios que se han asignado a un modulo y con asignacion o privilegio activado",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Registro encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TypeUserOfModuleGetDto.class,description = "Modulos de un Tipo de usuario"))),
+            @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no validos",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "idModule", in = ParameterIn.PATH, description = "ID de module",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "int", format = "int64"))
+    }
+    )
+    @GetMapping("/typeUser/activated/module/{idModule}")
+    public ResponseEntity<ResponseDTO> getTypeUserDistinctByIdModuleAndStatusActivated(@NotNull @Min(0) @PathVariable("idModule") Long idModule){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Registros encontrados")
+                        .data(this.serviceTypeUserModule.getTypeUserDistinctByIdModuleAndStatusActivated(idModule))
+                        .build()
+        );
     }
 }
