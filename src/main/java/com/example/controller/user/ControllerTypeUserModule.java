@@ -163,6 +163,30 @@ public class ControllerTypeUserModule extends ControllerTemplate {
     }
 
 
+    @Operation(summary = "Modulos asignados a tipos de usuario filtrado por ID de tipo de usuario y estado",
+            description = "Muestra todos los modulos que han sido asignado a un tipo de usuario pendiendo del estado que se haya pedido",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Registro encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ModuleOfTypeUserGetDto.class,description = "Datos modulo de Tipo de usuario"))),
+            @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "idTypeUser", in = ParameterIn.PATH, description = "ID de tipo de usuario",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32")),
+            @Parameter(name = "idStatus", in = ParameterIn.PATH, description = "ID de estado",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
+
+    }
+    )
+    @GetMapping("/moduleTypeUser/{idTypeUser}/status/{idStatus}")
+    public ResponseEntity<ResponseDTO> getModuleDistinctByIdTypeUserAndIdStatus(
+            @PathVariable(name="idTypeUser") @NotBlank Integer idTypeUser,
+            @PathVariable(name = "idStatus") @NotBlank Integer idStatus){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Registros encontrados")
+                        .data(this.serviceTypeUserModule.getModuleDistinctByIdTypeUserAndIdStatus(idTypeUser, idStatus))
+                        .build()
+        );
+    }
     @Operation(summary = "Tipos de usuarios asignados a un modulo segun su estado",
             description = "Muestra los tipos de usuarios que se han asignado a un modulo y que estado tiene esta asignacion o privilegio",
             method = "GET", responses = {
