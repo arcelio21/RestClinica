@@ -233,4 +233,28 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                         .build()
         );
     }
+
+    @Operation(summary = "Privilegios sobre un modulo asociado a un tipo de usuario",
+            description = "Muestra los privilegios y el estado de estos que tiene sobre un modulo un tipo de usuario",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Registro encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PrivilegeOfModuleGetDto.class,description = "Datos de Privilegios"))),
+            @ApiResponse(responseCode = "404",description = "Registro no encontrado, Ids no validos",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "idTypeUser", in = ParameterIn.QUERY, description = "ID type user",example = "1",required = true, schema = @Schema(implementation = Integer.class, type = "int", format = "int32")),
+            @Parameter(name = "idModule", in = ParameterIn.QUERY, description = "ID de module", example = "1", required = true, schema = @Schema(implementation = Long.class, type = "long", format = "int64"))
+    }
+    )
+    @GetMapping("/privilegeModule")
+    public ResponseEntity<ResponseDTO> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(
+            @RequestParam(name = "idTypeUser") @NotBlank Integer idTypeUser,
+            @RequestParam(name = "idModule") @NotBlank Long idModule){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Registros encontrados")
+                        .data(this.serviceTypeUserModule.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule))
+                        .build()
+        );
+    }
 }
