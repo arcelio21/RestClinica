@@ -919,18 +919,24 @@ class ServiceTypeUserModuleImplTest {
 
         Integer idTypeUser = 1;
 
-        ModuleTypeUserGetDto moduleTypeUserGetDto = new ModuleTypeUserGetDto(1L,"USER",1,"ADMIN");
+        TypeUserModuleGetDto typeUserModuleGetDto = TypeUserModuleGetDto.builder()
+                .id(1L)
+                .nameModule("USER")
+                .namePrivilege("READ")
+                .nameTypeUser("ADMIN")
+                .nameStatus("ACTIVED")
+                .build();
 
         given(this.mapper.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser)).willReturn(List.of(new TtypeUserModule()));
-        given(this.dtoMapper.tTypeUserModuleToModuleTypeUserGetDto(any(TtypeUserModule.class))).willReturn(moduleTypeUserGetDto);
+        given(this.dtoMapper.tTypeUserModuleToTypeUserModuleGetDto(any(TtypeUserModule.class))).willReturn(typeUserModuleGetDto);
 
-        List<ModuleTypeUserGetDto> moduleTypeUserGetDtoList = this.service.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser);
+        List<TypeUserModuleGetDto> moduleTypeUserGetDtoList = this.service.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser);
 
         assertNotNull(moduleTypeUserGetDtoList);
         assertFalse(moduleTypeUserGetDtoList.isEmpty());
 
         then(this.mapper).should(times(1)).getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser);
-        then(this.dtoMapper).should(times(1)).tTypeUserModuleToModuleTypeUserGetDto(any(TtypeUserModule.class));
+        then(this.dtoMapper).should(times(1)).tTypeUserModuleToTypeUserModuleGetDto(any(TtypeUserModule.class));
     }
 
     /**
