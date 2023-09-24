@@ -56,6 +56,26 @@ public interface MapperTypeUserModule {
 	@ResultMap(value = "typeUserModuleMap")
 	TtypeUserModule getById(@Param("id") Long id);
 
+	@Select("""
+		SELECT Ttm.id as id ,Tu.name_type_user AS typeUser,Ts.name_status AS nameStatus, Tp.name_privilege AS namePrivilege, Tm.name_modules AS nameModule
+				FROM Ttypeusers_modules Ttm
+				   INNER JOIN Tmodules_privileges Tmp on Ttm.modls_privgs_id = Tmp.id
+				   INNER JOIN Tmodules Tm on Tmp.module_id = Tm.id
+				   INNER JOIN Tstatus Ts on Tmp.status_id = Ts.id
+				   INNER JOIN Ttypes_users Tu on Ttm.type_user_id = Tu.id
+				   INNER JOIN Tprivileges Tp on Tmp.privilege_id = Tp.id
+				   WHERE  Ttm.type_user_id=#{idTypeUser} AND Tmp.status_id=1;
+	""")
+	@Results(
+			{
+					@Result(column = "id", property = "id"),
+					@Result(column = "typeUser", property = "typeUser.nameTypeUser"),
+					@Result(column = "nameStatus", property = "modulePrivilegeId.status.name"),
+					@Result(column = "namePrivilege", property = "modulePrivilegeId.privilege.namePrivilege"),
+					@Result(column = "nameModule", property = "modulePrivilegeId.module.nameModule")
+			}	)
+	List<TtypeUserModule> getTypeModulePrivilegeByidTypeUserAndStatusActived(@Param("idTypeUser") Integer idTypeUser);
+
 	/**
 	 * OBTENER LISTA DE MODULOS A LOS QUE LOS TIPOS DE USUARIOS TIENE PRIVILEGIOS
 	 * @return TtypeUserModule
@@ -153,25 +173,6 @@ public interface MapperTypeUserModule {
 	})
 	List<TtypeUserModule> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(Integer idTypeUser, Long idModule);
 
-	@Select("""
-		SELECT Ttm.id as id ,Tu.name_type_user AS typeUser,Ts.name_status AS nameStatus, Tp.name_privilege AS namePrivilege, Tm.name_modules AS nameModule
-				FROM Ttypeusers_modules Ttm
-				   INNER JOIN Tmodules_privileges Tmp on Ttm.modls_privgs_id = Tmp.id
-				   INNER JOIN Tmodules Tm on Tmp.module_id = Tm.id
-				   INNER JOIN Tstatus Ts on Tmp.status_id = Ts.id
-				   INNER JOIN Ttypes_users Tu on Ttm.type_user_id = Tu.id
-				   INNER JOIN Tprivileges Tp on Tmp.privilege_id = Tp.id
-				   WHERE  Ttm.type_user_id=#{idTypeUser} AND Tmp.status_id=1;
-	""")
-	@Results(
-			{
-				@Result(column = "id", property = "id"),
-				@Result(column = "typeUser", property = "typeUser.nameTypeUser"),
-				@Result(column = "nameStatus", property = "modulePrivilegeId.status.name"),
-				@Result(column = "namePrivilege", property = "modulePrivilegeId.privilege.namePrivilege"),
-				@Result(column = "nameModule", property = "modulePrivilegeId.module.nameModule")
-			}	)
-	List<TtypeUserModule> getTypeModulePrivilegeByidTypeUserAndStatusActived(@Param("idTypeUser") Integer idTypeUser);
 
 	/**
 	 * Metodo que  actualizara por medio de id de tipo de usuario e id del modulo de referencia

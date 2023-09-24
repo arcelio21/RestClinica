@@ -304,17 +304,17 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 	 *         if no data is found, or if the resulting list is empty.
 	 */
 	@Override
-	public List<ModuleTypeUserGetDto> getTypeModulePrivilegeByidTypeUserAndStatusActived(Integer idTypeUser) {
+	public List<TypeUserModuleGetDto> getTypeModulePrivilegeByidTypeUserAndStatusActived(Integer idTypeUser) {
 
 		if(idTypeUser == null || idTypeUser <= 0 ){
 			throw new NoDataFoundException("Parameter Not Valid");
 		}
 
-		List<ModuleTypeUserGetDto> moduleTypeUserGetDtoList = Optional.of(idTypeUser)
+		List<TypeUserModuleGetDto> moduleTypeUserGetDtoList = Optional.of(idTypeUser)
 				.map(this.mapperTypeUserModule::getTypeModulePrivilegeByidTypeUserAndStatusActived)
 				.orElseThrow(NoDataFoundException::new)
 				.stream()
-				.map(this.dtoTypeUserModuleMapper::tTypeUserModuleToModuleTypeUserGetDto)
+				.map(this.dtoTypeUserModuleMapper::tTypeUserModuleToTypeUserModuleGetDto)
 				.toList();
 
 		if(moduleTypeUserGetDtoList.isEmpty()){
