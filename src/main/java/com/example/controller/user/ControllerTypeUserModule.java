@@ -3,9 +3,7 @@ package com.example.controller.user;
 import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
-import com.example.dto.user.typeuser_module.TypeUserModuleSaveDto;
-import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
-import com.example.dto.user.typeuser_module.TypeUserOfModuleGetDto;
+import com.example.dto.user.typeuser_module.*;
 import com.example.dto.user.user_reg.UserRegDto;
 import com.example.service.user.ServiceTypeUserModuleImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +56,7 @@ public class ControllerTypeUserModule extends ControllerTemplate {
             "asigno modulos con sus privilegios filtrado por ID de registro",
             method = "GET", responses = {
             @ApiResponse(responseCode = "200",description = "Registro encontrado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Tipo de usuario"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TypeUserModuleGetDto.class,description = "Datos de Tipo de usuario asignados a modulo"))),
             @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
@@ -126,7 +124,7 @@ public class ControllerTypeUserModule extends ControllerTemplate {
             method = "Get",responses = {
             @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
                     content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseDTO.class))),
+                            schema = @Schema(implementation = ModuleTypeUserGetDto.class))),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
                     @Content(schema = @Schema(implementation = ErrorResponseDto.class))
             })
@@ -147,7 +145,7 @@ public class ControllerTypeUserModule extends ControllerTemplate {
             description = "Muestra todos los modulos que han sido asignado a un tipo de usuario y que siga activado",
             method = "GET", responses = {
             @ApiResponse(responseCode = "200",description = "Registro encontrado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Tipo de usuario"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ModuleOfTypeUserGetDto.class,description = "Datos de Tipo de usuario"))),
             @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     },parameters = {
             @Parameter(name = "idTypeUser", in = ParameterIn.PATH, description = "ID de tipo de usuario",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
@@ -166,10 +164,10 @@ public class ControllerTypeUserModule extends ControllerTemplate {
 
 
     @Operation(summary = "Tipos de usuarios asignados a un modulo segun su estado",
-            description = "Muestra los tipos de usuarios que se han asignado a un modulo y que estadio tiene esta asignacion o privilegio",
+            description = "Muestra los tipos de usuarios que se han asignado a un modulo y que estado tiene esta asignacion o privilegio",
             method = "GET", responses = {
             @ApiResponse(responseCode = "200",description = "Registro encontrado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Tipo de usuario"))),
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TypeUserOfModuleGetDto.class,description = "Datos de Tipo de usuario"))),
             @ApiResponse(responseCode = "404",description = "Registro no encontrado, Ids no validos",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     },parameters = {
             @Parameter(name = "idModule", in = ParameterIn.QUERY, description = "ID de module",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64")),
