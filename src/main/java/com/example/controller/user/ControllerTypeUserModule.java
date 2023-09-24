@@ -4,7 +4,6 @@ import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.user.typeuser_module.*;
-import com.example.dto.user.user_reg.UserRegDto;
 import com.example.service.user.ServiceTypeUserModuleImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -254,6 +253,27 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                 ResponseDTO.builder()
                         .info("Registros encontrados")
                         .data(this.serviceTypeUserModule.getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(idTypeUser,idModule))
+                        .build()
+        );
+    }
+
+    @Operation(summary = "Obtencion de informacion de modulo filtrado por tipo de usuario",
+            description = "Muestra informacion detallada de cada modulo que fue asignado a un tipo de usuario en especifico",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Registro encontrado",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TypeUserModuleGetDto.class,description = "Datos de modulo asignados a Tipo de usuario"))),
+            @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "idTypeUser", in = ParameterIn.PATH, description = "ID de tipo de usuario",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
+    }
+    )
+    @GetMapping("/typeUser/{idTypeUser}")
+    public ResponseEntity<ResponseDTO> getTypeModulePrivilegeByidTypeUserAndStatusActived(@PathVariable(name = "idTypeUser") @Min(1) Integer idTypeUser){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Registros encontrados")
+                        .data(this.serviceTypeUserModule.getTypeModulePrivilegeByidTypeUserAndStatusActived(idTypeUser))
                         .build()
         );
     }
