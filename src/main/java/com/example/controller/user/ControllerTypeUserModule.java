@@ -81,7 +81,10 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
-            }
+            }, requestBody =
+                @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Estructura de datos a actualizar", required = true,
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = TypeUserModuleUpdateDto.class)))
     )
     @PutMapping
     public ResponseEntity<ResponseDTO> update(@Validated @NotNull @RequestBody TypeUserModuleUpdateDto updateDto){
@@ -105,7 +108,10 @@ public class ControllerTypeUserModule extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema(implementation = ErrorResponseDto.class))
                     })
-            }
+            }, requestBody =
+                    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                            description = "Estructura de datos a guardar", required = true,
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = TypeUserModuleSaveDto.class)))
     )
     @PostMapping
     public ResponseEntity<ResponseDTO> save(@Validated @NotNull @RequestBody TypeUserModuleSaveDto saveDto){
