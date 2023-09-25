@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Builder
 @Getter
-@Schema(name = "Type User Module Update Data", description = "Estructura de informacion para guardar datos")
+@Schema(name = "Type User Module Save Data", description = "Estructura de informacion para guardar datos")
 public class TypeUserModuleSaveDto {
 
     @NotNull
