@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 @Service
-public class ServiceModuleImple implements IServiceModule{
+public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,ModulesDto, ModulesDto>{
 
 	private MapperModules mapperModules;
 	private DtoModulesMapper dtoModulesMapper;
@@ -57,7 +57,7 @@ public class ServiceModuleImple implements IServiceModule{
 		if(id==null ||id<=0){
 			throw new NoDataFoundException(id);
 		}
-		
+
 		return Optional.of(id)
 				.map(this.mapperModules::getById)
 				.map(this.dtoModulesMapper::TmoduleToModulesDto)
@@ -79,8 +79,7 @@ public class ServiceModuleImple implements IServiceModule{
 
 			throw new ModulesNotUpdateException("Data Modules Not Valid", modulesDto);
 		}
-		
-		//TODO RECORDA IMPLEMENTAR VALIDACION POR GRUPOS EN EL CONTROLLER
+
 		return Optional.of(modulesDto)
 				.map(this.dtoModulesMapper::modulesDtoToTmodule)
 				.map(this.mapperModules::update)
@@ -100,7 +99,7 @@ public class ServiceModuleImple implements IServiceModule{
 
 		if(modulesDto==null || modulesDto.getName()==null || modulesDto.getName().trim().isEmpty()){
 
-			throw new ModulesNotUpdateException("Error, Modules Not Saved", modulesDto);
+			throw new ModulesNotSaveException("Error, Modules Not Saved", modulesDto);
 		}
 
 		return Optional.of(modulesDto)

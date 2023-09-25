@@ -183,7 +183,6 @@ class ServiceAddressImplTest {
 	void testUpdateWithMapperError() {
 
 
-		//TODO HAY QUE HACER EXECPCION PARA SQL
 		//when(mapper.update(any(Taddress.class))).thenThrow(SQLException.class);
 
 		assertThrows(AddressNotUpdateException.class, () -> serviceAddress.update(this.addressRequestDtoValid));

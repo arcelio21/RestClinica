@@ -1,7 +1,7 @@
 package com.example.controller.module;
 
 import com.example.dto.ErrorResponseDto;
-import com.example.dto.address.AddressGetDto;
+import com.example.dto.ValidateGroupA;
 import com.example.dto.modules.ModulesDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,10 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.controller.ControllerTemplate;
 import com.example.dto.ResponseDTO;
@@ -136,7 +134,7 @@ public class ControllerModules extends ControllerTemplate{
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO> getById(@RequestParam("id") Long id){
+    public ResponseEntity<ResponseDTO> getById(@PathVariable("id") Long id){
 
         return ResponseEntity.ok(
                 ResponseDTO.builder()
@@ -146,5 +144,51 @@ public class ControllerModules extends ControllerTemplate{
         );
     }
 
-    //TODO HACER METODO POR PARA EXEPCIOON GENERADA POR SRPIGN SECURITY
+    @Operation(
+            summary = "Actualizar modules",
+            description = "Se actualizara los modulos que se desee",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Modulo actualizada correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PutMapping
+    public ResponseEntity<ResponseDTO> update(@Validated(value = {ValidateGroupA.class}) @RequestBody ModulesDto modulesDto){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Actualización exitosa, cantidad de registros actualizados")
+                        .data(this.serviceModuleImple.update(modulesDto))
+                        .build()
+        );
+    }
+
+    @Operation(
+            summary = "Guardar modules",
+            description = "Se guardara los modulos que se desee",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Modulo guardado correctamente",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseDTO.class))
+                    }),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PostMapping
+    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody ModulesDto modulesDto){
+
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Cantidad de registros guardados")
+                        .data(this.serviceModuleImple.save(modulesDto))
+                        .build()
+        );
+    }
 }

@@ -17,12 +17,9 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 
-    /**
-     *  TODO VER COMO SE PUEDE MODIFICAR LAS RUTAS A LAS QUE PUEDE ACCEDER DINAMICAMENTE
-     *  DESDE BASE DE DATOS
-     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         
@@ -48,6 +45,9 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
                 .and()
                 .authenticationProvider(this.authenticationProvider)
                 .addFilterBefore(this.jwtFilter,UsernamePasswordAuthenticationFilter.class);

@@ -6,6 +6,9 @@ import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.province.ProvinceDto;
 import com.example.dto.address.village.VillageDto;
 import com.example.dto.modules.ModulesDto;
+import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
+import com.example.dto.modules.privileges.PrivilegeSaveDto;
+import com.example.dto.modules.privileges.PrivilegeUpdateDto;
 import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
 import com.example.dto.user.user_reg.UserRegUpdateDto;
@@ -20,16 +23,24 @@ import com.example.exception.address.village.VillageNotSaveException;
 import com.example.exception.address.village.VillageNotUpdateException;
 import com.example.exception.modules.modules.ModulesNotSaveException;
 import com.example.exception.modules.modules.ModulesNotUpdateException;
+import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotSaveException;
+import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotUpdateException;
+import com.example.exception.modules.privilege.PrivilegeNotSaveException;
+import com.example.exception.modules.privilege.PrivilegeNotUpdateException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
+import com.example.exception.user.typeuser_module.TypeUserModuleNotSaveException;
+import com.example.exception.user.typeuser_module.TypeUserModuleNotUpdateException;
 import com.example.exception.user.user_reg.PasswordNotUpdateException;
 import com.example.exception.user.user_reg.UserNotSaveException;
 import com.example.exception.user.user_reg.UserNotUpdateException;
 import com.example.exception.user.user_reg.UsernameInvalid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,11 +48,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
+@Slf4j
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoDataFoundException.class)
@@ -50,6 +63,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         var error = ErrorResponseDto.builder()
                 .fecha(LocalDate.now())
                 .messageError(ex.getMessage())
+                .data("")
                 .build();
 
         return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
@@ -470,5 +484,156 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         );
     }
 
-    //TODO CAPRTURAR EXCEPCIONES SQL
+    //EXCEPCION PRIVILEGES
+
+    @ExceptionHandler(PrivilegeNotUpdateException.class)
+    public ResponseEntity<ErrorResponseDto> handlerPrivilegesNotUpdate(PrivilegeNotUpdateException ex){
+
+        Map<String, Object> data =null;
+
+        if(ex.getData()!=null){
+            PrivilegeUpdateDto privilege = (PrivilegeUpdateDto) ex.getData();
+            data = new HashMap<>();
+            data.put("ID", privilege.getId());
+            data.put("Name", privilege.getName());
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+          ErrorResponseDto.builder()
+                  .data( (data==null)
+                          ?""
+                          :data)
+                  .messageError(ex.getMessage())
+                  .fecha(LocalDate.now())
+                  .build()
+        );
+    }
+
+    @ExceptionHandler(PrivilegeNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto> handlerPrivilegesNotUpdate(PrivilegeNotSaveException ex){
+
+        Map<String, Object> data =null;
+
+        if(ex.getData()!=null){
+            PrivilegeSaveDto privilege = (PrivilegeSaveDto) ex.getData();
+            data = new HashMap<>();
+            data.put("Name", privilege.getName());
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ErrorResponseDto.builder()
+                        .data( (data==null)
+                                ?""
+                                :data)
+                        .messageError(ex.getMessage())
+                        .fecha(LocalDate.now())
+                        .build()
+        );
+    }
+
+    // EXCEPTION MODULEPRIVILEGES
+
+    @ExceptionHandler(ModulePrivilegesNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto>  handlerModulesPrivilegeNotSave(ModulePrivilegesNotSaveException ex){
+
+        Map<String, Object> data = null;
+
+        if(ex.getData()!=null){
+            data = new HashMap<>();
+            ModulePrivilegeSaveDto privilege = (ModulePrivilegeSaveDto) ex.getData();
+            data.put("privilegeId", privilege.getPrivilegeId());
+            data.put("modulesId", privilege.getModuleId());
+            data.put("statusId", privilege.getStatusId());
+        }
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponseDto.builder()
+                        .fecha(LocalDate.now())
+                        .messageError(ex.getMessage())
+                        .data(
+                                (ex.getData()!=null)
+                                ?ex.getData()
+                                :""
+                        )
+                        .build()
+        );
+
+    }
+
+    @ExceptionHandler(ModulePrivilegesNotUpdateException.class)
+    public ResponseEntity<ErrorResponseDto>  handlerModulesPrivilegeNotSave(ModulePrivilegesNotUpdateException ex){
+
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponseDto.builder()
+                        .fecha(LocalDate.now())
+                        .messageError(ex.getMessage())
+                        .data(
+                                (ex.getData()!=null)
+                                        ?ex.getData()
+                                        :""
+                        )
+                        .build()
+        );
+
+    }
+
+    //EXCEPTION TYPEUSERMODULE
+
+    @ExceptionHandler(TypeUserModuleNotUpdateException.class)
+    public ResponseEntity<ErrorResponseDto>  handlerModulesPrivilegeNotSave(TypeUserModuleNotUpdateException ex){
+
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponseDto.builder()
+                        .fecha(LocalDate.now())
+                        .messageError(ex.getMessage())
+                        .data(
+                                (ex.getData()!=null)
+                                        ?ex.getData()
+                                        :""
+                        )
+                        .build()
+        );
+
+    }
+
+    @ExceptionHandler(TypeUserModuleNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto>  handlerModulesPrivilegeNotSave(TypeUserModuleNotSaveException ex){
+
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponseDto.builder()
+                        .fecha(LocalDate.now())
+                        .messageError(ex.getMessage())
+                        .data(
+                                (ex.getData()!=null)
+                                        ?ex.getData()
+                                        :""
+                        )
+                        .build()
+        );
+
+    }
+
+
+    //EXCEPCION SQL
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<Map<String,Object>> handlerSqlException(SQLException ex){
+        log.error(ex.getMessage()+ ", SqlState: "+ex.getSQLState());
+        Map<String,Object> response = Map.of("message", "Datos no válidos", "Fecha", LocalDate.now());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+
+    //EXCEPTION AUTHORIZATION
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Map<String,Object>> handlerAuthenticationEntryPointException(AuthenticationException ex){
+
+        Map<String,Object> responseError = Map.of("MessageError", ex.getMessage(),"Fecha", LocalDate.now());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                responseError
+        );
+    }
 }

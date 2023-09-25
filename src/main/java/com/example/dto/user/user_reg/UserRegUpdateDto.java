@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class UserRegUpdateDto extends UserRegDto{
 
 
-    //TODO SOLUCIONAR LA DUPLICACION DE ADDRESSID
     @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     private Long addressId;
 

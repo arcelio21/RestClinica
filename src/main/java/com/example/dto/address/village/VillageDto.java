@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-@Schema(name = "Village", description = "Datos principales de Village", implementation = VillageDto.class)
+@Schema(name = "Village", description = "Datos principales de Village")
 public class VillageDto {
 
     @Schema(name = "id", description = "Identificacion unica de village", example = "1", format = "int32", minimum = "1")

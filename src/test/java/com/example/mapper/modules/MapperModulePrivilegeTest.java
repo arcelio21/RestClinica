@@ -50,7 +50,7 @@ class MapperModulePrivilegeTest {
 	
 	@Test
 	void getById() {
-		TmodulePrivilege tmodulePrivilege=this.mapperModulePrivilege.getById(1);
+		TmodulePrivilege tmodulePrivilege=this.mapperModulePrivilege.getById(1L);
 		assertNotNull(tmodulePrivilege);
 		assertNotNull(tmodulePrivilege.getModule().getId());
 		assertNotNull(tmodulePrivilege.getPrivilege().getId());
@@ -60,7 +60,7 @@ class MapperModulePrivilegeTest {
 	
 	@Test
 	void update() {
-		TmodulePrivilege tmodulePrivilege=this.mapperModulePrivilege.getById(1);
+		TmodulePrivilege tmodulePrivilege=this.mapperModulePrivilege.getById(1L);
  		tmodulePrivilege.setModule(new Tmodule(1L));
 		
 		Integer rowAffected=this.mapperModulePrivilege.update(tmodulePrivilege);

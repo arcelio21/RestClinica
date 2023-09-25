@@ -93,7 +93,8 @@ public interface DtoUserRegMapper {
             @Mapping(source = "userUpdate.addressId", target = "addressId.id"),
             @Mapping(source = "userUpdate.villageId", target = "addressId.villageId.id"),
             @Mapping(source = "userUpdate.direcSpecific", target = "addressId.specificAddress"),
-            @Mapping(target = "usersTypesRegs", ignore = true)
+            @Mapping(target = "usersTypesRegs", ignore = true),
+            @Mapping(target = "authorities", ignore = true)
     })
     TuserReg userRegUpdateDtoToTuserReg(UserRegUpdateDto userUpdate);
 
@@ -110,7 +111,8 @@ public interface DtoUserRegMapper {
             @Mapping(source = "userRegSaveDto.idenCard", target = "idenCard"),
             @Mapping(source = "userRegSaveDto.contact", target = "contact"),
             @Mapping(target = "addressId", ignore = true),
-            @Mapping(target = "usersTypesRegs", ignore = true)
+            @Mapping(target = "usersTypesRegs", ignore = true),
+            @Mapping(target = "authorities", ignore = true)
     })
     TuserReg userRegSaveDtoToTuserReg(UserRegSaveDto userRegSaveDto);
 
