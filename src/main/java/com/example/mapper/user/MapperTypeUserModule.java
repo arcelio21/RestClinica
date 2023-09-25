@@ -46,10 +46,11 @@ public interface MapperTypeUserModule {
 	 * @param id
 	 * @return Lista de TtypeUserModule con la información solicitada.
 	 */
-	@Select("SELECT Ttm.id, Tm.name_modules AS nameModule, Tu.name_type_user AS nameTypeUser, tpr.name_privilege AS namePrivilege " +
+	@Select("SELECT Ttm.id, Tm.name_modules AS nameModule ,Ts.name_status as nameStatus, Tu.name_type_user AS nameTypeUser, tpr.name_privilege AS namePrivilege " +
 			"FROM Ttypeusers_modules Ttm " +
 			"INNER JOIN Tmodules_privileges Tp on Ttm.modls_privgs_id = Tp.id " +
 			"INNER JOIN Tmodules Tm on Tp.module_id = Tm.id " +
+			"INNER JOIN Tstatus Ts on Tp.status_id = Ts.id " +
 			"INNER JOIN Tprivileges tpr ON Tp.privilege_id = tpr.id " +
 			"INNER JOIN Ttypes_users Tu on Ttm.type_user_id = Tu.id " +
 			"WHERE Ttm.id = #{id}")
@@ -163,11 +164,11 @@ public interface MapperTypeUserModule {
 			 INNER JOIN Tmodules_privileges Tp on tpm.modls_privgs_id = Tp.id
 			 INNER JOIN Tprivileges Tpr on Tp.privilege_id = Tpr.id
 			 INNER JOIN Tstatus Ts on Tp.status_id = Ts.id
-			 WHERE tpm.type_user_id =#{idTypeUser} AND Tp.module_id=#{idModule} AND tp.status_id=1
+			 WHERE tpm.type_user_id =#{idTypeUser} AND Tp.module_id=#{idModule} AND Tp.status_id=1
 	""")
 	@Results(value = {
 			@Result(column = "idPrivilege", property = "modulePrivilegeId.privilege.id"),
-			@Result(column = "namePrivelege", property = "modulePrivilegeId.privilege.namePrivilege"),
+			@Result(column = "namePrivilege", property = "modulePrivilegeId.privilege.namePrivilege"),
 			@Result(column = "idStatus", property = "modulePrivilegeId.status.id"),
 			@Result(column = "nameStatus", property = "modulePrivilegeId.status.name")
 	})
