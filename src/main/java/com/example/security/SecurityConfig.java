@@ -26,29 +26,27 @@ public class SecurityConfig {
         httpSecurity
                 .csrf()
                 .disable()
-                .authorizeHttpRequests()
-                .requestMatchers(
-                        new AntPathRequestMatcher("/api/v1/province/**",HttpMethod.GET.name()),
-                        new AntPathRequestMatcher("/api/v1/village/**",HttpMethod.GET.name()),
-                        new AntPathRequestMatcher("/api/v1/district/**",HttpMethod.GET.name()),
-                        new AntPathRequestMatcher("/api/v1/address/**",HttpMethod.GET.name()),
-                        new AntPathRequestMatcher("/swagger-ui.html"),
-                        new AntPathRequestMatcher("/api/v1/auth/**"),
-                        new AntPathRequestMatcher("/swagger-ui/index.html"),
-                        new AntPathRequestMatcher("/swagger-ui/**"),
-                        new AntPathRequestMatcher("/v3/api-docs/**"),
-                        new AntPathRequestMatcher("/webjars/**"),
-                        new AntPathRequestMatcher("/api-docs/**"))
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(customAuthenticationEntryPoint)
-                .and()
+                .authorizeHttpRequests((request)-> request.requestMatchers(
+                                new AntPathRequestMatcher("/api/v1/province/**",HttpMethod.GET.name()),
+                                new AntPathRequestMatcher("/api/v1/village/**",HttpMethod.GET.name()),
+                                new AntPathRequestMatcher("/api/v1/district/**",HttpMethod.GET.name()),
+                                new AntPathRequestMatcher("/api/v1/address/**",HttpMethod.GET.name()),
+                                new AntPathRequestMatcher("/swagger-ui.html"),
+                                new AntPathRequestMatcher("/api/v1/auth/**"),
+                                new AntPathRequestMatcher("/swagger-ui/index.html"),
+                                new AntPathRequestMatcher("/swagger-ui/**"),
+                                new AntPathRequestMatcher("/v3/api-docs/**"),
+                                new AntPathRequestMatcher("/webjars/**"),
+                                new AntPathRequestMatcher("/api-docs/**"))
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
+                .sessionManagement((sessionManagementConfigurer)->
+                        sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .exceptionHandling((exceptionHandling) ->
+                        exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint)
+                )
                 .authenticationProvider(this.authenticationProvider)
                 .addFilterBefore(this.jwtFilter,UsernamePasswordAuthenticationFilter.class);
 
