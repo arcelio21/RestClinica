@@ -1,5 +1,6 @@
 package com.example.mapper.user;
 
+import com.example.dto.user.typeuser_module.ModuleRoute;
 import com.example.entity.user.TtypeUserModule;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.ResultMap;
@@ -173,6 +174,22 @@ public interface MapperTypeUserModule {
 			@Result(column = "nameStatus", property = "modulePrivilegeId.status.name")
 	})
 	List<TtypeUserModule> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(Integer idTypeUser, Long idModule);
+
+	@Select(value = """
+            	SELECT mo.name_modules AS nameModule, tu.name_type_user AS typeUser, pr.name_privilege AS namePrivilege
+                 	FROM Ttypeusers_modules tm
+                 	INNER JOIN Tmodules_privileges mp  on tm.modls_privgs_id = mp.id
+                 	INNER JOIN Ttypes_users tu ON tm.type_user_id = tu.id
+                 	INNER JOIN Tmodules mo ON mp.module_id = mo.id
+                 	INNER JOIN Tprivileges pr ON mp.privilege_id = pr.id
+             	WHERE mp.status_id = 1
+            """)
+	@Results(value = {
+			@Result(column = "nameModule", property = "module"),
+			@Result(column = "typeUser", property = "typeUser"),
+			@Result(column = "namePrivilege", property = "privilege")
+	})
+	List<ModuleRoute> getRouteModule();
 
 
 	/**
