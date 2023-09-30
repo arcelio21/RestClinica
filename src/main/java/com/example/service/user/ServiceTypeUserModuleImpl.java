@@ -323,4 +323,9 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 
 		return moduleTypeUserGetDtoList;
 	}
+
+	@Override
+	public List<ModuleRoute> getRouteModule() {
+		return this.mapperTypeUserModule.getRouteModule();
+	}
 }

@@ -14,4 +14,6 @@ public interface IServiceTypeUserModule<GET,ID,UPDATE,SAVE> extends ServiceTempl
     List<TypeUserOfModuleGetDto> getTypeUserDistinctByIdModuleAndIdStatus(Long idModule, Integer idStatus);
     List<PrivilegeOfModuleGetDto> getPrivelegeOfModuleByIdTypeUserAndIdModuleAndStatusActived(Integer idTypeUser, Long idModule);
     List<TypeUserModuleGetDto> getTypeModulePrivilegeByidTypeUserAndStatusActived(Integer idTypeUser);
+
+    List<ModuleRoute> getRouteModule();
 }
