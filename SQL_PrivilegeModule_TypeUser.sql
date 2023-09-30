@@ -39,3 +39,12 @@ INNER JOIN Tmodules_privileges Tp on tpm.modls_privgs_id = Tp.id
 INNER JOIN Tprivileges Tpr on Tp.privilege_id = Tpr.id
 INNER JOIN Tstatus Ts on Tp.status_id = Ts.id
 WHERE tpm.type_user_id = 1 AND Tp.module_id=4;
+
+SELECT mo.name_modules AS nameMOdule, tu.name_type_user AS typeUser, pr.name_privilege AS namePrivilege
+    FROM Ttypeusers_modules tm
+    INNER JOIN Tmodules_privileges mp  on tm.modls_privgs_id = mp.id
+    INNER JOIN Ttypes_users tu ON tm.type_user_id = tu.id
+    INNER JOIN Tmodules mo ON mp.module_id = mo.id
+    INNER JOIN Tprivileges pr ON mp.privilege_id = pr.id
+WHERE mp.status_id = 1;
+
