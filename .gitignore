@@ -23,4 +23,4 @@ target/
 *.jar
 
 # ARCHIVOS INNCESARIOS
-SQL_PrivilegeModule_TypeUser.txt
+SQL_PrivilegeModule_TypeUser.sql
