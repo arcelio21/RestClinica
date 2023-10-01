@@ -18,7 +18,6 @@ import com.example.exception.user.user_reg.UsernameInvalid;
 import com.example.mapper.address.MapperAddress;
 import com.example.mapper.user.MapperUserReg;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +30,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ServiceUserRegImpl implements IServiceUserReg<UserRegDto, Long, UserRegUpdateDto, UserRegSaveDto>{
 
 	private final MapperUserReg mapperUserReg;

@@ -2,7 +2,6 @@
 
 import java.util.List;
 
-import com.example.entity.user.TuserTypeReg;
 import com.example.service.ServiceTemplateCrud;
 
 public interface IServiceUserTypeReg<GET,ID,UPDATE,SAVE> extends ServiceTemplateCrud<GET,ID,UPDATE,SAVE>{
