@@ -17,15 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tprovince;
-import com.example.entity.address.Tvillage;
 import com.example.mapper.address.MapperProvince;
 
 @ExtendWith(SpringExtension.class)

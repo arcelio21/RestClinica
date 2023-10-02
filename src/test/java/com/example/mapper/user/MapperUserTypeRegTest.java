@@ -50,7 +50,7 @@ class MapperUserTypeRegTest {
 
 	@Test
 	void getByIdUserReg(){
-		List<TuserTypeReg> users=this.mapperUserTypeReg.getByIdUserReg(1);
+		List<TuserTypeReg> users=this.mapperUserTypeReg.getByIdUserReg(1L);
 		assertNotNull(users);
 		assertTrue(users.size()>0);
 		assertNotNull(users.get(0).getStatusId());

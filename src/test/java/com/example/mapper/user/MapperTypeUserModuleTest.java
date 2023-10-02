@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import com.example.entity.modules.Tmodule;
-import com.example.entity.status.Tstatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +13,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.example.entity.modules.TmodulePrivilege;
-import com.example.entity.user.TtypeUser;
 import com.example.entity.user.TtypeUserModule;
 import com.example.mapper.modules.MapperModulePrivilege;
 
