@@ -96,9 +96,16 @@ public interface MapperUserTypeReg {
 	)
 	List<TuserTypeReg> getByIdTypeUser(@Param("idTypeUser") Integer id);
 	
-	@Select("SELECT * FROM 	Tusers_types_regs WHERE status_id=#{id}")
+	@Select("""
+		SELECT utr.id AS ID, ur.name AS Name, ur.last_name AS LastName, ur.iden_card AS Identification,tu.name_type_user as TypeUser,
+			st.name_status AS Status
+					FROM Tusers_types_regs utr
+					INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
+					INNER JOIN TusersRegs ur ON utr.user_reg_id = ur.id
+		WHERE utr.status_id=#{idStatus}
+	""")
 	@ResultMap("userTypeRegMap")
-	List<TuserTypeReg> getByIdStatus(@Param("id") Integer id);
+	List<TuserTypeReg> getByIdStatus(@Param("idStatus") Integer id);
 	
 	@Update("UPDATE Tusers_types_regs "
 			+ "SET user_reg_id=#{user.userRegId.id}, type_user_id=#{user.typeUser.id}, status_id=#{user.statusId.id} "
