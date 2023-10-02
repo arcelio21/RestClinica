@@ -48,3 +48,11 @@ SELECT mo.name_modules AS nameMOdule, tu.name_type_user AS typeUser, pr.name_pri
     INNER JOIN Tprivileges pr ON mp.privilege_id = pr.id
 WHERE mp.status_id = 1;
 
+
+# OBTENER DATOS DE TIPOS DE USUARIOS Y USUARIOS ASOCIADOS
+
+SELECT utr.id AS ID, concat(ur.name, ' ', ur.last_name) AS Nombre, ur.iden_card AS Cedula,tu.name_type_user as TypeUser, st.name_status AS Estado
+    FROM Tusers_types_regs utr
+    INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
+    INNER JOIN TusersRegs ur ON utr.user_reg_id = ur.id
+    INNER JOIN Tstatus st ON utr.status_id = st.id;
