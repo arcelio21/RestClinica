@@ -2,28 +2,39 @@ package com.example.service.user;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
+import com.example.dtomapper.user.DtoUserTypeRegMapper;
 import com.example.entity.user.TuserTypeReg;
+import com.example.exception.NoDataFoundException;
 import com.example.mapper.user.MapperUserTypeReg;
+
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
-public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<TuserTypeReg, Integer,TuserTypeReg,TuserTypeReg> {
+public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGetDto, Integer,TuserTypeReg,TuserTypeReg> {
 
-	private MapperUserTypeReg mapperUserTypeReg;
-
-	public ServiceUserTypeRegImpl(MapperUserTypeReg mapperUserTypeReg) {
-		this.mapperUserTypeReg = mapperUserTypeReg;
-	}
+	private final MapperUserTypeReg mapperUserTypeReg;
+	private final DtoUserTypeRegMapper dtoMapperUserTypeReg;
 
 	@Override
-	public List<TuserTypeReg> getAll() {
-		List<TuserTypeReg> tuserTypeRegs= this.mapperUserTypeReg.getAll();
-		if(tuserTypeRegs.size()<=0){
-		  return Collections.emptyList();
+	public List<UserTypeRegGetDto> getAll() {
+		
+		List<UserTypeRegGetDto> userTypeRegGetDtos = Optional.ofNullable(this.mapperUserTypeReg.getAll())
+		.orElseThrow(()-> new NoDataFoundException("Data is Empty"))
+		.stream()
+		.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserTypeRegDto)
+		.toList();
+
+		if(userTypeRegGetDtos.isEmpty()){
+			throw new NoDataFoundException("Data is Empty");
 		}
-		return tuserTypeRegs;
+
+		return userTypeRegGetDtos;
 	}
 
 	@Override
