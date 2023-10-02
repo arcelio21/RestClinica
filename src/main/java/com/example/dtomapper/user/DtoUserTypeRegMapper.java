@@ -1,5 +1,6 @@
 package com.example.dtomapper.user;
 
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -12,6 +13,16 @@ import com.example.entity.user.TuserTypeReg;
 public interface DtoUserTypeRegMapper {
     
     DtoUserTypeRegMapper INSTANCE = Mappers.getMapper(DtoUserTypeRegMapper.class);
+
+    @BeforeMapping
+    default void validateFullName(TuserTypeReg user){
+        if(user==null 
+            || user.getUserRegId().getName() == null || user.getUserRegId().getName().isEmpty()
+            || user.getUserRegId().getLastName() == null || user.getUserRegId().getLastName().isEmpty()){
+
+            throw new RuntimeException("ERROR DE MAPEO DE FULLNAME");
+        }
+    }
 
     @Mappings(value = {
         @Mapping(target = "id", source = "user.id"),
