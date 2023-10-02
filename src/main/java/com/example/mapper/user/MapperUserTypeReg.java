@@ -87,7 +87,7 @@ public interface MapperUserTypeReg {
 			@Result(column = "TypeUser", property = "typeUser.nameTypeUser"),
 			@Result(column = "Status", property = "statusId.name")
 	})
-	TuserTypeReg getByIdUserReg(@Param("id") Long id);
+	List<TuserTypeReg> getByIdUserReg(@Param("id") Long id);
 
 	/**
 	 * Recupera una lista de registros de usuario tipo-registro activados asociados
