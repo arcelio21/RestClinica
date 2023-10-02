@@ -29,17 +29,17 @@ class MapperUserTypeRegTest {
 	void getAll() {
 		List<TuserTypeReg> users=this.mapperUserTypeReg.getAll();
 		assertNotNull(users);
-		assertTrue(users.size()>0);
+        assertFalse(users.isEmpty());
 		assertNotNull(users.get(0).getStatusId());
 		assertNotNull(users.get(0).getTypeUser());
 		assertNotNull(users.get(0).getUserRegId());
-		users.forEach(System.out::println);
+		users.forEach((s) -> System.out.println(s.getId()+", "+s.getUserRegId().getName()+" "+ s.getUserRegId().getLastName()+", "+s.getTypeUser().getNameTypeUser()));
 		
 	}
-	
+
 	@Test
 	void getById() {
-		TuserTypeReg user=this.mapperUserTypeReg.getById(1);
+		TuserTypeReg user=this.mapperUserTypeReg.getById(1L);
 		assertNotNull(user);
 		assertNotNull(user.getStatusId().getId());
 		assertNotNull(user.getTypeUser().getId());
@@ -83,7 +83,7 @@ class MapperUserTypeRegTest {
 	
 	@Test
 	void update() {
-		TuserTypeReg user=this.mapperUserTypeReg.getById(1);
+		TuserTypeReg user=this.mapperUserTypeReg.getById(1L);
 		assertNotNull(user);
 		
 		user.setStatusId(new Tstatus(2));

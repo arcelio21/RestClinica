@@ -104,7 +104,7 @@ class MapperUserSpecialityTest {
 	void save() {
 		TuserSpeciality speciality=new TuserSpeciality();
 		speciality.setSpecialityId(new Tspeciality(1));
-		speciality.setUserTypeRegId(new TuserTypeReg(1));
+		speciality.setUserTypeRegId(new TuserTypeReg(1L));
 		speciality.setStatusId(new Tstatus(1));
 		
 		Integer rowAffected=this.mapperUserSpeciality.save(speciality);
