@@ -8,7 +8,7 @@ import com.example.entity.status.Tstatus;
 public class TuserTypeReg {
 
 	@Positive
-	private Integer id;
+	private Long id;
 	
 	@NotNull
 	private TuserReg userRegId;
@@ -25,13 +25,13 @@ public class TuserTypeReg {
 	}
 
 
-	public TuserTypeReg(@Positive Integer id) {
+	public TuserTypeReg(@Positive Long id) {
 		super();
 		this.id = id;
 	}
 
 
-	public TuserTypeReg(@Positive Integer id, @NotNull TuserReg userRegId, @NotNull TtypeUser typeUser,
+	public TuserTypeReg(@Positive Long id, @NotNull TuserReg userRegId, @NotNull TtypeUser typeUser,
 			@NotNull Tstatus statusId) {
 		super();
 		this.id = id;
@@ -41,12 +41,12 @@ public class TuserTypeReg {
 	}
 
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
