@@ -16,20 +16,37 @@ import com.example.entity.user.TuserTypeReg;
 @Mapper
 public interface MapperUserTypeReg {
 
-	@Select("SELECT * FROM Tusers_types_regs")
+	@Select("""
+		SELECT utr.id AS ID, ur.name AS Name, ur.last_name AS LastName, ur.iden_card AS Identification,tu.name_type_user as TypeUser, 
+			st.name_status AS Status
+								FROM Tusers_types_regs utr
+								INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
+								INNER JOIN TusersRegs ur ON utr.user_reg_id = ur.id
+								INNER JOIN Tstatus st ON utr.status_id = st.id
+	""")
 	@Results(id = "userTypeRegMap",
 		value = {
-				@Result(column = "id",property = "id"),
-				@Result(column = "user_reg_id",property = "userRegId.id"),
-				@Result(column = "type_user_id",property = "typeUser.id"),
-				@Result(column = "status_id",property = "statusId.id")
+				@Result(column = "ID",property = "id"),
+				@Result(column = "Name",property = "userRegId.name"),
+				@Result(column = "LastName",property = "userRegId.lastName"),
+				@Result(column = "Identification",property = "userRegId.idenCard"),
+				@Result(column = "TypeUser",property = "typeUser.nameTypeUser"),
+				@Result(column = "Status",property = "statusId.name")
 		}
 	)
 	List<TuserTypeReg> getAll();
-	
-	@Select("SELECT * FROM Tusers_types_regs WHERE id=#{id}")
+
+	@Select("""
+		SELECT utr.id AS ID, ur.name AS Name, ur.last_name AS LastName, ur.iden_card AS Identification,tu.name_type_user as TypeUser,
+			st.name_status AS Status
+								FROM Tusers_types_regs utr
+								INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
+								INNER JOIN TusersRegs ur ON utr.user_reg_id = ur.id
+								INNER JOIN Tstatus st ON utr.status_id = st.id
+								WHERE utr.id=#{id}
+	""")
 	@ResultMap("userTypeRegMap")
-	TuserTypeReg getById(@Param("id") Integer id);
+	TuserTypeReg getById(@Param("id") Long id);
 
 	@Select("SELECT * FROM Tusers_types_regs WHERE user_reg_id=#{id}")
 	@ResultMap("userTypeRegMap")
