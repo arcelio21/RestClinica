@@ -55,8 +55,26 @@ public interface MapperUserTypeReg {
 		 INNER JOIN Tstatus st ON utr.status_id = st.id
 	 WHERE utr.user_reg_id = #{id}
 	""")
-	@ResultMap("userTypeRegMap")
+	@Results({
+		@Result(column = "ID", property = "id"),
+		@Result(column = "TypeUser",property = "typeUser.nameTypeUser"),
+		@Result(column = "Status",property = "statusId.name")
+	})
 	List<TuserTypeReg> getByIdUserReg(@Param("id") Long id);
+
+	@Select("""
+		SELECT utr.id AS ID,tu.name_type_user as TypeUser, st.name_status AS Estado
+		FROM Tusers_types_regs utr
+					INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
+					INNER JOIN Tstatus st ON utr.status_id = st.id
+		WHERE utr.user_reg_id =#{id} AND utr.status_id=1 
+	""")
+	@Results({
+		@Result(column = "ID", property = "id"),
+		@Result(column = "TypeUser",property = "typeUser.nameTypeUser"),
+		@Result(column = "Status",property = "statusId.name")
+	})
+	List<TuserTypeReg> getByIdUserRegActivated(@Param("id") Long id);
 	
 	@Select("SELECT * FROM Tusers_types_regs WHERE type_user_id=#{id}")
 	@ResultMap("userTypeRegMap")
