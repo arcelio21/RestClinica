@@ -2,6 +2,7 @@ package com.example.service.user;
 
 import java.util.List;
 
+import com.example.dto.user.type_user_reg.TypeUserOfUserRegGetDto;
 import com.example.service.ServiceTemplateCrud;
 
 /**
@@ -19,7 +20,9 @@ import com.example.service.ServiceTemplateCrud;
  */
 public interface IServiceUserTypeReg<GET, ID, UPDATE, SAVE> extends ServiceTemplateCrud<GET, ID, UPDATE, SAVE> {
 
-	List<GET> getByIdUserReg(ID id);
+	List<TypeUserOfUserRegGetDto> getByIdUserReg(ID id);
+	
+	List<TypeUserOfUserRegGetDto> getByIdUserRegActivated(ID id);
 
 	List<GET> getByIdTypeUser(ID id);
 
