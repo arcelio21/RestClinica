@@ -23,6 +23,6 @@ public interface IServiceUserTypeReg<GET, ID, UPDATE, SAVE> extends ServiceTempl
 
 	List<GET> getByIdTypeUser(ID id);
 
-	List<GET> getByIdStatus(ID id);
+	List<GET> getByIdStatus(Integer id);
 
 }
