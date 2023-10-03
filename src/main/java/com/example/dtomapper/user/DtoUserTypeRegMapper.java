@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
+import com.example.dto.user.type_user_reg.TypeUserOfUserRegGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
 import com.example.entity.user.TuserTypeReg;
 
@@ -32,4 +33,11 @@ public interface DtoUserTypeRegMapper {
         @Mapping(target = "status", source = "user.statusId.name")
     })
     UserTypeRegGetDto tuserTypeRegToUserTypeRegDto(TuserTypeReg user);
+
+    @Mappings(value = {
+        @Mapping(target = "id", source = "user.id"),
+        @Mapping(target = "typeUser", source = "user.typeUser.nameTypeUser"),
+        @Mapping(target = "status", source = "user.statusId.name")
+    })
+    TypeUserOfUserRegGetDto tuserTypeRegToTypeUserOfUserRegGet(TuserTypeReg user);
 }
