@@ -18,21 +18,22 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGetDto, Long,TuserTypeReg,TuserTypeReg> {
+public class ServiceUserTypeRegImpl
+		implements IServiceUserTypeReg<UserTypeRegGetDto, Long, TuserTypeReg, TuserTypeReg> {
 
 	private final MapperUserTypeReg mapperUserTypeReg;
 	private final DtoUserTypeRegMapper dtoMapperUserTypeReg;
 
 	@Override
 	public List<UserTypeRegGetDto> getAll() {
-		
-		List<UserTypeRegGetDto> userTypeRegGetDtos = Optional.ofNullable(this.mapperUserTypeReg.getAll())
-		.orElseThrow(()-> new NoDataFoundException("Data is Empty"))
-		.stream()
-		.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserTypeRegDto)
-		.toList();
 
-		if(userTypeRegGetDtos.isEmpty()){
+		List<UserTypeRegGetDto> userTypeRegGetDtos = Optional.ofNullable(this.mapperUserTypeReg.getAll())
+				.orElseThrow(() -> new NoDataFoundException("Data is Empty"))
+				.stream()
+				.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserTypeRegDto)
+				.toList();
+
+		if (userTypeRegGetDtos.isEmpty()) {
 			throw new NoDataFoundException("Data is Empty");
 		}
 
@@ -43,25 +44,24 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGe
 	public UserTypeRegGetDto getById(Long id) {
 		this.isValitedId(id);
 
-		return Optional.of(id).
-		map(this.mapperUserTypeReg::getById)
-		.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserTypeRegDto)
-		.orElseThrow(()-> new NoDataFoundException(id));
+		return Optional.of(id).map(this.mapperUserTypeReg::getById)
+				.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserTypeRegDto)
+				.orElseThrow(() -> new NoDataFoundException(id));
 	}
 
 	@Override
 	public Integer update(TuserTypeReg tuserTypeReg) {
 
-		if(tuserTypeReg==null || tuserTypeReg.getId()==null || tuserTypeReg.getId()<=0){
+		if (tuserTypeReg == null || tuserTypeReg.getId() == null || tuserTypeReg.getId() <= 0) {
 			return 0;
 		}
-		return this.mapperUserTypeReg.update(tuserTypeReg);     
+		return this.mapperUserTypeReg.update(tuserTypeReg);
 	}
 
 	@Override
 	public Integer save(TuserTypeReg tuserTypeReg) {
 
-		if(tuserTypeReg==null){
+		if (tuserTypeReg == null) {
 			return 0;
 		}
 		return this.mapperUserTypeReg.save(tuserTypeReg);
@@ -73,13 +73,13 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGe
 		this.isValitedId(id);
 
 		List<TypeUserOfUserRegGetDto> typeUserOfUserRegGetDtos = Optional.of(id)
-		.map(this.mapperUserTypeReg::getByIdUserReg)
-		.orElseThrow(()-> new NoDataFoundException("Data Not Found"))
-		.stream()
-		.map(this.dtoMapperUserTypeReg::tuserTypeRegToTypeUserOfUserRegGet)
-		.toList();
+				.map(this.mapperUserTypeReg::getByIdUserReg)
+				.orElseThrow(() -> new NoDataFoundException("Data Not Found"))
+				.stream()
+				.map(this.dtoMapperUserTypeReg::tuserTypeRegToTypeUserOfUserRegGet)
+				.toList();
 
-		if(typeUserOfUserRegGetDtos.isEmpty()){
+		if (typeUserOfUserRegGetDtos.isEmpty()) {
 			throw new NoDataFoundException("Data is Empty");
 		}
 
@@ -87,18 +87,18 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGe
 	}
 
 	@Override
-	public List<TypeUserOfUserRegGetDto> getByIdUserRegActivated(Long id){
-		
+	public List<TypeUserOfUserRegGetDto> getByIdUserRegActivated(Long id) {
+
 		this.isValitedId(id);
 
 		List<TypeUserOfUserRegGetDto> typeUserOfUserRegGetDtos = Optional.of(id)
-		.map(this.mapperUserTypeReg::getByIdUserRegActivated)
-		.orElseThrow(()-> new NoDataFoundException("Data Not Found"))
-		.stream()
-		.map(this.dtoMapperUserTypeReg::tuserTypeRegToTypeUserOfUserRegGet)
-		.toList();
+				.map(this.mapperUserTypeReg::getByIdUserRegActivated)
+				.orElseThrow(() -> new NoDataFoundException("Data Not Found"))
+				.stream()
+				.map(this.dtoMapperUserTypeReg::tuserTypeRegToTypeUserOfUserRegGet)
+				.toList();
 
-		if(typeUserOfUserRegGetDtos.isEmpty()){
+		if (typeUserOfUserRegGetDtos.isEmpty()) {
 			throw new NoDataFoundException("Data is Empty");
 		}
 
@@ -107,17 +107,17 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGe
 
 	@Override
 	public List<UserRegOfTypeUserGetDto> getByIdTypeUser(Integer id) {
-		
+
 		this.isValitedId(id);
 
 		List<UserRegOfTypeUserGetDto> userRegOfTypeUserGetDtos = Optional.of(id)
-		.map(this.mapperUserTypeReg::getByIdTypeUser)
-		.orElseThrow(()-> new NoDataFoundException("Data Not Found"))
-		.stream()
-		.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserRegOfTypeUserGet)
-		.toList();
+				.map(this.mapperUserTypeReg::getByIdTypeUser)
+				.orElseThrow(() -> new NoDataFoundException("Data Not Found"))
+				.stream()
+				.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserRegOfTypeUserGet)
+				.toList();
 
-		if(userRegOfTypeUserGetDtos.isEmpty()){
+		if (userRegOfTypeUserGetDtos.isEmpty()) {
 			throw new NoDataFoundException("Data is Empty");
 		}
 
@@ -129,27 +129,27 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGe
 		this.isValitedId(id);
 
 		List<UserTypeRegGetDto> userTypeRegGetDtos = Optional.of(id)
-		.map(this.mapperUserTypeReg::getByIdStatus)
-		.orElseThrow(()-> new NoDataFoundException("Data Not Valid"))
-		.stream()
-		.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserTypeRegDto)
-		.toList();
+				.map(this.mapperUserTypeReg::getByIdStatus)
+				.orElseThrow(() -> new NoDataFoundException("Data Not Valid"))
+				.stream()
+				.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserTypeRegDto)
+				.toList();
 
-		if(userTypeRegGetDtos.isEmpty()){
+		if (userTypeRegGetDtos.isEmpty()) {
 			throw new NoDataFoundException("Data is Empty");
 		}
 
 		return userTypeRegGetDtos;
 	}
 
-	private void isValitedId (Long value){
-		if(value==null || value<=0){
+	private void isValitedId(Long value) {
+		if (value == null || value <= 0) {
 			throw new NoDataFoundException(value);
 		}
 	}
 
-	private void isValitedId (Integer value){
-		if(value==null || value<=0){
+	private void isValitedId(Integer value) {
+		if (value == null || value <= 0) {
 			throw new NoDataFoundException(value);
 		}
 	}
