@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.dto.user.type_user_reg.TypeUserOfUserRegGetDto;
+import com.example.dto.user.type_user_reg.UserRegOfTypeUserGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
 import com.example.dtomapper.user.DtoUserTypeRegMapper;
 import com.example.entity.user.TuserTypeReg;
@@ -103,14 +104,24 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGe
 
 		return typeUserOfUserRegGetDtos;
 	}
-	
+
 	@Override
-	public List<TuserTypeReg> getByIdTypeUser(Long id) {
+	public List<UserRegOfTypeUserGetDto> getByIdTypeUser(Integer id) {
 		
-		if(id==null || id<=0){
-			return Collections.emptyList();
+		this.isValitedId(id);
+
+		List<UserRegOfTypeUserGetDto> userRegOfTypeUserGetDtos = Optional.of(id)
+		.map(this.mapperUserTypeReg::getByIdTypeUser)
+		.orElseThrow(()-> new NoDataFoundException("Data Not Found"))
+		.stream()
+		.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserRegOfTypeUserGet)
+		.toList();
+
+		if(userRegOfTypeUserGetDtos.isEmpty()){
+			throw new NoDataFoundException("Data is Empty");
 		}
-		return this.mapperUserTypeReg.getByIdTypeUser(id);
+
+		return userRegOfTypeUserGetDtos;
 	}
 
 	@Override
