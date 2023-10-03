@@ -86,7 +86,26 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGe
 	}
 
 	@Override
-	public List<TuserTypeReg> getByIdTypeUser(Integer id) {
+	public List<TypeUserOfUserRegGetDto> getByIdUserRegActivated(Long id){
+		
+		this.isValitedId(id);
+
+		List<TypeUserOfUserRegGetDto> typeUserOfUserRegGetDtos = Optional.of(id)
+		.map(this.mapperUserTypeReg::getByIdUserRegActivated)
+		.orElseThrow(()-> new NoDataFoundException("Data Not Found"))
+		.stream()
+		.map(this.dtoMapperUserTypeReg::tuserTypeRegToTypeUserOfUserRegGet)
+		.toList();
+
+		if(typeUserOfUserRegGetDtos.isEmpty()){
+			throw new NoDataFoundException("Data is Empty");
+		}
+
+		return typeUserOfUserRegGetDtos;
+	}
+	
+	@Override
+	public List<TuserTypeReg> getByIdTypeUser(Long id) {
 		
 		if(id==null || id<=0){
 			return Collections.emptyList();
