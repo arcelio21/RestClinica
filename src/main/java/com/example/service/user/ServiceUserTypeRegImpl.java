@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGetDto, Integer,TuserTypeReg,TuserTypeReg> {
+public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGetDto, Long,TuserTypeReg,TuserTypeReg> {
 
 	private final MapperUserTypeReg mapperUserTypeReg;
 	private final DtoUserTypeRegMapper dtoMapperUserTypeReg;
@@ -38,12 +38,13 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGe
 	}
 
 	@Override
-	public TuserTypeReg getById(Integer id) {
+	public UserTypeRegGetDto getById(Long id) {
+		this.isValitedId(id);
 
-		if(id==null || id<=0){
-			return null;
-		}
-		return this.mapperUserTypeReg.getById(id);
+		return Optional.of(id).
+		map(this.mapperUserTypeReg::getById)
+		.map(this.dtoMapperUserTypeReg::tuserTypeRegToUserTypeRegDto)
+		.orElseThrow(()-> new NoDataFoundException(id));
 	}
 
 	@Override
@@ -89,6 +90,18 @@ public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGe
 			return Collections.emptyList();
 		}
 		return this.mapperUserTypeReg.getByIdStatus(id);
+	}
+
+	private void isValitedId (Long value){
+		if(value==null || value<=0){
+			throw new NoDataFoundException(value);
+		}
+	}
+
+	private void isValitedId (Integer value){
+		if(value==null || value<=0){
+			throw new NoDataFoundException(value);
+		}
 	}
 
 }
