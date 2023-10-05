@@ -10,11 +10,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.dto.user.type_user_reg.TypeUserOfUserRegGetDto;
 import com.example.dto.user.type_user_reg.UserRegOfTypeUserGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
+import com.example.dto.user.type_user_reg.UserTypeRegUpdateDto;
 import com.example.dtomapper.user.DtoUserTypeRegMapper;
 import com.example.entity.user.TuserTypeReg;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.type_user_reg.UserTypeRegNotUpdateException;
 import com.example.mapper.user.MapperUserTypeReg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -752,5 +755,155 @@ public class ServiceUserTypeRegImplTest {
 
         then(this.mapperUserTypeReg).should(times(1)).getByIdStatus(idValid);
         then(this.dtoMapperUserTypeReg).shouldHaveNoInteractions();
+    }
+
+    //UPDATE--------------------------------------------------------------------------------------------------------
+
+    /**
+     * Prueba unitaria para el método `update` del servicio UserTypeReg cuando se actualiza un registro válido.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` con un objeto `UserTypeRegUpdateDto` válido,
+     *       y la operación de actualización tiene éxito (retorna 1), la prueba unitaria sea exitosa.</li>
+     *   <li>Confirma que el método `dtoMapperUserTypeReg.userTypeRegUpdateToTuserTypeReg` se llama exactamente una vez
+     *       para convertir el DTO en una entidad de base de datos.</li>
+     *   <li>Confirma que el método `mapperUserTypeReg.update` se llama exactamente una vez para realizar la actualización
+     *       en la base de datos.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `update` del servicio con un objeto `UserTypeRegUpdateDto` válido,
+     *       y se simula que la conversión de DTO a entidad y la operación de actualización en la base de datos son exitosas.</li>
+     *   <li>Se verifica que se devuelve un valor no nulo (cantidad de filas afectadas) y que es igual a 1, lo que indica
+     *       que la actualización fue exitosa.</li>
+     *   <li>Se verifica que el método `dtoMapperUserTypeReg.userTypeRegUpdateToTuserTypeReg` se llama exactamente una vez
+     *       para realizar la conversión de DTO a entidad.</li>
+     *   <li>Se verifica que el método `mapperUserTypeReg.update` se llama exactamente una vez para realizar la actualización
+     *       en la base de datos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de UserTypeReg")
+    void update(){
+
+        UserTypeRegUpdateDto updateDtoValid = new UserTypeRegUpdateDto(1L, 1L, 1, 1);
+
+        given(this.dtoMapperUserTypeReg.userTypeRegUpdateToTuserTypeReg(updateDtoValid)).willReturn(new TuserTypeReg());
+
+        given(this.mapperUserTypeReg.update(any(TuserTypeReg.class))).willReturn(1);
+
+        Integer rowAffected = this.service.update(updateDtoValid);
+
+        assertNotNull(rowAffected);
+        assertEquals(1, rowAffected);
+
+        then(this.dtoMapperUserTypeReg).should(times(1)).userTypeRegUpdateToTuserTypeReg(updateDtoValid);
+        then(this.mapperUserTypeReg).should(times(1)).update(any(TuserTypeReg.class));
+    }
+
+
+    /**
+     * Prueba unitaria para el método `update` del servicio UserTypeReg cuando se intenta actualizar con datos no válidos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` con un objeto `UserTypeRegUpdateDto` no válido (null),
+     *       el servicio arroja una excepción `UserTypeRegNotUpdateException`.</li>
+     *   <li>Confirma que el método `dtoMapperUserTypeReg` y el método `mapperUserTypeReg` no tienen interacciones,
+     *       ya que no deberían ser llamados con datos no válidos.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `update` del servicio con un objeto `UserTypeRegUpdateDto` no válido (null),
+     *       lo que debería arrojar una excepción `UserTypeRegNotUpdateException`.</li>
+     *   <li>Se verifica que tanto el método `dtoMapperUserTypeReg` como el método `mapperUserTypeReg` no tienen interacciones,
+     *       ya que no deben ser llamados con datos no válidos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de UserTypeReg con datos no válidos")
+    void update_dataNotValid(){
+
+        UserTypeRegUpdateDto  updateNotValid = null;
+
+        assertThrows(UserTypeRegNotUpdateException.class, ()-> this.service.update(updateNotValid));
+
+        then(this.dtoMapperUserTypeReg).shouldHaveNoInteractions();
+        then(this.mapperUserTypeReg).shouldHaveNoInteractions();
+
+    }
+
+    /**
+     * Prueba unitaria para el método `update` del servicio UserTypeReg cuando el servicio no puede actualizar los datos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` con datos válidos, pero el servicio no puede actualizar los datos
+     *       (retorna null), arroja una excepción `UserTypeRegNotUpdateException`.</li>
+     *   <li>Confirma que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de actualización,
+     *       y el método `mapperUserTypeReg` se llama exactamente una vez para actualizar los datos en el servicio.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `update` del servicio con datos válidos, pero el servicio no puede actualizar los datos
+     *       (retorna null), lo que debería arrojar una excepción `UserTypeRegNotUpdateException`.</li>
+     *   <li>Se verifica que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de actualización proporcionados,
+     *       y que el método `mapperUserTypeReg` se llama exactamente una vez para intentar actualizar los datos en el servicio.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de UserTypeReg con datos de actualización no válidos")
+    void update_returnDataNotValid(){
+
+        UserTypeRegUpdateDto updateDto = new UserTypeRegUpdateDto(1L, 1L, 1, 1);
+
+        given(this.dtoMapperUserTypeReg.userTypeRegUpdateToTuserTypeReg(updateDto)).willReturn(new TuserTypeReg());
+
+        given(this.mapperUserTypeReg.update(any(TuserTypeReg.class))).willReturn(null);
+
+        assertThrows(UserTypeRegNotUpdateException.class, ()-> this.service.update(updateDto));
+
+
+        then(this.dtoMapperUserTypeReg).should(times(1)).userTypeRegUpdateToTuserTypeReg(updateDto);
+        then(this.mapperUserTypeReg).should(times(1)).update(any(TuserTypeReg.class));
+    }
+
+    /**
+     * Prueba unitaria para el método `update` del servicio UserTypeReg cuando no se afecta ninguna fila.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` con datos válidos, pero la actualización no afecta ninguna fila
+     *       (retorna 0), arroja una excepción `UserTypeRegNotUpdateException`.</li>
+     *   <li>Confirma que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de actualización,
+     *       y el método `mapperUserTypeReg` se llama exactamente una vez para intentar actualizar los datos en el servicio.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `update` del servicio con datos válidos, pero la actualización no afecta
+     *       ninguna fila en la base de datos (retorna 0), lo que debería arrojar una excepción `UserTypeRegNotUpdateException`.</li>
+     *   <li>Se verifica que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de actualización proporcionados,
+     *       y que el método `mapperUserTypeReg` se llama exactamente una vez para intentar actualizar los datos en el servicio.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de actualización de UserTypeReg con cero filas afectadas")
+    void update_returnZeroRowAffected(){
+
+        UserTypeRegUpdateDto updateDto = new UserTypeRegUpdateDto(1L, 1L, 1, 1);
+
+        given(this.dtoMapperUserTypeReg.userTypeRegUpdateToTuserTypeReg(updateDto)).willReturn(new TuserTypeReg());
+
+        given(this.mapperUserTypeReg.update(any(TuserTypeReg.class))).willReturn(0);
+
+        assertThrows(UserTypeRegNotUpdateException.class, ()-> this.service.update(updateDto));
+
+        then(this.dtoMapperUserTypeReg).should(times(1)).userTypeRegUpdateToTuserTypeReg(updateDto);
+        then(this.mapperUserTypeReg).should(times(1)).update(any(TuserTypeReg.class));
     }
 }
