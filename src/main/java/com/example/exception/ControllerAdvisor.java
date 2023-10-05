@@ -29,6 +29,7 @@ import com.example.exception.modules.privilege.PrivilegeNotSaveException;
 import com.example.exception.modules.privilege.PrivilegeNotUpdateException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
+import com.example.exception.user.type_user_reg.UserTypeRegNotSaveException;
 import com.example.exception.user.type_user_reg.UserTypeRegNotUpdateException;
 import com.example.exception.user.typeuser_module.TypeUserModuleNotSaveException;
 import com.example.exception.user.typeuser_module.TypeUserModuleNotUpdateException;
@@ -621,6 +622,22 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserTypeRegNotUpdateException.class)
     public ResponseEntity<ErrorResponseDto> handlerUserTypeRegNotUpdate(UserTypeRegNotUpdateException ex){
+        
+        return ResponseEntity.badRequest().body(
+            ErrorResponseDto.builder()
+            .fecha(LocalDate.now())
+            .messageError(ex.getMessage())
+            .data(
+                (ex.getData()!=null) 
+                    ?ex.getData()
+                    : ""
+            )
+            .build()
+        );
+    }
+
+    @ExceptionHandler(UserTypeRegNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto> handlerUserTypeRegNotSave(UserTypeRegNotSaveException ex){
         
         return ResponseEntity.badRequest().body(
             ErrorResponseDto.builder()
