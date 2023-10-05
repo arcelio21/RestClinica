@@ -15,7 +15,6 @@ import com.example.mapper.user.MapperUserTypeReg;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -58,10 +57,16 @@ public class ServiceUserTypeRegImpl
 			throw new UserTypeRegNotUpdateException(userTypeRegUpdate);
 		}
 
-		return Optional.of(userTypeRegUpdate)
+		Integer rowAffected = Optional.of(userTypeRegUpdate)
 			.map(this.dtoMapperUserTypeReg::userTypeRegUpdateToTuserTypeReg)
 			.map(this.mapperUserTypeReg::update)
 			.orElseThrow(() -> new UserTypeRegNotUpdateException(userTypeRegUpdate));
+
+		if(rowAffected ==null ||rowAffected==0){
+			throw new UserTypeRegNotUpdateException("Datos no encontrados para actualizar", userTypeRegUpdate);
+		}
+
+		return rowAffected;
 	}
 
 	@Override
