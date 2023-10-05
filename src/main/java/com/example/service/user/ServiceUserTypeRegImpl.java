@@ -6,19 +6,22 @@ import java.util.Optional;
 import com.example.dto.user.type_user_reg.TypeUserOfUserRegGetDto;
 import com.example.dto.user.type_user_reg.UserRegOfTypeUserGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
+import com.example.dto.user.type_user_reg.UserTypeRegUpdateDto;
 import com.example.dtomapper.user.DtoUserTypeRegMapper;
 import com.example.entity.user.TuserTypeReg;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.type_user_reg.UserTypeRegNotUpdateException;
 import com.example.mapper.user.MapperUserTypeReg;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class ServiceUserTypeRegImpl
-		implements IServiceUserTypeReg<UserTypeRegGetDto, Long, TuserTypeReg, TuserTypeReg> {
+		implements IServiceUserTypeReg<UserTypeRegGetDto, Long, UserTypeRegUpdateDto, TuserTypeReg> {
 
 	private final MapperUserTypeReg mapperUserTypeReg;
 	private final DtoUserTypeRegMapper dtoMapperUserTypeReg;
@@ -49,12 +52,16 @@ public class ServiceUserTypeRegImpl
 	}
 
 	@Override
-	public Integer update(TuserTypeReg tuserTypeReg) {
+	public Integer update(UserTypeRegUpdateDto userTypeRegUpdate) {
 
-		if (tuserTypeReg == null || tuserTypeReg.getId() == null || tuserTypeReg.getId() <= 0) {
-			return 0;
+		if(userTypeRegUpdate==null){
+			throw new UserTypeRegNotUpdateException(userTypeRegUpdate);
 		}
-		return this.mapperUserTypeReg.update(tuserTypeReg);
+
+		return Optional.of(userTypeRegUpdate)
+			.map(this.dtoMapperUserTypeReg::userTypeRegUpdateToTuserTypeReg)
+			.map(this.mapperUserTypeReg::update)
+			.orElseThrow(() -> new UserTypeRegNotUpdateException(userTypeRegUpdate));
 	}
 
 	@Override
