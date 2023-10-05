@@ -6,10 +6,12 @@ import java.util.Optional;
 import com.example.dto.user.type_user_reg.TypeUserOfUserRegGetDto;
 import com.example.dto.user.type_user_reg.UserRegOfTypeUserGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
+import com.example.dto.user.type_user_reg.UserTypeRegSaveDto;
 import com.example.dto.user.type_user_reg.UserTypeRegUpdateDto;
 import com.example.dtomapper.user.DtoUserTypeRegMapper;
 import com.example.entity.user.TuserTypeReg;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.type_user_reg.UserTypeRegNotSaveException;
 import com.example.exception.user.type_user_reg.UserTypeRegNotUpdateException;
 import com.example.mapper.user.MapperUserTypeReg;
 
@@ -20,7 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class ServiceUserTypeRegImpl
-		implements IServiceUserTypeReg<UserTypeRegGetDto, Long, UserTypeRegUpdateDto, TuserTypeReg> {
+		implements IServiceUserTypeReg<UserTypeRegGetDto, Long, UserTypeRegUpdateDto, UserTypeRegSaveDto> {
 
 	private final MapperUserTypeReg mapperUserTypeReg;
 	private final DtoUserTypeRegMapper dtoMapperUserTypeReg;
@@ -70,12 +72,22 @@ public class ServiceUserTypeRegImpl
 	}
 
 	@Override
-	public Integer save(TuserTypeReg tuserTypeReg) {
+	public Integer save(UserTypeRegSaveDto userTypeRegSave) {
 
-		if (tuserTypeReg == null) {
-			return 0;
+		if (userTypeRegSave == null) {
+			throw new UserTypeRegNotSaveException(userTypeRegSave);
 		}
-		return this.mapperUserTypeReg.save(tuserTypeReg);
+		
+		Integer rowAffected = Optional.of(userTypeRegSave)
+		.map(this.dtoMapperUserTypeReg::userTypeRegSaveToTuserTypeReg)
+		.map(this.mapperUserTypeReg::save)
+		.orElseThrow(()-> new UserTypeRegNotSaveException(userTypeRegSave));
+
+		if(rowAffected==null || rowAffected <= 0){
+			throw new UserTypeRegNotSaveException(userTypeRegSave);
+		}
+
+		return rowAffected;
 	}
 
 	@Override
