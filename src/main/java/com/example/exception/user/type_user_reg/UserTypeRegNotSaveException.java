@@ -11,12 +11,12 @@ public class UserTypeRegNotSaveException extends RuntimeException{
     }
 
     public UserTypeRegNotSaveException(Object data){
-        super("Not Update, Data no valid");
+        super("Not Saved, Data no valid");
         this.data = data;
     }
 
     public UserTypeRegNotSaveException(){
-        super("Not Update, Data no valid");
+        super("Not Saved, Data no valid");
         this.data = null;
     }
 
