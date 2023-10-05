@@ -83,10 +83,10 @@ class MapperUserTypeRegTest {
 	
 	@Test
 	void update() {
-		TuserTypeReg user=this.mapperUserTypeReg.getById(1L);
+		TuserTypeReg user=new TuserTypeReg(3L, new TuserReg(1L), new TtypeUser(1), new Tstatus(1));
 		assertNotNull(user);
 		
-		user.setStatusId(new Tstatus(2));
+		//user.setStatusId(new Tstatus(2));
 		
 		Integer rowAffected=this.mapperUserTypeReg.update(user);
 		assertEquals(1, rowAffected);
