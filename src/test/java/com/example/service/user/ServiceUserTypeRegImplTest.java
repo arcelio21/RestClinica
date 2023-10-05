@@ -10,10 +10,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.dto.user.type_user_reg.TypeUserOfUserRegGetDto;
 import com.example.dto.user.type_user_reg.UserRegOfTypeUserGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
+import com.example.dto.user.type_user_reg.UserTypeRegSaveDto;
 import com.example.dto.user.type_user_reg.UserTypeRegUpdateDto;
 import com.example.dtomapper.user.DtoUserTypeRegMapper;
 import com.example.entity.user.TuserTypeReg;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.user.type_user_reg.UserTypeRegNotSaveException;
 import com.example.exception.user.type_user_reg.UserTypeRegNotUpdateException;
 import com.example.mapper.user.MapperUserTypeReg;
 
@@ -905,5 +907,149 @@ public class ServiceUserTypeRegImplTest {
 
         then(this.dtoMapperUserTypeReg).should(times(1)).userTypeRegUpdateToTuserTypeReg(updateDto);
         then(this.mapperUserTypeReg).should(times(1)).update(any(TuserTypeReg.class));
+    }
+
+    //----------------------------------------------------------------------------------------------------------------
+    
+    /**
+     * Prueba unitaria para el método `save` del servicio UserTypeReg.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` con datos válidos, se guarda correctamente en la base de datos y se
+     *       afecta una fila, retornando 1 como resultado.</li>
+     *   <li>Confirma que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de guardado,
+     *       y el método `mapperUserTypeReg` se llama exactamente una vez para guardar los datos en el servicio.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `save` del servicio con datos válidos de guardado.</li>
+     *   <li>Se verifica que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de guardado proporcionados,
+     *       y que el método `mapperUserTypeReg` se llama exactamente una vez para guardar los datos en el servicio.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de UserTypeReg")
+    void save(){
+
+        UserTypeRegSaveDto saveDtoValid = new UserTypeRegSaveDto( 1L, 1, 1);
+
+        given(this.dtoMapperUserTypeReg.userTypeRegSaveToTuserTypeReg(saveDtoValid)).willReturn(new TuserTypeReg());
+
+        given(this.mapperUserTypeReg.save(any(TuserTypeReg.class))).willReturn(1);
+
+        Integer rowAffected = this.service.save(saveDtoValid);
+
+        assertNotNull(rowAffected);
+        assertEquals(1, rowAffected);
+
+        then(this.dtoMapperUserTypeReg).should(times(1)).userTypeRegSaveToTuserTypeReg(saveDtoValid);
+        then(this.mapperUserTypeReg).should(times(1)).save(any(TuserTypeReg.class));
+    }
+
+    /**
+     * Prueba unitaria para el método `save_dataNotValid` del servicio UserTypeReg cuando se proporcionan datos no válidos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` con datos de guardado no válidos (null), se arroja una excepción
+     *       `UserTypeRegNotSaveException`.</li>
+     *   <li>Confirma que tanto el método `dtoMapperUserTypeReg` como el método `mapperUserTypeReg` no tienen interacciones.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `save` del servicio con datos de guardado no válidos (null).</li>
+     *   <li>Se verifica que tanto el método `dtoMapperUserTypeReg` como el método `mapperUserTypeReg` no tienen interacciones,
+     *       lo que significa que no se debe realizar ningún procesamiento cuando los datos no son válidos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de UserTypeReg con datos no válidos")
+    void save_dataNotValid(){
+
+        UserTypeRegSaveDto saveNotValid = null;
+
+        assertThrows(UserTypeRegNotSaveException.class, ()-> this.service.save(saveNotValid));
+
+        then(this.dtoMapperUserTypeReg).shouldHaveNoInteractions();
+        then(this.mapperUserTypeReg).shouldHaveNoInteractions();
+
+    }
+
+
+    /**
+     * Prueba unitaria para el método `save_returnDataNotValid` del servicio UserTypeReg cuando la operación de guardado
+     * no tiene éxito y devuelve un valor nulo.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` con datos de guardado válidos y la operación de guardado devuelve
+     *       un valor nulo, se arroja una excepción `UserTypeRegNotSaveException`.</li>
+     *   <li>Confirma que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de guardado válidos,
+     *       y que el método `mapperUserTypeReg` se llama una vez para realizar la operación de guardado.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `save` del servicio con datos de guardado válidos, pero la operación de
+     *       guardado devuelve un valor nulo, lo que provoca que el método arroje una excepción `UserTypeRegNotSaveException`.</li>
+     *   <li>Se verifica que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de guardado válidos,
+     *       y que el método `mapperUserTypeReg` se llama una vez para realizar la operación de guardado.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de UserTypeReg con operación de guardado nula")
+    void save_returnDataNotValid(){
+
+        UserTypeRegSaveDto saveDtoValid = new UserTypeRegSaveDto( 1L, 1, 1);
+
+        given(this.dtoMapperUserTypeReg.userTypeRegSaveToTuserTypeReg(saveDtoValid)).willReturn(new TuserTypeReg());
+
+        given(this.mapperUserTypeReg.save(any(TuserTypeReg.class))).willReturn(null);
+
+        assertThrows(UserTypeRegNotSaveException.class, ()-> this.service.save(saveDtoValid));
+
+
+        then(this.dtoMapperUserTypeReg).should(times(1)).userTypeRegSaveToTuserTypeReg(saveDtoValid);
+        then(this.mapperUserTypeReg).should(times(1)).save(any(TuserTypeReg.class));
+    }
+
+    /**
+     * Prueba unitaria para el método `save_returnZeroRowAffected` del servicio UserTypeReg cuando la operación de guardado
+     * afecta cero filas en la base de datos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` con datos de guardado válidos y la operación de guardado afecta
+     *       cero filas en la base de datos, se arroja una excepción `UserTypeRegNotSaveException`.</li>
+     *   <li>Confirma que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de guardado válidos,
+     *       y que el método `mapperUserTypeReg` se llama una vez para realizar la operación de guardado.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `save` del servicio con datos de guardado válidos, pero la operación de
+     *       guardado afecta cero filas en la base de datos, lo que provoca que el método arroje una excepción `UserTypeRegNotSaveException`.</li>
+     *   <li>Se verifica que el método `dtoMapperUserTypeReg` se llama exactamente una vez con los datos de guardado válidos,
+     *       y que el método `mapperUserTypeReg` se llama una vez para realizar la operación de guardado.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado de UserTypeReg con cero filas afectadas en la base de datos")
+    void save_returnZeroRowAffected(){
+
+        UserTypeRegSaveDto saveDtoValid = new UserTypeRegSaveDto( 1L, 1, 1);
+
+        given(this.dtoMapperUserTypeReg.userTypeRegSaveToTuserTypeReg(saveDtoValid)).willReturn(new TuserTypeReg());
+
+        given(this.mapperUserTypeReg.save(any(TuserTypeReg.class))).willReturn(0);
+
+        assertThrows(UserTypeRegNotSaveException.class, ()-> this.service.save(saveDtoValid));
+
+
+        then(this.dtoMapperUserTypeReg).should(times(1)).userTypeRegSaveToTuserTypeReg(saveDtoValid);
+        then(this.mapperUserTypeReg).should(times(1)).save(any(TuserTypeReg.class));
     }
 }
