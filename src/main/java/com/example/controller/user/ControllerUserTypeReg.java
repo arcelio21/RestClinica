@@ -15,6 +15,7 @@ import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.user.type_user_reg.TypeUserOfUserRegGetDto;
 import com.example.dto.user.type_user_reg.UserRegOfTypeUserGetDto;
+import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegSaveDto;
 import com.example.dto.user.type_user_reg.UserTypeRegUpdateDto;
 import com.example.service.user.ServiceUserTypeRegImpl;
@@ -186,5 +187,25 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                         .info("Informacion obtenidad")
                         .data(this.service.getByIdTypeUser(idTypeUser))
                         .build()); 
+   }
+
+
+   @Operation(summary = "Obtiene registros filtrado por id de estado",description = "Filtrara los registros que se igual al id de estado que se enviara",
+                method = "GET", responses = {
+                @ApiResponse(responseCode = "200",description = "Registros encontrado",
+           content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserTypeRegGetDto.class,description = "Datos de usuario con tipo de usuario"))),
+                @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
+   },parameters = {
+                @Parameter(name = "idStatus", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
+   }
+   )
+   @GetMapping("/byStatus/${idStatus}")
+   public ResponseEntity<ResponseDTO> getByIdStatus(@PathVariable("idStatus") Integer idStatus){
+    
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Informacion obtenidad")
+                        .data(this.service.getByIdStatus(idStatus))
+                        .build());
    }
 }
