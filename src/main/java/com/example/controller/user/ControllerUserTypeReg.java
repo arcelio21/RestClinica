@@ -1,7 +1,11 @@
 package com.example.controller.user;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,7 +72,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
     }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO> getById(@PathVariable("id") Long id){
+    public ResponseEntity<ResponseDTO> getById(@NotNull @Min(1) @PathVariable("id") Long id){
         
         return ResponseEntity.ok(
                 ResponseDTO.builder()
@@ -96,7 +100,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
     
     )
     @PostMapping
-    public ResponseEntity<ResponseDTO> save(@RequestBody UserTypeRegSaveDto data){
+    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody UserTypeRegSaveDto data){
      
         return ResponseEntity.ok(
                 ResponseDTO.builder()
@@ -122,7 +126,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserTypeRegUpdateDto.class)))
     )
     @PutMapping
-    public ResponseEntity<ResponseDTO> update(@RequestBody UserTypeRegUpdateDto dtoUpdate){
+    public ResponseEntity<ResponseDTO> update(@Validated @RequestBody UserTypeRegUpdateDto dtoUpdate){
      
         return ResponseEntity.ok(
                         ResponseDTO.builder()
@@ -142,7 +146,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
     }
     )
     @GetMapping("/byuserReg/{idUserReg}")
-    public ResponseEntity<ResponseDTO> getByIdUserReg(@PathVariable("idUserReg") Long idUserReLong){
+    public ResponseEntity<ResponseDTO> getByIdUserReg(@NotNull @Min(1) @PathVariable("idUserReg") Long idUserReLong){
      
         return ResponseEntity.ok(
                 ResponseDTO.builder()
@@ -161,7 +165,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
     }
     )
     @GetMapping("/status/activated/byuserReg/{idUserReg}")
-    public ResponseEntity<ResponseDTO> getByIdUserRegActivated(@PathVariable("idUserReg") Long idUserReLong){
+    public ResponseEntity<ResponseDTO> getByIdUserRegActivated(@NotNull @Min(1) @PathVariable("idUserReg") Long idUserReLong){
      
         return ResponseEntity.ok(
                 ResponseDTO.builder()
@@ -180,7 +184,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
    }
    )
    @GetMapping("/byTypeUser/${idTypeUser}")
-   public ResponseEntity<ResponseDTO> getByIdTypeUser(@PathVariable("idTypeUser") Integer idTypeUser){
+   public ResponseEntity<ResponseDTO> getByIdTypeUser(@NotNull @Min(1) @PathVariable("idTypeUser") Integer idTypeUser){
     
         return ResponseEntity.ok(
                 ResponseDTO.builder()
@@ -200,7 +204,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
    }
    )
    @GetMapping("/byStatus/${idStatus}")
-   public ResponseEntity<ResponseDTO> getByIdStatus(@PathVariable("idStatus") Integer idStatus){
+   public ResponseEntity<ResponseDTO> getByIdStatus(@NotNull @Min(1) @PathVariable("idStatus") Integer idStatus){
     
         return ResponseEntity.ok(
                 ResponseDTO.builder()
