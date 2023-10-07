@@ -14,6 +14,7 @@ import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.user.type_user_reg.TypeUserOfUserRegGetDto;
+import com.example.dto.user.type_user_reg.UserRegOfTypeUserGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegSaveDto;
 import com.example.dto.user.type_user_reg.UserTypeRegUpdateDto;
 import com.example.service.user.ServiceUserTypeRegImpl;
@@ -166,5 +167,24 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                         .info("Informacion obtenidad")
                         .data(this.service.getByIdUserRegActivated(idUserReLong))
                         .build());
+   }
+
+   @Operation(summary = "Obtiene usuarios que tenga un tipo de usuario especifico",description = "Se podra filtrar los registros para obtener todos los usuarios que han sido asociados a un tipo de usuario especifico", 
+                method = "GET", responses = { 
+                @ApiResponse(responseCode = "200",description = "Data de usuarios encontrado",
+           content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegOfTypeUserGetDto.class,description = "Datos de usuario"))),
+                @ApiResponse(responseCode = "404",description = "data no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error"))) 
+   },parameters = {
+                @Parameter(name = "idTypeUser", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
+   }
+   )
+   @GetMapping("/byTypeUser/${idTypeUser}")
+   public ResponseEntity<ResponseDTO> getByIdTypeUser(@PathVariable("idTypeUser") Integer idTypeUser){
+    
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Informacion obtenidad")
+                        .data(this.service.getByIdTypeUser(idTypeUser))
+                        .build()); 
    }
 }
