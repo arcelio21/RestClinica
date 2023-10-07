@@ -148,4 +148,23 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                         .data(this.service.getByIdUserReg(idUserReLong))
                         .build());
    }
+
+   @Operation(summary = "Filtrar registro por el id de UserReg y estado activado",description = "Obtiene los tipos de usuario que estan asociados a un usuario y que tiene el registro activado",
+                method = "GET", responses = {
+                @ApiResponse(responseCode = "200",description = "Tipos de usuario para id de usuario encontrado",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TypeUserOfUserRegGetDto.class,description = "Datos de tipo de usuario para un usuario"))),
+                @ApiResponse(responseCode = "404",description = "data no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
+    },parameters = {
+                @Parameter(name = "idUserReg", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
+    }
+    )
+    @GetMapping("/status/activated/byuserReg/{idUserReg}")
+    public ResponseEntity<ResponseDTO> getByIdUserRegActivated(@PathVariable("idUserReg") Long idUserReLong){
+     
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Informacion obtenidad")
+                        .data(this.service.getByIdUserRegActivated(idUserReLong))
+                        .build());
+   }
 }
