@@ -2,6 +2,7 @@ package com.example.controller.user;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +35,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
             })
     }
     )
+    @GetMapping
     public ResponseEntity<ResponseDTO> getAll() {
         return ResponseEntity.ok(
                 ResponseDTO.builder()
