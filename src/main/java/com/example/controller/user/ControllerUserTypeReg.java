@@ -3,12 +3,15 @@ package com.example.controller.user;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
+import com.example.dto.user.type_user_reg.UserTypeRegSaveDto;
 import com.example.service.user.ServiceUserTypeRegImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,5 +67,33 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                         .info("Informacion obtenidad")
                         .data(this.service.getById(id))
                         .build());
+    }
+
+    @Operation(
+    summary = "Guarda registro de usuario con tipo de usuario asociado",
+    description = "Este permitira poder asociar un tipo de usuario a un usuario y guardar un registro de esto",
+    responses = {
+            @ApiResponse(responseCode = "201", description = "registro creada correctamente",content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseDTO.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                   @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+            })
+    },requestBody =
+                @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                        description = "Estructura de datos a guardar", required = true,
+                        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, 
+                        schema = @Schema(implementation = UserTypeRegSaveDto.class)))
+    
+    )
+    @PostMapping
+    public ResponseEntity<ResponseDTO> save(@RequestBody UserTypeRegSaveDto data){
+     
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Cantidad de registros guardados ")
+                        .data(this.service.save(data))
+                        .build()); 
     }
 }
