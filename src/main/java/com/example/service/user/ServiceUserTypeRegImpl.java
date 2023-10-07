@@ -20,12 +20,17 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ServiceUserTypeRegImpl
-		implements IServiceUserTypeReg<UserTypeRegGetDto, Long, UserTypeRegUpdateDto, UserTypeRegSaveDto> {
+public class ServiceUserTypeRegImpl implements IServiceUserTypeReg<UserTypeRegGetDto, Long, UserTypeRegUpdateDto, UserTypeRegSaveDto> {
 
 	private final MapperUserTypeReg mapperUserTypeReg;
 	private final DtoUserTypeRegMapper dtoMapperUserTypeReg;
 
+	/**
+	 * Recupera una lista de objetos UserTypeRegGetDto que representan todos los registros de tipos de usuario.
+	 *
+	 * @return Una lista de objetos UserTypeRegGetDto que representan registros de usuario asociados a un tipo de usuario.
+	 * @throws NoDataFoundException si no se encuentra ningún dato o si la lista resultante está vacía.
+	 */
 	@Override
 	public List<UserTypeRegGetDto> getAll() {
 
@@ -42,6 +47,13 @@ public class ServiceUserTypeRegImpl
 		return userTypeRegGetDtos;
 	}
 
+	/**
+	 * Recupera un objeto UserTypeRegGetDto que representa un registro de usuario asociado a un tipo de usuario por su ID.
+	 *
+	 * @param id El ID del registro de usuario a recuperar.
+	 * @return Un objeto UserTypeRegGetDto que representa el registro de usuario asociado a un tipo de usuario.
+	 * @throws NoDataFoundException si no se encuentra ningún dato con el ID proporcionado.
+	 */
 	@Override
 	public UserTypeRegGetDto getById(Long id) {
 		this.isValitedId(id);
@@ -70,6 +82,13 @@ public class ServiceUserTypeRegImpl
 		return rowAffected;
 	}
 
+	/**
+	 * Actualiza un registro de usuario asociado a un tipo de usuario utilizando los datos proporcionados en el objeto UserTypeRegUpdateDto.
+	 *
+	 * @param userTypeRegUpdate El objeto UserTypeRegUpdateDto que contiene los datos para la actualización.
+	 * @return El número de filas afectadas por la actualización.
+	 * @throws UserTypeRegNotUpdateException si no se pueden actualizar los datos debido a problemas de validez o si no se encuentran datos para actualizar.
+	 */
 	@Override
 	public Integer save(UserTypeRegSaveDto userTypeRegSave) {
 
@@ -89,6 +108,13 @@ public class ServiceUserTypeRegImpl
 		return rowAffected;
 	}
 
+	/**
+	 * Recupera una lista de objetos TypeUserOfUserRegGetDto que representan los tipos de usuario asociados a un registro de usuario por su ID.
+	 *
+	 * @param id El ID del registro de usuario.
+	 * @return Una lista de objetos TypeUserOfUserRegGetDto que representan los tipos de usuario asociados al registro de usuario.
+	 * @throws NoDataFoundException si no se encuentra ningún dato o si la lista resultante está vacía.
+	 */
 	@Override
 	public List<TypeUserOfUserRegGetDto> getByIdUserReg(Long id) {
 
@@ -108,6 +134,13 @@ public class ServiceUserTypeRegImpl
 		return typeUserOfUserRegGetDtos;
 	}
 
+	/**
+	 * Recupera una lista de objetos TypeUserOfUserRegGetDto que representan los tipos de usuario asociados a un registro activado de usuario por su ID.
+	 *
+	 * @param id El ID del registro de usuario.
+	 * @return Una lista de objetos TypeUserOfUserRegGetDto que representan los tipos de usuario activados asociados al registro de usuario.
+	 * @throws NoDataFoundException si no se encuentra ningún dato o si la lista resultante está vacía.
+	 */
 	@Override
 	public List<TypeUserOfUserRegGetDto> getByIdUserRegActivated(Long id) {
 
@@ -127,6 +160,13 @@ public class ServiceUserTypeRegImpl
 		return typeUserOfUserRegGetDtos;
 	}
 
+	/**
+	 * Recupera una lista de objetos UserRegOfTypeUserGetDto que representan los registros de usuario asociados a un tipo de usuario por su ID.
+	 *
+	 * @param id El ID del tipo de usuario.
+	 * @return Una lista de objetos UserRegOfTypeUserGetDto que representan los registros de usuario asociados al tipo de usuario.
+	 * @throws NoDataFoundException si no se encuentra ningún dato o si la lista resultante está vacía.
+	 */
 	@Override
 	public List<UserRegOfTypeUserGetDto> getByIdTypeUser(Integer id) {
 
@@ -146,6 +186,14 @@ public class ServiceUserTypeRegImpl
 		return userRegOfTypeUserGetDtos;
 	}
 
+	/**
+	 * Recupera una lista de objetos UserTypeRegGetDto que representan los registros de usuario asociados a un estado por su ID.
+	 *
+	 * @param id El ID del estado.
+	 * @return Una lista de objetos UserTypeRegGetDto que representan los registros de usuario asociados al estado.
+	 * @throws NoDataFoundException si no se encuentra ningún dato o si la lista resultante está vacía.
+	 * @throws IllegalArgumentException si el ID proporcionado no es válido (es decir, nulo o menor o igual a cero).
+	 */
 	@Override
 	public List<UserTypeRegGetDto> getByIdStatus(Integer id) {
 		this.isValitedId(id);
@@ -164,12 +212,24 @@ public class ServiceUserTypeRegImpl
 		return userTypeRegGetDtos;
 	}
 
+	/**
+	 * Valida si un valor de tipo Long es válido como identificador (ID).
+	 *
+	 * @param value El valor de tipo Long a validar como identificador.
+	 * @throws NoDataFoundException si el valor no es válido (es decir, nulo o menor o igual a cero).
+	 */
 	private void isValitedId(Long value) {
 		if (value == null || value <= 0) {
 			throw new NoDataFoundException(value);
 		}
 	}
 
+	/**
+	 * Valida si un valor de tipo Integer es válido como identificador (ID).
+	 *
+	 * @param value El valor de tipo Integer a validar como identificador.
+	 * @throws NoDataFoundException si el valor no es válido (es decir, nulo o menor o igual a cero).
+	 */
 	private void isValitedId(Integer value) {
 		if (value == null || value <= 0) {
 			throw new NoDataFoundException(value);
