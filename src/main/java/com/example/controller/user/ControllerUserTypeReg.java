@@ -15,7 +15,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.RequiredArgsConstructor;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -41,6 +44,25 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                 ResponseDTO.builder()
                         .info("Informacion obtenidad")
                         .data(service.getAll())
+                        .build());
+    }
+
+    @Operation(summary = "Obtiene usuario con tipo de usuario asociado filtrado por ID de registro",description = "Cuando se desee un registro especifico se enviada el ID de este registro como parametro",
+                method = "GET", responses = {
+                @ApiResponse(responseCode = "200",description = "Datos de usuario y su tipo de usuario asociado encontrado",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseDTO.class,description = "Datos de usuario y su tipo de usuario asociado"))),
+                @ApiResponse(responseCode = "404",description = "Data de usuario no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
+    },parameters = {
+                @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
+    }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDTO> getById(Long id){
+        
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Informacion obtenidad")
+                        .data(this.service.getById(id))
                         .build());
     }
 }
