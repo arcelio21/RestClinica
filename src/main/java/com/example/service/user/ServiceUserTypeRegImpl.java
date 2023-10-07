@@ -9,7 +9,6 @@ import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegSaveDto;
 import com.example.dto.user.type_user_reg.UserTypeRegUpdateDto;
 import com.example.dtomapper.user.DtoUserTypeRegMapper;
-import com.example.entity.user.TuserTypeReg;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.user.type_user_reg.UserTypeRegNotSaveException;
 import com.example.exception.user.type_user_reg.UserTypeRegNotUpdateException;
