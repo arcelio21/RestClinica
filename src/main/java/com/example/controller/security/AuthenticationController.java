@@ -4,11 +4,9 @@ import com.example.controller.ControllerTemplate;
 import com.example.dto.AuthenticationRequest;
 import com.example.dto.AuthenticationResponse;
 import com.example.dto.RegisterRequest;
-import com.example.entity.user.TuserReg;
 import com.example.service.jwt.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
