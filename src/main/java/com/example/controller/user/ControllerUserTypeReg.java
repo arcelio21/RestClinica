@@ -165,12 +165,12 @@ public class ControllerUserTypeReg extends ControllerTemplate {
     }
     )
     @GetMapping("/status/activated/byuserReg/{idUserReg}")
-    public ResponseEntity<ResponseDTO> getByIdUserRegActivated(@NotNull @Min(1) @PathVariable("idUserReg") Long idUserReLong){
+    public ResponseEntity<ResponseDTO> getByIdUserRegActivated(@NotNull @Min(1) @PathVariable("idUserReg") Long idUserReg){
      
         return ResponseEntity.ok(
                 ResponseDTO.builder()
                         .info("Informacion obtenidad")
-                        .data(this.service.getByIdUserRegActivated(idUserReLong))
+                        .data(this.service.getByIdUserRegActivated(idUserReg))
                         .build());
    }
 
@@ -183,7 +183,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                 @Parameter(name = "idTypeUser", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
    }
    )
-   @GetMapping("/byTypeUser/${idTypeUser}")
+   @GetMapping("/byTypeUser/{idTypeUser}")
    public ResponseEntity<ResponseDTO> getByIdTypeUser(@NotNull @Min(1) @PathVariable("idTypeUser") Integer idTypeUser){
     
         return ResponseEntity.ok(
@@ -203,7 +203,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                 @Parameter(name = "idStatus", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
    }
    )
-   @GetMapping("/byStatus/${idStatus}")
+   @GetMapping("/byStatus/{idStatus}")
    public ResponseEntity<ResponseDTO> getByIdStatus(@NotNull @Min(1) @PathVariable("idStatus") Integer idStatus){
     
         return ResponseEntity.ok(
