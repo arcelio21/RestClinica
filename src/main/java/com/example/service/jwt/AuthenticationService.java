@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +58,9 @@ public class AuthenticationService {
         
         this.saveUserTypeReg(request.getRoles(), idUserReg);
         
-        return this.generateToken(request.getIdenCard());
+        TuserReg user = this.valitedUser(request.getIdenCard(), request.getPassword());
+        
+        return this.generateToken(user);
     }
 
     /**
@@ -74,19 +77,9 @@ public class AuthenticationService {
             throw new UsernameInvalid("Datos no validos");
         }
 
-        this.authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getIdenCard(),
-                        request.getPassword()
-                )
-        );
-
-        var user = this.mapperUserReg.getByIdenCard(request.getIdenCard()).orElseThrow();
-
-        var jwt = this.jwtUtils.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwt)
-                .build();
+        TuserReg user = this.valitedUser(request.getIdenCard(), request.getPassword());
+        
+        return this.generateToken(user);
 
     }
 
@@ -167,6 +160,21 @@ public class AuthenticationService {
 
     }
 
+    private TuserReg valitedUser(Long idenCard, String password){
+        Authentication authentication =this.authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        idenCard,
+                        password
+                )
+        );
+
+        if(authentication==null || authentication.getPrincipal()==null){
+            throw new NoDataFoundException("DATA NOT VALID");
+        }
+
+        return (TuserReg)authentication.getPrincipal();
+    }
+
     /**
      * Genera un token de autenticación para un usuario identificado por su número de identificación.
      *
@@ -174,11 +182,9 @@ public class AuthenticationService {
      * @return Un objeto AuthenticationResponse que contiene el token generado.
      * @throws NoDataFoundException si el usuario no se encuentra o si los datos no son válidos.
      */
-    private AuthenticationResponse generateToken(Long idenCard){
+    private AuthenticationResponse generateToken(TuserReg user){
 
-        TuserReg userValited = this.mapperUserReg.getByIdenCard(idenCard).orElseThrow(() -> new NoDataFoundException("Data Not Valited"));
-
-        var jwt = this.jwtUtils.generateToken(userValited);
+        var jwt = this.jwtUtils.generateToken(user);
 
         return AuthenticationResponse.builder()
                 .token(jwt)
