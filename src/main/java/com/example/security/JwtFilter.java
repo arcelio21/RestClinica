@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -23,7 +24,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
+
+    private final List<String> urlsIgnore = List.of("/swagger-ui.html", "/api/v1/auth", "/swagger-ui", "/swagger-ui", "/v3/api-docs", "/webjars", "/api-docs");
     
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+
+        return urlsIgnore.stream().anyMatch(urlIgnore->request.getRequestURI().contains(urlIgnore));
+    }
+
+
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
