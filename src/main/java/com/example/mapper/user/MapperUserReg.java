@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
@@ -52,6 +53,7 @@ public interface MapperUserReg {
 	@Insert("INSERT INTO TusersRegs(iden_card,name,last_name,contact,email,birthday,password,address_id)"
 			+ " VALUES(#{user.idenCard},#{user.name},#{user.lastName},#{user.contact},#{user.email},#{user.birthday},"
 			+ "#{user.password},#{user.addressId.id}) ")
+	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	Integer save(@Param("user") TuserReg user);
 	
 	
