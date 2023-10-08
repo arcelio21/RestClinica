@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
+import com.example.dto.user.type_user.TypeUserSaveDto;
 
 @Data
 @AllArgsConstructor
@@ -22,4 +24,5 @@ public class RegisterRequest {
     private LocalDate birthday;
     private String direcSpecific;
     private Integer idVillage;
+    private List<TypeUserSaveDto> roles;
 }
