@@ -76,7 +76,7 @@ public interface MapperUserTypeReg {
 	 *         usuario tipo-registro asociado, o null si no se encuentra.
 	 */
 	@Select("""
-			 SELECT utr.id AS ID,tu.name_type_user as TypeUser, st.name_status AS Estado
+			 SELECT utr.id AS ID,tu.name_type_user as TypeUser, st.name_status AS Status
 				 FROM Tusers_types_regs utr
 				 INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
 				 INNER JOIN Tstatus st ON utr.status_id = st.id
@@ -102,7 +102,7 @@ public interface MapperUserTypeReg {
 	 *         se encuentran registros activados.
 	 */
 	@Select("""
-				SELECT utr.id AS ID,tu.name_type_user as TypeUser, st.name_status AS Estado
+				SELECT utr.id AS ID,tu.name_type_user as TypeUser, st.name_status AS Status
 				FROM Tusers_types_regs utr
 							INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
 							INNER JOIN Tstatus st ON utr.status_id = st.id
@@ -164,6 +164,7 @@ public interface MapperUserTypeReg {
 							FROM Tusers_types_regs utr
 							INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
 							INNER JOIN TusersRegs ur ON utr.user_reg_id = ur.id
+							INNER JOIN Tstatus st ON utr.status_id = st.id
 				WHERE utr.status_id=#{idStatus}
 			""")
 	@ResultMap("userTypeRegMap")
