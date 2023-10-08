@@ -3,7 +3,10 @@ package com.example.entity.user;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.FutureOrPresent;
@@ -16,6 +19,7 @@ import javax.validation.constraints.Size;
 
 import com.example.entity.address.Taddress;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
@@ -178,7 +182,16 @@ public class TuserReg implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+
+		if(this.getUsersTypesRegs().isEmpty()){
+			return Collections.emptyList();
+		}
+		Set<GrantedAuthority> authorities = new LinkedHashSet<>(); 
+		for (TuserTypeReg tuserTypeReg : usersTypesRegs) {
+			authorities.add(new SimpleGrantedAuthority(tuserTypeReg.getTypeUser().getNameTypeUser()));
+		}
+
+		return authorities;
 	}
 
 	public String getPassword() {
