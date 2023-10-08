@@ -28,15 +28,4 @@ public class AuthenticationController extends ControllerTemplate {
 
         return  ResponseEntity.ok(this.authenticationService.authenticate(request));
     }
-
-    /**
-     * Un ejemplo de como se puede utilizar la anotacion
-     * para obtener informacion del usuario autenticado
-     * @param tuserReg
-     * @return
-     */
-    @GetMapping(value = "/data")
-    public String dataUser(@AuthenticationPrincipal TuserReg tuserReg){
-        return tuserReg.getName()+" "+tuserReg.getLastName();
-    }
 }
