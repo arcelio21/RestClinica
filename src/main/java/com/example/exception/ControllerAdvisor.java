@@ -43,6 +43,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -669,6 +670,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         Map<String,Object> responseError = Map.of("MessageError", ex.getMessage(),"Fecha", LocalDate.now());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                 responseError
+        );
+    }
+
+    //EXCEPCION USERNAME
+    public ResponseEntity<ErrorResponseDto> handlerUsernameNotFoundException(UsernameNotFoundException ex){
+        
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+            ErrorResponseDto.builder()
+            .fecha(LocalDate.now())
+            .messageError(ex.getMessage())
+            .data("")
+            .build()
         );
     }
 }
