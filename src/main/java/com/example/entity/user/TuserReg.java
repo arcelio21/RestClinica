@@ -183,7 +183,7 @@ public class TuserReg implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-		if(this.getUsersTypesRegs().isEmpty()){
+		if(this.getUsersTypesRegs()==null || this.getUsersTypesRegs().isEmpty()){
 			return Collections.emptyList();
 		}
 		Set<GrantedAuthority> authorities = new LinkedHashSet<>(); 
