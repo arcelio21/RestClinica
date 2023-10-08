@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
@@ -11,6 +12,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.mapping.FetchType;
 
 import com.example.entity.user.TuserReg;
 
@@ -28,7 +30,8 @@ public interface MapperUserReg {
 			@Result(column = "email", property = "email"),
 			@Result(column = "birthday", property = "birthday"),
 			@Result(column = "creation_date", property = "creationDate"),
-			@Result(column = "address_id", property = "addressId.id")
+			@Result(column = "address_id", property = "addressId.id"),
+			@Result(column = "id", property = "usersTypesRegs", many = @Many(select = "com.example.mapper.user.MapperUserTypeReg.getByIdUserRegActivated", fetchType = FetchType.LAZY))
 	})
 	List<TuserReg> getAll();
 
