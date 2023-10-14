@@ -54,9 +54,9 @@ public interface MapperVillage {
 	Tvillage getDistrictAllById(@Param("id") Integer id);
 	
 	
-	@Insert("INSERT INTO Tvillages (name) VALUES(#{vill.name})")
+	@Insert("INSERT INTO Tvillages (name,district_id) VALUES(#{vill.name}, #{vill.district.id})")
 	int save(@Param("vill")Tvillage district);
 	
-	@Update("UPDATE Tvillages SET name=#{vill.name} WHERE id=#{vill.id}")
+	@Update("UPDATE Tvillages SET name=#{vill.name}, district_id=#{vill.district.id} WHERE id=#{vill.id}")
 	int update(@Param("vill") Tvillage district);
 }

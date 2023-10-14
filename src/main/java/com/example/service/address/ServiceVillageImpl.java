@@ -2,6 +2,8 @@ package com.example.service.address;
 
 import com.example.dto.address.village.VillageDistrictDto;
 import com.example.dto.address.village.VillageDto;
+import com.example.dto.address.village.VillagePostDto;
+import com.example.dto.address.village.VillageUpdateDto;
 import com.example.dtomapper.address.DtoVillageMapper;
 import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tvillage;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Service
-public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer, VillageDto,VillageDto>{
+public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer, VillageUpdateDto,VillagePostDto>{
 
 	
 	private final MapperVillage mapperVillage;
@@ -77,18 +79,18 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer, 
 	 * @throws VillageNotUpdateException Si los datos del pueblo no son válidos para la actualización.
 	 */
 	@Override
-	public Integer update(VillageDto villageDto) {
+	public Integer update(VillageUpdateDto villageDto) {
 
-		if(villageDto==null || villageDto.getId()==null || villageDto.getId()<=0
-			|| villageDto.getName()==null || villageDto.getName().trim().isEmpty()
-			|| villageDto.getDistrictId()==null || villageDto.getDistrictId()<=0){
+		if(villageDto==null || villageDto.id()==null || villageDto.id()<=0
+			|| villageDto.name()==null || villageDto.name().trim().isEmpty()
+			|| villageDto.districtId()==null || villageDto.districtId()<=0){
 
 			throw new VillageNotUpdateException("Error de actualizacion",villageDto);
 
 		}
 
 		return Optional.of(villageDto)
-				.map(this.dtoVillageMapper::villageDtoToTvillage)
+				.map(this.dtoVillageMapper::villageUpdateToTvillage)
 				.map(this.mapperVillage::update)
 				.orElseThrow(()-> new VillageNotUpdateException("Error de actualizacion", villageDto));
 	}
@@ -101,18 +103,18 @@ public class ServiceVillageImpl implements IServiceVillage<VillageDto, Integer, 
 	 * @throws VillageNotSaveException Si los datos no son válidos o no se puede guardar el pueblo.
 	 */
 	@Override
-	public Integer save(VillageDto villageDto) {
+	public Integer save(VillagePostDto villageDto) {
 
 		if(villageDto==null
-				|| villageDto.getName()==null || villageDto.getName().trim().isEmpty()
-				|| villageDto.getDistrictId()==null || villageDto.getDistrictId()<=0){
+				|| villageDto.name()==null || villageDto.name().trim().isEmpty()
+				|| villageDto.districtId()==null || villageDto.districtId()<=0){
 
 			throw new VillageNotSaveException("Error de guardado",villageDto);
 
 		}
 
 		return Optional.of(villageDto)
-				.map(this.dtoVillageMapper::villageDtoToTvillage)
+				.map(this.dtoVillageMapper::villagePostToTvillage)
 				.map(this.mapperVillage::save)
 				.orElseThrow(()-> new VillageNotSaveException("Error de guardado",villageDto));
 	}

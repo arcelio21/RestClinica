@@ -4,6 +4,8 @@ import com.example.controller.ControllerTemplate;
 import com.example.dto.ResponseDTO;
 import com.example.dto.address.village.VillageDistrictDto;
 import com.example.dto.address.village.VillageDto;
+import com.example.dto.address.village.VillagePostDto;
+import com.example.dto.address.village.VillageUpdateDto;
 import com.example.service.address.ServiceVillageImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -73,10 +75,15 @@ public class ControllerVillage extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = VillagePostDto.class)
+                                        )
+                        )
     )
     @PostMapping
-    public ResponseEntity<ResponseDTO> save(@RequestBody VillageDto villageDto){
+    public ResponseEntity<ResponseDTO> save(@RequestBody VillagePostDto villageDto){
         return  new ResponseEntity<>(ResponseDTO.builder()
                 .info("Cantidad de registros creados")
                 .data(this.serviceVillage.save(villageDto))
@@ -94,10 +101,15 @@ public class ControllerVillage extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = VillageUpdateDto.class)
+                                        )
+                        )
     )
     @PutMapping
-    public ResponseEntity<ResponseDTO> update(@RequestBody VillageDto villageDto){
+    public ResponseEntity<ResponseDTO> update(@RequestBody VillageUpdateDto villageDto){
         return ResponseEntity.ok(
                 ResponseDTO.builder()
                         .info("Cantidad de registros actualizados")
