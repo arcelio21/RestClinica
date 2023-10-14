@@ -1,7 +1,8 @@
 package com.example.service.address;
 
 import com.example.dto.address.AddressGetDto;
-import com.example.dto.address.AddressRequestDto;
+import com.example.dto.address.AddressSaveDto;
+import com.example.dto.address.AddressUpdatetDto;
 import com.example.dtomapper.address.DtoAddressMappper;
 import com.example.entity.address.Taddress;
 import com.example.entity.address.Tdistrict;
@@ -39,24 +40,7 @@ class ServiceAddressImplTest {
 	@InjectMocks
 	private ServiceAddressImpl serviceAddress;
 
-	private AddressRequestDto addressRequestDtoValid;
 
-	private AddressRequestDto addressRequestDtoNotValid;
-
-	@BeforeEach
-	void setUp(){
-		 addressRequestDtoValid = AddressRequestDto.builder()
-				.id(1L)
-				.villageId(1)
-				.specificAddress("Hola")
-				.build();
-
-		 addressRequestDtoNotValid = AddressRequestDto.builder()
-				 .id(null)
-				 .villageId(null)
-				 .specificAddress("  ")
-				 .build();
-	}
 
 	@Test
 	void testGetAllWithValidData() {
@@ -153,25 +137,30 @@ class ServiceAddressImplTest {
 	void testUpdateWithValidData() {
 		// Datos de prueba
 
-
+		AddressUpdatetDto addressUpdatetDto = AddressUpdatetDto.builder()
+													.id(1L)
+													.villageId(1)
+													.specificAddress("El diablito")
+													.build();
 		Taddress taddress = new Taddress(1L);
 		taddress.setSpecificAddress("Hola");
 		taddress.setVillageId(new Tvillage(1));
 
 		// Mockear el comportamiento del mapper
 		when(mapper.update(any(Taddress.class))).thenReturn(1);
-		when(dtoMapper.AddressRequestDtoToTaddress(this.addressRequestDtoValid)).thenReturn(taddress);
+		when(dtoMapper.AddressUpdateDtoToTaddress(addressUpdatetDto)).thenReturn(taddress);
 
 
 		// Verificar el resultado
-		assertEquals(1, serviceAddress.update(this.addressRequestDtoValid));
+		assertEquals(1, serviceAddress.update(addressUpdatetDto));
 	}
 
 	@Test
 	void testUpdateWithNullData() {
-
+		AddressUpdatetDto addressUpdatetDto = AddressUpdatetDto.builder()
+													.build();
 		// Llamar al método a probar y capturar la excepción
-		assertThrows(AddressNotUpdateException.class, () -> serviceAddress.update(this.addressRequestDtoNotValid));
+		assertThrows(AddressNotUpdateException.class, () -> serviceAddress.update(addressUpdatetDto));
 
 
 		// Verificar que no se llamó al mapper ni al dtoMapper
@@ -182,10 +171,14 @@ class ServiceAddressImplTest {
 	@Test
 	void testUpdateWithMapperError() {
 
-
+		AddressUpdatetDto addressUpdatetDto = AddressUpdatetDto.builder()
+													.id(1L)
+													.villageId(1)
+													.specificAddress("El diablito")
+													.build();
 		//when(mapper.update(any(Taddress.class))).thenThrow(SQLException.class);
 
-		assertThrows(AddressNotUpdateException.class, () -> serviceAddress.update(this.addressRequestDtoValid));
+		assertThrows(AddressNotUpdateException.class, () -> serviceAddress.update(addressUpdatetDto));
 	}
 
 	//SAVE
@@ -197,11 +190,13 @@ class ServiceAddressImplTest {
 	@Test
 	void testSave_ValidAddressRequestDto_ReturnsRowAffected() {
 
-		when(dtoMapper.AddressRequestDtoToTaddress(this.addressRequestDtoValid)).thenReturn(new Taddress());
+		AddressSaveDto addressSaveDto = new AddressSaveDto(1, "EL diablito");
+
+		when(dtoMapper.AddressSaveDtoToTaddress(addressSaveDto)).thenReturn(new Taddress());
 		when(mapper.save(any(Taddress.class))).thenReturn(1L);
 
 		// Act
-		Integer result = serviceAddress.save(this.addressRequestDtoValid);
+		Integer result = serviceAddress.save(addressSaveDto);
 
 		// Assert
 		assertEquals(1, result);
@@ -213,10 +208,10 @@ class ServiceAddressImplTest {
 	 */
 	@Test
 	void testSave_NullAddressRequestDto_ThrowsAddressNotSaveException() {
-
+		AddressSaveDto addressSaveDto = new AddressSaveDto(1, "");
 
 		// Act & Assert
-		assertThrows(AddressNotSaveException.class, () -> serviceAddress.save(this.addressRequestDtoNotValid));
+		assertThrows(AddressNotSaveException.class, () -> serviceAddress.save(addressSaveDto));
 	}
 
 
