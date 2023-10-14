@@ -3,9 +3,9 @@ package com.example.controller.module;
 import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
-import com.example.dto.modules.ModulesDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeUpdateDto;
+import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
 import com.example.service.modules.IServiceModulePrivilege;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -96,7 +96,7 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(
-                                            implementation = ModulesDto.class,
+                                            implementation = ModulePrivilegesDto.class,
                                             description = "Datos de privilegio de modulo"
                                     )
                             )
