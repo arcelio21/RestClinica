@@ -1,6 +1,8 @@
 package com.example.dtomapper.modules;
 
+import com.example.dto.modules.ModuleSaveDto;
 import com.example.dto.modules.ModulesDto;
+import com.example.dto.modules.ModulesUpdateDto;
 import com.example.entity.modules.Tmodule;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,5 +25,12 @@ public interface DtoModulesMapper {
             @Mapping(source = "module.id", target = "id"),
             @Mapping(source = "module.name", target = "nameModule")
     })
-    Tmodule modulesDtoToTmodule(ModulesDto module);
+    Tmodule modulesUpdateToTmodule(ModulesUpdateDto module);
+
+    @Mappings({
+            @Mapping(target ="id", ignore = true),
+            @Mapping(source = "module.name", target = "nameModule")
+    })
+    Tmodule modulesSaveToTmodule(ModuleSaveDto module);
+
 }

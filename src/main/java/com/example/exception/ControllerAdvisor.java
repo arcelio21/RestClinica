@@ -7,7 +7,8 @@ import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.province.ProvinceDto;
 import com.example.dto.address.village.VillagePostDto;
 import com.example.dto.address.village.VillageUpdateDto;
-import com.example.dto.modules.ModulesDto;
+import com.example.dto.modules.ModuleSaveDto;
+import com.example.dto.modules.ModulesUpdateDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.privileges.PrivilegeSaveDto;
 import com.example.dto.modules.privileges.PrivilegeUpdateDto;
@@ -450,7 +451,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         if(ex.getData()!=null){
 
             data = new HashMap<>();
-            ModulesDto modulesDto = (ModulesDto)ex.getData();
+            ModulesUpdateDto modulesDto = (ModulesUpdateDto)ex.getData();
 
             data.put("id", modulesDto.getId());
             data.put("name_module", modulesDto.getName());
@@ -475,9 +476,9 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
             data = new HashMap<>();
 
-            ModulesDto modulesDto = (ModulesDto)ex.getData();
+            ModuleSaveDto modulesDto = (ModuleSaveDto)ex.getData();
 
-            data.put("name_module", modulesDto.getName());
+            data.put("name_module", modulesDto.name());
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(

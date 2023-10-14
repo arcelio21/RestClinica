@@ -1,6 +1,8 @@
 package com.example.service.modules;
 
+import com.example.dto.modules.ModuleSaveDto;
 import com.example.dto.modules.ModulesDto;
+import com.example.dto.modules.ModulesUpdateDto;
 import com.example.dtomapper.modules.DtoModulesMapper;
 import com.example.entity.modules.Tmodule;
 import com.example.exception.NoDataFoundException;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @AllArgsConstructor
 @Service
-public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,ModulesDto, ModulesDto>{
+public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,ModulesUpdateDto, ModuleSaveDto>{
 
 	private MapperModules mapperModules;
 	private DtoModulesMapper dtoModulesMapper;
@@ -72,7 +74,7 @@ public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,Modul
 	 * @throws ModulesNotUpdateException si los datos del módulo no son válidos.
 	 */
 	@Override
-	public Integer update(ModulesDto modulesDto) {
+	public Integer update(ModulesUpdateDto modulesDto) {
 
 		if(modulesDto==null || modulesDto.getId()==null || modulesDto.getId()<=0
 			|| modulesDto.getName()==null || modulesDto.getName().trim().isEmpty()){
@@ -81,7 +83,7 @@ public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,Modul
 		}
 
 		return Optional.of(modulesDto)
-				.map(this.dtoModulesMapper::modulesDtoToTmodule)
+				.map(this.dtoModulesMapper::modulesUpdateToTmodule)
 				.map(this.mapperModules::update)
 				.orElseThrow(()-> new ModulesNotUpdateException("Data Modules Not Valid", modulesDto));
 	}
@@ -95,15 +97,15 @@ public class ServiceModuleImple implements IServiceModule<ModulesDto, Long,Modul
 	 * @throws ModulesNotSaveException si los datos del módulo no son válidos.
 	 */
 	@Override
-	public Integer save(ModulesDto modulesDto) {
+	public Integer save(ModuleSaveDto modulesDto) {
 
-		if(modulesDto==null || modulesDto.getName()==null || modulesDto.getName().trim().isEmpty()){
+		if(modulesDto==null || modulesDto.name()==null || modulesDto.name().trim().isEmpty()){
 
 			throw new ModulesNotSaveException("Error, Modules Not Saved", modulesDto);
 		}
 
 		return Optional.of(modulesDto)
-			.map(this.dtoModulesMapper::modulesDtoToTmodule)
+			.map(this.dtoModulesMapper::modulesSaveToTmodule)
 			.map(this.mapperModules::insert)
 			.orElseThrow(()-> new ModulesNotSaveException("Error, Modules Not Saved", modulesDto))
 		;

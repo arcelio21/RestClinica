@@ -1,8 +1,10 @@
 package com.example.controller.module;
 
 import com.example.dto.ErrorResponseDto;
-import com.example.dto.ValidateGroupA;
+import com.example.dto.modules.ModuleSaveDto;
 import com.example.dto.modules.ModulesDto;
+import com.example.dto.modules.ModulesUpdateDto;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -155,10 +157,15 @@ public class ControllerModules extends ControllerTemplate{
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = ModulesUpdateDto.class)
+                                        )
+                        )
     )
     @PutMapping
-    public ResponseEntity<ResponseDTO> update(@Validated(value = {ValidateGroupA.class}) @RequestBody ModulesDto modulesDto){
+    public ResponseEntity<ResponseDTO> update(@Validated @RequestBody ModulesUpdateDto modulesDto){
 
         return ResponseEntity.ok(
                 ResponseDTO.builder()
@@ -179,10 +186,15 @@ public class ControllerModules extends ControllerTemplate{
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = ModuleSaveDto.class)
+                                        )
+                        )
     )
     @PostMapping
-    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody ModulesDto modulesDto){
+    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody ModuleSaveDto modulesDto){
 
         return ResponseEntity.ok(
                 ResponseDTO.builder()
