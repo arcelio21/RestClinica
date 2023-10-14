@@ -8,6 +8,8 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.example.entity.user.TuserReg;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -76,19 +78,22 @@ public class JwtUtils {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(TuserReg uTuserReg){
         Map<String,Object> claims = new HashMap<>();
-        return createToken(claims,userDetails);
+        return createToken(claims,uTuserReg);
     }
-    public String generateToken(UserDetails userDetails, Map<String,Object> claims){
-        return createToken(claims,userDetails);
+    public String generateToken(TuserReg uTuserReg, Map<String,Object> claims){
+        return createToken(claims, uTuserReg);
     }
 
-    private String createToken(Map<String, Object> claims, UserDetails userDetails) {
+    private String createToken(Map<String, Object> claims, TuserReg uTuserReg) {
 
         return  Jwts.builder().setClaims(claims)
-                .setSubject(userDetails.getUsername())
-                .claim("authorities",userDetails.getAuthorities())
+                .setSubject(uTuserReg.getUsername())
+                .claim("authorities",uTuserReg.getAuthorities())
+                .claim("fullname", uTuserReg.getName()+" "+uTuserReg.getLastName())
+                .claim("fechaNacimiento", uTuserReg.getBirthday().toString())
+                .claim("email", uTuserReg.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+ TimeUnit.HOURS.toMillis(24)))
                 .signWith(this.getSignInKey(),SignatureAlgorithm.HS256).compact();
