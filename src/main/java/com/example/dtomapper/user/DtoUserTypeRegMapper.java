@@ -1,5 +1,6 @@
 package com.example.dtomapper.user;
 
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -12,7 +13,8 @@ import com.example.dto.user.type_user_reg.UserTypeRegSaveDto;
 import com.example.dto.user.type_user_reg.UserTypeRegUpdateDto;
 import com.example.entity.user.TuserTypeReg;
 
-@Mapper(uses = DtoUserTypeRegDecoratorMapperImpl.class)
+@Mapper()
+@DecoratedWith(DtoUserTypeRegDecoratorMapperImpl.class)
 public interface DtoUserTypeRegMapper {
     
     DtoUserTypeRegMapper INSTANCE = Mappers.getMapper(DtoUserTypeRegMapper.class);

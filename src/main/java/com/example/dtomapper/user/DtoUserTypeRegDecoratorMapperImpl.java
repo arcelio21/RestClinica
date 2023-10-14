@@ -1,18 +1,15 @@
 package com.example.dtomapper.user;
 
-import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.dto.user.type_user_reg.UserRegOfTypeUserGetDto;
 import com.example.dto.user.type_user_reg.UserTypeRegGetDto;
 import com.example.entity.user.TuserTypeReg;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@Mapper
 public abstract class DtoUserTypeRegDecoratorMapperImpl implements DtoUserTypeRegMapper{
     
-    private final DtoUserTypeRegMapper mapper;
+    @Autowired
+    private DtoUserTypeRegMapper mapper;
 
     @Override
     public UserTypeRegGetDto tuserTypeRegToUserTypeRegDto(TuserTypeReg user){
