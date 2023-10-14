@@ -1,10 +1,13 @@
 package com.example.exception;
 
 import com.example.dto.ErrorResponseDto;
-import com.example.dto.address.AddressRequestDto;
+import com.example.dto.address.AddressSaveDto;
+import com.example.dto.address.AddressUpdatetDto;
 import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.province.ProvinceDto;
 import com.example.dto.address.village.VillageDto;
+import com.example.dto.address.village.VillagePostDto;
+import com.example.dto.address.village.VillageUpdateDto;
 import com.example.dto.modules.ModulesDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.privileges.PrivilegeSaveDto;
@@ -147,10 +150,10 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
         Map<String, Object> data=null;
         if(ex.getData()!=null){
-            AddressRequestDto user = (AddressRequestDto) ex.getData();
+            AddressSaveDto user = (AddressSaveDto) ex.getData();
             data= new HashMap<>();
-            data.put("villageId", user.getVillageId());
-            data.put("direcSpecific", user.getSpecificAddress());
+            data.put("villageId", user.villageId());
+            data.put("direcSpecific", user.specificAddress());
         }
 
         var error = ErrorResponseDto.builder()
@@ -170,7 +173,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         Map<String, Object> data=null;
         if(ex.getData()!=null) {
 
-            AddressRequestDto address = (AddressRequestDto) ex.getData();
+            AddressUpdatetDto address = (AddressUpdatetDto) ex.getData();
             data= new HashMap<>();
             data.put("idAddress", address.getId());
             data.put("villageId", address.getVillageId());
@@ -244,11 +247,11 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         Map<String, Object> data=null;
         if(ex.getData()!=null) {
 
-            VillageDto villageDto = (VillageDto) ex.getData();
+            VillageUpdateDto villageDto = (VillageUpdateDto) ex.getData();
             data= new HashMap<>();
-            data.put("idVillage", villageDto.getId());
-            data.put("name", villageDto.getName());
-            data.put("districtId", villageDto.getDistrictId());
+            data.put("idVillage", villageDto.id());
+            data.put("name", villageDto.name());
+            data.put("districtId", villageDto.districtId());
         }
 
         var error = ErrorResponseDto.builder()
@@ -267,10 +270,10 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
         Map<String, Object> data=null;
         if(ex.getData()!=null){
-            VillageDto district = (VillageDto) ex.getData();
+            VillagePostDto village = (VillagePostDto) ex.getData();
             data= new HashMap<>();
-            data.put("name", district.getName());
-            data.put("districtId", district.getDistrictId());
+            data.put("name", village.name());
+            data.put("districtId", village.districtId());
         }
 
         var error = ErrorResponseDto.builder()

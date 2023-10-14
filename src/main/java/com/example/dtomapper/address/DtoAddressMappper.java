@@ -1,7 +1,8 @@
 package com.example.dtomapper.address;
 
 import com.example.dto.address.AddressGetDto;
-import com.example.dto.address.AddressRequestDto;
+import com.example.dto.address.AddressSaveDto;
+import com.example.dto.address.AddressUpdatetDto;
 import com.example.dto.user.user_reg.UserRegSaveDto;
 import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.entity.address.Taddress;
@@ -30,7 +31,15 @@ public interface DtoAddressMappper {
             @Mapping(source = "dto.specificAddress", target = "specificAddress"),
             @Mapping(target = "villageId", ignore = true)
     })
-    Taddress AddressRequestDtoToTaddress(AddressRequestDto dto);
+    Taddress AddressUpdateDtoToTaddress(AddressUpdatetDto dto);
+
+    @Mappings({
+            @Mapping(target = "id", ignore = true),
+            @Mapping(source = "dto.villageId", target = "villageId.id"),
+            @Mapping(source = "dto.specificAddress", target = "specificAddress"),
+            @Mapping(target = "villageId", ignore = true)
+    })
+    Taddress AddressSaveDtoToTaddress(AddressSaveDto dto);
 
     @Mappings(value = {
             @Mapping(source = "user.villageId", target = "villageId.id"),

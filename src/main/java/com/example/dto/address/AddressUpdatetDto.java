@@ -6,8 +6,8 @@ import lombok.Getter;
 
 @Builder
 @Getter
-@Schema(name = "AddressRequest", description = "Dto utilizado para actualizar o guardar registro de direcciones")
-public class AddressRequestDto {
+@Schema(name = "AddressUpdate", description = "Dto utilizado para actualizar registro de direcciones")
+public class AddressUpdatetDto {
 
     @Schema(name = "id", description = "Identificacion unica de address", example = "1", format = "int32", minimum = "1")
     private Long id;

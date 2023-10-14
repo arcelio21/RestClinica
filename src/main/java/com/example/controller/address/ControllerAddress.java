@@ -5,6 +5,10 @@ import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.address.AddressGetDto;
 import com.example.dto.address.AddressRequestDto;
+import com.example.dto.address.AddressSaveDto;
+import com.example.dto.address.AddressUpdatetDto;
+import com.example.dto.address.village.VillagePostDto;
+import com.example.dto.address.village.VillageUpdateDto;
 import com.example.service.address.IServiceAddress;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -73,12 +77,17 @@ public class ControllerAddress extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = VillagePostDto.class)
+                                        )
+                        )
     )
     @PostMapping
-    public ResponseEntity<ResponseDTO> save(@RequestBody AddressRequestDto addressRequestDto){
+    public ResponseEntity<ResponseDTO> save(@RequestBody AddressSaveDto addressSaveDto){
 
-        Integer row = this.serviceAddress.save(addressRequestDto);
+        Integer row = this.serviceAddress.save(addressSaveDto);
 
 
         return  new ResponseEntity<>(ResponseDTO.builder()
@@ -99,12 +108,17 @@ public class ControllerAddress extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = AddressUpdatetDto.class)
+                                        )
+                        )
     )
     @PutMapping
-    public ResponseEntity<ResponseDTO> update(@RequestBody AddressRequestDto addressRequestDto){
+    public ResponseEntity<ResponseDTO> update(@RequestBody AddressUpdatetDto addressUpdatetDto){
 
-        Integer row = this.serviceAddress.update(addressRequestDto);
+        Integer row = this.serviceAddress.update(addressUpdatetDto);
         return ResponseEntity.ok(
                 ResponseDTO.builder()
                         .info("Cantidad de registros actualizados")

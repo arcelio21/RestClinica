@@ -1,7 +1,8 @@
 package com.example.service.address;
 
 import com.example.dto.address.AddressGetDto;
-import com.example.dto.address.AddressRequestDto;
+import com.example.dto.address.AddressSaveDto;
+import com.example.dto.address.AddressUpdatetDto;
 import com.example.dtomapper.address.DtoAddressMappper;
 import com.example.entity.address.Taddress;
 import com.example.entity.address.Tdistrict;
@@ -79,18 +80,18 @@ public class ServiceAddressImpl implements IServiceAddress{
 	 * @throws AddressNotUpdateException Si los datos de la dirección no son válidos para la actualización.
 	 */
 	@Override
-	public Integer update(AddressRequestDto addressRequestDto) {
+	public Integer update(AddressUpdatetDto addressUpdate) {
 		
-		if(addressRequestDto ==null || addressRequestDto.getId()==null || addressRequestDto.getId()<=0
-				|| addressRequestDto.getVillageId()==null || addressRequestDto.getVillageId()<=0) {
+		if(addressUpdate ==null || addressUpdate.getId()==null || addressUpdate.getId()<=0
+				|| addressUpdate.getVillageId()==null || addressUpdate.getVillageId()<=0) {
 
-			throw new AddressNotUpdateException("Fallo en actualizacion",addressRequestDto);
+			throw new AddressNotUpdateException("Fallo en actualizacion",addressUpdate);
 		}
 
-		return Optional.of(addressRequestDto)
-				.map(this.dtoAddressMappper::AddressRequestDtoToTaddress)
+		return Optional.of(addressUpdate)
+				.map(this.dtoAddressMappper::AddressUpdateDtoToTaddress)
 				.map(this.mapper::update)
-				.orElseThrow(()-> new AddressNotUpdateException("Fallo en actualizacion", addressRequestDto));
+				.orElseThrow(()-> new AddressNotUpdateException("Fallo en actualizacion", addressUpdate));
 
 	}
 
@@ -102,21 +103,20 @@ public class ServiceAddressImpl implements IServiceAddress{
 	 * @throws AddressNotSaveException Si los datos no son válidos o no se puede guardar la dirección.
 	 */
 	@Override
-	public Integer save(AddressRequestDto addressRequestDto) {
+	public Integer save(AddressSaveDto addressSave) {
 
-		if(addressRequestDto ==null
-				|| addressRequestDto.getId()==null || addressRequestDto.getId()<=0
-				|| addressRequestDto.getVillageId()==null || addressRequestDto.getVillageId()<=0
-				|| addressRequestDto.getSpecificAddress()==null) {
+		if(addressSave ==null
+				|| addressSave.villageId()==null || addressSave.villageId()<=0
+				|| addressSave.specificAddress()==null || addressSave.specificAddress().trim().isEmpty()) {
 
-			throw new AddressNotSaveException("Fallo al guardar", addressRequestDto);
+			throw new AddressNotSaveException("Fallo al guardar", addressSave);
 		}
 
-		return Optional.of(addressRequestDto)
-				.map(this.dtoAddressMappper::AddressRequestDtoToTaddress)
+		return Optional.of(addressSave)
+				.map(this.dtoAddressMappper::AddressSaveDtoToTaddress)
 				.map(this.mapper::save)
-				.map(addres -> (addres>0)?1:0)
-				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar", addressRequestDto));
+				.map(addres -> (addres>0)?1:0) //PORQUE EL MAPPER DEVUELVE LONG Y HAY QUE DEVOLVER INTERGER
+				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar", addressSave));
 	}
 
 	/**
