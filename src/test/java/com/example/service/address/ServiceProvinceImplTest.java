@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.example.dto.address.province.ProvinceDto;
+import com.example.dto.address.province.ProvinceSaveDto;
+import com.example.dto.address.province.ProvinceUpdateDto;
 import com.example.dtomapper.address.DtoProvinceMapper;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.address.province.ProvinceNotSaveException;
@@ -34,7 +36,6 @@ class ServiceProvinceImplTest {
 	private ServiceProvinceImpl serviceProvinceImpl;
 
 	private ProvinceDto provinceDtoValid;
-	private ProvinceDto provinceDtoNOtValid;
 
 	private Tprovince tprovinceValid;
 
@@ -46,11 +47,6 @@ class ServiceProvinceImplTest {
 		provinceDtoValid = ProvinceDto.builder()
 				.id(1)
 				.name("Chiriqui")
-				.build();
-
-		provinceDtoNOtValid = ProvinceDto.builder()
-				.id(1)
-				.name(" ")
 				.build();
 
 		tprovinceValid = new Tprovince(1,"Chiriqui");
@@ -140,12 +136,14 @@ class ServiceProvinceImplTest {
 	 */
 	@Test
 	void testUpdate_ValidProvince_ReturnsUpdatedProvinceId() {
+
+		ProvinceUpdateDto provinceUpdateDto = new ProvinceUpdateDto(1, "Chiriqui");
 		// Arrange
-		when(dtoProvinceMapper.provinceDtoToTprovince(provinceDtoValid)).thenReturn(tprovinceValid);
+		when(dtoProvinceMapper.provinceUpdateDtoToTprovince(provinceUpdateDto)).thenReturn(tprovinceValid);
 		when(mapperProvince.update(tprovinceValid)).thenReturn(1);
 
 		// Act
-		Integer result = serviceProvinceImpl.update(provinceDtoValid);
+		Integer result = serviceProvinceImpl.update(provinceUpdateDto);
 
 		// Assert
 		assertNotNull(result);
@@ -160,9 +158,9 @@ class ServiceProvinceImplTest {
 	 */
 	@Test
 	void testUpdate_InvalidProvince_ThrowsProvinceNotUpdateException() {
-
+		ProvinceUpdateDto provinceUpdateDto = new ProvinceUpdateDto(1, "");
 		// Act & Assert
-		assertThrows(ProvinceNotUpdateException.class, () -> serviceProvinceImpl.update(this.provinceDtoNOtValid));
+		assertThrows(ProvinceNotUpdateException.class, () -> serviceProvinceImpl.update(provinceUpdateDto));
 	}
 
 	// Agrega más casos de prueba para cubrir otros escenarios, como cuando los datos de la provincia no son válidos para la actualización.
@@ -175,12 +173,14 @@ class ServiceProvinceImplTest {
 	 */
 	@Test
 	void testSave_ValidProvince_ReturnsSavedRecordsCount() {
+		
+		ProvinceSaveDto provinceSaveDto = new ProvinceSaveDto("Chiriqui");
 		// Arrange
-		when(dtoProvinceMapper.provinceDtoToTprovince(provinceDtoValid)).thenReturn(tprovinceValid);
+		when(dtoProvinceMapper.provinceSaveDtoToTprovince(provinceSaveDto)).thenReturn(tprovinceValid);
 		when(mapperProvince.save(tprovinceValid)).thenReturn(1);
 
 		// Act
-		Integer result = serviceProvinceImpl.save(provinceDtoValid);
+		Integer result = serviceProvinceImpl.save(provinceSaveDto);
 
 		// Assert
 		assertNotNull(result);
@@ -195,9 +195,9 @@ class ServiceProvinceImplTest {
 	 */
 	@Test
 	void testSave_InvalidProvince_ThrowsProvinceNotSaveException() {
-
+		ProvinceSaveDto provinceSaveDto = new ProvinceSaveDto("");
 		// Act & Assert
-		assertThrows(ProvinceNotSaveException.class, () -> serviceProvinceImpl.save(this.provinceDtoNOtValid));
+		assertThrows(ProvinceNotSaveException.class, () -> serviceProvinceImpl.save(provinceSaveDto));
 	}
 
 }

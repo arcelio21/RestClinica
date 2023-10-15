@@ -1,6 +1,8 @@
 package com.example.service.address;
 
 import com.example.dto.address.province.ProvinceDto;
+import com.example.dto.address.province.ProvinceSaveDto;
+import com.example.dto.address.province.ProvinceUpdateDto;
 import com.example.dtomapper.address.DtoProvinceMapper;
 import com.example.entity.address.Tprovince;
 import com.example.exception.NoDataFoundException;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Service
-public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Integer,ProvinceDto,ProvinceDto> {
+public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Integer,ProvinceUpdateDto,ProvinceSaveDto> {
 
 
 	private final MapperProvince mapperProvince;
@@ -75,19 +77,19 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 	 * @throws ProvinceNotUpdateException Si los datos de la provincia no son válidos para la actualización.
 	 */
 	@Override
-	public Integer update(ProvinceDto provinceDto) {
+	public Integer update(ProvinceUpdateDto provinceUpdateDto) {
 		
-		if(provinceDto==null || provinceDto.getId()==null || provinceDto.getId()==0
-			|| provinceDto.getName()==null || provinceDto.getName().trim().isEmpty()
+		if(provinceUpdateDto==null || provinceUpdateDto.id()==null || provinceUpdateDto.id()==0
+			|| provinceUpdateDto.name()==null || provinceUpdateDto.name().trim().isEmpty()
 			) {
 
-			throw new ProvinceNotUpdateException("Fallo de actualizacion de provincia",provinceDto);
+			throw new ProvinceNotUpdateException("Fallo de actualizacion de provincia",provinceUpdateDto);
 		}
 
-		return Optional.of(provinceDto)
-				.map(this.dtoProvinceMapper::provinceDtoToTprovince)
+		return Optional.of(provinceUpdateDto)
+				.map(this.dtoProvinceMapper::provinceUpdateDtoToTprovince)
 				.map(this.mapperProvince::update)
-				.orElseThrow(()-> new ProvinceNotUpdateException("Fallo de actualizacion de provincia",provinceDto));
+				.orElseThrow(()-> new ProvinceNotUpdateException("Fallo de actualizacion de provincia",provinceUpdateDto));
 	}
 
 	/**
@@ -98,16 +100,16 @@ public class ServiceProvinceImpl implements IServiceProvince<ProvinceDto, Intege
 	 * @throws ProvinceNotSaveException Si los datos no son válidos o no se puede guardar la provincia.
 	 */
 	@Override
-	public Integer save(ProvinceDto provinceDto) {
+	public Integer save(ProvinceSaveDto provinceSaveDto) {
 
-		if(provinceDto==null || provinceDto.getName()==null || provinceDto.getName().trim().isEmpty()){
-			throw new ProvinceNotSaveException("Fallo al guardar province",provinceDto);
+		if(provinceSaveDto==null || provinceSaveDto.name()==null || provinceSaveDto.name().trim().isEmpty()){
+			throw new ProvinceNotSaveException("Fallo al guardar province",provinceSaveDto);
 		}
 
-		return Optional.of(provinceDto)
-				.map(this.dtoProvinceMapper::provinceDtoToTprovince)
+		return Optional.of(provinceSaveDto)
+				.map(this.dtoProvinceMapper::provinceSaveDtoToTprovince)
 				.map(this.mapperProvince::save)
-				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar province",provinceDto));
+				.orElseThrow(()-> new ProvinceNotSaveException("Fallo al guardar province",provinceSaveDto));
 	}
 
 }
