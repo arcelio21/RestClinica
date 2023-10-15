@@ -3,6 +3,8 @@ package com.example.service.address;
 import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.village.VillageDistrictDto;
 import com.example.dto.address.village.VillageDto;
+import com.example.dto.address.village.VillagePostDto;
+import com.example.dto.address.village.VillageUpdateDto;
 import com.example.dtomapper.address.DtoVillageMapper;
 import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tvillage;
@@ -38,10 +40,8 @@ class ServiceVillageImplTest {
     private ServiceVillageImpl serviceVillage;
 
     private VillageDto villageDtoValid;
-    private VillageDto villageDtoNotValid;
 
     private VillageDistrictDto villageDistrictDtoValid;
-    private VillageDistrictDto villageDistrictDtoNotValid;
 
 
 
@@ -53,11 +53,7 @@ class ServiceVillageImplTest {
                 .districtId(1)
                 .build();
 
-        villageDtoNotValid = VillageDto.builder()
-                .id(0)
-                .name("  ")
-                .districtId(null)
-                .build();
+
 
         villageDistrictDtoValid = VillageDistrictDto.builder()
                 .id(1)
@@ -67,12 +63,6 @@ class ServiceVillageImplTest {
                         .name("David")
                         .provinceId(1)
                         .build())
-                .build();
-
-        villageDistrictDtoNotValid = VillageDistrictDto.builder()
-                .id(0)
-                .name("  ")
-                .district(null)
                 .build();
     }
 
@@ -174,13 +164,13 @@ class ServiceVillageImplTest {
     @Test
     void update_WithValidData_ReturnsUpdatedVillageId() {
 
-
+        VillageUpdateDto villageDto = new VillageUpdateDto(1, "Las lomas", 1);
         Tvillage updatedVillage = new Tvillage(1, "Las lomas", new Tdistrict(1));
-        when(dtoVillageMapper.villageDtoToTvillage(this.villageDtoValid)).thenReturn(updatedVillage);
+        when(dtoVillageMapper.villageUpdateToTvillage(villageDto)).thenReturn(updatedVillage);
         when(mapperVillage.update(updatedVillage)).thenReturn(1);
 
         // Act
-        Integer result = serviceVillage.update(this.villageDtoValid);
+        Integer result = serviceVillage.update(villageDto);
 
         // Assert
         assertEquals(1, result);
@@ -193,11 +183,12 @@ class ServiceVillageImplTest {
      */
     @Test
     void update_WithInvalidData_ThrowsVillageNotUpdateException() {
-
+        
+        VillageUpdateDto villageDto = new VillageUpdateDto(0, "Las lomas", 1);
 
         // Act and Assert
         // Se espera que al llamar al método update() con datos inválidos se lance una excepción del tipo VillageNotUpdateException
-        assertThrows(VillageNotUpdateException.class, () -> serviceVillage.update(this.villageDtoNotValid));
+        assertThrows(VillageNotUpdateException.class, () -> serviceVillage.update(villageDto));
     }
 
     //SAVE
@@ -210,13 +201,13 @@ class ServiceVillageImplTest {
     @Test
     void save_WithValidData_ReturnsNumberOfSavedRecords() {
 
-
+        VillagePostDto villageDto = new VillagePostDto("Las lomas", 1);
         Tvillage savedVillage = new Tvillage(1, "Las lomas", new Tdistrict(1));
-        when(dtoVillageMapper.villageDtoToTvillage(this.villageDtoValid)).thenReturn(savedVillage);
+        when(dtoVillageMapper.villagePostToTvillage(villageDto)).thenReturn(savedVillage);
         when(mapperVillage.save(savedVillage)).thenReturn(1);
 
         // Act
-        Integer result = serviceVillage.save(this.villageDtoValid);
+        Integer result = serviceVillage.save(villageDto);
 
         // Assert
         assertEquals(1, result);
@@ -230,9 +221,10 @@ class ServiceVillageImplTest {
     @Test
     void save_WithInvalidData_ThrowsVillageNotSaveException() {
 
+        VillagePostDto villageDto = new VillagePostDto("Las lomas", 0);
         // Act and Assert
         // Se espera que al llamar al método save() con datos inválidos se lance una excepción del tipo VillageNotSaveException
-        assertThrows(VillageNotSaveException.class, () -> serviceVillage.save(this.villageDtoNotValid));
+        assertThrows(VillageNotSaveException.class, () -> serviceVillage.save(villageDto));
     }
 
     //GETBYDISTRICTID

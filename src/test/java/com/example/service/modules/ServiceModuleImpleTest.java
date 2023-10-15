@@ -1,7 +1,9 @@
 package com.example.service.modules;
 
 
+import com.example.dto.modules.ModuleSaveDto;
 import com.example.dto.modules.ModulesDto;
+import com.example.dto.modules.ModulesUpdateDto;
 import com.example.dtomapper.modules.DtoModulesMapper;
 import com.example.entity.modules.Tmodule;
 import com.example.exception.NoDataFoundException;
@@ -215,16 +217,19 @@ class ServiceModuleImpleTest {
     @DisplayName("Prueba de actualización de módulo válido")
     public void testUpdate_ValidModulesDto_ReturnsUpdatedModuleId() {
         // Arrange
-
-        given(this.dtoModulesMapper.modulesDtoToTmodule(this.modulesDtoValid)).willReturn(this.tmoduleValid);
+        ModulesUpdateDto moduleUpdate = ModulesUpdateDto.builder()
+                                            .id(1L)
+                                            .name("USER")
+                                            .build();
+        given(this.dtoModulesMapper.modulesUpdateToTmodule(moduleUpdate)).willReturn(this.tmoduleValid);
         given(this.mapperModules.update(this.tmoduleValid)).willReturn(1);
 
         // Act
-        Integer result = this.serviceModuleImple.update(this.modulesDtoValid);
+        Integer result = this.serviceModuleImple.update(moduleUpdate);
 
         // Assert
         assertEquals(Integer.valueOf(1), result);
-        then(this.dtoModulesMapper).should().modulesDtoToTmodule(this.modulesDtoValid);
+        then(this.dtoModulesMapper).should().modulesUpdateToTmodule(moduleUpdate);
         then(this.mapperModules).should().update(this.tmoduleValid);
     }
 
@@ -243,10 +248,10 @@ class ServiceModuleImpleTest {
     public void testUpdate_NullModulesDto_ThrowsModulesNotUpdateException() {
         // Arrange
 
-        ModulesDto modulesDto = null;
+        ModulesUpdateDto moduleNul = null;
 
         // Act & Assert
-        assertThrows(ModulesNotUpdateException.class, () -> this.serviceModuleImple.update(modulesDto));
+        assertThrows(ModulesNotUpdateException.class, () -> this.serviceModuleImple.update(moduleNul));
         then(this.dtoModulesMapper).shouldHaveNoInteractions();
         then(this.mapperModules).shouldHaveNoInteractions();
     }
@@ -264,8 +269,10 @@ class ServiceModuleImpleTest {
     @Test
     @DisplayName("Prueba de actualización de módulo con objeto inválido")
     public void testUpdate_InvalidModulesDto_ThrowsModulesNotUpdateException() {
+        
+        ModulesUpdateDto moduleUpdate = ModulesUpdateDto.builder().build();
         // Act & Assert
-        assertThrows(ModulesNotUpdateException.class, () -> this.serviceModuleImple.update(this.modulesDtoNotValid));
+        assertThrows(ModulesNotUpdateException.class, () -> this.serviceModuleImple.update(moduleUpdate));
         then(this.dtoModulesMapper).shouldHaveNoInteractions();
         then(this.mapperModules).shouldHaveNoInteractions();
     }
@@ -285,16 +292,16 @@ class ServiceModuleImpleTest {
     @DisplayName("Prueba de guardado de módulo con objeto válido")
     public void testSave_ValidModulesDto_ReturnsSavedModuleId() {
         // Arrange
-
-        given(this.dtoModulesMapper.modulesDtoToTmodule(this.modulesDtoValid)).willReturn(this.tmoduleValid);
+        ModuleSaveDto moduleSave = new ModuleSaveDto("/api/user");
+        given(this.dtoModulesMapper.modulesSaveToTmodule(moduleSave)).willReturn(this.tmoduleValid);
         given(this.mapperModules.insert(this.tmoduleValid)).willReturn(1);
 
         // Act
-        Integer result = this.serviceModuleImple.save(this.modulesDtoValid);
+        Integer result = this.serviceModuleImple.save(moduleSave);
 
         // Assert
         assertEquals(Integer.valueOf(1), result);
-        then(this.dtoModulesMapper).should().modulesDtoToTmodule(this.modulesDtoValid);
+        then(this.dtoModulesMapper).should().modulesSaveToTmodule(moduleSave);
         then(this.mapperModules).should().insert(this.tmoduleValid);
     }
 
@@ -312,10 +319,10 @@ class ServiceModuleImpleTest {
     @DisplayName("Prueba de guardado de módulo con objeto nulo")
     public void testSave_NullModulesDto_ThrowsModulesNotSaveException() {
         // Arrange
-        ModulesDto modulesDto = null;
+        ModuleSaveDto moduleSave = null;
 
         // Act & Assert
-        assertThrows(ModulesNotSaveException.class, () -> this.serviceModuleImple.save(modulesDto));
+        assertThrows(ModulesNotSaveException.class, () -> this.serviceModuleImple.save(moduleSave));
         then(this.dtoModulesMapper).shouldHaveNoInteractions();
         then(this.mapperModules).shouldHaveNoInteractions();
     }
@@ -333,8 +340,10 @@ class ServiceModuleImpleTest {
     @Test
     @DisplayName("Prueba de guardado de módulo con objeto inválido")
     public void testSave_InvalidModulesDto_ThrowsModulesNotSaveException() {
+
+        ModuleSaveDto moduleSave = new ModuleSaveDto("");
         // Act & Assert
-        assertThrows(ModulesNotSaveException.class, () -> this.serviceModuleImple.save(this.modulesDtoNotValid));
+        assertThrows(ModulesNotSaveException.class, () -> this.serviceModuleImple.save(moduleSave));
         then(this.dtoModulesMapper).shouldHaveNoInteractions();
         then(this.mapperModules).shouldHaveNoInteractions();
     }
