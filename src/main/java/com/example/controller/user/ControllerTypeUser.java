@@ -4,7 +4,10 @@ import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.ValidateGroupA;
+import com.example.dto.address.province.ProvinceSaveDto;
 import com.example.dto.user.type_user.TypeUserDto;
+import com.example.dto.user.type_user.TypeUserPostDto;
+import com.example.dto.user.type_user.TypeUserUpdateDto;
 import com.example.dto.user.user_reg.UserRegDto;
 import com.example.service.user.ServiceTypeUserImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,15 +82,20 @@ public class ControllerTypeUser extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema(implementation = ErrorResponseDto.class))
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = TypeUserPostDto.class)
+                                        )
+                        )
     )
     @PostMapping
-    public ResponseEntity<ResponseDTO> save(@Validated(value = {ValidateGroupA.class}) @NotNull @RequestBody TypeUserDto typeUserDto){
+    public ResponseEntity<ResponseDTO> save(@Validated @NotNull @RequestBody TypeUserPostDto typeUserPostDto){
 
         return ResponseEntity.ok(
                 ResponseDTO.builder()
                         .info("Cantidad de registros guardados")
-                        .data(this.serviceTypeUser.save(typeUserDto))
+                        .data(this.serviceTypeUser.save(typeUserPostDto))
                         .build()
         );
     }
@@ -103,15 +111,20 @@ public class ControllerTypeUser extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = TypeUserUpdateDto.class)
+                                        )
+                        )
     )
     @PutMapping
-    public ResponseEntity<ResponseDTO> update(@Validated @NotNull @RequestBody TypeUserDto typeUserDto){
+    public ResponseEntity<ResponseDTO> update(@Validated @NotNull @RequestBody TypeUserUpdateDto typeUserUpdateDto){
 
         return ResponseEntity.ok(
                 ResponseDTO.builder()
                         .info("Cantidad de registros actualizados")
-                        .data(this.serviceTypeUser.update(typeUserDto))
+                        .data(this.serviceTypeUser.update(typeUserUpdateDto))
                         .build()
         );
     }

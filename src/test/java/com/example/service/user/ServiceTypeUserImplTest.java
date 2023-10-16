@@ -1,6 +1,8 @@
 package com.example.service.user;
 
 import com.example.dto.user.type_user.TypeUserDto;
+import com.example.dto.user.type_user.TypeUserPostDto;
+import com.example.dto.user.type_user.TypeUserUpdateDto;
 import com.example.dtomapper.user.DtoTypeUserMapper;
 import com.example.entity.user.TtypeUser;
 import com.example.exception.NoDataFoundException;
@@ -225,16 +227,16 @@ class ServiceTypeUserImplTest {
     @DisplayName("Prueba de actualización de TypeUserDto válido")
     public void testUpdate_ValidTypeUserDto_ReturnsUpdatedTypeUser() {
         // Arrange
-
-        given(this.dtoTypeUserMapper.typeUserDtoToTtypeUser(this.typeUserDtoValid)).willReturn(this.ttypeUserValid);
+        TypeUserUpdateDto typeUserUpdateDto = new TypeUserUpdateDto(1, "USER");
+        given(this.dtoTypeUserMapper.typeUserUpdateDtoToTtypeUser(typeUserUpdateDto)).willReturn(this.ttypeUserValid);
         given(this.mapperTypeUser.update(this.ttypeUserValid)).willReturn(1);
 
         // Act
-        Integer result = this.serviceTypeUser.update(this.typeUserDtoValid);
+        Integer result = this.serviceTypeUser.update(typeUserUpdateDto);
 
         // Assert
         assertEquals(1, result);
-        then(this.dtoTypeUserMapper).should().typeUserDtoToTtypeUser(this.typeUserDtoValid);
+        then(this.dtoTypeUserMapper).should().typeUserUpdateDtoToTtypeUser(typeUserUpdateDto);
         then(this.mapperTypeUser).should().update(this.ttypeUserValid);
     }
 
@@ -253,9 +255,9 @@ class ServiceTypeUserImplTest {
     @DisplayName("Prueba de actualización de TypeUserDto no válido")
     public void testUpdate_InvalidTypeUserDto_ThrowsTypeUserNotUpdateException() {
         // Arrange
-
+        TypeUserUpdateDto typeUserUpdateDto = new TypeUserUpdateDto(1, "");
         // Act & Assert
-        assertThrows(TypeUserNotUpdateException.class, () -> this.serviceTypeUser.update(this.typeUserDtoNotValid));
+        assertThrows(TypeUserNotUpdateException.class, () -> this.serviceTypeUser.update(typeUserUpdateDto));
         then(this.dtoTypeUserMapper).shouldHaveNoInteractions();
         then(this.mapperTypeUser).shouldHaveNoInteractions();
     }
@@ -277,13 +279,14 @@ class ServiceTypeUserImplTest {
     @Test
     @DisplayName("Prueba de actualización de TypeUserDto no existente")
     public void testUpdate_NonexistentTypeUserDto_ThrowsTypeUserNotUpdateException() {
+        
+        TypeUserUpdateDto typeUserUpdateDto = new TypeUserUpdateDto(1, "USER");
         // Arrange
-
-        given(this.dtoTypeUserMapper.typeUserDtoToTtypeUser(this.typeUserDtoValid)).willReturn(null);
+        given(this.dtoTypeUserMapper.typeUserUpdateDtoToTtypeUser(typeUserUpdateDto)).willReturn(null);
 
         // Act & Assert
-        assertThrows(TypeUserNotUpdateException.class, () -> this.serviceTypeUser.update(this.typeUserDtoValid));
-        then(this.dtoTypeUserMapper).should().typeUserDtoToTtypeUser(this.typeUserDtoValid);
+        assertThrows(TypeUserNotUpdateException.class, () -> this.serviceTypeUser.update(typeUserUpdateDto));
+        then(this.dtoTypeUserMapper).should().typeUserUpdateDtoToTtypeUser(typeUserUpdateDto);
         then(this.mapperTypeUser).shouldHaveNoInteractions();
     }
 
@@ -306,16 +309,16 @@ class ServiceTypeUserImplTest {
     @DisplayName("Prueba de guardado de TypeUserDto válido")
     public void testSave_ValidTypeUserDto_ReturnsSavedTypeUserId() {
         // Arrange
-
-        given(this.dtoTypeUserMapper.typeUserDtoToTtypeUser(this.typeUserDtoValid)).willReturn(this.ttypeUserValid);
+        TypeUserPostDto typeUserPostDto = new TypeUserPostDto("USER");
+        given(this.dtoTypeUserMapper.typeUserPostDtoToTtypeUser(typeUserPostDto)).willReturn(this.ttypeUserValid);
         given(this.mapperTypeUser.save(this.ttypeUserValid)).willReturn(1);
 
         // Act
-        Integer result = this.serviceTypeUser.save(this.typeUserDtoValid);
+        Integer result = this.serviceTypeUser.save(typeUserPostDto);
 
         // Assert
         assertEquals(1, result);
-        then(this.dtoTypeUserMapper).should().typeUserDtoToTtypeUser(this.typeUserDtoValid);
+        then(this.dtoTypeUserMapper).should().typeUserPostDtoToTtypeUser(typeUserPostDto);
         then(this.mapperTypeUser).should().save(this.ttypeUserValid);
     }
 
@@ -333,9 +336,9 @@ class ServiceTypeUserImplTest {
     @DisplayName("Prueba de guardado de TypeUserDto inválido")
     public void testSave_InvalidTypeUserDto_ThrowsTypeUserNotSaveException() {
         // Arrange
-
+        TypeUserPostDto typeUserPostDto = new TypeUserPostDto("");
         // Act & Assert
-        assertThrows(TypeUserNotSaveException.class, () -> this.serviceTypeUser.save(this.typeUserDtoNotValid));
+        assertThrows(TypeUserNotSaveException.class, () -> this.serviceTypeUser.save(typeUserPostDto));
         then(this.dtoTypeUserMapper).shouldHaveNoInteractions();
         then(this.mapperTypeUser).shouldHaveNoInteractions();
     }

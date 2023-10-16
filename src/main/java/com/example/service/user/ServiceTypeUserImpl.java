@@ -1,6 +1,8 @@
 package com.example.service.user;
 
 import com.example.dto.user.type_user.TypeUserDto;
+import com.example.dto.user.type_user.TypeUserPostDto;
+import com.example.dto.user.type_user.TypeUserUpdateDto;
 import com.example.dtomapper.user.DtoTypeUserMapper;
 import com.example.entity.user.TtypeUser;
 import com.example.exception.NoDataFoundException;
@@ -16,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integer,TypeUserDto,TypeUserDto>{
+public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integer, TypeUserUpdateDto, TypeUserPostDto>{
 
 	
 	private final MapperTypeUser mapperTypeUser;
@@ -74,14 +76,14 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 	 * @throws TypeUserNotUpdateException si se produjo un error al intentar actualizar los datos o si los datos proporcionados no son válidos
 	 */
 	@Override
-	public Integer update(TypeUserDto typeUserDto) {
+	public Integer update(TypeUserUpdateDto typeUserUpdateDto) {
 
-		this.validDataTypeUserUpdate(typeUserDto);
+		this.validDataTypeUserUpdate(typeUserUpdateDto);
 		
-		return Optional.of(typeUserDto)
-				.map(this.dtoTypeUserMapper::typeUserDtoToTtypeUser)
+		return Optional.of(typeUserUpdateDto)
+				.map(this.dtoTypeUserMapper::typeUserUpdateDtoToTtypeUser)
 				.map(this.mapperTypeUser::update)
-				.orElseThrow(() -> new TypeUserNotUpdateException("Error al intentar actualizar, Datos no validos",typeUserDto));
+				.orElseThrow(() -> new TypeUserNotUpdateException("Error al intentar actualizar, Datos no validos",typeUserUpdateDto));
 	}
 
 	/**
@@ -93,14 +95,14 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 	 *         o si los datos proporcionados no son válidos
 	 */
 	@Override
-	public Integer save(TypeUserDto typeUserDto) {
+	public Integer save(TypeUserPostDto typeUserPostDto) {
 
-		this.validDataTypeUserSave(typeUserDto);
+		this.validDataTypeUserSave(typeUserPostDto);
 
-		return Optional.of(typeUserDto)
-				.map(this.dtoTypeUserMapper::typeUserDtoToTtypeUser)
+		return Optional.of(typeUserPostDto)
+				.map(this.dtoTypeUserMapper::typeUserPostDtoToTtypeUser)
 				.map(this.mapperTypeUser::save)
-				.orElseThrow(()-> new TypeUserNotSaveException("Error al intentar guardar", typeUserDto));
+				.orElseThrow(()-> new TypeUserNotSaveException("Error al intentar guardar", typeUserPostDto));
 	}
 
 
@@ -110,11 +112,11 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 	 * @param typeUserDto Objeto TypeUserDto a validar
 	 * @throws TypeUserNotUpdateException si los datos proporcionados no son válidos para una actualización
 	 */
-	private void validDataTypeUserUpdate(TypeUserDto typeUserDto) throws TypeUserNotUpdateException{
-		if(typeUserDto==null || typeUserDto.getId()==null || typeUserDto.getId()<=0
-				|| typeUserDto.getName()==null || typeUserDto.getName().trim().isEmpty()
+	private void validDataTypeUserUpdate(TypeUserUpdateDto typeUserUpdateDto) throws TypeUserNotUpdateException{
+		if(typeUserUpdateDto==null || typeUserUpdateDto.id()==null || typeUserUpdateDto.id()<=0
+				|| typeUserUpdateDto.name()==null || typeUserUpdateDto.name().trim().isEmpty()
 		) {
-			throw new TypeUserNotUpdateException("Datos no validos", typeUserDto);
+			throw new TypeUserNotUpdateException("Datos no validos", typeUserUpdateDto);
 		}
 	}
 
@@ -124,9 +126,9 @@ public class ServiceTypeUserImpl implements IServiceTypeUser <TypeUserDto, Integ
 	 * @param typeUserDto Objeto TypeUserDto a validar
 	 * @throws TypeUserNotSaveException si los datos proporcionados no son válidos para un guardado
 	 */
-	private void validDataTypeUserSave(TypeUserDto typeUserDto){
-		if(typeUserDto==null || typeUserDto.getName()==null ||typeUserDto.getName().trim().equals("") ) {
-			throw new TypeUserNotSaveException("Datos no validos", typeUserDto);
+	private void validDataTypeUserSave(TypeUserPostDto typeUserPostDto){
+		if(typeUserPostDto==null || typeUserPostDto.name()==null ||typeUserPostDto.name().trim().equals("") ) {
+			throw new TypeUserNotSaveException("Datos no validos", typeUserPostDto);
 		}
 	}
 
