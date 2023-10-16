@@ -2,6 +2,8 @@ package com.example.service.address;
 
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
+import com.example.dto.address.district.DistrictSaveDto;
+import com.example.dto.address.district.DistrictUpdateDto;
 import com.example.dto.address.province.ProvinceDto;
 import com.example.dtomapper.address.DtoDistrictMapper;
 import com.example.entity.address.Tdistrict;
@@ -124,14 +126,10 @@ class ServiceDistrictImplTest {
 	 */
 	@Test
 	void updateDistrictNotValid(){
-		DistrictDto districtDto = DistrictDto.builder()
-				.id(1)
-				.name("  ")
-				.provinceId(null)
-				.build();
+		DistrictUpdateDto districtUpdateDto = new DistrictUpdateDto(1, "", 0);
 
 
-		assertThrows(DistrictNotUpdateException.class,()->this.service.update(districtDto));
+		assertThrows(DistrictNotUpdateException.class,()->this.service.update(districtUpdateDto));
 	}
 
 	/**
@@ -139,31 +137,24 @@ class ServiceDistrictImplTest {
 	 */
 	@Test
 	void updateDistrictConverterNotValid(){
-		DistrictDto districtDto = DistrictDto.builder()
-				.id(1)
-				.name("Bocas")
-				.provinceId(1)
-				.build();
+		DistrictUpdateDto districtUpdateDto = new DistrictUpdateDto(1, "David", 1);
 
-		when(this.dtoMapper.districtDtoToTdistrict(districtDto)).thenReturn(null);
+		when(this.dtoMapper.districtUpdateDtoToTdistrict(districtUpdateDto)).thenReturn(null);
 
-		assertThrows(DistrictNotUpdateException.class,()->this.service.update(districtDto));
+		assertThrows(DistrictNotUpdateException.class,()->this.service.update(districtUpdateDto));
 	}
 
 	@Test
 	void updateDistrictValid(){
-		DistrictDto districtDto = DistrictDto.builder()
-				.id(1)
-				.name("Bocas")
-				.provinceId(1)
-				.build();
+		
+		DistrictUpdateDto districtUpdateDto = new DistrictUpdateDto(1, "David", 1);
 
 		Tdistrict tdistrict = new Tdistrict(1,"Bocas",new Tprovince(1));
 
-		when(this.dtoMapper.districtDtoToTdistrict(districtDto)).thenReturn(tdistrict);
+		when(this.dtoMapper.districtUpdateDtoToTdistrict(districtUpdateDto)).thenReturn(tdistrict);
 		when(this.mapper.update(tdistrict)).thenReturn(1);
 
-		assertEquals(1,this.service.update(districtDto));
+		assertEquals(1,this.service.update(districtUpdateDto));
 	}
 
 	/**
@@ -171,11 +162,8 @@ class ServiceDistrictImplTest {
 	 */
 	@Test
 	void saveDistrictNotValid(){
-		DistrictDto districtDto = DistrictDto.builder()
-				.name("  ")
-				.provinceId(1)
-				.build();
-		assertThrows(DistrictNotSaveException.class,()->this.service.save(districtDto));
+		DistrictSaveDto districtSaveDto = new DistrictSaveDto("", 1);
+		assertThrows(DistrictNotSaveException.class,()->this.service.save(districtSaveDto));
 	}
 
 
@@ -184,13 +172,10 @@ class ServiceDistrictImplTest {
 	 */
 	@Test
 	void saveDistrictConverterNotValid(){
-		DistrictDto districtDto = DistrictDto.builder()
-				.name("David")
-				.provinceId(1)
-				.build();
-		when(this.dtoMapper.districtDtoToTdistrict(districtDto)).thenReturn(null);
+		DistrictSaveDto districtSaveDto = new DistrictSaveDto("David", 1);
+		when(this.dtoMapper.districtSaveDtoToTdistrict(districtSaveDto)).thenReturn(null);
 
-		assertThrows(DistrictNotSaveException.class,()->this.service.save(districtDto));
+		assertThrows(DistrictNotSaveException.class,()->this.service.save(districtSaveDto));
 	}
 
 	/**
@@ -198,18 +183,14 @@ class ServiceDistrictImplTest {
 	 */
 	@Test
 	void saveDistrictValid(){
-		DistrictDto districtDto = DistrictDto.builder()
-				.id(1)
-				.name("Bocas")
-				.provinceId(1)
-				.build();
+		DistrictSaveDto districtSaveDto = new DistrictSaveDto("David", 1);
 
 		Tdistrict tdistrict = new Tdistrict(1,"Bocas",new Tprovince(1));
 
-		when(this.dtoMapper.districtDtoToTdistrict(districtDto)).thenReturn(tdistrict);
+		when(this.dtoMapper.districtSaveDtoToTdistrict(districtSaveDto)).thenReturn(tdistrict);
 		when(this.mapper.save(tdistrict)).thenReturn(1);
 
-		assertEquals(1,this.service.save(districtDto));
+		assertEquals(1,this.service.save(districtSaveDto));
 	}
 
 

@@ -2,6 +2,8 @@ package com.example.dtomapper.address;
 
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
+import com.example.dto.address.district.DistrictSaveDto;
+import com.example.dto.address.district.DistrictUpdateDto;
 import com.example.entity.address.Tdistrict;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -48,4 +50,22 @@ public interface DtoDistrictMapper {
             @Mapping(target = "province.districts", ignore = true)
     })
     Tdistrict districtALlToTdistrict(DistrictAllDto districtAllDto);
+
+    @Mappings(value = {
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "name", source = "districtDto.name"),
+            @Mapping(target = "villages", ignore = true),
+            @Mapping(target = "province.id", source = "districtDto.provinceId", defaultValue = "0"),
+            @Mapping(target = "province", ignore = true)
+    })
+    Tdistrict districtSaveDtoToTdistrict(DistrictSaveDto districtDto);
+
+    @Mappings(value = {
+            @Mapping(target = "id", source = "districtDto.id"),
+            @Mapping(target = "name", source = "districtDto.name"),
+            @Mapping(target = "villages", ignore = true),
+            @Mapping(target = "province.id", source = "districtDto.provinceId", defaultValue = "0"),
+            @Mapping(target = "province", ignore = true)
+    })
+    Tdistrict districtUpdateDtoToTdistrict(DistrictUpdateDto districtDto);
 }

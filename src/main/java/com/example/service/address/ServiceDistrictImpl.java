@@ -2,6 +2,8 @@ package com.example.service.address;
 
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
+import com.example.dto.address.district.DistrictSaveDto;
+import com.example.dto.address.district.DistrictUpdateDto;
 import com.example.dtomapper.address.DtoDistrictMapper;
 import com.example.entity.address.Tdistrict;
 import com.example.entity.address.Tprovince;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @RequiredArgsConstructor
 @Service
-public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Integer, DistrictDto,DistrictDto>{
+public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Integer, DistrictUpdateDto,DistrictSaveDto>{
 	
 	private final MapperDistrict mapperDistrict;
 	private  final DtoDistrictMapper dtoMapper;
@@ -71,16 +73,16 @@ public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Intege
 	 * @throws DistrictNotUpdateException Si los datos del distrito no son válidos para la actualización.
 	 */
 	@Override
-	public Integer update(DistrictDto districtDto) {
+	public Integer update(DistrictUpdateDto districtDto) {
 
-		if (districtDto == null || districtDto.getId()==null || districtDto.getName() == null
-				|| districtDto.getId()<=0 || districtDto.getName().trim().isEmpty()
-				|| districtDto.getProvinceId()==null || districtDto.getProvinceId()<=0) {
+		if (districtDto == null || districtDto.id()==null || districtDto.name() == null
+				|| districtDto.id()<=0 || districtDto.name().trim().isEmpty()
+				|| districtDto.provinceId()==null || districtDto.provinceId()<=0) {
 			throw new DistrictNotUpdateException("Datos de distrito no valido",districtDto);
 		}
 
 		return Optional.of(districtDto)
-				.map(this.dtoMapper::districtDtoToTdistrict)
+				.map(this.dtoMapper::districtUpdateDtoToTdistrict)
 				.map(this.mapperDistrict::update)
 				.orElseThrow(()-> new DistrictNotUpdateException("Datos de distrito no valido",districtDto));
 	}
@@ -93,14 +95,14 @@ public class ServiceDistrictImpl implements IServiceDistrict<DistrictDto, Intege
 	 * @throws DistrictNotSaveException Si los datos no son válidos o no se puede guardar el distrito.
 	 */
 	@Override
-	public Integer save(DistrictDto districtDto) {
-		if (districtDto == null || districtDto.getName() == null || districtDto.getName().trim().isEmpty()
-			|| districtDto.getProvinceId()==null || districtDto.getProvinceId()<=0) {
+	public Integer save(DistrictSaveDto districtDto) {
+		if (districtDto == null || districtDto.name() == null || districtDto.name().trim().isEmpty()
+			|| districtDto.provinceId()==null || districtDto.provinceId()<=0) {
 			throw new DistrictNotSaveException("Datos no Validos", districtDto);
 		}
 
 		return Optional.of(districtDto)
-				.map(this.dtoMapper::districtDtoToTdistrict)
+				.map(this.dtoMapper::districtSaveDtoToTdistrict)
 				.map(this.mapperDistrict::save)
 				.orElseThrow(()-> new DistrictNotSaveException("Datos no validos", districtDto));
 	}

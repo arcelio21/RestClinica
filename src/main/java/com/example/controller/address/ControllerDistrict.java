@@ -4,6 +4,9 @@ import com.example.controller.ControllerTemplate;
 import com.example.dto.ResponseDTO;
 import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
+import com.example.dto.address.district.DistrictSaveDto;
+import com.example.dto.address.district.DistrictUpdateDto;
+import com.example.dto.user.type_user.TypeUserPostDto;
 import com.example.service.address.ServiceDistrictImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -75,10 +78,15 @@ public class ControllerDistrict extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = DistrictSaveDto.class)
+                                        )
+                        )
     )
     @PostMapping
-    public ResponseEntity<ResponseDTO> save(@RequestBody DistrictDto districtDto){
+    public ResponseEntity<ResponseDTO> save(@RequestBody DistrictSaveDto districtDto){
         Integer row = this.serviceDistrict.save(districtDto);
         return  new ResponseEntity<>(ResponseDTO.builder()
                 .info("Cantidad de registros creados")
@@ -97,10 +105,15 @@ public class ControllerDistrict extends ControllerTemplate {
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
-            }
+            },
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                schema = @Schema(implementation = DistrictUpdateDto.class)
+                                        )
+                        )
     )
     @PutMapping
-    public ResponseEntity<ResponseDTO> update(@org.springframework.web.bind.annotation.RequestBody DistrictDto districtDto){
+    public ResponseEntity<ResponseDTO> update(@RequestBody DistrictUpdateDto districtDto){
         Integer row = this.serviceDistrict.update(districtDto);
         return ResponseEntity.ok(
                 ResponseDTO.builder()
