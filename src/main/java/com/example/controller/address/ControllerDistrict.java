@@ -6,7 +6,6 @@ import com.example.dto.address.district.DistrictAllDto;
 import com.example.dto.address.district.DistrictDto;
 import com.example.dto.address.district.DistrictSaveDto;
 import com.example.dto.address.district.DistrictUpdateDto;
-import com.example.dto.user.type_user.TypeUserPostDto;
 import com.example.service.address.ServiceDistrictImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

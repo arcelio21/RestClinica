@@ -3,8 +3,6 @@ package com.example.controller.user;
 import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
-import com.example.dto.ValidateGroupA;
-import com.example.dto.address.province.ProvinceSaveDto;
 import com.example.dto.user.type_user.TypeUserDto;
 import com.example.dto.user.type_user.TypeUserPostDto;
 import com.example.dto.user.type_user.TypeUserUpdateDto;

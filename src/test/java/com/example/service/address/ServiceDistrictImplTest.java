@@ -114,7 +114,7 @@ class ServiceDistrictImplTest {
 
 	@Test
 	void getByIdWithIdNotValidAndDistrictNotExits(){
-		Tdistrict tdistrict = new Tdistrict(1,"Bocas",new Tprovince(1));
+		//Tdistrict tdistrict = new Tdistrict(1,"Bocas",new Tprovince(1));
 		Integer id = null;
 
 		assertThrows(NoDataFoundException.class,()-> this.service.getById(id));
