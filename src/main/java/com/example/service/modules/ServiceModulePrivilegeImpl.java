@@ -4,7 +4,10 @@ import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeUpdateDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
 import com.example.dtomapper.modules.DtoModulesPrivilegesMapper;
+import com.example.entity.modules.Tmodule;
 import com.example.entity.modules.TmodulePrivilege;
+import com.example.entity.modules.Tprivilege;
+import com.example.entity.status.Tstatus;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotSaveException;
 import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotUpdateException;
@@ -109,22 +112,40 @@ public class ServiceModulePrivilegeImpl implements IServiceModulePrivilege{
 	@Override
 	public Integer save(ModulePrivilegeSaveDto modulePrivilegeSaveDto) {
 
-		if (modulePrivilegeSaveDto == null || modulePrivilegeSaveDto.getPrivilegeId()==null || modulePrivilegeSaveDto.getPrivilegeId()<=0
+		if (modulePrivilegeSaveDto == null || modulePrivilegeSaveDto.getPrivilegeIds()==null || modulePrivilegeSaveDto.getPrivilegeIds().isEmpty()
 			|| modulePrivilegeSaveDto.getModuleId()==null || modulePrivilegeSaveDto.getModuleId()<=0
 			|| modulePrivilegeSaveDto.getStatusId()==null || modulePrivilegeSaveDto.getStatusId()<=0
 		) {
 			throw new ModulePrivilegesNotSaveException("Data Not Valid", modulePrivilegeSaveDto);
 		}
 
-		Integer rowAffected = Optional.of(modulePrivilegeSaveDto)
-				.map(this.dtoModulesPrivilegesMapper::ModulePrivilegeSaveDtoToTmodulePrivilege)
+		TmodulePrivilege mTmodulePrivilege = this.converterDtoSaveToEntity(modulePrivilegeSaveDto.getModuleId(), modulePrivilegeSaveDto.getStatusId());
+
+
+		modulePrivilegeSaveDto.getPrivilegeIds().forEach((idPrivilege) -> {
+
+			mTmodulePrivilege.setPrivilege(new Tprivilege(idPrivilege.value()));
+
+			Integer rowAffected = Optional.of(mTmodulePrivilege)
 				.map(this.mapperModulePrivilege::save)
 				.orElseThrow(()-> new ModulePrivilegesNotSaveException("Data not valid", modulePrivilegeSaveDto));
 
-		if (rowAffected==null || rowAffected<=0){
-			throw new ModulePrivilegesNotSaveException("Error to update", modulePrivilegeSaveDto);
-		}
+			if (rowAffected==null || rowAffected<=0){
+				throw new ModulePrivilegesNotSaveException("Error to update", modulePrivilegeSaveDto);
+			}
+		});
 
-		return rowAffected;
+		
+
+		return 1;
+	}
+
+	private TmodulePrivilege converterDtoSaveToEntity(Long idModule, Integer idStatus){
+
+		TmodulePrivilege mTmodulePrivilege = new TmodulePrivilege();
+		mTmodulePrivilege.setModule(new Tmodule(idModule));
+		mTmodulePrivilege.setStatus(new Tstatus(idStatus));
+
+		return mTmodulePrivilege;
 	}
 }

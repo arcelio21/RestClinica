@@ -547,7 +547,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         if(ex.getData()!=null){
             data = new HashMap<>();
             ModulePrivilegeSaveDto privilege = (ModulePrivilegeSaveDto) ex.getData();
-            data.put("privilegeId", privilege.getPrivilegeId());
+            data.put("privilegeId", privilege.getPrivilegeIds());
             data.put("modulesId", privilege.getModuleId());
             data.put("statusId", privilege.getStatusId());
         }

@@ -24,7 +24,7 @@ public interface DtoModulesPrivilegesMapper {
 
     @Mappings({
             @Mapping(source = "modulePrivilegeSaveDto.moduleId", target = "module.id"),
-            @Mapping(source = "modulePrivilegeSaveDto.privilegeId", target = "privilege.id"),
+            @Mapping(ignore = true, target = "privilege.id"),
             @Mapping(source = "modulePrivilegeSaveDto.statusId", target = "status.id"),
             @Mapping(target = "status", ignore = true),
             @Mapping(target = "privilege", ignore = true),

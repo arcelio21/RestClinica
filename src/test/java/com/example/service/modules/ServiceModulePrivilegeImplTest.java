@@ -3,6 +3,7 @@ package com.example.service.modules;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeUpdateDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
+import com.example.dto.modules.modulesprivileges.PrivilegeIdDto;
 import com.example.dtomapper.modules.DtoModulesPrivilegesMapper;
 import com.example.entity.modules.TmodulePrivilege;
 import com.example.exception.NoDataFoundException;
@@ -62,7 +63,7 @@ class ServiceModulePrivilegeImplTest {
         modulePrivilegesDtoNotValid = ModulePrivilegesDto.builder().build();
 
         modulePrivilegeSaveDtoValid = ModulePrivilegeSaveDto.builder()
-                .privilegeId(1)
+                .privilegeIds(List.of(new PrivilegeIdDto(1)))
                 .moduleId(1L)
                 .statusId(1)
                 .build();
@@ -210,7 +211,7 @@ class ServiceModulePrivilegeImplTest {
     @Test
     @DisplayName("Prueba de guardado de datos con objeto válido")
     void save_data_valid(){
-        given(this.dtoMapper.ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid)).willReturn(new TmodulePrivilege());
+        //given(this.dtoMapper.ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid)).willReturn(new TmodulePrivilege());
         given(this.mapper.save(any(TmodulePrivilege.class))).willReturn(1);
 
         Integer rowAffected = this.service.save(this.modulePrivilegeSaveDtoValid);
@@ -218,7 +219,7 @@ class ServiceModulePrivilegeImplTest {
         assertNotNull(rowAffected);
         assertEquals(1,rowAffected);
 
-        then(this.dtoMapper).should(times(1)).ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid);
+        //then(this.dtoMapper).should(times(1)).ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid);
         then(this.mapper).should(times(1)).save(any(TmodulePrivilege.class));
     }
 
@@ -247,13 +248,13 @@ class ServiceModulePrivilegeImplTest {
     @Test
     @DisplayName("Prueba de guardado de datos con retorno 0 en el método save() del mapper")
     void save_data_mapperReturn_0(){
-        given(this.dtoMapper.ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid)).willReturn(new TmodulePrivilege());
+        //given(this.dtoMapper.ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid)).willReturn(new TmodulePrivilege());
         given(this.mapper.save(any(TmodulePrivilege.class))).willReturn(0);
 
         assertThrows(ModulePrivilegesNotSaveException.class,()-> this.service.save(this.modulePrivilegeSaveDtoValid));
 
 
-        then(this.dtoMapper).should(times(1)).ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid);
+        //then(this.dtoMapper).should(times(1)).ModulePrivilegeSaveDtoToTmodulePrivilege(this.modulePrivilegeSaveDtoValid);
         then(this.mapper).should(times(1)).save(any(TmodulePrivilege.class));
     }
 
