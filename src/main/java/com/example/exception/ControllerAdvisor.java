@@ -481,6 +481,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
             data.put("name_module", modulesDto.name());
         }
 
+        ex.printStackTrace(System.out);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
             ErrorResponseDto.builder()
                 .fecha(LocalDate.now())

@@ -13,7 +13,7 @@ public record PrivilegeIdDto(
 
     @NotNull
     @Min(value = 1)
-    @Schema(name = "id", description = "Valor de privilegio asociados")
+    @Schema(name = "id", description = "Valor de privilegio asociados", example = "1")
     @JsonProperty(value = "id")
     Integer value
 ) {

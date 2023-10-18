@@ -45,5 +45,6 @@ public interface MapperModulePrivilege {
 	@Insert("INSERT INTO Tmodules_privileges "
 			+ "(privilege_id,module_id,status_id)"
 			+ "VALUES(#{modPriv.privilege.id},#{modPriv.module.id},#{modPriv.status.id})")
+	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	Integer save(@Param("modPriv") TmodulePrivilege tmodulePrivilege);
 }

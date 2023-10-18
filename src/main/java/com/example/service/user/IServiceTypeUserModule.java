@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IServiceTypeUserModule<GET,ID,UPDATE,SAVE> extends ServiceTemplateCrud<GET,ID,UPDATE,SAVE>{
 
+    Integer addModuleToTypeUserFull(TypeUserModuleFullSaveDto saveFull);
     List<ModuleTypeUserGetDto> getModuleAndTypeUserDistinct();
     List<ModuleOfTypeUserGetDto> getModuleDistinctByIdTypeUserAndStatusActived(Integer idTypeUser);
     List<ModuleOfTypeUserGetDto> getModuleDistinctByIdTypeUserAndIdStatus(Integer idTypeUser, Integer idStatus);

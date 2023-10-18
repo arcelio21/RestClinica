@@ -124,6 +124,33 @@ public class ControllerTypeUserModule extends ControllerTemplate {
         );
     }
 
+    @Operation(
+    summary = "Guardar todos los datos relacionados a privilegios de tipo de usuario sobre modulo",
+    description = "Se podra enviar los datos de modulo, privilegios y tipo el tipo de usuario para guardarlo todo en una peticion",
+    responses = {
+            @ApiResponse(responseCode = "201", description = "Todos los registros creada correctamente",content = {
+                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ResponseDTO.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                   @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+            })
+    },requestBody =
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                description = "Estructura de datos a guardar", required = true,
+                content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                schema = @Schema(implementation = TypeUserModuleFullSaveDto.class)))
+    )
+    @PostMapping("/addFull")
+    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody TypeUserModuleFullSaveDto data){
+        
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Cantidad de registros guardados ")
+                        .data(this.serviceTypeUserModule.addModuleToTypeUserFull(data))
+                        .build()); 
+    }
+
 
     @Operation(summary = "Modulos asignados a tipos de usuario ", description = "Muestra todos los modulos que existen y que tipo de usuario lo puede acceder",
             method = "Get",responses = {

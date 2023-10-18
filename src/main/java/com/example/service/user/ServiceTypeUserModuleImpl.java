@@ -1,23 +1,48 @@
 package com.example.service.user;
 
-import com.example.dto.user.typeuser_module.*;
-import com.example.dtomapper.user.DtoTypeUserModuleMapper;
-import com.example.exception.NoDataFoundException;
-import com.example.exception.user.typeuser_module.TypeUserModuleNotSaveException;
-import com.example.exception.user.typeuser_module.TypeUserModuleNotUpdateException;
-import com.example.mapper.user.MapperTypeUserModule;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
+import com.example.dto.modules.modulesprivileges.PrivilegeIdDto;
+import com.example.dto.user.typeuser_module.ModuleOfTypeUserGetDto;
+import com.example.dto.user.typeuser_module.ModuleRoute;
+import com.example.dto.user.typeuser_module.ModuleTypeUserGetDto;
+import com.example.dto.user.typeuser_module.PrivilegeOfModuleGetDto;
+import com.example.dto.user.typeuser_module.TypeUserModuleFullSaveDto;
+import com.example.dto.user.typeuser_module.TypeUserModuleGetDto;
+import com.example.dto.user.typeuser_module.TypeUserModuleSaveDto;
+import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
+import com.example.dto.user.typeuser_module.TypeUserOfModuleGetDto;
+import com.example.dtomapper.modules.DtoModulesMapper;
+import com.example.dtomapper.user.DtoTypeUserModuleMapper;
+import com.example.entity.modules.Tmodule;
+import com.example.entity.modules.TmodulePrivilege;
+import com.example.entity.modules.Tprivilege;
+import com.example.entity.status.Tstatus;
+import com.example.exception.NoDataFoundException;
+import com.example.exception.modules.modules.ModulesNotSaveException;
+import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotSaveException;
+import com.example.exception.user.typeuser_module.TypeUserModuleNotSaveException;
+import com.example.exception.user.typeuser_module.TypeUserModuleNotUpdateException;
+import com.example.mapper.modules.MapperModulePrivilege;
+import com.example.mapper.modules.MapperModules;
+import com.example.mapper.user.MapperTypeUserModule;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUserModuleGetDto, Long, TypeUserModuleUpdateDto, TypeUserModuleSaveDto> {
 
+	
 	private final MapperTypeUserModule mapperTypeUserModule;
 	private final DtoTypeUserModuleMapper dtoTypeUserModuleMapper;
+	private final MapperModules mapperModules;
+	private final MapperModulePrivilege mapperModulePrivilege;
 
 
 	/**
@@ -120,6 +145,101 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 		}
 
 		return rowAffected;
+	}
+
+	@Transactional
+	@Override
+	public Integer addModuleToTypeUserFull(TypeUserModuleFullSaveDto saveFull) {
+
+
+		this.validateTypeUserModuleFullSave(saveFull);
+
+		Integer rowAffectedTotal=0;
+
+		Long idModule = this.saveModule(saveFull.nameModule());
+
+		ModulePrivilegeSaveDto modulePrivilegeSaveDto = this.convertToModulePrivilege(saveFull, idModule);
+		TmodulePrivilege mTmodulePrivilege = this.converterDtoSaveToEntity(modulePrivilegeSaveDto.getModuleId(), modulePrivilegeSaveDto.getStatusId());
+
+		
+		for (PrivilegeIdDto privilegeId : modulePrivilegeSaveDto.getPrivilegeIds()) {
+
+			mTmodulePrivilege.setPrivilege(new Tprivilege(privilegeId.value()));
+
+			Long idPrivilegeModule = this.saveModulePrivilege(mTmodulePrivilege);
+			
+			TypeUserModuleSaveDto typeUserModuleSaveDto = TypeUserModuleSaveDto.builder()
+															.idModulePrivilege(idPrivilegeModule)
+															.typeUser(saveFull.idTypeUser())
+															.build();
+			this.save(typeUserModuleSaveDto);
+			rowAffectedTotal++;
+		}
+		
+		return rowAffectedTotal;
+	}
+
+	private void validateTypeUserModuleFullSave(TypeUserModuleFullSaveDto saveDto){
+
+		if(saveDto== null || saveDto.idStatus()==null || saveDto.idStatus()<=0
+		||	saveDto.idTypeUser()==null || saveDto.idTypeUser()<=0
+			|| saveDto.nameModule()==null || saveDto.nameModule().trim().isEmpty()
+			|| saveDto.listPrivilegeIds()==null || saveDto.listPrivilegeIds().isEmpty()
+		){
+			throw new TypeUserModuleNotSaveException(saveDto, "DATA NO VALID");
+		}
+	}
+
+	private Long saveModule(String path){
+
+		Tmodule module = new Tmodule();
+		module.setNameModule(path);
+
+		Integer rowAffected = this.mapperModules.insert(module);
+
+		if(rowAffected==null || rowAffected<=0){
+			throw new ModulesNotSaveException("Data not valid", null);
+		}
+
+		return module.getId();
+	}
+
+	private Long saveModulePrivilege(TmodulePrivilege mTmodulePrivilege){
+		
+		Integer rowAffected = Optional.of(mTmodulePrivilege)
+				.map(this.mapperModulePrivilege::save)
+				.orElseThrow(()-> new ModulePrivilegesNotSaveException("Module Privilege Data not valid", null));
+
+		if (rowAffected==null || rowAffected<=0){
+			throw new ModulePrivilegesNotSaveException("Error to Save", null);
+		}
+
+		return mTmodulePrivilege.getId();
+	}
+
+	private ModulePrivilegeSaveDto convertToModulePrivilege(TypeUserModuleFullSaveDto typeUserModuleFullSaveDto, Long idModule){
+		
+
+		if(idModule==null || idModule<=0){
+			throw new ModulePrivilegesNotSaveException("DATA NO VALID", null);
+		}
+
+		ModulePrivilegeSaveDto modulePrivilegeSaveDto = ModulePrivilegeSaveDto.builder()
+															.privilegeIds(typeUserModuleFullSaveDto.listPrivilegeIds())
+															.moduleId(idModule)
+															.statusId(1)
+															.build();
+
+		return modulePrivilegeSaveDto;
+	}
+
+	private TmodulePrivilege converterDtoSaveToEntity(Long idModule, Integer idStatus){
+
+		TmodulePrivilege mTmodulePrivilege = new TmodulePrivilege();
+		mTmodulePrivilege.setModule(new Tmodule(idModule));
+		mTmodulePrivilege.setStatus(new Tstatus(idStatus));
+
+		return mTmodulePrivilege;
 	}
 
 	/**

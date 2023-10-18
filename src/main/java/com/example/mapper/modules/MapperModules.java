@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Select;
@@ -26,5 +27,6 @@ public interface MapperModules {
 	public Integer update(@Param("modul") Tmodule module);
 	
 	@Insert("INSERT INTO Tmodules (name_modules) VALUES(#{modul.nameModule})")
+	@Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
 	public Integer insert(@Param("modul") Tmodule module);
 }
