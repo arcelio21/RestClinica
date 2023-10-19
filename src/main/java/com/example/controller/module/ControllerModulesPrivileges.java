@@ -6,13 +6,20 @@ import com.example.dto.ResponseDTO;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeUpdateDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
+import com.example.dto.modules.modulesprivileges.PrivilegeModuleDetailGetDto;
 import com.example.service.modules.IServiceModulePrivilege;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -191,4 +198,60 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
                         .build()
         );
     }
+
+    @Operation(summary = "Obtener detalles de privilegios de modulo",description = "Ver informacion completa de los privilegios asignados a modulo",
+                method = "GET", responses = {
+                @ApiResponse(responseCode = "200",description = "Lista de privilegios de modulo encontrado",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PrivilegeModuleDetailGetDto.class,description = "Datos de privilegios de modulo"))),
+                @ApiResponse(responseCode = "404",description = "data no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
+    }
+    )
+    @GetMapping("/details")
+    public ResponseEntity<ResponseDTO> getPrivilegeModuleDetails(){
+    
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Informacion obtenidad")
+                        .data(this.serviceModulePrivilege.getPrivilegeModuleDetails())
+                        .build());
+    }
+
+    @Operation(summary = "Obtiene informacion completa de privilegios sobre modulo",description = "Si se desea ver informacion de los modulos que se le han asigando privilgios",
+                method = "GET", responses = {
+                @ApiResponse(responseCode = "200",description = "Datos encontrado",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PrivilegeModuleDetailGetDto.class,description = "Datos de Privilegios de modulo"))),
+                @ApiResponse(responseCode = "404",description = "Datos no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
+    },parameters = {
+                @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
+    }
+    )
+    @GetMapping("/details/{id}")
+    public ResponseEntity<ResponseDTO> getPrivilegeModuleDetailsById(@NotNull @Min(1) @PathVariable("id")Long id){
+     
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Informacion obtenidad con id: " + id)
+                        .data(this.serviceModulePrivilege.getPrivilegeModuleDetailsById(id))
+                        .build()); 
+    }
+
+    @Operation(summary = "Obtiene detalles de privilegios de modulo por id de modulo",description = "Ver detalle completo de los privilegios que tiene un modulo filtrado por id de modulo", 
+                method = "GET", responses = { 
+                @ApiResponse(responseCode = "200",description = "Data de privilegio de modulo encontrado",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PrivilegeModuleDetailGetDto.class,description = "Datos de detalles de privilegios de modulo"))),
+                @ApiResponse(responseCode = "404",description = "data no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error"))) 
+    },parameters = {
+                @Parameter(name = "idModule", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
+    }
+    )
+    @GetMapping("details/module/{idModule}")
+    public ResponseEntity<ResponseDTO> getPrivilegeModuleDetailsByModuleId(@NotNull @Min(1) @PathVariable("idModule") Long idModule){
+     
+        return ResponseEntity.ok(
+                ResponseDTO.builder()
+                        .info("Informacion obtenidad con id: " + idModule)
+                        .data(this.serviceModulePrivilege.getPrivilegeModuleDetailsByModuleId(idModule))
+                        .build()); 
+    }
+
 }

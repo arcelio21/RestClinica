@@ -8,18 +8,6 @@ import java.util.List;
 @Mapper
 public interface MapperModulePrivilege {
 
-	/**
-	 * @Results(
-	 *                        id = "modulPrivMap",
-	 * 			value = {
-	 *                @Result(column = "id",property = "id"),
-	 *                @Result(column = "privilege_id", property = "privilege", one = @One(select="com.example.mapper.modules.MapperPrivilege.getByid",fetchType = FetchType.LAZY)),
-	 *                @Result(column = "module_id",property = "module", one = @One(select="com.example.mapper.modules.MapperModules.getById",fetchType = FetchType.LAZY)),
-	 *                @Result(column = "status_id",property = "status", one = @One(select="com.example.mapper.status.MapperStatus.getById",fetchType = FetchType.LAZY))
-	 *            }
-	 * 	)
-	 * @return
-	 */
 	@Select("SELECT id,module_id,privilege_id,status_id FROM Tmodules_privileges")
 	@Results(
 			id = "ModulePrivilegeSimpleDat",
@@ -31,6 +19,47 @@ public interface MapperModulePrivilege {
 			}
 	)
 	List<TmodulePrivilege> getAll();
+
+	@Select(value = """
+		SELECT mp.id AS id, pr.name_privilege AS namePrivilege, m.name_modules AS nameModule, s.name_status AS nameStatus  
+			FROM Tmodules_privileges  mp 
+				INNER JOIN Tprivileges pr ON mp.privilege_id=pr.id
+				INNER JOIN Tstatus s ON s.id = mp.status_id
+				INNER JOIN Tmodules m ON m.id = mp.module_id
+			WHERE mp.status_id=1;
+	""")
+	@Results(
+		id = "detailsModulePrivilege",
+		value = {
+			@Result(column = "id", property = "id"),
+			@Result(column = "namePrivilege", property = "privilege.namePrivilege"),
+			@Result(column = "nameModule", property = "module.nameModule"),
+			@Result(column = "nameStatus", property = "status.name")
+		}
+	)
+	List<TmodulePrivilege> getModulePrivilegeDetails();
+
+	@Select(value = """
+		SELECT mp.id AS id, pr.name_privilege AS namePrivilege, m.name_modules AS nameModule, s.name_status AS nameStatus  
+			FROM Tmodules_privileges  mp 
+				INNER JOIN Tprivileges pr ON mp.privilege_id=pr.id
+				INNER JOIN Tstatus s ON s.id = mp.status_id
+				INNER JOIN Tmodules m ON m.id = mp.module_id
+			WHERE mp.status_id=1 AND mp.module_id=#{idModule};
+	""")
+	@ResultMap(value = "detailsModulePrivilege")
+	List<TmodulePrivilege> getModulePrivilegeDetailsByModuleId(@Param(value = "idModule") Long idModule);
+
+	@Select(value = """
+		SELECT mp.id AS id, pr.name_privilege AS namePrivilege, m.name_modules AS nameModule, s.name_status AS nameStatus  
+			FROM Tmodules_privileges  mp 
+				INNER JOIN Tprivileges pr ON mp.privilege_id=pr.id
+				INNER JOIN Tstatus s ON s.id = mp.status_id
+				INNER JOIN Tmodules m ON m.id = mp.module_id
+			WHERE mp.status_id=1 AND mp.id=#{id};
+	""")
+	@ResultMap(value = "detailsModulePrivilege")
+	TmodulePrivilege getModulePrivilegeDetailsById(@Param(value = "id") Long id);
 	
 	@Select("SELECT * FROM Tmodules_privileges WHERE id=#{id}")
 	@ResultMap(value = "ModulePrivilegeSimpleDat")

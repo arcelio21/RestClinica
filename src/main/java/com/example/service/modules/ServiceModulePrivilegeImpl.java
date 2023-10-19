@@ -3,6 +3,7 @@ package com.example.service.modules;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeUpdateDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
+import com.example.dto.modules.modulesprivileges.PrivilegeModuleDetailGetDto;
 import com.example.dtomapper.modules.DtoModulesPrivilegesMapper;
 import com.example.entity.modules.Tmodule;
 import com.example.entity.modules.TmodulePrivilege;
@@ -60,9 +61,7 @@ public class ServiceModulePrivilegeImpl implements IServiceModulePrivilege{
 	@Override
 	public ModulePrivilegesDto getById(Long id) {
 
-		if(id==null || id<=0){
-			throw new NoDataFoundException(id);
-		}
+		this.validateId(id);
 
 		return Optional.of(id)
 				.map(this.mapperModulePrivilege::getById)
@@ -147,5 +146,58 @@ public class ServiceModulePrivilegeImpl implements IServiceModulePrivilege{
 		mTmodulePrivilege.setStatus(new Tstatus(idStatus));
 
 		return mTmodulePrivilege;
+	}
+
+	@Override
+	public PrivilegeModuleDetailGetDto getPrivilegeModuleDetailsById(Long id) {
+		
+		this.validateId(id);
+
+		return Optional.of(id)
+			.map(this.mapperModulePrivilege::getModulePrivilegeDetailsById)
+			.map(this.dtoModulesPrivilegesMapper::tmodulePrivilegeToPrivilegeModuleDetailsGetDto)
+			.orElseThrow(NoDataFoundException::new);
+
+	}
+
+	@Override
+	public List<PrivilegeModuleDetailGetDto> getPrivilegeModuleDetails() {
+		
+		List<PrivilegeModuleDetailGetDto> listPrivilegeModuleDetails = Optional.of(this.mapperModulePrivilege.getModulePrivilegeDetails())
+			.orElseThrow(()-> new NoDataFoundException("DATA IS NOT FOUND"))
+			.stream()
+			.map(this.dtoModulesPrivilegesMapper::tmodulePrivilegeToPrivilegeModuleDetailsGetDto)
+			.toList();
+
+		if (listPrivilegeModuleDetails.isEmpty()) {
+			throw new NoDataFoundException("DATA IS EMPTY");
+		}
+
+		return listPrivilegeModuleDetails;
+	}
+
+	@Override
+	public List<PrivilegeModuleDetailGetDto> getPrivilegeModuleDetailsByModuleId(Long idModule) {
+		
+		this.validateId(idModule);
+
+		List<PrivilegeModuleDetailGetDto> listPrivilegeModuleDetails = Optional.of(idModule)
+			.map(this.mapperModulePrivilege::getModulePrivilegeDetailsByModuleId)
+			.orElseThrow(NoDataFoundException::new)
+			.stream()
+			.map(this.dtoModulesPrivilegesMapper::tmodulePrivilegeToPrivilegeModuleDetailsGetDto)
+			.toList();
+		
+		if(listPrivilegeModuleDetails.isEmpty()){
+			throw new NoDataFoundException("DATA IS EMPTY");
+		}
+
+		return listPrivilegeModuleDetails;
+	}
+
+	private void validateId(Long id){
+		if(id==null || id<=0){
+			throw new NoDataFoundException(id);
+		}
 	}
 }

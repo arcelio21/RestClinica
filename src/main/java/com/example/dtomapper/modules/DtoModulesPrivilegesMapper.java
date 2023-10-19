@@ -3,6 +3,7 @@ package com.example.dtomapper.modules;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegeUpdateDto;
 import com.example.dto.modules.modulesprivileges.ModulePrivilegesDto;
+import com.example.dto.modules.modulesprivileges.PrivilegeModuleDetailGetDto;
 import com.example.entity.modules.TmodulePrivilege;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -43,4 +44,12 @@ public interface DtoModulesPrivilegesMapper {
             @Mapping(target = "privilege", ignore = true)
     })
     TmodulePrivilege ModulePrivilegeUpdateDtoToTmoduloPrivilege(ModulePrivilegeUpdateDto modulePrivilegeUpdateDto);
+
+    @Mappings({
+        @Mapping(source = "modulePrivilege.id", target = "id"),
+        @Mapping(source = "modulePrivilege.privilege.namePrivilege", target = "namePrivilege"),
+        @Mapping(source = "modulePrivilege.module.nameModule", target = "nameModule"),
+        @Mapping(source = "modulePrivilege.status.name", target = "nameStatus")
+    })
+    PrivilegeModuleDetailGetDto tmodulePrivilegeToPrivilegeModuleDetailsGetDto(TmodulePrivilege modulePrivilege);
 }
