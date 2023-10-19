@@ -158,11 +158,11 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 
 		Long idModule = this.saveModule(saveFull.nameModule());
 
-		ModulePrivilegeSaveDto modulePrivilegeSaveDto = this.convertToModulePrivilege(saveFull, idModule);
-		TmodulePrivilege mTmodulePrivilege = this.converterDtoSaveToEntity(modulePrivilegeSaveDto.getModuleId(), modulePrivilegeSaveDto.getStatusId());
+		Integer idStatus = 1;
 
+		TmodulePrivilege mTmodulePrivilege = this.converterDtoSaveToEntity(idModule, idStatus);
 		
-		for (PrivilegeIdDto privilegeId : modulePrivilegeSaveDto.getPrivilegeIds()) {
+		for (PrivilegeIdDto privilegeId : saveFull.listPrivilegeIds()) {
 
 			mTmodulePrivilege.setPrivilege(new Tprivilege(privilegeId.value()));
 
@@ -217,23 +217,12 @@ public class ServiceTypeUserModuleImpl implements IServiceTypeUserModule<TypeUse
 		return mTmodulePrivilege.getId();
 	}
 
-	private ModulePrivilegeSaveDto convertToModulePrivilege(TypeUserModuleFullSaveDto typeUserModuleFullSaveDto, Long idModule){
-		
-
-		if(idModule==null || idModule<=0){
-			throw new ModulePrivilegesNotSaveException("DATA NO VALID", null);
-		}
-
-		ModulePrivilegeSaveDto modulePrivilegeSaveDto = ModulePrivilegeSaveDto.builder()
-															.privilegeIds(typeUserModuleFullSaveDto.listPrivilegeIds())
-															.moduleId(idModule)
-															.statusId(1)
-															.build();
-
-		return modulePrivilegeSaveDto;
-	}
 
 	private TmodulePrivilege converterDtoSaveToEntity(Long idModule, Integer idStatus){
+
+		if(idModule==null || idModule<=0 || idStatus==null || idStatus<=0){
+			throw new ModulePrivilegesNotSaveException("DATA NO VALID", null);
+		}
 
 		TmodulePrivilege mTmodulePrivilege = new TmodulePrivilege();
 		mTmodulePrivilege.setModule(new Tmodule(idModule));
