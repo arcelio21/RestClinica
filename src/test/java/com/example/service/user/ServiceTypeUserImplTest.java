@@ -40,10 +40,8 @@ class ServiceTypeUserImplTest {
     private ServiceTypeUserImpl serviceTypeUser;
 
     private TypeUserDto typeUserDtoValid;
-    private TypeUserDto typeUserDtoNotValid;
 
     private TtypeUser ttypeUserValid;
-    private TtypeUser ttypeUserNotValid;
 
     @BeforeEach
     void setUp() {
@@ -52,12 +50,9 @@ class ServiceTypeUserImplTest {
                 .name("ADMIN")
                 .build();
 
-        typeUserDtoNotValid = TypeUserDto.builder()
-                .name(" ")
-                .build();
+        
 
         ttypeUserValid = new TtypeUser(1,"ADMIN");
-        ttypeUserNotValid = new TtypeUser(null,"");
 
     }
 

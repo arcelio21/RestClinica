@@ -14,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.entity.user.TtypeUserModule;
-import com.example.mapper.modules.MapperModulePrivilege;
 
 @DisplayName("ACCEDER Y/O MODIFICAR DATOS QUE SE ENCUENTRAN EN"
 		+ " LA ENTIDAD QUE GUARDA LOS PRIVILEGIOS A MODULOS DE CADA TIPO DE USUARIO")
@@ -25,12 +24,7 @@ class MapperTypeUserModuleTest {
 
 	@Autowired
 	private MapperTypeUserModule mapperTypeUserModule;
-	
-	@Autowired
-	private MapperModulePrivilege mapperModulePrivilege;
-	
-	@Autowired
-	private MapperTypeUser mapperTypeUser;
+
 	
 	@Test
 	void getAll() {

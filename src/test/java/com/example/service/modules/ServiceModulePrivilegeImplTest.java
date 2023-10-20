@@ -41,7 +41,6 @@ class ServiceModulePrivilegeImplTest {
 
     private ModulePrivilegesDto modulePrivilegesDtoValid;
 
-    private ModulePrivilegesDto modulePrivilegesDtoNotValid;
 
 
     private ModulePrivilegeSaveDto modulePrivilegeSaveDtoValid;
@@ -60,7 +59,6 @@ class ServiceModulePrivilegeImplTest {
                 .privilegeId(1)
                 .statusId(1)
                 .build();
-        modulePrivilegesDtoNotValid = ModulePrivilegesDto.builder().build();
 
         modulePrivilegeSaveDtoValid = ModulePrivilegeSaveDto.builder()
                 .privilegeIds(List.of(new PrivilegeIdDto(1)))

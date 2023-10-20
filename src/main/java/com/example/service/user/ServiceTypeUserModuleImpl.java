@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.dto.modules.modulesprivileges.ModulePrivilegeSaveDto;
 import com.example.dto.modules.modulesprivileges.PrivilegeIdDto;
 import com.example.dto.user.typeuser_module.ModuleOfTypeUserGetDto;
 import com.example.dto.user.typeuser_module.ModuleRoute;
@@ -17,7 +16,6 @@ import com.example.dto.user.typeuser_module.TypeUserModuleGetDto;
 import com.example.dto.user.typeuser_module.TypeUserModuleSaveDto;
 import com.example.dto.user.typeuser_module.TypeUserModuleUpdateDto;
 import com.example.dto.user.typeuser_module.TypeUserOfModuleGetDto;
-import com.example.dtomapper.modules.DtoModulesMapper;
 import com.example.dtomapper.user.DtoTypeUserModuleMapper;
 import com.example.entity.modules.Tmodule;
 import com.example.entity.modules.TmodulePrivilege;

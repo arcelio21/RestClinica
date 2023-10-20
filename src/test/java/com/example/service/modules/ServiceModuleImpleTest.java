@@ -42,10 +42,9 @@ class ServiceModuleImpleTest {
     private ServiceModuleImple serviceModuleImple;
 
     private ModulesDto modulesDtoValid;
-    private ModulesDto modulesDtoNotValid;
+
 
     private Tmodule tmoduleValid;
-    private Tmodule tmoduleNotValid;
 
     @BeforeEach
     void setUp() {
@@ -54,10 +53,8 @@ class ServiceModuleImpleTest {
                 .id(1L)
                 .name("/api/address")
                 .build();
-        this.modulesDtoNotValid = ModulesDto.builder().build();
 
         this.tmoduleValid = new Tmodule(1L,"/api/address");
-        this.tmoduleNotValid = new Tmodule(null, "");
 
     }
 

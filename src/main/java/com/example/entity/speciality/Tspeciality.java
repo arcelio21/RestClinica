@@ -4,6 +4,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 
+import org.springframework.validation.annotation.Validated;
+
+@Validated
 public class Tspeciality {
 
 	@Positive
