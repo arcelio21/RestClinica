@@ -15,6 +15,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,19 +33,17 @@ public class ControllerDistrict extends ControllerTemplate {
 
     @Operation(summary = "Obtener todas los distritos", description = "Se utiliza para obtener todas los distritos registrados",
             method = "Get",responses = {
-            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
-                    content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
                     @Content(schema = @Schema)
             })
     }
     )
-    @GetMapping
-    public ResponseEntity<ResponseDTO> getAll(){
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<DistrictDto>>> getAll(){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<DistrictDto>>builder()
                         .info("Distritos disponibles con estrucutura basica")
                         .data(this.serviceDistrict.getAll())
                         .build()
@@ -51,18 +52,20 @@ public class ControllerDistrict extends ControllerTemplate {
 
     @Operation(summary = "Obtener distrito por ID",description = "Se podra obtener el distrito que se desee filtrandolo por su ID",
             method = "GET", responses = {
-            @ApiResponse(responseCode = "200",description = "Distrito encontrado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DistrictDto.class,description = "Datos de Distrito"))),
+            @ApiResponse(responseCode = "200",description = "Distrito encontrado",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404",description = "Distrito no encontrado, Id no valido",content = @Content(schema = @Schema))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
     }
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<DistrictDto> getById(@PathVariable("id") Integer id){
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<DistrictDto>> getById(@PathVariable("id") Integer id){
 
         return ResponseEntity.ok(
-                this.serviceDistrict.getById(id)
+                ResponseDTO.<DistrictDto>builder()
+                .info("District Found")
+                .data(this.serviceDistrict.getById(id))
+                .build()
         );
     }
 
@@ -70,10 +73,7 @@ public class ControllerDistrict extends ControllerTemplate {
             summary = "Guardar nuevo distrito",
             description = "Se guardara una nuevo distrito en caso de necesitarse",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "distrito creado correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "201", description = "distrito creado correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
@@ -84,10 +84,10 @@ public class ControllerDistrict extends ControllerTemplate {
                                         )
                         )
     )
-    @PostMapping
-    public ResponseEntity<ResponseDTO> save(@RequestBody DistrictSaveDto districtDto){
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> save(@RequestBody DistrictSaveDto districtDto){
         Integer row = this.serviceDistrict.save(districtDto);
-        return  new ResponseEntity<>(ResponseDTO.builder()
+        return  new ResponseEntity<>(ResponseDTO.<Integer>builder()
                 .info("Cantidad de registros creados")
                 .data(row)
                 .build(), HttpStatus.CREATED);
@@ -97,10 +97,7 @@ public class ControllerDistrict extends ControllerTemplate {
             summary = "Actualizar distrito",
             description = "Se actualizara distrito que se desee",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Distrito actualizado correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "201", description = "Distrito actualizado correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
@@ -111,11 +108,11 @@ public class ControllerDistrict extends ControllerTemplate {
                                         )
                         )
     )
-    @PutMapping
-    public ResponseEntity<ResponseDTO> update(@RequestBody DistrictUpdateDto districtDto){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update(@RequestBody DistrictUpdateDto districtDto){
         Integer row = this.serviceDistrict.update(districtDto);
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Cantidad de registros actualizados")
                         .data(row)
                         .build()
@@ -124,35 +121,35 @@ public class ControllerDistrict extends ControllerTemplate {
 
     @Operation(summary = "Obtener distrito basico por ID",description = "Se podra obtener el distrito con su nombre y ID, filtrandolo por su ID",
             method = "GET", responses = {
-            @ApiResponse(responseCode = "200",description = "Distrito encontrado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DistrictDto.class,description = "Datos de Distrito"))),
+            @ApiResponse(responseCode = "200",description = "Distrito encontrado",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404",description = "Distrito no encontrado, Id no valido",content = @Content(schema = @Schema))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
     }
     )
-    @GetMapping("/getIdName/{id}")
-    public ResponseEntity<DistrictDto> getByIdName(@PathVariable(value = "id") Integer id){
+    @GetMapping(path = "/getIdName/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<DistrictDto>> getByIdName(@PathVariable(value = "id") Integer id){
         return ResponseEntity.ok(
-                this.serviceDistrict.getByIdName(id)
+                ResponseDTO.<DistrictDto>builder()
+                .info("District Found")
+                .data(this.serviceDistrict.getByIdName(id))
+                .build()
         );
     }
 
     @Operation(summary = "Obtener todas los distritos", description = "Se utiliza para obtener todas los distritos registrados con datos basicos de nombre y ID",
             method = "Get",responses = {
-            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
-                    content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
                     @Content(schema = @Schema)
             })
     }
     )
-    @GetMapping("/allIdName")
-    public ResponseEntity<ResponseDTO> getAllIdName(){
+    @GetMapping(path = "/allIdName", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<DistrictDto>>> getAllIdName(){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<DistrictDto>>builder()
                         .info("Distritos disponibles con estrucutura simple")
                         .data(this.serviceDistrict.getAllIdName())
                         .build()
@@ -161,17 +158,16 @@ public class ControllerDistrict extends ControllerTemplate {
 
     @Operation(summary = "Obtener distrito relacionado con una provincia",description = "Se podra obtener el distrito relacionada con la provincia que se busca",
             method = "GET", responses = {
-            @ApiResponse(responseCode = "200",description = "Distrito encontrado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseDTO.class,description = "Datos de Distrito"))),
+            @ApiResponse(responseCode = "200",description = "Distrito encontrado",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404",description = "Distrito no encontrado, Id no valido",content = @Content(schema = @Schema))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
     }
     )
-    @GetMapping("/byprovince/{id}")
-    public ResponseEntity<ResponseDTO> getByProvince(@PathVariable("id") Integer id){
+    @GetMapping(path = "/byprovince/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<DistrictDto>>> getByProvince(@PathVariable("id") Integer id){
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<DistrictDto>>builder()
                         .info("Distritos relacionados con la provincia")
                         .data(this.serviceDistrict.getByProvinceId(id))
                         .build()
@@ -181,17 +177,19 @@ public class ControllerDistrict extends ControllerTemplate {
 
     @Operation(summary = "Obtener distrito por id con datos de provincia",description = "Se podra obtener el distrito que ademas de los datos principales tendra los datos de la provincia a la que esta relacionado",
             method = "GET", responses = {
-            @ApiResponse(responseCode = "200",description = "Distrito encontrado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DistrictAllDto.class,description = "Datos de Distrito"))),
+            @ApiResponse(responseCode = "200",description = "Distrito encontrado",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404",description = "Distrito no encontrado, Id no valido",content = @Content(schema = @Schema))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
     }
     )
-    @GetMapping("/districtAndProvince/{id}")
-    public ResponseEntity<DistrictAllDto> getDistrictAndProvinceById(@PathVariable("id")  Integer id) {
+    @GetMapping(path = "/districtAndProvince/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<DistrictAllDto>> getDistrictAndProvinceById(@PathVariable("id")  Integer id) {
         return ResponseEntity.ok(
-                this.serviceDistrict.getDistrictAndProvinceById(id)
+                ResponseDTO.<DistrictAllDto>builder()
+                .info("District Found")
+                .data(this.serviceDistrict.getDistrictAndProvinceById(id))
+                .build()
         );
     }
 

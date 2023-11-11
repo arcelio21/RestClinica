@@ -1,5 +1,7 @@
 package com.example.controller.user;
 
+import java.util.List;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -45,37 +47,34 @@ public class ControllerUserTypeReg extends ControllerTemplate {
 
     @Operation(summary = "Obtener todas las usuarios y su tipo de usuario", description = "Se utiliza para obtener todos los usuarios con tipo de usuario registradas",
             method = "Get",responses = {
-            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
-                    content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
                     @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponseDto.class))
             })
     }
     )
-    @GetMapping
-    public ResponseEntity<ResponseDTO> getAll() {
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<UserTypeRegGetDto>>> getAll() {
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<UserTypeRegGetDto>>builder()
                         .info("Informacion obtenidad")
-                        .data(service.getAll())
+                        .data(this.service.getAll())
                         .build());
     }
 
     @Operation(summary = "Obtiene usuario con tipo de usuario asociado filtrado por ID de registro",description = "Cuando se desee un registro especifico se enviada el ID de este registro como parametro",
                 method = "GET", responses = {
-                @ApiResponse(responseCode = "200",description = "Datos de usuario y su tipo de usuario asociado encontrado",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseDTO.class,description = "Datos de usuario y su tipo de usuario asociado"))),
+                @ApiResponse(responseCode = "200",description = "Datos de usuario y su tipo de usuario asociado encontrado",useReturnTypeSchema = true),
                 @ApiResponse(responseCode = "404",description = "Data de usuario no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
     },parameters = {
                 @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
     }
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO> getById(@NotNull @Min(1) @PathVariable("id") Long id){
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<UserTypeRegGetDto>> getById(@NotNull @Min(1) @PathVariable("id") Long id){
         
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<UserTypeRegGetDto>builder()
                         .info("Informacion obtenidad")
                         .data(this.service.getById(id))
                         .build());
@@ -85,10 +84,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
     summary = "Guarda registro de usuario con tipo de usuario asociado",
     description = "Este permitira poder asociar un tipo de usuario a un usuario y guardar un registro de esto",
     responses = {
-            @ApiResponse(responseCode = "201", description = "registro creada correctamente",content = {
-                    @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseDTO.class))
-            }),
+            @ApiResponse(responseCode = "201", description = "registro creada correctamente",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                    @Content(schema = @Schema(implementation = ErrorResponseDto.class))
             })
@@ -99,11 +95,11 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                         schema = @Schema(implementation = UserTypeRegSaveDto.class)))
     
     )
-    @PostMapping
-    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody UserTypeRegSaveDto data){
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> save(@Validated @RequestBody UserTypeRegSaveDto data){
      
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Cantidad de registros guardados ")
                         .data(this.service.save(data))
                         .build()); 
@@ -113,10 +109,7 @@ public class ControllerUserTypeReg extends ControllerTemplate {
         summary = "Actualiza registro de usuario asociado con tipo de usuario",
         description = "Para actualizar la asociacion de un tipo de usuario con un usuario",
         responses = {
-                @ApiResponse(responseCode = "200", description = "Registro actualizada correctamente",content = {
-                        @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                schema = @Schema(implementation = ResponseDTO.class))
-                }),
+                @ApiResponse(responseCode = "200", description = "Registro actualizada correctamente",useReturnTypeSchema = true),
                 @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                 })
@@ -125,11 +118,11 @@ public class ControllerUserTypeReg extends ControllerTemplate {
                 description = "Estructura de datos a actualizar", required = true,
                 content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserTypeRegUpdateDto.class)))
     )
-    @PutMapping
-    public ResponseEntity<ResponseDTO> update(@Validated @RequestBody UserTypeRegUpdateDto dtoUpdate){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update(@Validated @RequestBody UserTypeRegUpdateDto dtoUpdate){
      
         return ResponseEntity.ok(
-                        ResponseDTO.builder()
+                        ResponseDTO.<Integer>builder()
                                         .info("Cantidad de registros actualizados")
                                         .data(this.service.update(dtoUpdate))
                                         .build()
@@ -138,18 +131,17 @@ public class ControllerUserTypeReg extends ControllerTemplate {
     
     @Operation(summary = "Filtrar registro por el id de UserReg",description = "Obtiene los tipos de usuario que estan asociados a un usuario",
                 method = "GET", responses = {
-                @ApiResponse(responseCode = "200",description = "Tipos de usuario para id de usuario encontrado",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TypeUserOfUserRegGetDto.class,description = "Datos de tipo de usuario para un usuario"))),
+                @ApiResponse(responseCode = "200",description = "Tipos de usuario para id de usuario encontrado",useReturnTypeSchema = true),
                 @ApiResponse(responseCode = "404",description = "data no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
     },parameters = {
                 @Parameter(name = "idUserReg", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
     }
     )
-    @GetMapping("/byuserReg/{idUserReg}")
-    public ResponseEntity<ResponseDTO> getByIdUserReg(@NotNull @Min(1) @PathVariable("idUserReg") Long idUserReLong){
+    @GetMapping(path = "/byuserReg/{idUserReg}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<TypeUserOfUserRegGetDto>>> getByIdUserReg(@NotNull @Min(1) @PathVariable("idUserReg") Long idUserReLong){
      
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<TypeUserOfUserRegGetDto>>builder()
                         .info("Informacion obtenidad")
                         .data(this.service.getByIdUserReg(idUserReLong))
                         .build());
@@ -157,37 +149,35 @@ public class ControllerUserTypeReg extends ControllerTemplate {
 
    @Operation(summary = "Filtrar registro por el id de UserReg y estado activado",description = "Obtiene los tipos de usuario que estan asociados a un usuario y que tiene el registro activado",
                 method = "GET", responses = {
-                @ApiResponse(responseCode = "200",description = "Tipos de usuario para id de usuario encontrado",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TypeUserOfUserRegGetDto.class,description = "Datos de tipo de usuario para un usuario"))),
+                @ApiResponse(responseCode = "200",description = "Tipos de usuario para id de usuario encontrado",useReturnTypeSchema = true),
                 @ApiResponse(responseCode = "404",description = "data no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
     },parameters = {
                 @Parameter(name = "idUserReg", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
     }
     )
-    @GetMapping("/status/activated/byuserReg/{idUserReg}")
-    public ResponseEntity<ResponseDTO> getByIdUserRegActivated(@NotNull @Min(1) @PathVariable("idUserReg") Long idUserReg){
+    @GetMapping(path = "/status/activated/byuserReg/{idUserReg}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<TypeUserOfUserRegGetDto>>> getByIdUserRegActivated(@NotNull @Min(1) @PathVariable("idUserReg") Long idUserReg){
      
         return ResponseEntity.ok(
-                ResponseDTO.builder()
-                        .info("Informacion obtenidad")
+                ResponseDTO.<List<TypeUserOfUserRegGetDto>>builder()
+                        .info("Informacion obtenida")
                         .data(this.service.getByIdUserRegActivated(idUserReg))
                         .build());
    }
 
    @Operation(summary = "Obtiene usuarios que tenga un tipo de usuario especifico",description = "Se podra filtrar los registros para obtener todos los usuarios que han sido asociados a un tipo de usuario especifico", 
                 method = "GET", responses = { 
-                @ApiResponse(responseCode = "200",description = "Data de usuarios encontrado",
-           content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegOfTypeUserGetDto.class,description = "Datos de usuario"))),
+                @ApiResponse(responseCode = "200",description = "Data de usuarios encontrado",useReturnTypeSchema = true),
                 @ApiResponse(responseCode = "404",description = "data no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error"))) 
    },parameters = {
                 @Parameter(name = "idTypeUser", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
    }
    )
-   @GetMapping("/byTypeUser/{idTypeUser}")
-   public ResponseEntity<ResponseDTO> getByIdTypeUser(@NotNull @Min(1) @PathVariable("idTypeUser") Integer idTypeUser){
+   @GetMapping(path = "/byTypeUser/{idTypeUser}", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<ResponseDTO<List<UserRegOfTypeUserGetDto>>> getByIdTypeUser(@NotNull @Min(1) @PathVariable("idTypeUser") Integer idTypeUser){
     
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<UserRegOfTypeUserGetDto>>builder()
                         .info("Informacion obtenidad")
                         .data(this.service.getByIdTypeUser(idTypeUser))
                         .build()); 
@@ -196,18 +186,17 @@ public class ControllerUserTypeReg extends ControllerTemplate {
 
    @Operation(summary = "Obtiene registros filtrado por id de estado",description = "Filtrara los registros que se igual al id de estado que se enviara",
                 method = "GET", responses = {
-                @ApiResponse(responseCode = "200",description = "Registros encontrado",
-           content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserTypeRegGetDto.class,description = "Datos de usuario con tipo de usuario"))),
+                @ApiResponse(responseCode = "200",description = "Registros encontrado",useReturnTypeSchema = true),
                 @ApiResponse(responseCode = "404",description = "Registro no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
    },parameters = {
                 @Parameter(name = "idStatus", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
    }
    )
-   @GetMapping("/byStatus/{idStatus}")
-   public ResponseEntity<ResponseDTO> getByIdStatus(@NotNull @Min(1) @PathVariable("idStatus") Integer idStatus){
+   @GetMapping(path = "/byStatus/{idStatus}", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<ResponseDTO<List<UserTypeRegGetDto>>> getByIdStatus(@NotNull @Min(1) @PathVariable("idStatus") Integer idStatus){
     
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<UserTypeRegGetDto>>builder()
                         .info("Informacion obtenidad")
                         .data(this.service.getByIdStatus(idStatus))
                         .build());

@@ -14,6 +14,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,18 +33,16 @@ public class ControllerProvince extends ControllerTemplate {
 
     @Operation(summary = "Obtener todas las provincias", description = "Se utiliza para obtener todas las provincias registradas",
         method = "Get",responses = {
-            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
-                    content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
                     @Content(schema = @Schema)
             })
     }
     )
-    @GetMapping
-    public ResponseEntity<ResponseDTO> getAll(){
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<ProvinceDto>>> getAll(){
 
-        ResponseDTO responseDTO = ResponseDTO.builder()
+        ResponseDTO<List<ProvinceDto>> responseDTO = ResponseDTO.<List<ProvinceDto>>builder()
                 .data(this.serviceProvince.getAll())
                 .info("Datos encontrados")
                 .build();
@@ -50,26 +51,27 @@ public class ControllerProvince extends ControllerTemplate {
 
     @Operation(summary = "Obtener provincias por ID",description = "Se podra obtener la provincia que se desee filtrandolo por su ID",
             method = "GET", responses = {
-            @ApiResponse(responseCode = "200",description = "Provincia encontrada",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProvinceDto.class,description = "Datos de provincia"))),
+            @ApiResponse(responseCode = "200",description = "Provincia encontrada",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404",description = "Provincia no encontrada, Id no valido",content = @Content(schema = @Schema))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "integer", format = "int32"))
     }
     )
-    @GetMapping("/{id}")
-    public  ResponseEntity<ProvinceDto> getById(@PathVariable(name = "id") Integer id){
-        return ResponseEntity.ok(this.serviceProvince.getById(id));
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public  ResponseEntity<ResponseDTO<ProvinceDto>> getById(@PathVariable(name = "id") Integer id){
+        return ResponseEntity.ok(
+                ResponseDTO.<ProvinceDto>builder()
+                .info("Province Found")
+                .data(this.serviceProvince.getById(id))
+                .build()
+        );
     }
 
     @Operation(
             summary = "Guardar nueva provincia",
             description = "Se guardara una nueva provincia en caso de necesitarse",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Provincia creada correctamente",content = {
-                           @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                   schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "201", description = "Provincia creada correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
@@ -80,13 +82,13 @@ public class ControllerProvince extends ControllerTemplate {
                                         )
                         )
     )
-    @PostMapping
-    public ResponseEntity<ResponseDTO> save(@RequestBody ProvinceSaveDto provinceSaveDto){
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> save(@RequestBody ProvinceSaveDto provinceSaveDto){
 
         Integer row = this.serviceProvince.save(provinceSaveDto);
 
 
-        return  new ResponseEntity<>(ResponseDTO.builder()
+        return  new ResponseEntity<>(ResponseDTO.<Integer>builder()
                 .info("Cantidad de registros creados")
                 .data(row)
                 .build(), HttpStatus.CREATED);
@@ -97,10 +99,7 @@ public class ControllerProvince extends ControllerTemplate {
             summary = "Actualizar provincia",
             description = "Se actualizara provincia que se desee",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Provincia actualizada correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "201", description = "Provincia actualizada correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
@@ -111,12 +110,12 @@ public class ControllerProvince extends ControllerTemplate {
                                         )
                         )
     )
-    @PutMapping
-    public ResponseEntity<ResponseDTO> update(@RequestBody ProvinceUpdateDto provinceUpdateDto){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update(@RequestBody ProvinceUpdateDto provinceUpdateDto){
 
         Integer row = this.serviceProvince.update(provinceUpdateDto);
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Cantidad de registros actualizados")
                         .data(row)
                         .build()

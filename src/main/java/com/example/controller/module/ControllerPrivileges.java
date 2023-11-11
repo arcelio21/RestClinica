@@ -3,7 +3,7 @@ package com.example.controller.module;
 import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
-import com.example.dto.modules.ModulesDto;
+import com.example.dto.modules.privileges.PrivilegeDto;
 import com.example.dto.modules.privileges.PrivilegeSaveDto;
 import com.example.dto.modules.privileges.PrivilegeUpdateDto;
 import com.example.service.modules.IServicePrivilege;
@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -34,13 +37,7 @@ public class ControllerPrivileges extends ControllerTemplate {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Búsqueda exitosa",
-                            useReturnTypeSchema = true,
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ResponseDTO.class
-                                    )
-                            )
+                            useReturnTypeSchema = true
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -73,11 +70,11 @@ public class ControllerPrivileges extends ControllerTemplate {
                     )
             }
     )
-    @GetMapping
-    public ResponseEntity<ResponseDTO> getAll(){
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<PrivilegeDto>>> getAll(){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<PrivilegeDto>>builder()
                         .info("Datos disponibles")
                         .data(this.servicePrivilege.getAll())
                         .build()
@@ -92,13 +89,7 @@ public class ControllerPrivileges extends ControllerTemplate {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Privilege encontrado",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ModulesDto.class,
-                                            description = "Datos de privilege"
-                                    )
-                            )
+                            useReturnTypeSchema = true
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -131,11 +122,11 @@ public class ControllerPrivileges extends ControllerTemplate {
 
             }
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO> getById(@PathVariable("id") Integer id){
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<PrivilegeDto>> getById(@PathVariable("id") Integer id){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<PrivilegeDto>builder()
                         .info("Datos encontrados")
                         .data(this.servicePrivilege.getById(id))
                         .build()
@@ -146,20 +137,17 @@ public class ControllerPrivileges extends ControllerTemplate {
             summary = "Actualizar privilege",
             description = "Se actualizara los privilege que se desee",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Privilege actualizada correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "200", description = "Privilege actualizada correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
             }
     )
-    @PutMapping
-    public ResponseEntity<ResponseDTO> update(@Validated @RequestBody PrivilegeUpdateDto privilegeUpdateDto){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update(@Validated @RequestBody PrivilegeUpdateDto privilegeUpdateDto){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Actualización exitosa, cantidad de registros actualizados")
                         .data(this.servicePrivilege.update(privilegeUpdateDto))
                         .build()
@@ -170,20 +158,17 @@ public class ControllerPrivileges extends ControllerTemplate {
             summary = "Guardar privileges",
             description = "Se guardara los privileges que se desee",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Privilege guardado correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "200", description = "Privilege guardado correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
             }
     )
-    @PostMapping
-    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody PrivilegeSaveDto privilegeSaveDto){
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> save(@Validated @RequestBody PrivilegeSaveDto privilegeSaveDto){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Cantidad de registros guardados")
                         .data(this.servicePrivilege.save(privilegeSaveDto))
                         .build()

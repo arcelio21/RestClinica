@@ -16,6 +16,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,18 +35,16 @@ public class ControllerAddress extends ControllerTemplate {
 
     @Operation(summary = "Obtener todas las direcciones", description = "Se utiliza para obtener todas las direcciones registradas",
             method = "Get",responses = {
-            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
-                    content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
                     @Content(schema = @Schema)
             })
     }
     )
-    @GetMapping
-    public ResponseEntity<ResponseDTO> getAll(){
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<AddressGetDto>>> getAll(){
 
-        ResponseDTO responseDTO = ResponseDTO.builder()
+        ResponseDTO<List<AddressGetDto>> responseDTO = ResponseDTO.<List<AddressGetDto>>builder()
                 .data(this.serviceAddress.getAll())
                 .info("Datos encontrados")
                 .build();
@@ -68,10 +69,7 @@ public class ControllerAddress extends ControllerTemplate {
             summary = "Guardar nueva address",
             description = "Se guardara una nueva address en caso de necesitarse",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Address creada correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "201", description = "Address creada correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
@@ -82,13 +80,13 @@ public class ControllerAddress extends ControllerTemplate {
                                         )
                         )
     )
-    @PostMapping
-    public ResponseEntity<ResponseDTO> save(@RequestBody AddressSaveDto addressSaveDto){
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> save(@RequestBody AddressSaveDto addressSaveDto){
 
         Integer row = this.serviceAddress.save(addressSaveDto);
 
 
-        return  new ResponseEntity<>(ResponseDTO.builder()
+        return  new ResponseEntity<>(ResponseDTO.<Integer>builder()
                 .info("Cantidad de registros creados")
                 .data(row)
                 .build(), HttpStatus.CREATED);
@@ -99,10 +97,7 @@ public class ControllerAddress extends ControllerTemplate {
             summary = "Actualizar address",
             description = "Se actualizara address que se desee",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Address actualizada correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "201", description = "Address actualizada correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema)
                     })
@@ -113,12 +108,12 @@ public class ControllerAddress extends ControllerTemplate {
                                         )
                         )
     )
-    @PutMapping
-    public ResponseEntity<ResponseDTO> update(@RequestBody AddressUpdatetDto addressUpdatetDto){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update(@RequestBody AddressUpdatetDto addressUpdatetDto){
 
         Integer row = this.serviceAddress.update(addressUpdatetDto);
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Cantidad de registros actualizados")
                         .data(row)
                         .build()

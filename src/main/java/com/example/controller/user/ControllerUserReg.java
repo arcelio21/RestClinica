@@ -17,6 +17,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,53 +35,54 @@ public class ControllerUserReg extends ControllerTemplate {
 
     @Operation(summary = "Obtener todas las usuarios", description = "Se utiliza para obtener todos los usuarios registradas",
             method = "Get",responses = {
-            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true,
-                    content =@Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ResponseDTO.class))),
+            @ApiResponse(responseCode = "200", description = "Busqueda exitosa",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404", description = "Not Found", content = {
                     @Content(schema = @Schema)
             })
     }
     )
-    @GetMapping
-    public ResponseEntity<ResponseDTO> getAll(){
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<UserRegDto>>> getAll(){
 
         return ResponseEntity.ok(
-                new ResponseDTO("Lista de usuarios registrados",
-                        this.serviceUserReg.getAll())
+                ResponseDTO.<List<UserRegDto>>builder()
+                .info("Lista de usuarios registrados")
+                .data(this.serviceUserReg.getAll())
+                .build()
         );
     }
 
     @Operation(summary = "Obtener usuario por ID",description = "Se podra obtener un usuario por su ID",
             method = "GET", responses = {
-            @ApiResponse(responseCode = "200",description = "Usuario encontrado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de usuarios"))),
+            @ApiResponse(responseCode = "200",description = "Usuario encontrado",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404",description = "Usuario no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     },parameters = {
             @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
     }
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<UserRegDto> getById(@PathVariable("id") Long id){
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<UserRegDto>> getById(@PathVariable("id") Long id){
         return ResponseEntity.ok(
-                this.serviceUserReg.getById(id)
+                ResponseDTO.<UserRegDto>builder()
+                .info("User Register Found")
+                .data(this.serviceUserReg.getById(id))
+                .build()
         );
     }
 
     @Operation(summary = "Obtener usuario por nombre",description = "Se podra obtener un usuario por su Nombre",
             method = "GET", responses = {
-            @ApiResponse(responseCode = "200",description = "Usuarios encontrados",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserRegDto.class,description = "Datos de Address"))),
+            @ApiResponse(responseCode = "200",description = "Usuarios encontrados",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404",description = "Usuario no encontrado, nombre no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     },parameters = {
             @Parameter(name = "name", in = ParameterIn.PATH, description = "nombre de usuario",example = "arcelio",required = true, schema = @Schema(implementation = String.class))
         }
     )
-    @GetMapping("/byName/{name}")
-    public ResponseEntity<ResponseDTO> getByName(@PathVariable("name") String name){
+    @GetMapping(path = "/byName/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<UserRegDto>>> getByName(@PathVariable("name") String name){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<UserRegDto>>builder()
                         .info("Usuario filtrados por nombre")
                         .data(this.serviceUserReg.getByName(name))
                         .build()
@@ -89,20 +93,17 @@ public class ControllerUserReg extends ControllerTemplate {
             summary = "Actualizar Usuarios",
             description = "Se actualizara usuario que se desee",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Usuario actualizada correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "200", description = "Usuario actualizada correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
             }
     )
-    @PutMapping
-    public ResponseEntity<ResponseDTO> update(@RequestBody UserRegUpdateDto userRegDto){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update(@RequestBody UserRegUpdateDto userRegDto){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Cantidad de registros actualizados")
                         .data(this.serviceUserReg.update(userRegDto))
                         .build()
@@ -113,20 +114,17 @@ public class ControllerUserReg extends ControllerTemplate {
             summary = "Guardar nueva usuario",
             description = "Se guardara una nueva usuario en caso de necesitarse",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "User creada correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "201", description = "User creada correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(schema = @Schema(implementation = ErrorResponseDto.class))
                     })
             }
     )
-    @PostMapping
-    public ResponseEntity<ResponseDTO> save (@RequestBody UserRegSaveDto user) throws UserNotSaveException {
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> save (@RequestBody UserRegSaveDto user) throws UserNotSaveException {
 
 
-        return new ResponseEntity<>(ResponseDTO.builder()
+        return new ResponseEntity<>(ResponseDTO.<Integer>builder()
                 .info("Cantidad de registro guardados")
                 .data(this.serviceUserReg.save(user))
                 .build(),
@@ -137,15 +135,14 @@ public class ControllerUserReg extends ControllerTemplate {
 
     @Operation(summary = "Actualizar contraseña de usuario",description = "Se encargara de actualizar contraseña de usuario cuando se desee",
             method = "POST", responses = {
-            @ApiResponse(responseCode = "200",description = "Usuario Actualizado",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ResponseDTO.class,description = "Datos de actualizacion"))),
+            @ApiResponse(responseCode = "200",description = "Usuario Actualizado",useReturnTypeSchema = true),
             @ApiResponse(responseCode = "403",description = "Datos de usuario no valido",content = @Content(schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
     })
-    @PutMapping("/update/password")
-    public ResponseEntity<ResponseDTO> updatePassword( @RequestBody UserUpdatePassDto user){
+    @PutMapping(path = "/update/password", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> updatePassword( @RequestBody UserUpdatePassDto user){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Cantidad de registros actualizados")
                         .data(this.serviceUserReg.updatePassword(user))
                         .build()

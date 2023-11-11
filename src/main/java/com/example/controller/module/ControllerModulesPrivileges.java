@@ -17,6 +17,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -41,13 +43,7 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Búsqueda exitosa",
-                            useReturnTypeSchema = true,
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ResponseDTO.class
-                                    )
-                            )
+                            useReturnTypeSchema = true
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -80,11 +76,11 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
                     )
             }
     )
-    @GetMapping
-    public ResponseEntity<ResponseDTO> getAll(){
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<ModulePrivilegesDto>>> getAll(){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<ModulePrivilegesDto>>builder()
                         .info("Datos disponibles")
                         .data(this.serviceModulePrivilege.getAll())
                         .build()
@@ -100,13 +96,7 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Modulo encontrado",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ModulePrivilegesDto.class,
-                                            description = "Datos de privilegio de modulo"
-                                    )
-                            )
+                            useReturnTypeSchema = true
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -139,11 +129,11 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
 
             }
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO> getById(@PathVariable("id") Long id){
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<ModulePrivilegesDto>> getById(@PathVariable("id") Long id){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<ModulePrivilegesDto>builder()
                         .info("Datos encontrados")
                         .data(this.serviceModulePrivilege.getById(id))
                         .build()
@@ -155,20 +145,17 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
             summary = "Actualizar privilegio de module",
             description = "Se actualizara privilegio de  modulo que se desee",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Privilegio de Modulo actualizada correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "200", description = "Privilegio de Modulo actualizada correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
             }
     )
-    @PutMapping
-    public ResponseEntity<ResponseDTO> update( @Validated @RequestBody ModulePrivilegeUpdateDto modulePrivilegeUpdateDto){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update( @Validated @RequestBody ModulePrivilegeUpdateDto modulePrivilegeUpdateDto){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Actualización exitosa, cantidad de registros actualizados")
                         .data(this.serviceModulePrivilege.update(modulePrivilegeUpdateDto))
                         .build()
@@ -179,20 +166,17 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
             summary = "Guardar privilegio de module",
             description = "Se guardara privilegio de modulo que se desee",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Privilegio de Modulo guardado correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "200", description = "Privilegio de Modulo guardado correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
             }
     )
-    @PostMapping
-    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody ModulePrivilegeSaveDto modulePrivilegeSaveDto){
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> save(@Validated @RequestBody ModulePrivilegeSaveDto modulePrivilegeSaveDto){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Cantidad de registros guardados")
                         .data(this.serviceModulePrivilege.save(modulePrivilegeSaveDto))
                         .build()
@@ -201,16 +185,15 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
 
     @Operation(summary = "Obtener detalles de privilegios de modulo",description = "Ver informacion completa de los privilegios asignados a modulo",
                 method = "GET", responses = {
-                @ApiResponse(responseCode = "200",description = "Lista de privilegios de modulo encontrado",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PrivilegeModuleDetailGetDto.class,description = "Datos de privilegios de modulo"))),
+                @ApiResponse(responseCode = "200",description = "Lista de privilegios de modulo encontrado",useReturnTypeSchema = true),
                 @ApiResponse(responseCode = "404",description = "data no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
     }
     )
-    @GetMapping("/details")
-    public ResponseEntity<ResponseDTO> getPrivilegeModuleDetails(){
+    @GetMapping(path = "/details", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<PrivilegeModuleDetailGetDto>>> getPrivilegeModuleDetails(){
     
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<PrivilegeModuleDetailGetDto> >builder()
                         .info("Informacion obtenidad")
                         .data(this.serviceModulePrivilege.getPrivilegeModuleDetails())
                         .build());
@@ -218,18 +201,17 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
 
     @Operation(summary = "Obtiene informacion completa de privilegios sobre modulo",description = "Si se desea ver informacion de los modulos que se le han asigando privilgios",
                 method = "GET", responses = {
-                @ApiResponse(responseCode = "200",description = "Datos encontrado",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PrivilegeModuleDetailGetDto.class,description = "Datos de Privilegios de modulo"))),
+                @ApiResponse(responseCode = "200",description = "Datos encontrado",useReturnTypeSchema = true),
                 @ApiResponse(responseCode = "404",description = "Datos no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error")))
     },parameters = {
                 @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
     }
     )
-    @GetMapping("/details/{id}")
-    public ResponseEntity<ResponseDTO> getPrivilegeModuleDetailsById(@NotNull @Min(1) @PathVariable("id")Long id){
+    @GetMapping(path = "/details/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<PrivilegeModuleDetailGetDto>> getPrivilegeModuleDetailsById(@NotNull @Min(1) @PathVariable("id")Long id){
      
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<PrivilegeModuleDetailGetDto>builder()
                         .info("Informacion obtenidad con id: " + id)
                         .data(this.serviceModulePrivilege.getPrivilegeModuleDetailsById(id))
                         .build()); 
@@ -237,18 +219,17 @@ public class ControllerModulesPrivileges extends ControllerTemplate {
 
     @Operation(summary = "Obtiene detalles de privilegios de modulo por id de modulo",description = "Ver detalle completo de los privilegios que tiene un modulo filtrado por id de modulo", 
                 method = "GET", responses = { 
-                @ApiResponse(responseCode = "200",description = "Data de privilegio de modulo encontrado",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PrivilegeModuleDetailGetDto.class,description = "Datos de detalles de privilegios de modulo"))),
+                @ApiResponse(responseCode = "200",description = "Data de privilegio de modulo encontrado",useReturnTypeSchema = true),
                 @ApiResponse(responseCode = "404",description = "data no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos del error"))) 
     },parameters = {
                 @Parameter(name = "idModule", in = ParameterIn.PATH, description = "ID de recurso",example = "1",required = true, schema = @Schema(implementation = Long.class,type = "long", format = "int64"))
     }
     )
-    @GetMapping("details/module/{idModule}")
-    public ResponseEntity<ResponseDTO> getPrivilegeModuleDetailsByModuleId(@NotNull @Min(1) @PathVariable("idModule") Long idModule){
+    @GetMapping(path = "details/module/{idModule}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<PrivilegeModuleDetailGetDto> >> getPrivilegeModuleDetailsByModuleId(@NotNull @Min(1) @PathVariable("idModule") Long idModule){
      
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<List<PrivilegeModuleDetailGetDto> >builder()
                         .info("Informacion obtenidad con id: " + idModule)
                         .data(this.serviceModulePrivilege.getPrivilegeModuleDetailsByModuleId(idModule))
                         .build()); 

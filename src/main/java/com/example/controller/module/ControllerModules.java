@@ -10,6 +10,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -38,13 +41,7 @@ public class ControllerModules extends ControllerTemplate{
                     @ApiResponse(
                             responseCode = "200",
                             description = "Búsqueda exitosa",
-                            useReturnTypeSchema = true,
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ResponseDTO.class
-                                    )
-                            )
+                            useReturnTypeSchema = true
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -77,11 +74,11 @@ public class ControllerModules extends ControllerTemplate{
                     )
             }
     )
-    @GetMapping
-    public ResponseEntity<ResponseDTO> getAll(){
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<List<ModulesDto>>> getAll(){
         
         return ResponseEntity.ok(
-            ResponseDTO.builder()
+            ResponseDTO.<List<ModulesDto>>builder()
                 .info("Datos disponibles")
                 .data(this.serviceModuleImple.getAll())
                 .build()
@@ -96,13 +93,7 @@ public class ControllerModules extends ControllerTemplate{
                     @ApiResponse(
                             responseCode = "200",
                             description = "Modulo encontrado",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ModulesDto.class,
-                                            description = "Datos de modulo"
-                                    )
-                            )
+                            useReturnTypeSchema = true
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -135,11 +126,11 @@ public class ControllerModules extends ControllerTemplate{
 
             }
     )
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDTO> getById(@PathVariable("id") Long id){
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<ModulesDto>> getById(@PathVariable("id") Long id){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<ModulesDto>builder()
                         .info("Datos encontrados")
                         .data(this.serviceModuleImple.getById(id))
                         .build()
@@ -150,10 +141,7 @@ public class ControllerModules extends ControllerTemplate{
             summary = "Actualizar modules",
             description = "Se actualizara los modulos que se desee",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Modulo actualizada correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "200", description = "Modulo actualizada correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
@@ -164,11 +152,11 @@ public class ControllerModules extends ControllerTemplate{
                                         )
                         )
     )
-    @PutMapping
-    public ResponseEntity<ResponseDTO> update(@Validated @RequestBody ModulesUpdateDto modulesDto){
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update(@Validated @RequestBody ModulesUpdateDto modulesDto){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Actualización exitosa, cantidad de registros actualizados")
                         .data(this.serviceModuleImple.update(modulesDto))
                         .build()
@@ -179,10 +167,7 @@ public class ControllerModules extends ControllerTemplate{
             summary = "Guardar modules",
             description = "Se guardara los modulos que se desee",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Modulo guardado correctamente",content = {
-                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ResponseDTO.class))
-                    }),
+                    @ApiResponse(responseCode = "200", description = "Modulo guardado correctamente",useReturnTypeSchema = true),
                     @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
                             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
                     })
@@ -193,11 +178,11 @@ public class ControllerModules extends ControllerTemplate{
                                         )
                         )
     )
-    @PostMapping
-    public ResponseEntity<ResponseDTO> save(@Validated @RequestBody ModuleSaveDto modulesDto){
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> save(@Validated @RequestBody ModuleSaveDto modulesDto){
 
         return ResponseEntity.ok(
-                ResponseDTO.builder()
+                ResponseDTO.<Integer>builder()
                         .info("Cantidad de registros guardados")
                         .data(this.serviceModuleImple.save(modulesDto))
                         .build()
