@@ -25,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
 
-    private final List<String> urlsIgnore = List.of("/swagger-ui.html", "/api/v1/auth", "/swagger-ui", "/swagger-ui", "/v3/api-docs", "/webjars", "/api-docs");
+    private final List<String> urlsIgnore = List.of("/swagger-ui.html", "/api/v1/auth", "/swagger-ui", "/swagger-ui", "/v3/api-docs", "/webjars", "/api-docs","/api/v1/village");
     
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
