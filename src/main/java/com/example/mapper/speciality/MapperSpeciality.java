@@ -22,7 +22,7 @@ public interface MapperSpeciality {
 			@Arg(column = "name",javaType = String.class)
 		}
 	)
-	@Select("SELECT * FROM Tspecialties")
+	@Select("SELECT id, name FROM Tspecialties")
 	List<Tspeciality> getAll();
 	
 	@ConstructorArgs(
@@ -31,12 +31,12 @@ public interface MapperSpeciality {
 			@Arg(column = "name",javaType = String.class)
 		}
 	)
-	@Select("SELECT * FROM Tspecialties WHERE id=#{id}")
-	public Tspeciality getById(@Param("id") Integer id);
+	@Select("SELECT id, name FROM Tspecialties WHERE id=#{id}")
+    Tspeciality getById(@Param("id") Integer id);
 	
 	@Update("UPDATE Tspecialties SET name=#{spec.name} WHERE id=#{spec.id}")
-	public int update(@Param("spec") Tspeciality tspeciality);
+    int update(@Param("spec") Tspeciality tspeciality);
 	
 	@Insert("INSERT INTO Tspecialties (name) VALUES(#{spec.name})")
-	public int save(@Param("spec") Tspeciality tspeciality);
+    int save(@Param("spec") Tspeciality tspeciality);
 }
