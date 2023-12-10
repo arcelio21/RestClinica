@@ -1,4 +1,4 @@
-package com.example.dto.speciality.type_speciality;
+package com.example.dto.speciality.speciality;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
