@@ -44,9 +44,25 @@ public class ServiceSpecialityImpl implements IServiceSpeciality<SpecialityGetDt
 		return specialityList;
 	}
 
+	/**
+	 * Obtiene una especialidad por su ID.
+	 *
+	 * @param id El ID de la especialidad a recuperar.
+	 * @return Un objeto SpecialityGetDto que representa la especialidad correspondiente al ID proporcionado.
+	 * @throws NoDataFoundException si no se encuentra la especialidad o si el ID no es válido (nulo o menor o igual a cero).
+	 */
+	@Transactional(readOnly = true)
 	@Override
-	public SpecialityGetDto getById(Integer integer) {
-		return null;
+	public SpecialityGetDto getById(Integer id) {
+
+		if(id==null || id<=0){
+			throw new NoDataFoundException("ID NO VALID");
+		}
+
+        return Optional.of(id)
+				.map(this.mapperSpeciality::getById)
+				.map(this.dtoSpecialityMapper::TspecialityToSpecialityGet)
+				.orElseThrow(()-> new NoDataFoundException("DATA NOT FOUND"));
 	}
 
 	@Override
