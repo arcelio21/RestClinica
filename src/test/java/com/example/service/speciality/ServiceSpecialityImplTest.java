@@ -34,6 +34,8 @@ class ServiceSpecialityImplTest {
     @InjectMocks
     private ServiceSpecialityImpl serviceSpeciality;
 
+    private final Integer ID_SPECIALITY = 1;
+
     @BeforeEach
     void setUp() {
 
@@ -131,4 +133,105 @@ class ServiceSpecialityImplTest {
         then(this.mapperSpeciality).should(times(1)).getAll();
 
     }
+
+    /**
+     * Prueba unitaria para el método `getById` del servicio Speciality cuando se obtienen datos exitosos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getById` del servicio Speciality con un ID de especialidad válido,
+     *       y se obtienen datos exitosos, devuelve un objeto `SpecialityGetDto` no nulo.</li>
+     *   <li>Confirma que el método `mapperSpeciality` se llama exactamente una vez con el ID de especialidad válido,
+     *       y que el método `dtoSpecialityMapper` se llama exactamente una vez para convertir los datos obtenidos.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `getById` del servicio Speciality con un ID de especialidad válido,
+     *       y el método devuelve datos exitosos, lo que provoca que se devuelva un objeto `SpecialityGetDto` no nulo.</li>
+     *   <li>Se verifica que el método `mapperSpeciality` se llama exactamente una vez con el ID de especialidad válido
+     *       y que el método `dtoSpecialityMapper` se llama exactamente una vez para convertir los datos obtenidos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getById con éxito en SpecialityService")
+    void getById_Success(){
+
+
+        given(this.mapperSpeciality.getById(this.ID_SPECIALITY)).willReturn(new Tspeciality(1,"Odontologo"));
+        given(this.dtoSpecialityMapper.TspecialityToSpecialityGet(any(Tspeciality.class))).willReturn(new SpecialityGetDto(1,"Odontologo"));
+
+        SpecialityGetDto specialityGetDto = this.serviceSpeciality.getById(this.ID_SPECIALITY);
+
+        assertNotNull(specialityGetDto);
+        assertInstanceOf(SpecialityGetDto.class,specialityGetDto);
+        assertInstanceOf(Integer.class,specialityGetDto.id());
+        assertInstanceOf(String.class,specialityGetDto.name());
+
+        then(this.mapperSpeciality).should(times(1)).getById(this.ID_SPECIALITY);
+        then(this.dtoSpecialityMapper).should(times(1)).TspecialityToSpecialityGet(any(Tspeciality.class));
+    }
+
+    /**
+     * Prueba unitaria para el método `getById` del servicio Speciality cuando no existen datos para el ID proporcionado.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getById` del servicio Speciality con un ID de especialidad válido,
+     *       y no existen datos para ese ID, se arroja una excepción `NoDataFoundException`.</li>
+     *   <li>Confirma que el método `mapperSpeciality` se llama exactamente una vez con el ID de especialidad válido,
+     *       y que el método `dtoSpecialityMapper` no tiene interacciones.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `getById` del servicio Speciality con un ID de especialidad válido,
+     *       pero no existen datos para ese ID, lo que provoca que se arroje una excepción `NoDataFoundException`.</li>
+     *   <li>Se verifica que el método `mapperSpeciality` se llama exactamente una vez con el ID de especialidad válido
+     *       y que el método `dtoSpecialityMapper` no tiene interacciones, ya que no hay datos para convertir.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getById cuando no existen datos en SpecialityService")
+    void getById_NotExits(){
+
+        given(this.mapperSpeciality.getById(this.ID_SPECIALITY)).willReturn(null);
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceSpeciality.getById(this.ID_SPECIALITY));
+
+        then(this.mapperSpeciality).should(times(1)).getById(this.ID_SPECIALITY);
+        then(this.dtoSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getById` del servicio Speciality cuando se proporciona un ID no válido.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getById` del servicio Speciality con un ID no válido,
+     *       se arroja una excepción `NoDataFoundException`.</li>
+     *   <li>Confirma que tanto el método `mapperSpeciality` como el método `dtoSpecialityMapper` no tienen interacciones.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `getById` del servicio Speciality con un ID no válido,
+     *       lo que provoca que se arroje una excepción `NoDataFoundException`.</li>
+     *   <li>Se verifica que tanto el método `mapperSpeciality` como el método `dtoSpecialityMapper` no tienen interacciones,
+     *       ya que no se debería haber llamado a estos métodos con un ID no válido.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de getById con ID no válido en SpecialityService")
+    void getById_ID_NotValid(){
+
+        Integer id_notvalid=-1;
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceSpeciality.getById(id_notvalid));
+
+        then(this.mapperSpeciality).shouldHaveNoInteractions();
+        then(this.dtoSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+
 }
