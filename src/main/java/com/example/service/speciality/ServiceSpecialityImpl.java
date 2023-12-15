@@ -5,6 +5,7 @@ import com.example.dto.speciality.speciality.SpecialitySaveDto;
 import com.example.dto.speciality.speciality.SpecialityUpdateDto;
 import com.example.dtomapper.speciality.DtoSpecialityMapper;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.speciality.speciality.SpecialityNotSaveException;
 import com.example.mapper.speciality.MapperSpeciality;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -70,8 +71,28 @@ public class ServiceSpecialityImpl implements IServiceSpeciality<SpecialityGetDt
 		return null;
 	}
 
+	/**
+	 * Guarda una nueva especialidad en la base de datos con la información proporcionada.
+	 *
+	 * @param specialitySave La información de la especialidad a guardar.
+	 * @return El número de filas afectadas al guardar la especialidad en la base de datos.
+	 * @throws SpecialityNotSaveException si no se puede guardar la especialidad o si los datos de la especialidad no son válidos.
+	 */
 	@Override
-	public Integer save(SpecialitySaveDto t) {
-		return null;
+	public Integer save(SpecialitySaveDto specialitySave) {
+		if(specialitySave == null || specialitySave.name()==null || specialitySave.name().trim().isEmpty()){
+			throw new SpecialityNotSaveException(specialitySave,"DATA NOT VALID");
+		}
+
+		Integer rowSave = Optional.of(specialitySave)
+				.map(this.dtoSpecialityMapper::SpecialitySaveDtoToTspeciality)
+				.map(this.mapperSpeciality::save)
+				.orElseThrow(()-> new SpecialityNotSaveException(specialitySave));
+
+		if(rowSave==null || rowSave <= 0){
+			throw new SpecialityNotSaveException(specialitySave,"DATA NOT SAVED");
+		}
+
+		return rowSave;
 	}
 }
