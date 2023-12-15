@@ -1,9 +1,11 @@
 package com.example.service.speciality;
 
 import com.example.dto.speciality.speciality.SpecialityGetDto;
+import com.example.dto.speciality.speciality.SpecialitySaveDto;
 import com.example.dtomapper.speciality.DtoSpecialityMapper;
 import com.example.entity.speciality.Tspeciality;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.speciality.speciality.SpecialityNotSaveException;
 import com.example.mapper.speciality.MapperSpeciality;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -231,6 +233,114 @@ class ServiceSpecialityImplTest {
 
         then(this.mapperSpeciality).shouldHaveNoInteractions();
         then(this.dtoSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `save` del servicio Speciality cuando se proporcionan datos válidos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` del servicio Speciality con datos válidos,
+     *       se devuelve un entero no nulo, indicando que la operación de guardado fue exitosa.</li>
+     *   <li>Confirma que tanto el método `SpecialitySaveDtoToTspeciality` del dtoSpecialityMapper como el método `save` del mapperSpeciality
+     *       se llaman exactamente una vez con los datos proporcionados.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `SpecialitySaveDtoToTspeciality` del dtoSpecialityMapper con un objeto SpecialitySaveDto válido,
+     *       devolviendo un objeto Tspeciality.</li>
+     *   <li>La prueba simula que se llama al método `save` del mapperSpeciality con el objeto Tspeciality devuelto,
+     *       devolviendo un entero (por ejemplo, 1) para indicar que la operación de guardado fue exitosa.</li>
+     *   <li>Se verifica que tanto el método `SpecialitySaveDtoToTspeciality` del dtoSpecialityMapper como el método `save` del mapperSpeciality
+     *       se llaman exactamente una vez con los datos proporcionados, lo que confirma que la operación de guardado fue exitosa.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de guardado exitoso de Speciality")
+    void given_saveValid_when_saveSpeciality_then_notnull_success(){
+        SpecialitySaveDto specialitySave = new SpecialitySaveDto("Odontologo");
+        Tspeciality tspeciality = new Tspeciality(0,"Odontologo");
+
+        //GIVEN
+        given(this.dtoSpecialityMapper.SpecialitySaveDtoToTspeciality(specialitySave)).willReturn(tspeciality);
+        given(this.mapperSpeciality.save(any(Tspeciality.class))).willReturn(1);
+
+        //WHEN
+        Integer rowSave = this.serviceSpeciality.save(specialitySave);
+
+        //THEN
+        assertNotNull(rowSave);
+        assertEquals(1,rowSave);
+
+        then(this.dtoSpecialityMapper).should(times(1)).SpecialitySaveDtoToTspeciality(specialitySave);
+        then(this.mapperSpeciality).should(times(1)).save(tspeciality);
+    }
+
+    /**
+     * Prueba unitaria para el método `save` del servicio Speciality cuando se proporcionan datos no válidos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` del servicio Speciality con datos no válidos,
+     *       se arroja una excepción `SpecialityNotSaveException`.</li>
+     *   <li>Confirma que tanto el método `SpecialitySaveDtoToTspeciality` del dtoSpecialityMapper como el método `save` del mapperSpeciality
+     *       no se llaman, ya que la operación de guardado no debe llevarse a cabo con datos no válidos.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `SpecialitySaveDtoToTspeciality` del dtoSpecialityMapper con un objeto SpecialitySaveDto no válido,
+     *       arrojando una excepción `SpecialityNotSaveException`.</li>
+     *   <li>Se verifica que tanto el método `SpecialitySaveDtoToTspeciality` del dtoSpecialityMapper como el método `save` del mapperSpeciality
+     *       no se llaman, ya que la operación de guardado no debe llevarse a cabo con datos no válidos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de error al intentar guardar Speciality con datos no válidos")
+    void given_dataNotValid_when_saveSpeciality_then_throw_Error(){
+
+        SpecialitySaveDto specialitySave = new SpecialitySaveDto("");
+
+        assertThrows(SpecialityNotSaveException.class,()-> this.serviceSpeciality.save(specialitySave));
+
+        then(this.mapperSpeciality).shouldHaveNoInteractions();
+        then(this.dtoSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `save` del servicio Speciality cuando la operación de guardado no es exitosa.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` del servicio Speciality con datos válidos,
+     *       pero la operación de guardado no tiene éxito (devuelve 0 filas afectadas), se arroja una excepción `SpecialityNotSaveException`.</li>
+     *   <li>Confirma que tanto el método `SpecialitySaveDtoToTspeciality` del dtoSpecialityMapper como el método `save` del mapperSpeciality
+     *       se llaman exactamente una vez cada uno.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `SpecialitySaveDtoToTspeciality` del dtoSpecialityMapper con un objeto SpecialitySaveDto válido,
+     *       y al método `save` del mapperSpeciality que devuelve 0 filas afectadas, lo que provoca una excepción `SpecialityNotSaveException`.</li>
+     *   <li>Se verifica que tanto el método `SpecialitySaveDtoToTspeciality` del dtoSpecialityMapper como el método `save` del mapperSpeciality
+     *       se llaman exactamente una vez cada uno.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de error al intentar guardar Speciality cuando la operación de guardado no es exitosa")
+    void given_SaveNotValid_when_saveSpeciality_then_throw_Error(){
+
+        SpecialitySaveDto specialitySave = new SpecialitySaveDto("Odontologo");
+        Tspeciality tspeciality = new Tspeciality(0,"Odontologo");
+
+        given(this.dtoSpecialityMapper.SpecialitySaveDtoToTspeciality(specialitySave)).willReturn(tspeciality);
+        given(this.mapperSpeciality.save(any(Tspeciality.class))).willReturn(0);
+
+        assertThrows(SpecialityNotSaveException.class,()-> this.serviceSpeciality.save(specialitySave));
+
+        then(this.dtoSpecialityMapper).should(times(1)).SpecialitySaveDtoToTspeciality(specialitySave);
+        then(this.mapperSpeciality).should(times(1)).save(tspeciality);
     }
 
 
