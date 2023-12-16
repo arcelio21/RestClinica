@@ -6,6 +6,7 @@ import com.example.dto.speciality.speciality.SpecialityUpdateDto;
 import com.example.dtomapper.speciality.DtoSpecialityMapper;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.speciality.speciality.SpecialityNotSaveException;
+import com.example.exception.speciality.speciality.SpecialityNotUpdateException;
 import com.example.mapper.speciality.MapperSpeciality;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -66,9 +67,30 @@ public class ServiceSpecialityImpl implements IServiceSpeciality<SpecialityGetDt
 				.orElseThrow(()-> new NoDataFoundException("DATA NOT FOUND"));
 	}
 
+	/**
+	 * Actualiza una especialidad existente en la base de datos con la información proporcionada.
+	 *
+	 * @param updateDto La información actualizada de la especialidad.
+	 * @return El número de filas afectadas al actualizar la especialidad en la base de datos.
+	 * @throws SpecialityNotUpdateException si no se puede actualizar la especialidad o si los datos de actualización no son válidos.
+	 */
 	@Override
-	public Integer update(SpecialityUpdateDto t) {
-		return null;
+	public Integer update(SpecialityUpdateDto updateDto) {
+
+		if(updateDto==null || updateDto.id()==null || updateDto.id()<=0 || updateDto.name() == null || updateDto.name().trim().isEmpty()){
+			throw new SpecialityNotUpdateException("DATA NOT VALID",updateDto);
+		}
+
+		Integer rowAffected = Optional.of(updateDto)
+				.map(this.dtoSpecialityMapper::SpecialityUpdateDtoToTspeciality)
+				.map(this.mapperSpeciality::update)
+				.orElseThrow(()-> new SpecialityNotUpdateException(updateDto));
+
+		if(rowAffected==null || rowAffected<=0){
+			throw  new SpecialityNotUpdateException(updateDto);
+		}
+
+		return rowAffected;
 	}
 
 	/**
