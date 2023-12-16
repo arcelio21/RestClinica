@@ -30,6 +30,8 @@ import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotSaveExc
 import com.example.exception.modules.modulesprivilege.ModulePrivilegesNotUpdateException;
 import com.example.exception.modules.privilege.PrivilegeNotSaveException;
 import com.example.exception.modules.privilege.PrivilegeNotUpdateException;
+import com.example.exception.speciality.speciality.SpecialityNotSaveException;
+import com.example.exception.speciality.speciality.SpecialityNotUpdateException;
 import com.example.exception.user.type_user.TypeUserNotSaveException;
 import com.example.exception.user.type_user.TypeUserNotUpdateException;
 import com.example.exception.user.type_user_reg.UserTypeRegNotSaveException;
@@ -654,6 +656,41 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                     : ""
             )
             .build()
+        );
+    }
+
+    //SPECIALITY----------------------------------------------------------------------
+    @ExceptionHandler(SpecialityNotUpdateException.class)
+    public ResponseEntity<ErrorResponseDto> handlerSpecialityNotUpdate(SpecialityNotUpdateException ex){
+
+        Object dataResponse = "Not Exist";
+        if(ex.getData()!=null){
+            dataResponse = ex.getData();
+        }
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponseDto.builder()
+                        .fecha(LocalDate.now())
+                        .messageError(ex.getMessage())
+                        .data(dataResponse)
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(SpecialityNotSaveException.class)
+    public ResponseEntity<ErrorResponseDto> handlerSpecialityNotUpdate(SpecialityNotSaveException ex){
+
+        Object dataResponse = "Not Exist";
+        if(ex.getData()!=null){
+            dataResponse = ex.getData();
+        }
+
+        return ResponseEntity.badRequest().body(
+                ErrorResponseDto.builder()
+                        .fecha(LocalDate.now())
+                        .messageError(ex.getMessage())
+                        .data(dataResponse)
+                        .build()
         );
     }
 
