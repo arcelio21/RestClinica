@@ -2,10 +2,12 @@ package com.example.service.speciality;
 
 import com.example.dto.speciality.speciality.SpecialityGetDto;
 import com.example.dto.speciality.speciality.SpecialitySaveDto;
+import com.example.dto.speciality.speciality.SpecialityUpdateDto;
 import com.example.dtomapper.speciality.DtoSpecialityMapper;
 import com.example.entity.speciality.Tspeciality;
 import com.example.exception.NoDataFoundException;
 import com.example.exception.speciality.speciality.SpecialityNotSaveException;
+import com.example.exception.speciality.speciality.SpecialityNotUpdateException;
 import com.example.mapper.speciality.MapperSpeciality;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -343,5 +345,143 @@ class ServiceSpecialityImplTest {
         then(this.mapperSpeciality).should(times(1)).save(tspeciality);
     }
 
+    /**
+     * Prueba unitaria para el método `update` del servicio Speciality cuando la operación de actualización es exitosa.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` del servicio Speciality con datos válidos,
+     *       y la operación de actualización tiene éxito (devuelve 1 fila afectada), la prueba es exitosa.</li>
+     *   <li>Confirma que tanto el método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper como el método `update` del mapperSpeciality
+     *       se llaman exactamente una vez cada uno.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper con un objeto SpecialityUpdateDto válido,
+     *       y al método `update` del mapperSpeciality que devuelve 1 fila afectada, lo que indica una operación de actualización exitosa.</li>
+     *   <li>Se verifica que tanto el método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper como el método `update` del mapperSpeciality
+     *       se llaman exactamente una vez cada uno.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de éxito al intentar actualizar Speciality cuando la operación de actualización es exitosa")
+    void given_updateValid_when_updateSpeciality_then_success(){
+
+        SpecialityUpdateDto specialityUpdateDto = new SpecialityUpdateDto(1,"Odontologo");
+        Tspeciality tspeciality = new Tspeciality(1,"Odontologo");
+
+        given(this.dtoSpecialityMapper.SpecialityUpdateDtoToTspeciality(specialityUpdateDto)).willReturn(tspeciality);
+        given(this.mapperSpeciality.update(any(Tspeciality.class))).willReturn(1);
+
+        Integer rowAffected = this.serviceSpeciality.update(specialityUpdateDto);
+
+        assertNotNull(rowAffected);
+        assertEquals(1,rowAffected);
+
+        then(this.dtoSpecialityMapper).should(times(1)).SpecialityUpdateDtoToTspeciality(specialityUpdateDto);
+        then(this.mapperSpeciality).should(times(1)).update(tspeciality);
+    }
+
+    /**
+     * Prueba unitaria para el método `update` del servicio Speciality cuando los datos no son válidos y se espera una excepción.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` del servicio Speciality con datos no válidos,
+     *       se arroja una excepción `SpecialityNotUpdateException`.</li>
+     *   <li>Confirma que tanto el método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper como el método `update` del mapperSpeciality
+     *       no tienen interacciones.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper con un objeto SpecialityUpdateDto inválido,
+     *       lo que debería arrojar una excepción `SpecialityNotUpdateException`.</li>
+     *   <li>Se verifica que tanto el método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper como el método `update` del mapperSpeciality
+     *       no tienen interacciones, ya que no se espera que la operación de actualización tenga lugar.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de excepción al intentar actualizar Speciality con datos no válidos")
+    void given_dataNotValid_when_updateSpeciality_then_throwException(){
+
+        SpecialityUpdateDto specialityUpdateDto = new SpecialityUpdateDto(1,"");
+
+        assertThrows(SpecialityNotUpdateException.class,()-> this.serviceSpeciality.update(specialityUpdateDto));
+
+        then(this.dtoSpecialityMapper).shouldHaveNoInteractions();
+        then(this.mapperSpeciality).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `update` del servicio Speciality cuando se intenta actualizar un ID que no existe y se espera una excepción.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` del servicio Speciality con un ID que no existe,
+     *       se arroja una excepción `SpecialityNotUpdateException`.</li>
+     *   <li>Confirma que tanto el método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper como el método `update` del mapperSpeciality
+     *       no tienen interacciones.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper con un objeto SpecialityUpdateDto válido,
+     *       pero el ID no existe en la base de datos, lo que debería arrojar una excepción `SpecialityNotUpdateException`.</li>
+     *   <li>Se verifica que tanto el método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper como el método `update` del mapperSpeciality
+     *       no tienen interacciones, ya que no se espera que la operación de actualización tenga lugar.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de excepción al intentar actualizar Speciality con ID que no existe")
+    void given_idNotExist_when_updateSpeciality_then_throwException(){
+        SpecialityUpdateDto specialityUpdateDto = new SpecialityUpdateDto(90,"Odontologo");
+        Tspeciality tspeciality = new Tspeciality(90,"Odontologo");
+
+        given(this.dtoSpecialityMapper.SpecialityUpdateDtoToTspeciality(specialityUpdateDto)).willReturn(tspeciality);
+        given(this.mapperSpeciality.update(any(Tspeciality.class))).willReturn(0);
+
+        assertThrows(SpecialityNotUpdateException.class,()-> this.serviceSpeciality.update(specialityUpdateDto));
+
+
+        then(this.dtoSpecialityMapper).should(times(1)).SpecialityUpdateDtoToTspeciality(specialityUpdateDto);
+        then(this.mapperSpeciality).should(times(1)).update(tspeciality);
+    }
+
+
+    /**
+     * Prueba unitaria para el método `update` del servicio Speciality cuando el mapeo del dtoSpecialityMapper no es válido y se espera una excepción.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` del servicio Speciality con un objeto SpecialityUpdateDto
+     *       que no se puede mapear a un objeto Tspeciality válido, se arroja una excepción `SpecialityNotUpdateException`.</li>
+     *   <li>Confirma que el método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper se llama exactamente una vez con el objeto SpecialityUpdateDto,
+     *       y que el método `update` del mapperSpeciality no tiene interacciones.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper con un objeto SpecialityUpdateDto,
+     *       pero el mapeo no es válido, lo que debería arrojar una excepción `SpecialityNotUpdateException`.</li>
+     *   <li>Se verifica que el método `SpecialityUpdateDtoToTspeciality` del dtoSpecialityMapper se llama exactamente una vez con el objeto SpecialityUpdateDto,
+     *       y que el método `update` del mapperSpeciality no tiene interacciones, ya que no se espera que la operación de actualización tenga lugar.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de excepción al intentar actualizar Speciality con mapeo no válido")
+    void given_mapperNotValid_when_updateSpeciality_then_throwException(){
+
+        SpecialityUpdateDto specialityUpdateDto = new SpecialityUpdateDto(1,"Odontologo");
+
+        given(this.dtoSpecialityMapper.SpecialityUpdateDtoToTspeciality(specialityUpdateDto)).willReturn(null);
+
+
+        assertThrows(SpecialityNotUpdateException.class,()-> this.serviceSpeciality.update(specialityUpdateDto));
+
+        then(this.dtoSpecialityMapper).should(times(1)).SpecialityUpdateDtoToTspeciality(specialityUpdateDto);
+        then(this.mapperSpeciality).shouldHaveNoInteractions();
+    }
 
 }
