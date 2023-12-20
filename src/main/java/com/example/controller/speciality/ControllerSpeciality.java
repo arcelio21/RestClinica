@@ -68,5 +68,25 @@ public class ControllerSpeciality extends ControllerTemplate {
     }
 
 
+    @Operation(
+            summary = "Actualizar Speciality",
+            description = "Se actualizara especialidad que se desee",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Speciality actualizada correctamente",useReturnTypeSchema = true),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update(@RequestBody SpecialityUpdateDto specialityUpdateDto){
+
+        return ResponseEntity.ok(
+                ResponseDTO.<Integer>builder()
+                        .info("Cantidad de registros actualizados")
+                        .data(this.serviceSpeciality.update(specialityUpdateDto))
+                        .build()
+        );
+    }
 
 }
