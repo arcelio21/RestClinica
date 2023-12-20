@@ -1,11 +1,16 @@
 package com.example.controller.speciality;
 
 import com.example.controller.ControllerTemplate;
+import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.speciality.speciality.SpecialityGetDto;
+import com.example.dto.speciality.speciality.SpecialityUpdateDto;
 import com.example.dto.user.user_reg.UserRegDto;
+import com.example.dto.user.user_reg.UserRegUpdateDto;
 import com.example.service.speciality.ServiceSpecialityImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,9 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,4 +48,25 @@ public class ControllerSpeciality extends ControllerTemplate {
                         .build()
         );
     }
+
+    @Operation(summary = "Obtener speciality por ID",description = "Se podra obtener una especialidad por su ID",
+            method = "GET", responses = {
+            @ApiResponse(responseCode = "200",description = "Speciality encontrado",useReturnTypeSchema = true),
+            @ApiResponse(responseCode = "404",description = "Speciality no encontrado, Id no valido",content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class, description = "Datos de error")))
+    },parameters = {
+            @Parameter(name = "id", in = ParameterIn.PATH, description = "ID de speciality",example = "1",required = true, schema = @Schema(implementation = Integer.class,type = "int", format = "int32"))
+    }
+    )
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+        public ResponseEntity<ResponseDTO<SpecialityGetDto>> getById(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(
+                ResponseDTO.<SpecialityGetDto>builder()
+                        .info("Speciality Found")
+                        .data(this.serviceSpeciality.getById(id))
+                        .build()
+        );
+    }
+
+
+
 }
