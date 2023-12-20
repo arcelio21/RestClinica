@@ -4,9 +4,12 @@ import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.speciality.speciality.SpecialityGetDto;
+import com.example.dto.speciality.speciality.SpecialitySaveDto;
 import com.example.dto.speciality.speciality.SpecialityUpdateDto;
 import com.example.dto.user.user_reg.UserRegDto;
+import com.example.dto.user.user_reg.UserRegSaveDto;
 import com.example.dto.user.user_reg.UserRegUpdateDto;
+import com.example.exception.user.user_reg.UserNotSaveException;
 import com.example.service.speciality.ServiceSpecialityImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,6 +90,28 @@ public class ControllerSpeciality extends ControllerTemplate {
                         .info("Cantidad de registros actualizados")
                         .data(this.serviceSpeciality.update(specialityUpdateDto))
                         .build()
+        );
+    }
+
+    @Operation(
+            summary = "Guardar nueva Speciality",
+            description = "Se guardara una nueva especialidad en caso de necesitarse",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Speciality creada correctamente",useReturnTypeSchema = true),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> save (@RequestBody SpecialitySaveDto specialitySaveDto){
+
+
+        return new ResponseEntity<>(ResponseDTO.<Integer>builder()
+                .info("Cantidad de registro guardados")
+                .data(this.serviceSpeciality.save(specialitySaveDto))
+                .build(),
+                HttpStatus.CREATED
         );
     }
 
