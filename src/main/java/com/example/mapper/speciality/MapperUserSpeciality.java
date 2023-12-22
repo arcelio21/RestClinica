@@ -20,29 +20,114 @@ public interface MapperUserSpeciality {
 		id="userSpecRes",
 		value = {
 			@Result(column = "id",property = "id"),
-			@Result(column = "speciality_id",property = "specialityId.id"),
-			@Result(column = "user_type_reg_id",property = "userTypeRegId.id"),
-			@Result(column = "status_id",property = "statusId.id")
+			@Result(column = "nameSpeciality",property = "specialityId.name"),
+			@Result(column = "nameStatus",property = "statusId.name"),
+			@Result(column = "nameUser",property = "userTypeRegId.userRegId.name"),
+			@Result(column = "lastNameUser",property = "userTypeRegId.userRegId.lastName"),
+			@Result(column = "nameTypeUser",property = "userTypeRegId.typeUser.nameTypeUser")
 		}
 	)
-	@Select("SELECT * FROM Tusers_specialties")
+	@Select("SELECT us.id AS id, s.name AS nameSpeciality, st.name_status AS nameStatus,usr.name AS nameUser,usr.last_name AS lastNameUser, tu.name_type_user AS nameTypeUser" +
+			"	FROM Tusers_specialties us " +
+			"INNER JOIN Tspecialties s ON us.speciality_id = s.id " +
+			"INNER JOIN Tusers_types_regs utr ON us.user_type_reg_id = utr.id " +
+			"INNER JOIN TusersRegs usr ON utr.user_reg_id = usr.id " +
+			"INNER JOIN Tstatus st ON us.status_id = st.id " +
+			"INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id")
 	List<TuserSpeciality> getAll();
 	
 	@ResultMap(value = "userSpecRes")
-	@Select("SELECT * FROM Tusers_specialties WHERE id=#{id}")
+	@Select("SELECT us.id AS id, s.name AS nameSpeciality, st.name_status AS nameStatus,usr.name AS nameUser,usr.last_name AS lastNameUser, tu.name_type_user AS nameTypeUser" +
+			"	FROM Tusers_specialties us " +
+			"INNER JOIN Tspecialties s ON us.speciality_id = s.id " +
+			"INNER JOIN Tusers_types_regs utr ON us.user_type_reg_id = utr.id " +
+			"INNER JOIN TusersRegs usr ON utr.user_reg_id = usr.id " +
+			"INNER JOIN Tstatus st ON us.status_id = st.id " +
+			"INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id " +
+			"WHERE us.id=#{id}")
 	TuserSpeciality getById(@Param("id") Integer id);
+
+	@Results(
+			value = {
+					@Result(column = "id",property = "id"),
+					@Result(column = "nameStatus",property = "statusId.name"),
+					@Result(column = "nameUser",property = "userTypeRegId.userRegId.name"),
+					@Result(column = "lastNameUser",property = "userTypeRegId.userRegId.lastName"),
+					@Result(column = "nameTypeUser",property = "userTypeRegId.typeUser.nameTypeUser")
+			}
+	)
+	@Select("SELECT us.id AS id, st.name_status AS nameStatus,usr.name AS nameUser,usr.last_name AS lastNameUser, tu.name_type_user AS nameTypeUser" +
+			"	FROM Tusers_specialties us " +
+			"INNER JOIN Tusers_types_regs utr ON us.user_type_reg_id = utr.id " +
+			"INNER JOIN TusersRegs usr ON utr.user_reg_id = usr.id " +
+			"INNER JOIN Tstatus st ON us.status_id = st.id " +
+			"INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id " +
+			"WHERE us.speciality_id=#{idSpeciality}")
+	List<TuserSpeciality> getByIdSpeciality(@Param("idSpeciality") Integer idSpeciality);
+
+
+	@Results(
+			value = {
+					@Result(column = "id",property = "id"),
+					@Result(column = "nameSpeciality",property = "specialityId.name"),
+					@Result(column = "nameStatus",property = "statusId.name")
+			}
+	)
+	@Select("SELECT us.id AS id, s.name AS nameSpeciality, st.name_status AS nameStatus" +
+			"	FROM Tusers_specialties us " +
+			"INNER JOIN Tspecialties s ON us.speciality_id = s.id " +
+			"INNER JOIN Tstatus st ON us.status_id = st.id " +
+			"WHERE us.user_type_reg_id=#{idUserTypeReg}")
+	TuserSpeciality getByIdUserTypeReg(@Param("idUserTypeReg") Integer idUserTypeReg);
 	
-	@ResultMap(value = "userSpecRes")
-	@Select("SELECT * FROM Tusers_specialties WHERE speciality_id=#{id}")
-	List<TuserSpeciality> getByIdSpeciality(@Param("id") Integer idSpeciality);
-	
-	@ResultMap(value = "userSpecRes")
-	@Select("SELECT * FROM Tusers_specialties WHERE user_type_reg_id=#{id}")
-	TuserSpeciality getByIdUserTypeReg(@Param("id") Integer idUserTypeReg);
-	
-	@ResultMap(value = "userSpecRes")
-	@Select("SELECT * FROM Tusers_specialties WHERE status_id=#{id}")
-	List<TuserSpeciality> getByIdStatus(@Param("id") Integer idStatus);
+
+	@Results(
+			id = "statusResult",
+			value = {
+					@Result(column = "id",property = "id"),
+					@Result(column = "nameSpeciality",property = "specialityId.name"),
+					@Result(column = "nameUser",property = "userTypeRegId.userRegId.name"),
+					@Result(column = "lastNameUser",property = "userTypeRegId.userRegId.lastName"),
+					@Result(column = "nameTypeUser",property = "userTypeRegId.typeUser.nameTypeUser")
+			}
+	)
+	@Select("SELECT us.id AS id, s.name AS nameSpeciality, usr.name AS nameUser,usr.last_name AS lastNameUser, tu.name_type_user AS nameTypeUser" +
+			"	FROM Tusers_specialties us " +
+			"INNER JOIN Tspecialties s ON us.speciality_id = s.id " +
+			"INNER JOIN Tusers_types_regs utr ON us.user_type_reg_id = utr.id " +
+			"INNER JOIN TusersRegs usr ON utr.user_reg_id = usr.id " +
+			"INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id " +
+			"WHERE us.status_id=#{idStatus}")
+	List<TuserSpeciality> getByIdStatus(@Param("idStatus") Integer idStatus);
+
+	@ResultMap(value = "statusResult")
+	@Select("SELECT us.id AS id, s.name AS nameSpeciality, usr.name AS nameUser,usr.last_name AS lastNameUser, tu.name_type_user AS nameTypeUser" +
+			"	FROM Tusers_specialties us " +
+			"INNER JOIN Tspecialties s ON us.speciality_id = s.id " +
+			"INNER JOIN Tusers_types_regs utr ON us.user_type_reg_id = utr.id " +
+			"INNER JOIN TusersRegs usr ON utr.user_reg_id = usr.id " +
+			"INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id " +
+			"WHERE us.status_id=1")
+	List<TuserSpeciality> getByIdStatusActivated();
+
+	@Results(
+			value = {
+					@Result(column = "id",property = "id"),
+					@Result(column = "nameSpeciality",property = "specialityId.name"),
+					@Result(column = "nameStatus",property = "statusId.name"),
+					@Result(column = "nameUser",property = "userTypeRegId.userRegId.name"),
+					@Result(column = "lastNameUser",property = "userTypeRegId.userRegId.lastName")
+			}
+	)
+	@Select("SELECT us.id AS id, s.name AS nameSpeciality, st.name_status AS nameStatus,usr.name AS nameUser,usr.last_name AS lastNameUser " +
+			"	FROM Tusers_specialties us " +
+			"INNER JOIN Tspecialties s ON us.speciality_id = s.id " +
+			"INNER JOIN Tusers_types_regs utr ON us.user_type_reg_id = utr.id " +
+			"INNER JOIN TusersRegs usr ON utr.user_reg_id = usr.id " +
+			"INNER JOIN Tstatus st ON us.status_id = st.id " +
+			"INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id " +
+			"WHERE tu.id=#{idTypeUser}")
+	List<TuserSpeciality> getByTypeUserId(@Param("idTypeUser") Integer idTypeUser);
 	
 	@Update("UPDATE Tusers_specialties "
 			+ "SET speciality_id=#{userSpec.specialityId.id}, user_type_reg_id=#{userSpec.userTypeRegId.id}, status_id=#{userSpec.statusId.id} "
