@@ -56,3 +56,12 @@ SELECT utr.id AS ID, concat(ur.name, ' ', ur.last_name) AS Nombre, ur.iden_card 
     INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
     INNER JOIN TusersRegs ur ON utr.user_reg_id = ur.id
     INNER JOIN Tstatus st ON utr.status_id = st.id;
+
+#OTBENER ESPECIALIDADES DE USUARIOS POR TIPOS DE ESPECIALIDADRES
+SELECT us.id AS id, st.name_status AS nameStatus,usr.name AS nameUser,usr.last_name AS lastNameUser, tu.name_type_user AS nameTypeUser
+				FROM Tusers_specialties us
+			INNER JOIN Tusers_types_regs utr ON us.user_type_reg_id = utr.id
+			INNER JOIN TusersRegs usr ON utr.user_reg_id = usr.id
+			INNER JOIN Tstatus st ON us.status_id = st.id
+			INNER JOIN Ttypes_users tu ON utr.type_user_id = tu.id
+			WHERE us.speciality_id=1
