@@ -1,11 +1,13 @@
 package com.example.dto.speciality.userspeciality;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+@Builder
 @Schema(name = "UserSpecialityBySpecialityGet",
         description = "Estructura para datos de especialidad asociado a un usuario filtrado por tipo de especialidad"
 )

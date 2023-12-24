@@ -1,10 +1,12 @@
 package com.example.dto.speciality.userspeciality;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+@Builder
 @Schema(
         name = "UserSpecialityUpdate",
         description = "Estructura para guardado de usuario asociado a especialidad"
