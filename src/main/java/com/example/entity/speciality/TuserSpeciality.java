@@ -5,21 +5,26 @@ import javax.validation.constraints.Positive;
 
 import com.example.entity.status.Tstatus;
 import com.example.entity.user.TuserTypeReg;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *@apiNote Esta clase se encargar de guardar toda la informacion de los registros de la tabla {TuserSpeciality}
  * */
+@Getter
+@Setter
 public class TuserSpeciality {
 
+
 	@Positive
-	private Integer id;
-	
+	private Long id;
+
 	@NotNull
 	private Tspeciality specialityId;
-	
+
 	@NotNull
 	private TuserTypeReg userTypeRegId;
-	
+
 	@NotNull
 	private Tstatus statusId;
 
@@ -29,13 +34,13 @@ public class TuserSpeciality {
 	}
 
 
-	public TuserSpeciality(@Positive Integer id) {
+	public TuserSpeciality(@Positive Long id) {
 		super();
 		this.id = id;
 	}
 
 
-	public TuserSpeciality(@Positive Integer id, @NotNull Tspeciality specialityId, @NotNull TuserTypeReg userTypeRegId,
+	public TuserSpeciality(@Positive Long id, @NotNull Tspeciality specialityId, @NotNull TuserTypeReg userTypeRegId,
 			@NotNull Tstatus statusId) {
 		super();
 		this.id = id;
@@ -45,56 +50,10 @@ public class TuserSpeciality {
 	}
 
 
-	/**
-	 * @apiNote Devolvera el ID de la especialidad de usuario
-	 */
-	public Integer getId() {
-		return id;
-	}
-
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-
-	public Tspeciality getSpecialityId() {
-		return specialityId;
-	}
-
-
-	public void setSpecialityId(Tspeciality specialityId) {
-		this.specialityId = specialityId;
-	}
-
-
-	public TuserTypeReg getUserTypeRegId() {
-		return userTypeRegId;
-	}
-
-
-	public void setUserTypeRegId(TuserTypeReg userTypeRegId) {
-		this.userTypeRegId = userTypeRegId;
-	}
-
-
-	public Tstatus getStatusId() {
-		return statusId;
-	}
-
-
-	public void setStatusId(Tstatus statusId) {
-		this.statusId = statusId;
-	}
-
-
 	@Override
 	public String toString() {
 		return "TuserSpeciality [id=" + id + ", specialityId=" + specialityId.getId() + ", userTypeRegId=" + userTypeRegId.getId()
 				+ ", statusId=" + statusId.getId() + "]";
 	}
-	
-	
-	
-	
+
 }
