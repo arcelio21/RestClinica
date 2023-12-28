@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 
 
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableConfigurationProperties
 @MapperScan("com.example.mapper.*")
 @EnableAspectJAutoProxy
+@CrossOrigin(origins = "http://localhost:4200")
 public class RestClinicaApplication {
 
 	public static void main(String[] args) {
