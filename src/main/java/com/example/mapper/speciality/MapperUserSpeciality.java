@@ -78,7 +78,7 @@ public interface MapperUserSpeciality {
 			"INNER JOIN Tspecialties s ON us.speciality_id = s.id " +
 			"INNER JOIN Tstatus st ON us.status_id = st.id " +
 			"WHERE us.user_type_reg_id=#{idUserTypeReg}")
-	TuserSpeciality getByIdUserTypeReg(@Param("idUserTypeReg") Integer idUserTypeReg);
+	List<TuserSpeciality> getByIdUserTypeReg(@Param("idUserTypeReg") Integer idUserTypeReg);
 	
 
 	@Results(
