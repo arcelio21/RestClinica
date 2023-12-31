@@ -2,11 +2,13 @@ package com.example.service.speciality;
 
 import com.example.dto.speciality.userspeciality.*;
 import com.example.dtomapper.speciality.DtoUserSpecialityMapper;
+import com.example.exception.NoDataFoundException;
 import com.example.mapper.speciality.MapperUserSpeciality;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -18,7 +20,18 @@ public class ServiceUserSpeciality implements IServiceUserSpeciality<UserSpecial
 
 	@Override
 	public List<UserSpecialityGetDto> getAll() {
-		return null;
+
+		List<UserSpecialityGetDto> listUserSpeciality = Optional.ofNullable(this.mapperUserSpeciality.getAll())
+				.orElseThrow(()-> new NoDataFoundException("Data Not Found"))
+				.stream()
+				.map(this.dtoUserSpecialityMapper::userSpecialityToUserSpecialityGetDto)
+				.toList();
+
+		if(listUserSpeciality.isEmpty()){
+			throw  new NoDataFoundException("Data Not exist");
+		}
+
+		return listUserSpeciality;
 	}
 
 	@Override
