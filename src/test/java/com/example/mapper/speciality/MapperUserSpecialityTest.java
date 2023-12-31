@@ -30,7 +30,7 @@ class MapperUserSpecialityTest {
 		List<TuserSpeciality> users=this.mapperUserSpeciality.getAll();
 		
 		assertNotNull(users);
-		assertTrue(users.size()>0);
+        assertFalse(users.isEmpty());
 		assertNotNull(users.get(0).getSpecialityId());
 		assertNotNull(users.get(0).getStatusId());
 		assertNotNull(users.get(0).getUserTypeRegId());
@@ -55,7 +55,7 @@ class MapperUserSpecialityTest {
 		List<TuserSpeciality> users=this.mapperUserSpeciality.getByIdSpeciality(1);
 		
 		assertNotNull(users);
-		assertTrue(users.size()>0);
+        assertFalse(users.isEmpty());
 		assertNotNull(users.get(0).getSpecialityId());
 		assertNotNull(users.get(0).getStatusId());
 		assertNotNull(users.get(0).getUserTypeRegId());
@@ -66,12 +66,12 @@ class MapperUserSpecialityTest {
 	
 	@Test
 	void getByIdUserTypeReg() {
-		TuserSpeciality users=this.mapperUserSpeciality.getByIdUserTypeReg(1);
+		List<TuserSpeciality> users=this.mapperUserSpeciality.getByIdUserTypeReg(1);
 		
 		assertNotNull(users);
-		assertNotNull(users.getSpecialityId());
-		assertNotNull(users.getStatusId());
-		assertNotNull(users.getUserTypeRegId());
+		assertNotNull(users.get(0).getSpecialityId());
+		assertNotNull(users.get(0).getStatusId());
+		assertNotNull(users.get(0).getUserTypeRegId());
 		
 		System.out.println(users);
 	}
@@ -81,7 +81,7 @@ class MapperUserSpecialityTest {
 		List<TuserSpeciality> users=this.mapperUserSpeciality.getByIdStatus(1);
 		
 		assertNotNull(users);
-		assertTrue(users.size()>0);
+        assertFalse(users.isEmpty());
 		assertNotNull(users.get(0).getSpecialityId());
 		assertNotNull(users.get(0).getStatusId());
 		assertNotNull(users.get(0).getUserTypeRegId());
@@ -91,11 +91,11 @@ class MapperUserSpecialityTest {
 	
 	@Test
 	void update() {
-		TuserSpeciality users=this.mapperUserSpeciality.getByIdUserTypeReg(1);
+		List<TuserSpeciality> users=this.mapperUserSpeciality.getByIdUserTypeReg(1);
 		assertNotNull(users);
 		
-		users.setSpecialityId(new Tspeciality(1));
-		Integer rowAffected=this.mapperUserSpeciality.update(users);
+		users.get(0).setSpecialityId(new Tspeciality(1));
+		Integer rowAffected=this.mapperUserSpeciality.update(users.get(0));
 		assertEquals(1, rowAffected);
 		
 	}
