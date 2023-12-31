@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class ServiceUserSpiciality implements IServiceUserSpeciality<UserSpecialityGetDto,Integer, UserSpecialityUpdateDto, UserSpecialitySaveDto>{
+public class ServiceUserSpeciality implements IServiceUserSpeciality<UserSpecialityGetDto,Integer, UserSpecialityUpdateDto, UserSpecialitySaveDto>{
 
 	private final MapperUserSpeciality mapperUserSpeciality;
 	private final DtoUserSpecialityMapper dtoUserSpecialityMapper;
