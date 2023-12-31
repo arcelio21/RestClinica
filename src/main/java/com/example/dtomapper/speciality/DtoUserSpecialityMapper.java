@@ -46,9 +46,6 @@ public interface DtoUserSpecialityMapper {
                     @Mapping(target = "nameSpeciality", source = "data.specialityId.name"),
                     @Mapping(target = "nameTypeUser", source = "data.userTypeRegId.typeUser.nameTypeUser"),
                     @Mapping(target = "nameStatus", source = "data.statusId.name"),
-                    @Mapping(target = "specialityId", ignore = true),
-                    @Mapping(target = "statusId", ignore = true),
-                    @Mapping(target = "userTypeRegId", ignore = true)
             }
     )
     UserSpecialityGetDto userSpecialityToUserSpecialityGetDto(TuserSpeciality data);
@@ -59,10 +56,7 @@ public interface DtoUserSpecialityMapper {
                     @Mapping(target = "lastNameUser", source = "data.userTypeRegId.userRegId.name"),
                     @Mapping(target = "nameUser", source = "data.userTypeRegId.userRegId.lastName"),
                     @Mapping(target = "nameStatus", source = "data.statusId.name"),
-                    @Mapping(target = "nameTypeUser", source = "data.userTypeRegId.typeUser.nameTypeUser"),
-                    @Mapping(target = "specialityId", ignore = true),
-                    @Mapping(target = "statusId", ignore = true),
-                    @Mapping(target = "userTypeRegId", ignore = true)
+                    @Mapping(target = "nameTypeUser", source = "data.userTypeRegId.typeUser.nameTypeUser")
             }
     )
     UserSpecialityBySpecialityGetDto userSpecialityToUserSpecialityBySpecialityGetDto(TuserSpeciality data);
@@ -72,10 +66,7 @@ public interface DtoUserSpecialityMapper {
             @Mapping(target = "nameUser", source = "data.userTypeRegId.userRegId.name"),
             @Mapping(target = "lastNameUser", source = "data.userTypeRegId.userRegId.lastName"),
             @Mapping(target = "nameTypeUser", source = "data.userTypeRegId.typeUser.nameTypeUser"),
-            @Mapping(target = "nameSpeciality", source = "data.specialityId.name"),
-            @Mapping(target = "specialityId", ignore = true),
-            @Mapping(target = "statusId", ignore = true),
-            @Mapping(target = "userTypeRegId", ignore = true)
+            @Mapping(target = "nameSpeciality", source = "data.specialityId.name")
     })
     UserSpecialityByStatusGetDto userSpecialityToUserSpecialityByStatusGetDto(TuserSpeciality data);
 
@@ -84,20 +75,14 @@ public interface DtoUserSpecialityMapper {
             @Mapping(target = "nameSpeciality", source = "data.specialityId.name"),
             @Mapping(target = "nameUser", source = "data.userTypeRegId.userRegId.name"),
             @Mapping(target = "lastNameUser", source = "data.userTypeRegId.userRegId.lastName"),
-            @Mapping(target = "nameStatus", source = "data.statusId.name"),
-            @Mapping(target = "specialityId", ignore = true),
-            @Mapping(target = "statusId", ignore = true),
-            @Mapping(target = "userTypeRegId", ignore = true)
+            @Mapping(target = "nameStatus", source = "data.statusId.name")
     })
     UserSpecialityByTypeUserGetDto userSpecialityToUserSpecialityByTypeUserGetDto(TuserSpeciality data);
 
     @Mappings(value = {
             @Mapping(target = "id", source = "data.id"),
             @Mapping(target = "nameStatus", source = "data.statusId.name"),
-            @Mapping(target = "nameSpeciality", source = "data.specialityId.name"),
-            @Mapping(target = "specialityId", ignore = true),
-            @Mapping(target = "statusId", ignore = true),
-            @Mapping(target = "userTypeRegId", ignore = true)
+            @Mapping(target = "nameSpeciality", source = "data.specialityId.name")
     })
     UserSpecialityByUserTypeRegGetDto userSpecialityToUserSpecialityByUserTypeRegGetDto(TuserSpeciality data);
 }
