@@ -158,4 +158,50 @@ class ServiceUserSpecialityTest {
 
     }
 
+
+    @Test
+    void givenOneUserSpeciality_when_getById_then_exist(){
+
+        Integer idUserSpeciality = 1;
+
+        given(this.mapperUserSpeciality.getById(idUserSpeciality)).willReturn(this.tuserSpeciality);
+        given(this.dtoUserSpecialityMapper.userSpecialityToUserSpecialityGetDto(this.tuserSpeciality)).willReturn(this.userSpecialityGetDto);
+        
+        UserSpecialityGetDto userSpecialityGet = this.serviceUserSpiciality.getById(idUserSpeciality);
+
+        assertNotNull(userSpecialityGet);
+        assertNotNull(userSpecialityGet.id());
+        assertNotNull(userSpecialityGet.lastNameUser());
+        assertNotNull(userSpecialityGet.nameSpeciality());
+        assertNotNull(userSpecialityGet.nameStatus());
+        assertNotNull(userSpecialityGet.nameTypeUser());
+        assertNotNull(userSpecialityGet.nameUser());
+
+        then(this.mapperUserSpeciality).should(times(1)).getById(idUserSpeciality);
+        then(this.dtoUserSpecialityMapper).should(times(1)).userSpecialityToUserSpecialityGetDto(this.tuserSpeciality);
+    }
+
+    @Test
+    void givenThrowError_when_getById_then_IDNotValid(){
+        
+        Integer idUserSpeciality = 0;
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getById(idUserSpeciality));
+
+        then(this.mapperUserSpeciality).shouldHaveNoInteractions();
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void givenThrowError_when_getById_then_dataNotExist(){
+        
+        Integer idUserSpeciality = 2;
+
+        given(this.mapperUserSpeciality.getById(idUserSpeciality)).willReturn(null);
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getById(idUserSpeciality));
+
+        then(this.mapperUserSpeciality).should(times(1)).getById(idUserSpeciality);
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
 }
