@@ -35,8 +35,16 @@ public class ServiceUserSpeciality implements IServiceUserSpeciality<UserSpecial
 	}
 
 	@Override
-	public UserSpecialityGetDto getById(Integer integer) {
-		return null;
+	public UserSpecialityGetDto getById(Integer idUserSpeciality) {
+
+		if(idUserSpeciality==null || idUserSpeciality<=0){
+			throw new NoDataFoundException("ID NOT VALID");
+		}
+
+		return Optional.of(idUserSpeciality)
+		.map(this.mapperUserSpeciality::getById)
+		.map(this.dtoUserSpecialityMapper::userSpecialityToUserSpecialityGetDto)
+		.orElseThrow(()-> new NoDataFoundException("Data Not Found"));
 	}
 
 	@Override
