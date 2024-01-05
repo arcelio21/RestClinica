@@ -10,6 +10,7 @@ import com.example.entity.user.TtypeUser;
 import com.example.entity.user.TuserReg;
 import com.example.entity.user.TuserTypeReg;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.speciality.user_speciality.UserSpecialityNotUpdateException;
 import com.example.mapper.speciality.MapperUserSpeciality;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -263,6 +264,134 @@ class ServiceUserSpecialityTest {
         assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getById(idUserSpeciality));
 
         then(this.mapperUserSpeciality).should(times(1)).getById(idUserSpeciality);
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `update` del servicio UserSpeciality cuando se actualiza con éxito.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` y la actualización tiene éxito,
+     *       se devuelve un valor entero que indica la cantidad de filas afectadas, y no se lanza ninguna excepción.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`,
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialityUpdateDto`.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `update` del servicio y la actualización tiene éxito.
+     *       Se espera que se devuelva un valor entero que indica la cantidad de filas afectadas, y que no se lance ninguna excepción.</li>
+     *   <li>Se verifica que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialityUpdateDto`.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba update exitoso")
+    void givenRowAffected_when_update_then_success(){
+
+        given(this.mapperUserSpeciality.update(this.tuserSpeciality)).willReturn(1);
+        given(this.dtoUserSpecialityMapper.UserSpecialityUpdateDtoTouserSpeciality(this.userSpecialityUpdateDto)).willReturn(this.tuserSpeciality);
+
+        Integer rowAffected = this.serviceUserSpiciality.update(this.userSpecialityUpdateDto);
+
+        assertNotNull(rowAffected);
+        assertEquals(1,rowAffected);
+
+        then(this.mapperUserSpeciality).should(times(1)).update(this.tuserSpeciality);
+        then(this.dtoUserSpecialityMapper).should(times(1)).UserSpecialityUpdateDtoTouserSpeciality(this.userSpecialityUpdateDto);
+    }
+
+    /**
+     * Prueba unitaria para el método `update` del servicio UserSpeciality cuando ocurre un error y retorna un valor nulo.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` y ocurre un error, y retorna un valor nulo,
+     *       se lance una excepción `UserSpecialityNotUpdateException`.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`,
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialityUpdateDto`.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `update` del servicio,
+     *       pero ocurre un error y retorna un valor nulo. Se espera que se lance una excepción.</li>
+     *   <li>Se verifica que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialityUpdateDto`.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba update con error y retorno nulo")
+    void givenThrowError_when_update_then_errorUpdate(){
+
+        given(this.mapperUserSpeciality.update(this.tuserSpeciality)).willReturn(null);
+        given(this.dtoUserSpecialityMapper.UserSpecialityUpdateDtoTouserSpeciality(this.userSpecialityUpdateDto)).willReturn(this.tuserSpeciality);
+
+        assertThrows(UserSpecialityNotUpdateException.class, ()-> this.serviceUserSpiciality.update(this.userSpecialityUpdateDto));
+
+        then(this.mapperUserSpeciality).should(times(1)).update(this.tuserSpeciality);
+        then(this.dtoUserSpecialityMapper).should(times(1)).UserSpecialityUpdateDtoTouserSpeciality(this.userSpecialityUpdateDto);
+    }
+
+    /**
+     * Prueba unitaria para el método `update` del servicio UserSpeciality cuando ocurre un error y retorna 0 filas afectadas.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` y ocurre un error, y retorna 0 filas afectadas,
+     *       se lance una excepción `UserSpecialityNotUpdateException`.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`,
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialityUpdateDto`.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `update` del servicio,
+     *       pero ocurre un error y retorna 0 filas afectadas. Se espera que se lance una excepción.</li>
+     *   <li>Se verifica que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialityUpdateDto`.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba update con error y retorno de 0 filas afectadas")
+    void givenThrowError_when_update_then_errorUpdateReturnRowAffectedZero(){
+
+        given(this.mapperUserSpeciality.update(this.tuserSpeciality)).willReturn(0);
+        given(this.dtoUserSpecialityMapper.UserSpecialityUpdateDtoTouserSpeciality(this.userSpecialityUpdateDto)).willReturn(this.tuserSpeciality);
+
+        assertThrows(UserSpecialityNotUpdateException.class, ()-> this.serviceUserSpiciality.update(this.userSpecialityUpdateDto));
+
+        then(this.mapperUserSpeciality).should(times(1)).update(this.tuserSpeciality);
+        then(this.dtoUserSpecialityMapper).should(times(1)).UserSpecialityUpdateDtoTouserSpeciality(this.userSpecialityUpdateDto);
+    }
+
+    /**
+     * Prueba unitaria para el método `update` del servicio UserSpeciality cuando los datos no son válidos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `update` con datos no válidos,
+     *       se lance una excepción `UserSpecialityNotUpdateException`.</li>
+     *   <li>Confirma que ni el método `mapperUserSpeciality` ni el método `dtoUserSpecialityMapper`
+     *       tengan interacciones.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `update` del servicio con datos que no son válidos.</li>
+     *   <li>Se espera que se lance una excepción y que ni el método `mapperUserSpeciality`
+     *       ni el método `dtoUserSpecialityMapper` tengan interacciones.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba update con datos no válidos")
+    void givenThrowError_when_update_then_dataNotValid(){
+        UserSpecialityUpdateDto userSpecialityUpdateNotValid = new UserSpecialityUpdateDto(1L, -1, 1L, 0);
+        
+        assertThrows(UserSpecialityNotUpdateException.class,()-> this.serviceUserSpiciality.update(userSpecialityUpdateNotValid));
+
+        then(this.mapperUserSpeciality).shouldHaveNoInteractions();
         then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
     }
 }
