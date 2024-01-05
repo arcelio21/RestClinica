@@ -3,6 +3,7 @@ package com.example.service.speciality;
 import com.example.dto.speciality.userspeciality.*;
 import com.example.dtomapper.speciality.DtoUserSpecialityMapper;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.speciality.user_speciality.UserSpecialityNotUpdateException;
 import com.example.mapper.speciality.MapperUserSpeciality;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,9 +61,35 @@ public class ServiceUserSpeciality implements IServiceUserSpeciality<UserSpecial
 		.orElseThrow(()-> new NoDataFoundException("Data Not Found"));
 	}
 
+	/**
+	 * Actualiza la información de una asociación entre usuario y especialidad en la base de datos.
+	 *
+	 * @param userSpecialityUpdate La información actualizada de la asociación entre usuario y especialidad.
+	 * @return El número de filas afectadas al actualizar la asociación en la base de datos.
+	 * @throws UserSpecialityNotUpdateException si no se puede actualizar la asociación o si los datos de actualización no son válidos.
+	 */
 	@Override
-	public Integer update(UserSpecialityUpdateDto t) {
-		return null;
+	public Integer update(UserSpecialityUpdateDto userSpecialityUpdate) {
+		
+		if(userSpecialityUpdate == null 
+		|| userSpecialityUpdate.id() == null || userSpecialityUpdate.id()<=0
+		|| userSpecialityUpdate.idSpeciality() == null || userSpecialityUpdate.idSpeciality()<=0
+		|| userSpecialityUpdate.idStatus() == null || userSpecialityUpdate.idStatus() <= 0
+		|| userSpecialityUpdate.idUserTypeReg() == null || userSpecialityUpdate.idUserTypeReg() <= 0
+		){
+			throw new UserSpecialityNotUpdateException("Data not valid",userSpecialityUpdate);
+		}
+
+		Integer rowAffected = Optional.of(userSpecialityUpdate)
+		.map(this.dtoUserSpecialityMapper::UserSpecialityUpdateDtoTouserSpeciality)
+		.map(this.mapperUserSpeciality::update)
+		.orElseThrow(()-> new UserSpecialityNotUpdateException(userSpecialityUpdate));
+
+		if(rowAffected==null || rowAffected==0){
+			throw new UserSpecialityNotUpdateException(userSpecialityUpdate);
+		}
+
+		return rowAffected;
 	}
 
 	@Override
