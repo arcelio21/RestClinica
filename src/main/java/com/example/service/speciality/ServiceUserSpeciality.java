@@ -18,6 +18,12 @@ public class ServiceUserSpeciality implements IServiceUserSpeciality<UserSpecial
 	private final DtoUserSpecialityMapper dtoUserSpecialityMapper;
 
 
+	/**
+	 * Obtiene una lista de todas las asociaciones entre usuarios y especialidades.
+	 *
+	 * @return Una lista de objetos UserSpecialityGetDto que representan las asociaciones entre usuarios y especialidades.
+	 * @throws NoDataFoundException si no se encuentran datos de asociaciones o si la lista resultante está vacía.
+	 */
 	@Override
 	public List<UserSpecialityGetDto> getAll() {
 
@@ -34,6 +40,13 @@ public class ServiceUserSpeciality implements IServiceUserSpeciality<UserSpecial
 		return listUserSpeciality;
 	}
 
+	/**
+	 * Obtiene una asociación entre usuario y especialidad por su ID.
+	 *
+	 * @param idUserSpeciality El ID de la asociación entre usuario y especialidad a recuperar.
+	 * @return Un objeto UserSpecialityGetDto que representa la asociación correspondiente al ID proporcionado.
+	 * @throws NoDataFoundException si no se encuentra la asociación o si el ID no es válido (nulo o menor o igual a cero).
+	 */
 	@Override
 	public UserSpecialityGetDto getById(Integer idUserSpeciality) {
 

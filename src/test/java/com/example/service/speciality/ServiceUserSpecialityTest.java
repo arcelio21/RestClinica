@@ -1,6 +1,7 @@
 package com.example.service.speciality;
 
 import com.example.dto.speciality.userspeciality.UserSpecialityGetDto;
+import com.example.dto.speciality.userspeciality.UserSpecialityUpdateDto;
 import com.example.dtomapper.speciality.DtoUserSpecialityMapper;
 import com.example.entity.speciality.Tspeciality;
 import com.example.entity.speciality.TuserSpeciality;
@@ -38,6 +39,7 @@ class ServiceUserSpecialityTest {
 
     private TuserSpeciality tuserSpeciality;
     private UserSpecialityGetDto userSpecialityGetDto;
+    private UserSpecialityUpdateDto userSpecialityUpdateDto;
 
     @BeforeEach
     void setUp() {
@@ -57,6 +59,8 @@ class ServiceUserSpecialityTest {
         tuserSpeciality = new TuserSpeciality(1L,tspeciality,tuserTypeReg,tstatus);
 
         userSpecialityGetDto = new UserSpecialityGetDto(1L,"Odontologo","Activated","Admin","Montezuma","Arcelio");
+        
+        this.userSpecialityUpdateDto = new UserSpecialityUpdateDto(1L, 1, 1L, 1);
     }
 
     /**
@@ -159,7 +163,26 @@ class ServiceUserSpecialityTest {
     }
 
 
+    /**
+     * Prueba unitaria para el método `getById` del servicio UserSpeciality cuando el dato existe.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getById` con un ID válido y el dato existe,
+     *       se obtiene el resultado esperado.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con el ID proporcionado,
+     *       y que el método `dtoUserSpecialityMapper` también se llama exactamente una vez para mapear el resultado.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `getById` del servicio con un ID válido,
+     *       y el dato correspondiente existe en la base de datos.</li>
+     *   <li>Se verifica que los mapeadores y el servicio se llamen según lo esperado y que se obtenga el resultado deseado.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba getById con dato existente")
     void givenOneUserSpeciality_when_getById_then_exist(){
 
         Integer idUserSpeciality = 1;
@@ -181,7 +204,25 @@ class ServiceUserSpecialityTest {
         then(this.dtoUserSpecialityMapper).should(times(1)).userSpecialityToUserSpecialityGetDto(this.tuserSpeciality);
     }
 
+    
+    /**
+     * Prueba unitaria para el método `getById` del servicio UserSpeciality cuando el ID no es válido.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getById` con un ID no válido,
+     *       se lance una excepción `NoDataFoundException`.</li>
+     *   <li>Confirma que ni el método `mapperUserSpeciality` ni el método `dtoUserSpecialityMapper` tienen interacciones.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `getById` del servicio con un ID que no es válido.</li>
+     *   <li>Se espera que se lance una excepción y que no haya interacciones con los mapeadores o el servicio.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba getById con ID no válido")
     void givenThrowError_when_getById_then_IDNotValid(){
         
         Integer idUserSpeciality = 0;
@@ -192,7 +233,27 @@ class ServiceUserSpecialityTest {
         then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
     }
 
+    /**
+     * Prueba unitaria para el método `getById` del servicio UserSpeciality cuando los datos no existen.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getById` con un ID válido pero no existente,
+     *          se lance una excepción `NoDataFoundException`.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con el ID válido,
+     *       y que el método `dtoUserSpecialityMapper` no tiene interacciones.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `getById` del servicio con un ID que existe,
+     *       pero los datos no están presentes.</li>
+     *   <li>Se espera que se lance una excepción y que haya una única interacción con el método `mapperUserSpeciality`.</li>
+     *   <li>El método `dtoUserSpecialityMapper` no debe tener interacciones ya que no hay datos para mapear.</li>
+     * </ul>
+     */
     @Test
+    @DisplayName("Prueba getById con datos que no existen")
     void givenThrowError_when_getById_then_dataNotExist(){
         
         Integer idUserSpeciality = 2;
