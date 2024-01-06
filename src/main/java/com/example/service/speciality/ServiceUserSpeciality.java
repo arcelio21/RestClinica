@@ -3,6 +3,7 @@ package com.example.service.speciality;
 import com.example.dto.speciality.userspeciality.*;
 import com.example.dtomapper.speciality.DtoUserSpecialityMapper;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.speciality.user_speciality.UserSpecialityNotSaveException;
 import com.example.exception.speciality.user_speciality.UserSpecialityNotUpdateException;
 import com.example.mapper.speciality.MapperUserSpeciality;
 import lombok.RequiredArgsConstructor;
@@ -101,9 +102,33 @@ public class ServiceUserSpeciality implements
 		return rowAffected;
 	}
 
+	/**
+	 * Guarda una nueva asociación entre usuario y especialidad en la base de datos.
+	 *
+	 * @param userSpecialitySaveDto La información de la nueva asociación entre usuario y especialidad.
+	 * @return El número de filas afectadas al guardar la nueva asociación en la base de datos.
+	 * @throws UserSpecialityNotSaveException si no se puede guardar la asociación o si los datos no son válidos.
+	 */
 	@Override
-	public Integer save(UserSpecialitySaveDto t) {
-		return null;
+	public Integer save(UserSpecialitySaveDto userSpecialitySaveDto) {
+
+		if (userSpecialitySaveDto == null
+				|| userSpecialitySaveDto.idSpeciality() == null || userSpecialitySaveDto.idSpeciality() <= 0
+				|| userSpecialitySaveDto.idStatus() == null || userSpecialitySaveDto.idStatus() <= 0
+				|| userSpecialitySaveDto.idUserTypeReg() == null || userSpecialitySaveDto.idUserTypeReg() <= 0) {
+			throw new UserSpecialityNotSaveException(userSpecialitySaveDto);
+		}
+
+		Integer rowAffected = Optional.of(userSpecialitySaveDto)
+				.map(this.dtoUserSpecialityMapper::UserSpecialitySaveDtoToUserSpeciality)
+				.map(this.mapperUserSpeciality::save)
+				.orElseThrow(() -> new UserSpecialityNotSaveException(userSpecialitySaveDto));
+
+		if (rowAffected == null || rowAffected <= 0) {
+			throw new UserSpecialityNotSaveException(userSpecialitySaveDto);
+		}
+
+		return rowAffected;
 	}
 
 	@Override
