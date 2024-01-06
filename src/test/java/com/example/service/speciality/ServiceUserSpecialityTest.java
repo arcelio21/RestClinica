@@ -1,6 +1,7 @@
 package com.example.service.speciality;
 
 import com.example.dto.speciality.userspeciality.UserSpecialityGetDto;
+import com.example.dto.speciality.userspeciality.UserSpecialitySaveDto;
 import com.example.dto.speciality.userspeciality.UserSpecialityUpdateDto;
 import com.example.dtomapper.speciality.DtoUserSpecialityMapper;
 import com.example.entity.speciality.Tspeciality;
@@ -10,6 +11,7 @@ import com.example.entity.user.TtypeUser;
 import com.example.entity.user.TuserReg;
 import com.example.entity.user.TuserTypeReg;
 import com.example.exception.NoDataFoundException;
+import com.example.exception.speciality.user_speciality.UserSpecialityNotSaveException;
 import com.example.exception.speciality.user_speciality.UserSpecialityNotUpdateException;
 import com.example.mapper.speciality.MapperUserSpeciality;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +43,7 @@ class ServiceUserSpecialityTest {
     private TuserSpeciality tuserSpeciality;
     private UserSpecialityGetDto userSpecialityGetDto;
     private UserSpecialityUpdateDto userSpecialityUpdateDto;
+    private UserSpecialitySaveDto userSpecialitySaveDto;
 
     @BeforeEach
     void setUp() {
@@ -62,6 +65,7 @@ class ServiceUserSpecialityTest {
         userSpecialityGetDto = new UserSpecialityGetDto(1L,"Odontologo","Activated","Admin","Montezuma","Arcelio");
         
         this.userSpecialityUpdateDto = new UserSpecialityUpdateDto(1L, 1, 1L, 1);
+        this.userSpecialitySaveDto = new UserSpecialitySaveDto(1, 1L, 1);
     }
 
     /**
@@ -390,6 +394,131 @@ class ServiceUserSpecialityTest {
         UserSpecialityUpdateDto userSpecialityUpdateNotValid = new UserSpecialityUpdateDto(1L, -1, 1L, 0);
         
         assertThrows(UserSpecialityNotUpdateException.class,()-> this.serviceUserSpiciality.update(userSpecialityUpdateNotValid));
+
+        then(this.mapperUserSpeciality).shouldHaveNoInteractions();
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `save` del servicio UserSpeciality cuando se guarda con éxito.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` y el guardado tiene éxito,
+     *       se devuelve un valor entero que indica la cantidad de filas afectadas, y no se lanza ninguna excepción.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`,
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialitySaveDto`.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `save` del servicio y el guardado tiene éxito.
+     *       Se espera que se devuelva un valor entero que indica la cantidad de filas afectadas, y que no se lance ninguna excepción.</li>
+     *   <li>Se verifica que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialitySaveDto`.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba save exitoso")
+    void given_rowAffected_when_saveUserSpeciality_then_success(){
+        
+        given(this.mapperUserSpeciality.save(this.tuserSpeciality)).willReturn(1);
+        given(this.dtoUserSpecialityMapper.UserSpecialitySaveDtoToUserSpeciality(this.userSpecialitySaveDto)).willReturn(this.tuserSpeciality);
+
+        Integer rowAffected = this.serviceUserSpiciality.save(this.userSpecialitySaveDto);
+
+        assertNotNull(rowAffected);
+        assertEquals(1, rowAffected);
+
+        then(this.mapperUserSpeciality).should(times(1)).save(this.tuserSpeciality);
+        then(this.dtoUserSpecialityMapper).should(times(1)).UserSpecialitySaveDtoToUserSpeciality(this.userSpecialitySaveDto);
+    }
+
+    /**
+     * Prueba unitaria para el método `save` del servicio UserSpeciality cuando se produce un error al guardar.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` y el guardado produce un error,
+     *       se lanza la excepción `UserSpecialityNotSaveException` y no se devuelve ningún valor.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`,
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialitySaveDto`.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `save` del servicio y el guardado produce un error.
+     *       Se espera que se lance la excepción `UserSpecialityNotSaveException` y no se devuelva ningún valor.</li>
+     *   <li>Se verifica que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialitySaveDto`.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de error al guardar")
+    void given_throwError_when_saveUserSpeciality_then_returnNullMapper(){
+        given(this.mapperUserSpeciality.save(this.tuserSpeciality)).willReturn(null);
+        given(this.dtoUserSpecialityMapper.UserSpecialitySaveDtoToUserSpeciality(this.userSpecialitySaveDto)).willReturn(this.tuserSpeciality);
+
+        assertThrows(UserSpecialityNotSaveException.class, ()-> this.serviceUserSpiciality.save(this.userSpecialitySaveDto));
+
+        then(this.mapperUserSpeciality).should(times(1)).save(this.tuserSpeciality);
+        then(this.dtoUserSpecialityMapper).should(times(1)).UserSpecialitySaveDtoToUserSpeciality(this.userSpecialitySaveDto);
+    
+    }
+
+    /**
+     * Prueba unitaria para el método `save` del servicio UserSpeciality cuando se produce un error y devuelve 0 filas afectadas.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` y el guardado produce un error (devolviendo 0 filas afectadas),
+     *       se lanza la excepción `UserSpecialityNotSaveException` y no se devuelve ningún valor.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`,
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialitySaveDto`.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `save` del servicio y el guardado produce un error
+     *       devolviendo 0 filas afectadas. Se espera que se lance la excepción `UserSpecialityNotSaveException` y no se devuelva ningún valor.</li>
+     *   <li>Se verifica que el método `mapperUserSpeciality` se llama exactamente una vez con la entidad `tuserSpeciality`
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez con el DTO `userSpecialitySaveDto`.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de error al guardar con 0 filas afectadas")
+    void given_throwError_when_saveUserSpeciality_then_returnZeroMapper(){
+        given(this.mapperUserSpeciality.save(this.tuserSpeciality)).willReturn(0);
+        given(this.dtoUserSpecialityMapper.UserSpecialitySaveDtoToUserSpeciality(this.userSpecialitySaveDto)).willReturn(this.tuserSpeciality);
+
+        assertThrows(UserSpecialityNotSaveException.class, ()-> this.serviceUserSpiciality.save(this.userSpecialitySaveDto));
+
+        then(this.mapperUserSpeciality).should(times(1)).save(this.tuserSpeciality);
+        then(this.dtoUserSpecialityMapper).should(times(1)).UserSpecialitySaveDtoToUserSpeciality(this.userSpecialitySaveDto);
+    
+    }
+
+    /**
+     * Prueba unitaria para el método `save` del servicio UserSpeciality cuando se produce un error debido a datos no válidos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `save` y los datos proporcionados no son válidos,
+     *       se lanza la excepción `UserSpecialityNotSaveException` y no se produce ninguna interacción con los mappers ni el repositorio.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `save` del servicio con datos no válidos.
+     *       Se espera que se lance la excepción `UserSpecialityNotSaveException` y que no haya interacciones con los mappers ni el repositorio.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba de error al guardar con datos no válidos")
+    void given_throwError_when_saveUserSpeciality_then_dataNotValid(){
+        UserSpecialitySaveDto userSpecialitySaveNotValid = new UserSpecialitySaveDto(0, 1L, null);
+        
+        assertThrows(UserSpecialityNotSaveException.class,()-> this.serviceUserSpiciality.save(userSpecialitySaveNotValid));
 
         then(this.mapperUserSpeciality).shouldHaveNoInteractions();
         then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
