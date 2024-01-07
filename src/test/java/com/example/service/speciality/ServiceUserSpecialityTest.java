@@ -1,5 +1,6 @@
 package com.example.service.speciality;
 
+import com.example.dto.speciality.userspeciality.UserSpecialityBySpecialityGetDto;
 import com.example.dto.speciality.userspeciality.UserSpecialityGetDto;
 import com.example.dto.speciality.userspeciality.UserSpecialitySaveDto;
 import com.example.dto.speciality.userspeciality.UserSpecialityUpdateDto;
@@ -521,6 +522,139 @@ class ServiceUserSpecialityTest {
         assertThrows(UserSpecialityNotSaveException.class,()-> this.serviceUserSpiciality.save(userSpecialitySaveNotValid));
 
         then(this.mapperUserSpeciality).shouldHaveNoInteractions();
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdSpeciality` del servicio UserSpeciality al filtrar por especialidad con éxito.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getByIdSpeciality` con un ID de especialidad válido,
+     *       el método devuelve una lista no vacía de DTOs `UserSpecialityBySpecialityGetDto` y
+     *       que las interacciones con el repositorio y el mapper son las esperadas.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `getByIdSpeciality` del servicio con un ID de especialidad válido.
+     *       Se espera que el método devuelva una lista no vacía de DTOs y que haya interacciones específicas con el repositorio y el mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Prueba exitosa al filtrar por especialidad")
+    void given_listUserSpeciality_when_filterBySpeciality_then_success(){
+
+        Integer idSpeciality = 1;
+
+        UserSpecialityBySpecialityGetDto userSpecialityBySpecialityGet = new UserSpecialityBySpecialityGetDto(1L, "Activated", "Arcelio", "Montezuma", "ADMIN");
+
+
+        given(this.mapperUserSpeciality.getByIdSpeciality(idSpeciality)).willReturn(List.of(this.tuserSpeciality));
+        given(this.dtoUserSpecialityMapper.userSpecialityToUserSpecialityBySpecialityGetDto(this.tuserSpeciality)).willReturn(userSpecialityBySpecialityGet);
+
+        List<UserSpecialityBySpecialityGetDto>  userSpecialityBySpecialityGetList = this.serviceUserSpiciality.getByIdSpeciality(idSpeciality);
+
+        assertNotNull(userSpecialityBySpecialityGetList);
+        assertFalse(userSpecialityBySpecialityGetList.isEmpty());
+        assertNotNull(userSpecialityBySpecialityGetList.get(0));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdSpeciality(idSpeciality);
+        then(this.dtoUserSpecialityMapper).should(times(1)).userSpecialityToUserSpecialityBySpecialityGetDto(this.tuserSpeciality);
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdSpeciality` del servicio UserSpeciality al filtrar por especialidad con ID no válido.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getByIdSpeciality` con un ID de especialidad no válido,
+     *       el método arroja una excepción `NoDataFoundException` y que no hay interacciones con el repositorio y el mapper.</li>
+     * </ul>
+     *
+     * <p>Comportamiento Esperado:</p>
+     * <ul>
+     *   <li>La prueba simula un escenario donde se llama al método `getByIdSpeciality` del servicio con un ID de especialidad no válido.
+     *       Se espera que el método arroje una excepción y que no haya interacciones con el repositorio y el mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Error al filtrar por especialidad con ID no válido")
+    void given_ThrowError_when_filterBySpeciality_then_idSpecialityNotValid(){
+       
+        Integer idSpeciality = 0;
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getByIdSpeciality(idSpeciality));
+
+        then(this.mapperUserSpeciality).shouldHaveNoInteractions();
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdSpeciality` del servicio UserSpeciality al filtrar por especialidad con lista vacía.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getByIdSpeciality` con un ID de especialidad válido,
+     *       y el método devuelve una lista vacía, arroja una excepción `NoDataFoundException`.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de especialidad válido,
+     *       y que el método `dtoUserSpecialityMapper` no tiene interacciones.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `getByIdSpeciality` del servicio con un ID de especialidad válido,
+     *       pero la lista de datos está vacía, lo que provoca que el método arroje una excepción `NoDataFoundException`.</li>
+     *   <li>Se verifica que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de especialidad válido
+     *       y que el método `dtoUserSpecialityMapper` no tiene interacciones, lo que significa que no debe haber datos válidos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Error al filtrar por especialidad con lista vacía")
+    void given_ThrowError_when_filterBySpeciality_then_listEmpty(){
+       
+        Integer idSpeciality = 2;
+
+        given(this.mapperUserSpeciality.getByIdSpeciality(idSpeciality)).willReturn(Collections.emptyList());
+
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getByIdSpeciality(idSpeciality));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdSpeciality(idSpeciality);
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+    
+    /**
+     * Prueba unitaria para el método `getByIdSpeciality` del servicio UserSpeciality al filtrar por especialidad con lista nula.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getByIdSpeciality` con un ID de especialidad válido,
+     *       y el método devuelve una lista nula, arroja una excepción `NoDataFoundException`.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de especialidad válido,
+     *       y que el método `dtoUserSpecialityMapper` no tiene interacciones.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `getByIdSpeciality` del servicio con un ID de especialidad válido,
+     *       pero la lista de datos es nula, lo que provoca que el método arroje una excepción `NoDataFoundException`.</li>
+     *   <li>Se verifica que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de especialidad válido
+     *       y que el método `dtoUserSpecialityMapper` no tiene interacciones, lo que significa que no debe haber datos válidos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Error al filtrar por especialidad con lista nula")
+    void given_ThrowError_when_filterBySpeciality_then_listNull(){
+       
+        Integer idSpeciality = 2;
+
+        given(this.mapperUserSpeciality.getByIdSpeciality(idSpeciality)).willReturn(null);
+
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getByIdSpeciality(idSpeciality));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdSpeciality(idSpeciality);
         then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
     }
 }
