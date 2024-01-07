@@ -1,6 +1,8 @@
 package com.example.security;
 
+import com.example.dto.security.UrlIgnore;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,12 +27,40 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
 
-    private final List<String> urlsIgnore = List.of("/swagger-ui.html", "/api/v1/auth", "/swagger-ui", "/swagger-ui", "/v3/api-docs", "/webjars", "/api-docs","/api/v1/village");
-    
+    private final List<UrlIgnore> urlIgnores = List.of(
+            new UrlIgnore("/swagger-ui.html", new HttpMethod[]{HttpMethod.GET}),
+            new UrlIgnore("/swagger-ui", new HttpMethod[]{HttpMethod.GET}),
+            new UrlIgnore("/webjars", new HttpMethod[]{HttpMethod.GET}),
+            new UrlIgnore("/api-docs", new HttpMethod[]{HttpMethod.GET}),
+            new UrlIgnore("/api/v1/province", new HttpMethod[]{HttpMethod.GET}),
+            new UrlIgnore("/api/v1/district/byprovince", new HttpMethod[]{HttpMethod.GET}),
+            new UrlIgnore("/api/v1/village/bydistrict", new HttpMethod[]{HttpMethod.GET})
+    );
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
-        return urlsIgnore.stream().anyMatch(urlIgnore->request.getRequestURI().contains(urlIgnore));
+        if(request.getRequestURI().contains("swagger-ui")
+                || request.getRequestURI().contains("webjars")
+            || request.getRequestURI().contains("/api-docs")
+        ){
+            return  true;
+        }
+
+        return urlIgnores.stream().anyMatch(urlIgnore->{
+
+            if(urlIgnore.path().trim().equals(request.getRequestURI())){
+
+                for (HttpMethod httpMethod: urlIgnore.typeRequest()){
+                     if (httpMethod.matches(request.getMethod())){
+                         return true;
+                     }
+                }
+
+                return  false;
+            }
+
+            return false;
+        });
     }
 
 
