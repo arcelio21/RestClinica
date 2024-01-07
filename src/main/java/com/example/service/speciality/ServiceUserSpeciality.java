@@ -131,9 +131,32 @@ public class ServiceUserSpeciality implements
 		return rowAffected;
 	}
 
+	/**
+	 * Obtiene la lista de asociaciones entre usuarios y una especialidad específica según el ID de la especialidad.
+	 *
+	 * @param idSpeciality El ID de la especialidad para la cual se desea obtener las asociaciones.
+	 * @return La lista de asociaciones entre usuarios y la especialidad especificada.
+	 * @throws NoDataFoundException si no se encuentran datos válidos para la especialidad dada.
+	 */
 	@Override
 	public List<UserSpecialityBySpecialityGetDto> getByIdSpeciality(Integer idSpeciality) {
-		return null;
+		
+		if(idSpeciality==null || idSpeciality<=0){
+			throw new NoDataFoundException(idSpeciality);
+		}
+
+		List<UserSpecialityBySpecialityGetDto> userSpecialityBySpecialityList = Optional.of(idSpeciality)
+		.map(this.mapperUserSpeciality::getByIdSpeciality)
+		.orElseThrow(()-> new NoDataFoundException(idSpeciality))
+		.stream()
+		.map(this.dtoUserSpecialityMapper::userSpecialityToUserSpecialityBySpecialityGetDto)
+		.toList();
+
+		if(userSpecialityBySpecialityList == null || userSpecialityBySpecialityList.isEmpty()){
+			throw new NoDataFoundException("DATA FOUND IS NOT VALID");
+		}
+
+		return userSpecialityBySpecialityList;
 	}
 
 	@Override
