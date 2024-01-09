@@ -159,9 +159,33 @@ public class ServiceUserSpeciality implements
 		return userSpecialityBySpecialityList;
 	}
 
+	/**
+	 * Obtiene la lista de asociaciones entre usuarios y especialidades basadas en un tipo de usuario específico
+	 * según el ID del tipo de usuario.
+	 *
+	 * @param idUserTypeReg El ID del tipo de usuario para el cual se desea obtener las asociaciones.
+	 * @return La lista de asociaciones entre usuarios y especialidades basadas en el tipo de usuario especificado.
+	 * @throws NoDataFoundException si no se encuentran datos válidos para el tipo de usuario dado.
+	 */
 	@Override
 	public List<UserSpecialityByUserTypeRegGetDto> getByIdUserTypeReg(Integer idUserTypeReg) {
-		return null;
+
+		if (idUserTypeReg==null || idUserTypeReg<=0){
+			throw new NoDataFoundException(idUserTypeReg);
+		}
+
+		List<UserSpecialityByUserTypeRegGetDto> userSpecialityByUserTypeRegList = Optional.of(idUserTypeReg)
+				.map(this.mapperUserSpeciality::getByIdUserTypeReg)
+				.orElseThrow(NoDataFoundException::new)
+				.stream()
+				.map(this.dtoUserSpecialityMapper::userSpecialityToUserSpecialityByUserTypeRegGetDto)
+				.toList();
+
+		if(userSpecialityByUserTypeRegList.isEmpty()){
+			throw new NoDataFoundException("Data is empty");
+		}
+
+		return  userSpecialityByUserTypeRegList;
 	}
 
 	@Override
