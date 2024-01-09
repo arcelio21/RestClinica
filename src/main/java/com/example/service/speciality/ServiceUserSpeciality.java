@@ -152,7 +152,7 @@ public class ServiceUserSpeciality implements
 		.map(this.dtoUserSpecialityMapper::userSpecialityToUserSpecialityBySpecialityGetDto)
 		.toList();
 
-		if(userSpecialityBySpecialityList == null || userSpecialityBySpecialityList.isEmpty()){
+		if(userSpecialityBySpecialityList.isEmpty()){
 			throw new NoDataFoundException("DATA FOUND IS NOT VALID");
 		}
 
