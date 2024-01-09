@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         return urlIgnores.stream().anyMatch(urlIgnore->{
 
-            if(urlIgnore.path().trim().equals(request.getRequestURI())){
+            if(request.getRequestURI().trim().contains(urlIgnore.path())){
 
                 for (HttpMethod httpMethod: urlIgnore.typeRequest()){
                      if (httpMethod.matches(request.getMethod())){
