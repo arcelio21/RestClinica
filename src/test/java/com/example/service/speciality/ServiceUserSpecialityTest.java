@@ -1,9 +1,6 @@
 package com.example.service.speciality;
 
-import com.example.dto.speciality.userspeciality.UserSpecialityBySpecialityGetDto;
-import com.example.dto.speciality.userspeciality.UserSpecialityGetDto;
-import com.example.dto.speciality.userspeciality.UserSpecialitySaveDto;
-import com.example.dto.speciality.userspeciality.UserSpecialityUpdateDto;
+import com.example.dto.speciality.userspeciality.*;
 import com.example.dtomapper.speciality.DtoUserSpecialityMapper;
 import com.example.entity.speciality.Tspeciality;
 import com.example.entity.speciality.TuserSpeciality;
@@ -655,6 +652,121 @@ class ServiceUserSpecialityTest {
         assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getByIdSpeciality(idSpeciality));
 
         then(this.mapperUserSpeciality).should(times(1)).getByIdSpeciality(idSpeciality);
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdUserTypeReg` del servicio UserSpeciality al filtrar por ID de Tipo de Usuario de Registro.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Verifica que cuando se llama al método `getByIdUserTypeReg` con un ID de Tipo de Usuario de Registro válido,
+     *       y el método devuelve una lista válida, se procesa correctamente y no se arroja ninguna excepción.</li>
+     *   <li>Confirma que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de Tipo de Usuario de Registro válido,
+     *       y que el método `dtoUserSpecialityMapper` también se llama exactamente una vez para mapear los datos.</li>
+     * </ul>
+     *
+     * <p>Simula el comportamiento esperado:</p>
+     * <ul>
+     *   <li>La prueba simula que se llama al método `getByIdUserTypeReg` del servicio con un ID de Tipo de Usuario de Registro válido,
+     *       y que el método devuelve una lista válida con al menos un elemento.</li>
+     *   <li>Se verifica que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de Tipo de Usuario de Registro válido
+     *       y que el método `dtoUserSpecialityMapper` también se llama exactamente una vez para mapear los datos, lo que significa que hay datos válidos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por ID de Tipo de Usuario de Registro con lista válida")
+    void given_ListUserSpeciality_when_filterByIdUserTypeReg_then_success(){
+
+        Integer idUserTypeReg = 1;
+        UserSpecialityByUserTypeRegGetDto userSpecialityByUserTypeRegGet = new UserSpecialityByUserTypeRegGetDto(1L,"Odontologo","Activated");
+
+        given(this.mapperUserSpeciality.getByIdUserTypeReg(idUserTypeReg)).willReturn(List.of(this.tuserSpeciality));
+        given(this.dtoUserSpecialityMapper.userSpecialityToUserSpecialityByUserTypeRegGetDto(this.tuserSpeciality)).willReturn(userSpecialityByUserTypeRegGet);
+
+        List<UserSpecialityByUserTypeRegGetDto> userSpecialityByUserTypeRegGetDtos = this.serviceUserSpiciality.getByIdUserTypeReg(idUserTypeReg);
+
+        assertNotNull(userSpecialityByUserTypeRegGetDtos);
+        assertFalse(userSpecialityByUserTypeRegGetDtos.isEmpty());
+        assertNotNull(userSpecialityByUserTypeRegGetDtos.get(0));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdUserTypeReg(idUserTypeReg);
+        then(this.dtoUserSpecialityMapper).should(times(1)).userSpecialityToUserSpecialityByUserTypeRegGetDto(this.tuserSpeciality);
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdUserTypeReg` del servicio UserSpeciality al filtrar por ID de Tipo de Usuario de Registro.
+     * Verifica el manejo de errores cuando se proporciona un ID de Tipo de Usuario de Registro no válido.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdUserTypeReg` con un ID de Tipo de Usuario de Registro no válido,
+     *       se lanza una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` y `dtoUserSpecialityMapper` no tienen interacciones,
+     *       ya que no se espera ninguna llamada cuando el ID de Tipo de Usuario de Registro no es válido.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por ID de Tipo de Usuario de Registro con ID no válido")
+    void given_ThrowError_when_filterByIdUserTypeReg_then_IdUserTypeRegNotValid(){
+
+        Integer idUserTypeReg = 0;
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getByIdUserTypeReg(idUserTypeReg));
+
+        then(this.mapperUserSpeciality).shouldHaveNoInteractions();
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdUserTypeReg` del servicio UserSpeciality al filtrar por ID de Tipo de Usuario de Registro.
+     * Verifica el manejo de errores cuando el mapper devuelve datos nulos.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdUserTypeReg` con un ID de Tipo de Usuario de Registro válido,
+     *       pero el mapper devuelve datos nulos, se lanza una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de Tipo de Usuario de Registro válido,
+     *       y que el método `dtoUserSpecialityMapper` no tiene interacciones, ya que no se espera ninguna llamada cuando el mapper devuelve datos nulos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por ID de Tipo de Usuario de Registro con datos nulos")
+    void given_ThrowError_when_filterByIdUserTypeReg_then_MapperReturnDataNull(){
+
+        Integer idUserTypeReg = 2;
+
+        given(this.mapperUserSpeciality.getByIdUserTypeReg(idUserTypeReg)).willReturn(null);
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getByIdUserTypeReg(idUserTypeReg));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdUserTypeReg(idUserTypeReg);
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdUserTypeReg` del servicio UserSpeciality al filtrar por ID de Tipo de Usuario de Registro.
+     * Verifica el manejo de errores cuando el mapper devuelve una lista de datos vacía.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdUserTypeReg` con un ID de Tipo de Usuario de Registro válido,
+     *       pero el mapper devuelve una lista vacía, se lanza una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de Tipo de Usuario de Registro válido,
+     *       y que el método `dtoUserSpecialityMapper` no tiene interacciones, ya que no se espera ninguna llamada cuando el mapper devuelve una lista vacía.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por ID de Tipo de Usuario de Registro con lista vacía")
+    void given_ThrowError_when_filterByIdUserTypeReg_then_MapperReturnDataIsEmpty(){
+
+        Integer idUserTypeReg = 2;
+
+        given(this.mapperUserSpeciality.getByIdUserTypeReg(idUserTypeReg)).willReturn(Collections.emptyList());
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getByIdUserTypeReg(idUserTypeReg));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdUserTypeReg(idUserTypeReg);
         then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
     }
 }
