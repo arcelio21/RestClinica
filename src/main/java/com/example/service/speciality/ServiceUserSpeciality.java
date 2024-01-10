@@ -188,9 +188,33 @@ public class ServiceUserSpeciality implements
 		return  userSpecialityByUserTypeRegList;
 	}
 
+	/**
+	 * Obtiene la lista de asociaciones entre usuarios y especialidades basadas en un estado específico
+	 * según el ID del estado.
+	 *
+	 * @param idStatus El ID del estado para el cual se desea obtener las asociaciones.
+	 * @return La lista de asociaciones entre usuarios y especialidades basadas en el estado especificado.
+	 * @throws NoDataFoundException si no se encuentran datos válidos para el estado dado.
+	 */
 	@Override
 	public List<UserSpecialityByStatusGetDto> getByIdStatus(Integer idStatus) {
-		return null;
+
+		if (idStatus == null || idStatus<=0){
+			throw new NoDataFoundException(idStatus);
+		}
+
+		List<UserSpecialityByStatusGetDto> userSpecialityByStatusList = Optional.of(idStatus)
+				.map(this.mapperUserSpeciality::getByIdStatus)
+				.orElseThrow(NoDataFoundException::new)
+				.stream()
+				.map(this.dtoUserSpecialityMapper::userSpecialityToUserSpecialityByStatusGetDto)
+				.toList();
+
+		if(userSpecialityByStatusList.isEmpty()){
+			throw new NoDataFoundException("DATA IS EMPTY");
+		}
+
+		return userSpecialityByStatusList;
 	}
 
 	@Override
