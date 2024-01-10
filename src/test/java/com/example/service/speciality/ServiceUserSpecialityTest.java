@@ -769,4 +769,116 @@ class ServiceUserSpecialityTest {
         then(this.mapperUserSpeciality).should(times(1)).getByIdUserTypeReg(idUserTypeReg);
         then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
     }
+
+    /**
+     * Prueba unitaria para el método `getByIdStatus` del servicio UserSpeciality al filtrar por ID de Estado.
+     * Verifica el éxito del método cuando se proporciona un ID de Estado válido.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdStatus` con un ID de Estado válido,
+     *       el servicio devuelve una lista de datos.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de Estado válido,
+     *       y que el método `dtoUserSpecialityMapper` se llama exactamente una vez para cada elemento en la lista de datos devuelta por el mapper.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por ID de Estado con datos exitosos")
+    void given_listUserSpeciality_when_getUserSpecialityByStatus_then_dataSuccess(){
+
+        Integer idStatus = 1;
+
+        UserSpecialityByStatusGetDto userSpecialityByStatusGet = new UserSpecialityByStatusGetDto(1L,"Odontologo","Arcelio","Montezuma","Admin");
+
+        given(this.mapperUserSpeciality.getByIdStatus(idStatus)).willReturn(List.of(this.tuserSpeciality));
+        given(this.dtoUserSpecialityMapper.userSpecialityToUserSpecialityByStatusGetDto(this.tuserSpeciality)).willReturn(userSpecialityByStatusGet);
+
+        List<UserSpecialityByStatusGetDto> userSpecialityByStatusList = this.serviceUserSpiciality.getByIdStatus(idStatus);
+
+        assertNotNull(userSpecialityByStatusList);
+        assertFalse(userSpecialityByStatusList.isEmpty());
+        assertNotNull(userSpecialityByStatusList.stream().findFirst());
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdStatus(idStatus);
+        then(this.dtoUserSpecialityMapper).should(times(1)).userSpecialityToUserSpecialityByStatusGetDto(this.tuserSpeciality);
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdStatus` del servicio UserSpeciality al filtrar por un ID de Estado no válido.
+     * Verifica que el método lance una excepción `NoDataFoundException` cuando se proporciona un ID de Estado no válido.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdStatus` con un ID de Estado no válido,
+     *       el servicio lanza una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que ni el método `mapperUserSpeciality` ni el método `dtoUserSpecialityMapper` se llaman, ya que la excepción se lanza antes de llegar a esos métodos.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por ID de Estado con ID no válido")
+    void given_throwError_when_getUserSpecialityByStatus_then_idNotValid(){
+
+        Integer idStatus = 0;
+
+        assertThrows(NoDataFoundException.class,()-> this.serviceUserSpiciality.getByIdStatus(idStatus));
+
+        then(this.mapperUserSpeciality).shouldHaveNoInteractions();
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdStatus` del servicio UserSpeciality al filtrar por un ID de Estado,
+     * donde el mapeo desde el repositorio devuelve un resultado nulo.
+     * Verifica que el método lance una excepción `NoDataFoundException` cuando el mapeo desde el repositorio devuelve un resultado nulo.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdStatus` y el mapeo desde el repositorio devuelve un resultado nulo,
+     *       el servicio lanza una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de Estado proporcionado.</li>
+     *   <li>Confirma que el método `dtoUserSpecialityMapper` no se llama, ya que la excepción se lanza antes de llegar a ese método.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por ID de Estado con resultado nulo en el mapeo")
+    void given_throwError_when_getUserSpecialityByStatus_then_mapperReturnNull(){
+
+        Integer idStatus = 2;
+
+        given(this.mapperUserSpeciality.getByIdStatus(idStatus)).willReturn(null);
+
+        assertThrows(NoDataFoundException.class,()-> this.serviceUserSpiciality.getByIdStatus(idStatus));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdStatus(idStatus);
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdStatus` del servicio UserSpeciality al filtrar por un ID de Estado,
+     * donde el mapeo desde el repositorio devuelve una lista vacía.
+     * Verifica que el método lance una excepción `NoDataFoundException` cuando el mapeo desde el repositorio devuelve una lista vacía.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdStatus` y el mapeo desde el repositorio devuelve una lista vacía,
+     *       el servicio lanza una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` se llama exactamente una vez con el ID de Estado proporcionado.</li>
+     *   <li>Confirma que el método `dtoUserSpecialityMapper` no se llama, ya que la excepción se lanza antes de llegar a ese método.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por ID de Estado con mapeo devolviendo lista vacía")
+    void given_throwError_when_getUserSpecialityByStatus_then_mapperReturnEmpty(){
+
+        Integer idStatus = 3;
+
+        given(this.mapperUserSpeciality.getByIdStatus(idStatus)).willReturn(Collections.emptyList());
+
+        assertThrows(NoDataFoundException.class,()-> this.serviceUserSpiciality.getByIdStatus(idStatus));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdStatus(idStatus);
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+
 }
