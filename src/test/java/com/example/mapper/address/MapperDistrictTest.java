@@ -27,8 +27,8 @@ class MapperDistrictTest {
 	void getAll() {
 		//fail("Not yet implemented");
 		List<Tdistrict> districts=this.mapperDistrict.getAll();
-		districts.forEach(x->System.out.println(x));
-		assertTrue(districts.size()>0);
+		districts.forEach(System.out::println);
+        assertFalse(districts.isEmpty());
 	}
 	
 	@Test
@@ -66,7 +66,7 @@ class MapperDistrictTest {
 	void getByProvinceId(){
 
 		List<Tdistrict> tdistricts = this.mapperDistrict.getByProvinceId(new Tprovince(4));
-		assertTrue(tdistricts.size()>0);
+        assertFalse(tdistricts.isEmpty());
 
 		for (Tdistrict tdistrict:
 			  tdistricts) {

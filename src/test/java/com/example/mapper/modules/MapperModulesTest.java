@@ -50,7 +50,7 @@ class MapperModulesTest {
 	
 	@Test
 	void update() {
-		Tmodule module=this.mapperModules.getById(1L);
+		Tmodule module=this.mapperModules.getById(3L);
 		assertNotNull(module);
 		module.setNameModule("Login");
 		Integer rowAffected=this.mapperModules.update(module);
