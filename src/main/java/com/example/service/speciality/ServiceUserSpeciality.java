@@ -217,9 +217,25 @@ public class ServiceUserSpeciality implements
 		return userSpecialityByStatusList;
 	}
 
+	/**
+	 * Obtiene la lista de asociaciones entre usuarios y especialidades activas, basadas en el estado activado.
+	 *
+	 * @return La lista de asociaciones entre usuarios y especialidades activas.
+	 * @throws NoDataFoundException si no se encuentran datos válidos para las asociaciones activadas.
+	 */
 	@Override
 	public List<UserSpecialityByStatusGetDto> getByIdStatusActivated() {
-		return null;
+
+		List<UserSpecialityByStatusGetDto> userSpecialityByStatusList = Optional.ofNullable(this.mapperUserSpeciality.getByIdStatusActivated())
+				.orElseThrow(NoDataFoundException::new)
+				.stream()
+				.map(this.dtoUserSpecialityMapper::userSpecialityToUserSpecialityByStatusGetDto)
+				.toList();
+
+		if (userSpecialityByStatusList.isEmpty()){
+			throw new NoDataFoundException("DATA IS EMPTY");
+		}
+		return userSpecialityByStatusList;
 	}
 
 	@Override
