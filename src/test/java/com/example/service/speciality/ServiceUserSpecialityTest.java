@@ -880,5 +880,88 @@ class ServiceUserSpecialityTest {
         then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
     }
 
+    /**
+     * Prueba unitaria para el método `getByIdStatusActivated` del servicio UserSpeciality al filtrar por usuarios activados,
+     * donde el mapeo desde el repositorio devuelve una lista con al menos un elemento.
+     * Verifica que el método devuelva una lista no vacía de objetos `UserSpecialityByStatusGetDto`.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdStatusActivated` y el mapeo desde el repositorio devuelve una lista no vacía,
+     *       el servicio devuelve una lista no vacía de objetos `UserSpecialityByStatusGetDto`.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` se llama exactamente una vez para obtener la lista de usuarios activados.</li>
+     *   <li>Verifica que el método `dtoUserSpecialityMapper` se llama exactamente una vez para cada elemento en la lista devuelta por el mapeo.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por usuarios activados con mapeo devolviendo lista no vacía")
+    void given_listUserSpeciality_when_getUserSpecialityByStatusActivated_then_success(){
+
+        UserSpecialityByStatusGetDto userSpecialityByStatusGet = new UserSpecialityByStatusGetDto(1L,"Odontologo","Arcelio","Montezuma","Admin");
+
+        given(this.mapperUserSpeciality.getByIdStatusActivated()).willReturn(List.of(this.tuserSpeciality));
+        given(this.dtoUserSpecialityMapper.userSpecialityToUserSpecialityByStatusGetDto(this.tuserSpeciality)).willReturn(userSpecialityByStatusGet);
+
+        List<UserSpecialityByStatusGetDto> userSpecialityByStatusList = this.serviceUserSpiciality.getByIdStatusActivated();
+
+        assertNotNull(userSpecialityByStatusList);
+        assertFalse(userSpecialityByStatusList.isEmpty());
+        assertNotNull(userSpecialityByStatusList.stream().findFirst());
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdStatusActivated();
+        then(this.dtoUserSpecialityMapper).should(times(1)).userSpecialityToUserSpecialityByStatusGetDto(this.tuserSpeciality);
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdStatusActivated` del servicio UserSpeciality al filtrar por usuarios activados,
+     * donde el mapeo desde el repositorio devuelve `null`.
+     * Verifica que el método arroje una excepción `NoDataFoundException`.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdStatusActivated` y el mapeo desde el repositorio devuelve `null`,
+     *       el servicio arroja una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` se llama exactamente una vez para obtener la lista de usuarios activados.</li>
+     *   <li>Verifica que el método `dtoUserSpecialityMapper` no se llama en este caso.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por usuarios activados con mapeo devolviendo null")
+    void given_throwError_when_getUserSpecialityByStatusActivated_then_mapperReturnNull(){
+
+        given(this.mapperUserSpeciality.getByIdStatusActivated()).willReturn(null);
+
+        assertThrows(NoDataFoundException.class,()-> this.serviceUserSpiciality.getByIdStatusActivated());
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdStatusActivated();
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+
+    }
+
+    /**
+     * Prueba unitaria para el método `getByIdStatusActivated` del servicio UserSpeciality al filtrar por usuarios activados,
+     * donde el mapeo desde el repositorio devuelve una lista vacía.
+     * Verifica que el método arroje una excepción `NoDataFoundException`.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByIdStatusActivated` y el mapeo desde el repositorio devuelve una lista vacía,
+     *       el servicio arroja una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` se llama exactamente una vez para obtener la lista de usuarios activados.</li>
+     *   <li>Verifica que el método `dtoUserSpecialityMapper` no se llama en este caso.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por usuarios activados con mapeo devolviendo lista vacía")
+    void given_throwError_when_getUserSpecialityByStatusActivated_then_mapperReturnEmpty(){
+
+        given(this.mapperUserSpeciality.getByIdStatusActivated()).willReturn(Collections.emptyList());
+
+        assertThrows(NoDataFoundException.class,()-> this.serviceUserSpiciality.getByIdStatusActivated());
+
+        then(this.mapperUserSpeciality).should(times(1)).getByIdStatusActivated();
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+
+    }
 
 }
