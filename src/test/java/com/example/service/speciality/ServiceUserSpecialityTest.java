@@ -964,4 +964,113 @@ class ServiceUserSpecialityTest {
 
     }
 
+    /**
+     * Prueba unitaria para el método `getByTypeUserId` del servicio UserSpeciality al filtrar por usuarios de un tipo específico,
+     * donde el mapeo desde el repositorio devuelve una lista con al menos un elemento.
+     * Verifica que la lista obtenida no esté vacía y que el mapeo de la entidad al DTO sea exitoso.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que cuando se llama al método `getByTypeUserId` con un id de tipo de usuario válido y el mapeo desde el repositorio devuelve
+     *       una lista con al menos un elemento, el servicio devuelve una lista de DTOs no vacía.</li>
+     *   <li>Verifica que el método `mapperUserSpeciality` se llama exactamente una vez para obtener la lista de usuarios por tipo.</li>
+     *   <li>Verifica que el método `dtoUserSpecialityMapper` se llama exactamente una vez para convertir la entidad a DTO.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por usuarios de un tipo específico con mapeo devolviendo lista no vacía")
+    void given_listUserSpeciality_when_getUserSpecialityByTypeUser_then_success(){
+
+        Integer idTypeUser = 1;
+
+        UserSpecialityByTypeUserGetDto userSpecialityByTypeUser = new UserSpecialityByTypeUserGetDto(1L,"Odontologo","Activated","Arcelio","Montezuma");
+
+        given(this.mapperUserSpeciality.getByTypeUserId(idTypeUser)).willReturn(List.of(this.tuserSpeciality));
+        given(this.dtoUserSpecialityMapper.userSpecialityToUserSpecialityByTypeUserGetDto(this.tuserSpeciality)).willReturn(userSpecialityByTypeUser);
+
+        List<UserSpecialityByTypeUserGetDto> userSpecialityByTypeUserList = this.serviceUserSpiciality.getByTypeUserId(idTypeUser);
+
+        assertNotNull(userSpecialityByTypeUserList);
+        assertFalse(userSpecialityByTypeUserList.isEmpty());
+        assertNotNull(userSpecialityByTypeUserList.stream().findFirst());
+
+        then(this.mapperUserSpeciality).should(times(1)).getByTypeUserId(idTypeUser);
+        then(this.dtoUserSpecialityMapper).should(times(1)).userSpecialityToUserSpecialityByTypeUserGetDto(this.tuserSpeciality);
+    }
+
+    /**
+     * Prueba unitaria para el método `getByTypeUserId` del servicio UserSpeciality al intentar filtrar por usuarios de un tipo específico
+     * con un ID de tipo de usuario no válido.
+     * Verifica que se lance una excepción `NoDataFoundException` y que no haya interacciones con los mapeadores ni el repositorio.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que al llamar al método `getByTypeUserId` con un ID de tipo de usuario no válido, el servicio lanza una excepción
+     *       `NoDataFoundException`.</li>
+     *   <li>Verifica que no haya interacciones con el repositorio y que el mapeador de DTOs tampoco sea invocado.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por usuarios de un tipo específico con ID no válido")
+    void given_throwError_when_getUserSpecialityByTypeUser_then_IdNotValid(){
+
+        Integer idTypeUser = 0;
+
+        assertThrows(NoDataFoundException.class,()-> this.serviceUserSpiciality.getByTypeUserId(idTypeUser));
+
+        then(this.mapperUserSpeciality).shouldHaveNoInteractions();
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getByTypeUserId` del servicio UserSpeciality al intentar filtrar por usuarios de un tipo específico
+     * cuando el mapeador retorna null.
+     * Verifica que se lance una excepción `NoDataFoundException` y que haya una única interacción con el repositorio.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que al llamar al método `getByTypeUserId` con un ID de tipo de usuario válido, pero el mapeador devuelve null,
+     *       el servicio lanza una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que haya una única interacción con el repositorio y que el mapeador de DTOs no sea invocado.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por usuarios de un tipo específico con mapeador retornando null")
+    void given_throwError_when_getUserSpecialityByTypeUser_then_mapperReturnNull(){
+
+        Integer idTypeUser = 1;
+
+        given(this.mapperUserSpeciality.getByTypeUserId(idTypeUser)).willReturn(null);
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getByTypeUserId(idTypeUser));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByTypeUserId(idTypeUser);
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
+
+    /**
+     * Prueba unitaria para el método `getByTypeUserId` del servicio UserSpeciality al intentar filtrar por usuarios de un tipo específico
+     * cuando el repositorio retorna una lista vacía.
+     * Verifica que se lance una excepción `NoDataFoundException` y que haya una única interacción con el repositorio.
+     *
+     * <p>Descripción de la Prueba:</p>
+     * <ul>
+     *   <li>Confirma que al llamar al método `getByTypeUserId` con un ID de tipo de usuario válido, pero el repositorio retorna una lista vacía,
+     *       el servicio lanza una excepción `NoDataFoundException`.</li>
+     *   <li>Verifica que haya una única interacción con el repositorio y que el mapeador de DTOs no sea invocado.</li>
+     * </ul>
+     */
+    @Test
+    @DisplayName("Filtrar por usuarios de un tipo específico con repositorio retornando lista vacía")
+    void given_throwError_when_getUserSpecialityByTypeUser_then_mapperReturnEmpty(){
+
+        Integer idTypeUser = 1;
+
+        given(this.mapperUserSpeciality.getByTypeUserId(idTypeUser)).willReturn(Collections.emptyList());
+
+        assertThrows(NoDataFoundException.class, ()-> this.serviceUserSpiciality.getByTypeUserId(idTypeUser));
+
+        then(this.mapperUserSpeciality).should(times(1)).getByTypeUserId(idTypeUser);
+        then(this.dtoUserSpecialityMapper).shouldHaveNoInteractions();
+    }
 }
