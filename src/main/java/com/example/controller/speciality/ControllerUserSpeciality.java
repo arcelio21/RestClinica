@@ -4,7 +4,9 @@ import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
 import com.example.dto.speciality.speciality.SpecialityGetDto;
+import com.example.dto.speciality.speciality.SpecialityUpdateDto;
 import com.example.dto.speciality.userspeciality.UserSpecialityGetDto;
+import com.example.dto.speciality.userspeciality.UserSpecialityUpdateDto;
 import com.example.service.speciality.ServiceUserSpeciality;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,10 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -64,6 +63,27 @@ public class ControllerUserSpeciality extends ControllerTemplate{
                 ResponseDTO.<UserSpecialityGetDto>builder()
                         .info("Speciality Found")
                         .data(this.service.getById(id))
+                        .build()
+        );
+    }
+
+    @Operation(
+            summary = "Actualizar UserSpeciality",
+            description = "Se actualizara usuario especialidad que se desee",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "UserSpeciality actualizada correctamente",useReturnTypeSchema = true),
+                    @ApiResponse(responseCode = "400", description = "Datos proporcionado no son validos",content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = ErrorResponseDto.class))
+                    })
+            }
+    )
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseDTO<Integer>> update(@RequestBody UserSpecialityUpdateDto userSpecialityUpdateDto){
+
+        return ResponseEntity.ok(
+                ResponseDTO.<Integer>builder()
+                        .info("Cantidad de registros actualizados")
+                        .data(this.service.update(userSpecialityUpdateDto))
                         .build()
         );
     }
