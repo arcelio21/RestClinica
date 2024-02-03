@@ -3,9 +3,6 @@ package com.example.controller.speciality;
 import com.example.controller.ControllerTemplate;
 import com.example.dto.ErrorResponseDto;
 import com.example.dto.ResponseDTO;
-import com.example.dto.speciality.speciality.SpecialityGetDto;
-import com.example.dto.speciality.speciality.SpecialitySaveDto;
-import com.example.dto.speciality.speciality.SpecialityUpdateDto;
 import com.example.dto.speciality.userspeciality.UserSpecialityGetDto;
 import com.example.dto.speciality.userspeciality.UserSpecialitySaveDto;
 import com.example.dto.speciality.userspeciality.UserSpecialityUpdateDto;
@@ -31,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ControllerUserSpeciality extends ControllerTemplate{
 
-    private ServiceUserSpeciality service;
+    private final ServiceUserSpeciality service;
 
     @Operation(summary = "Obtener todas las especialidades de usuarios", description = "Se utiliza para obtener todas las speciality asociadas a usuarios",
             method = "Get",responses = {
